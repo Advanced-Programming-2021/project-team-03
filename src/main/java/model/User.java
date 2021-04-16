@@ -1,5 +1,7 @@
 package model;
 
+import model.card.Card;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,6 +13,7 @@ public class User {
     private int balance;
     private ArrayList<Deck> Decks;
     private ArrayList<Card> Cards;
+    private Deck activeDeck;
 
     private static HashMap<String, User> allUsers;
 
