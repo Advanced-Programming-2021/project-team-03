@@ -1,12 +1,13 @@
 package view;
 
+import model.game.Game;
 import model.user.User;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Menu {
+public class View {
     private static final Scanner SCANNER = new Scanner(System.in);
     private static Matcher regexMatcher;
 
