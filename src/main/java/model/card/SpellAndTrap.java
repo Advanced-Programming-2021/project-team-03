@@ -9,4 +9,10 @@ public class SpellAndTrap extends Card {
     public void cardAction() {
 
     }
+
+    @Override
+    public String toString() {
+        //TODO
+        return null;
+    }
 }

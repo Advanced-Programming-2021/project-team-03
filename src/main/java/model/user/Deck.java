@@ -29,11 +29,11 @@ public class Deck {
         return sideDeck;
     }
 
-    public void addDeck(User owner) {
+    public void addDeckToUser(User owner) {
 
     }
 
-    public void removeDeck(User owner) {
+    public void removeDeckFromUser(User owner) {
 
     }
 

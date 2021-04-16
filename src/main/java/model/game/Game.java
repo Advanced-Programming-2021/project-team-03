@@ -27,4 +27,9 @@ public class Game {
     public void changeTurn() {
         // TODO
     }
+
+    public String makeGameBoardToShow(){
+        //TODO
+        return "Game Board";
+    }
 }

@@ -13,4 +13,10 @@ public class Monster extends Card{
     @Override
     public void cardAction() {
     }
+
+    @Override
+    public String toString() {
+        //TODO
+        return null;
+    }
 }
