@@ -1,4 +1,4 @@
-package model;
+package model.user;
 
 import model.card.Card;
 
@@ -6,19 +6,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class User {
+    private static HashMap<String, User> allUsers;
     private String username;
     private String nickName;
     private String passwordHash;
     private int score;
     private int balance;
+    private int level;
     private ArrayList<Deck> Decks;
     private ArrayList<Card> Cards;
     private Deck activeDeck;
 
-    private static HashMap<String, User> allUsers;
-
     public User(String username, String password, String nickName) {
-
+        // TODO
     }
 
     public static void removeUser(String username) {
@@ -83,5 +83,21 @@ public class User {
 
     public void setCards(ArrayList<Card> cards) {
         Cards = cards;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public Deck getActiveDeck() {
+        return activeDeck;
+    }
+
+    public void setActiveDeck(Deck activeDeck) {
+        this.activeDeck = activeDeck;
     }
 }

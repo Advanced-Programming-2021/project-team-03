@@ -1,8 +1,16 @@
 package model;
 
+import model.user.Deck;
+
 public class AIBot {
-    public String getCommand(Game game) {
-        //TODO
-        return "TODO";
+    private final Deck DECK;
+
+    public AIBot(Deck deck) {
+        this.DECK = deck;
+        // TODO
+    }
+
+    public Deck getDECK() {
+        return DECK;
     }
 }

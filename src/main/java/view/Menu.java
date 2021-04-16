@@ -1,7 +1,6 @@
 package view;
 
-import model.Game;
-import model.User;
+import model.user.User;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
