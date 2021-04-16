@@ -7,12 +7,12 @@ public class MainController {
 
     }
 
-    public String showCardInformation(Card card){
+    public static String showCardInformation(Card card){
         //TODO
         return null;
     }
 
-    public String getScoreBoard(){
+    public static String getScoreBoard(){
         //TODO
         return null;
     }
