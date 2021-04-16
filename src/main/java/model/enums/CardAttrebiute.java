@@ -8,5 +8,5 @@ public enum CardAttrebiute {
     WATER,
     WIND,
     SPELL,
-    TRAP;
+    TRAP
 }

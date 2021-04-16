@@ -3,9 +3,9 @@ package model.game;
 import model.user.User;
 
 public class Player {
-    private User user;
-    private Board board;
-    private int health;
+    private final User user;
+    private final Board board;
+    private final int health;
 
     public Player(int initialHealth, Board board, User user) {
         this.user = user;

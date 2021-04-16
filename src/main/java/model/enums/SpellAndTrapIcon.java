@@ -7,5 +7,5 @@ public enum SpellAndTrapIcon {
     RITUAL,
     CONTINUOUS,
     COUNTER,
-    NORMAl;
+    NORMAl
 }

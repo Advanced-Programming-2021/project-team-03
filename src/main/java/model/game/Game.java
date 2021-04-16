@@ -10,7 +10,7 @@ enum PlayerTurn {
 public class Game {
     private Player player1;
     private Player player2;
-    private PlayerTurn turn;
+    private final PlayerTurn turn;
 
     public Game(User user1, User user2) { // TODO
         // TODO: Construct players with given users.
