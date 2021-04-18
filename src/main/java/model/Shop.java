@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Shop {
     private static ArrayList<String> allCardNames;
 
-    public static boolean isCardExist(String cardName) {
+    public static boolean doesCardExist(String cardName) {
         //TODO
         return true;
     }

@@ -1,6 +1,7 @@
 package control;
 
 import model.card.Card;
+import model.game.Game;
 import model.user.User;
 
 enum Phase {
@@ -14,80 +15,82 @@ enum Phase {
 public class GameController {
     private Card selectedCard;
     private Phase currentPhase;
+    private Game game;
+
     public String makeNewDuel(String firstUsername,User SecondUsername,int roundsCount){
-            //TODO
-            return null;
-    }
-
-    public String selectCard(String cardType,int position){
         //TODO
         return null;
     }
 
-    public String deselectCard(String cardType,int position){
+    public static String selectCard(String cardType,int position){
         //TODO
         return null;
     }
 
-    private void changePhase(){
-
-    }
-
-    public String summonCard(){
+    public static String deselectCard(String cardType,int position){
         //TODO
         return null;
     }
 
-    public String setCard(String type){
+    private static void changePhase(){
+
+    }
+
+    public static String summonCard(){
         //TODO
         return null;
     }
 
-    public String setCardStandFormat(){
+    public static String setCard(String type){
         //TODO
         return null;
     }
 
-    public String attackToRivalCard(int targetCardPosition){
+    public static String setCardStandFormat(){
         //TODO
         return null;
     }
 
-    public String DirectAttackToRivalHealth(){
+    public static String attackToRivalCard(int targetCardPosition){
         //TODO
         return null;
     }
 
-    public String activateSpellCardInOnwTurn(){
+    public static String DirectAttackToRivalHealth(){
         //TODO
         return null;
     }
 
-    public String activateSpellCardInRivalTurn(){
+    public static String activateSpellCardInOnwTurn(){
         //TODO
         return null;
     }
 
-    public String ritualSummon(){
+    public static String activateSpellCardInRivalTurn(){
         //TODO
         return null;
     }
 
-    public String specialSummon(){
+    public static String ritualSummon(){
         //TODO
         return null;
     }
 
-    public String showGraveyard(String whichGraveyard){
+    public static String specialSummon(){
         //TODO
         return null;
     }
 
-    private void rewardPlayers(){
+    public static String showGraveyard(String whichGraveyard){
+        //TODO
+        return null;
+    }
+
+    private static void rewardPlayers(){
 
     }
 
-    public String surrender(String username){
+    public static String surrender(String username){
         //TODO
         return null;
     }
