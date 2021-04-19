@@ -1,6 +1,6 @@
 package model.enums;
 
-public enum CardAttrebiute {
+public enum CardAttributes {
     DARK,
     LIGHT,
     EARTH,

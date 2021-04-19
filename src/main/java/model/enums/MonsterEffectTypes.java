@@ -1,7 +1,9 @@
 package model.enums;
 
 public enum MonsterEffectTypes {
-    NORMAL,
-    EFFECT,
-    RITUAL
+    QUICK_PLAY,
+    TRIGGER,
+    CONTINUOUS,
+    FLIP,
+    IGNITION
 }

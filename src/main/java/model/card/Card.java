@@ -1,13 +1,19 @@
 package model.card;
 
-import model.enums.CardAttrebiute;
+import model.enums.CardAttributes;
 
 public abstract class Card {
     protected String cardName;
     protected String cardID;
     protected String description;
     protected int price;
-    protected CardAttrebiute attribute;
+    protected CardAttributes attribute;
 
-    public abstract void cardAction();
+    public Card(String cardName, String cardID, String description, int price, CardAttributes attribute) {
+        this.cardName = cardName;
+        this.cardID = cardID;
+        this.description = description;
+        this.price = price;
+        this.attribute = attribute;
+    }
 }
