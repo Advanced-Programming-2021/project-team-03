@@ -10,60 +10,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-enum AttackingOrDefending {
-    ATTACKING,
-    DEFENDING
-}
-
-enum FaceUpOrFaceDown {
-    FACE_UP,
-    FACE_DOWN,
-}
-
-class CardPositionInField {
-    public AttackingOrDefending attackingOrDefending;
-    public FaceUpOrFaceDown faceUpOrFaceDown;
-    public int position;
-
-    public CardPositionInField(int position, FaceUpOrFaceDown faceUpOrFaceDown, AttackingOrDefending attackingOrDefending){
-        this.position = position;
-        this.faceUpOrFaceDown = faceUpOrFaceDown;
-        this.attackingOrDefending = attackingOrDefending;
-    }
-
-    public AttackingOrDefending getAttackingOrDefending() {
-        return attackingOrDefending;
-    }
-
-    public void setAttackingOrDefending(AttackingOrDefending attackingOrDefending) {
-        this.attackingOrDefending = attackingOrDefending;
-    }
-
-    public FaceUpOrFaceDown getFaceUpOrFaceDown() {
-        return faceUpOrFaceDown;
-    }
-
-    public void setFaceUpOrFaceDown(FaceUpOrFaceDown faceUpOrFaceDown) {
-        this.faceUpOrFaceDown = faceUpOrFaceDown;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-}
-
 public class Board {
-    private User owner;
-    private HashMap<CardPositionInField, Monster> monstersInField; // holding each monster with its position and revealed status
-    private HashMap<CardPositionInField, SpellAndTrap> spellAndTrapsInField; // holding all spells and traps in the field
-    private ArrayList<Card> graveyard;
+    private final User owner;
+    private final HashMap<Integer, Monster> monstersInField; // holding each monster with its position and revealed status
+    private final HashMap<Integer, SpellAndTrap> spellAndTrapsInField; // holding all spells and traps in the field
+    private final ArrayList<Card> graveyard;
     private SpellAndTrap fieldCard;
-    private ArrayList<Card> remainingCards;
-    private ArrayList<Card> inHandCards;
+    private final ArrayList<Card> remainingCards;
+    private final ArrayList<Card> inHandCards;
 
     public Board(Deck deck, User player) {
         this.owner = player;
@@ -76,17 +30,17 @@ public class Board {
         addStartingCardsToInHandCards(); // adding 4 card from top of remaining cards to hand to start the game
     }
 
-    private void addStartingDeckToTheRemainingCards(Deck deck){
+    private void addStartingDeckToTheRemainingCards(Deck deck) {
         remainingCards.addAll(deck.getMainDeck());
         Collections.shuffle(remainingCards); // shuffle all cards for start the game
     }
 
-    public void addCardFromRemainingToInHandCards(){
+    public void addCardFromRemainingToInHandCards() {
         inHandCards.add(remainingCards.get(0));
         remainingCards.remove(0);
     }
 
-    private void addStartingCardsToInHandCards(){
+    private void addStartingCardsToInHandCards() {
         for (int i = 0; i < 4; i++) {
             addCardFromRemainingToInHandCards();
         }
@@ -96,11 +50,11 @@ public class Board {
         return owner;
     }
 
-    public HashMap<CardPositionInField, Monster> getMonstersInField() {
+    public HashMap<Integer, Monster> getMonstersInField() {
         return monstersInField;
     }
 
-    public HashMap<CardPositionInField, SpellAndTrap> getSpellAndTrapsInField() {
+    public HashMap<Integer, SpellAndTrap> getSpellAndTrapsInField() {
         return spellAndTrapsInField;
     }
 
@@ -149,5 +103,22 @@ public class Board {
         // TODO
     }
 
+    public Card getCardByPosition(int position) { // returning the card in the given position if needed
+        if (monstersInField.containsKey(position))
+            return monstersInField.get(position);
 
+        return spellAndTrapsInField.get(position);
+    }
+
+    public boolean doesContainCard(int cardGameId) {
+        for (Monster monster : monstersInField.values()) {
+            if (monster.getCardIdInTheGame() == cardGameId)
+                return true;
+        }
+        for (SpellAndTrap spellAndTrap : spellAndTrapsInField.values()) {
+            if (spellAndTrap.getCardIdInTheGame() == cardGameId)
+                return true;
+        }
+        return false;
+    }
 }
