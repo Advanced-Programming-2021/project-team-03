@@ -7,6 +7,13 @@
     <groupId>groupId</groupId>
     <artifactId>Yu-Gi-Oh</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <dependencies>
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.3m</version>
+        </dependency>
+
 
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
@@ -21,7 +28,17 @@
             <version>2.8.6</version>
         </dependency>
 
+        </dependencies>
+
+    <properties>
+        <maven.compiler.source>16</maven.compiler.source>
+        <maven.compiler.target>16</maven.compiler.target>
+    </properties>
+
+</project>
+
+
 
     </dependencies>
-    
+
 </project>
