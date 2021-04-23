@@ -1,19 +1,22 @@
 package control;
 
-import model.card.Card;
+public class MainController { // this class is responsible for view request and send the feedback to thee view via a Json string
 
-public class MainController {
-    public static void run(){
+    private static MainController mainControllerInstance;
 
+    private MainController(){
     }
 
-    public static String showCardInformation(Card card){
-        //TODO
-        return null;
+    public static MainController getInstance() {
+        if (mainControllerInstance == null)
+            mainControllerInstance = new MainController();
+        return mainControllerInstance;
     }
 
-    public static String getScoreBoard(){
-        //TODO
+    public String getRequest(String input){ //this method receives a input string and return a string as an answer
+        /* note that this strings are in Json format */
+
+        // TODO parsing analysing and answering the request of view menu
         return null;
     }
 }
