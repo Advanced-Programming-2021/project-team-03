@@ -1,12 +1,9 @@
 package model.card;
 
 import model.enums.MonsterEffectTypes;
-import model.game.Board;
 import model.game.Game;
 
 import java.util.HashMap;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 import static model.enums.FaceUpSituation.*;
 import static model.enums.MonsterEffectTypes.*;
