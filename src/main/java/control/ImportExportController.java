@@ -22,4 +22,14 @@ public class ImportExportController {
         //TODO
         return null;
     }
+
+    public boolean canImportThisCard(String cardName) {
+        //TODO
+        return false;
+    }
+
+    public boolean canExportThisCard(String cardName) {
+        //TODO
+        return false;
+    }
 }
