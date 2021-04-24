@@ -94,7 +94,6 @@ public class View {
     public void registerMenu() {
         while (true) {
             String inputCommand = SCANNER.nextLine().replaceAll("(\\s)+", " ");
-            ;
             if (inputCommand.matches(registerMenuCommands[0])) break; //Program will finish
             else if (inputCommand.matches(registerMenuCommands[1])) System.out.println("please login first");
             else if (inputCommand.matches(registerMenuCommands[2])) System.out.println("Login Menu");
@@ -117,12 +116,10 @@ public class View {
 
         //Finding username, password and nickname from command:
         for (int i = 1; i < 7; i += 2) {
-            if (regexMatcher.group(i).equals("-username") || regexMatcher.group(i).equals("u")) {
-                username = regexMatcher.group(i + 1);
-            } else if (regexMatcher.group(i).equals("-password") || regexMatcher.group(i).equals("p")) {
-                password = regexMatcher.group(i + 1);
-            } else if (regexMatcher.group(i).equals("-nickname") || regexMatcher.group(i).equals("n")) {
-                nickname = regexMatcher.group(i + 1);
+            switch (regexMatcher.group(i)) {
+                case "-username", "u" -> username = regexMatcher.group(i + 1);
+                case "-password", "p" -> password = regexMatcher.group(i + 1);
+                case "-nickname", "n" -> nickname = regexMatcher.group(i + 1);
             }
         }
 
