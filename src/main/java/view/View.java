@@ -87,8 +87,7 @@ public class View {
      */
     public JSONObject sendRequestToControl(JSONObject messageToSend) {
         String controlAnswerString = MainController.getInstance().getRequest(messageToSend.toString());
-        JSONObject controlAnswerJson = new JSONObject(controlAnswerString);
-        return controlAnswerJson;
+        return new JSONObject(controlAnswerString);
     }
 
     //region register menu methods
@@ -112,9 +111,9 @@ public class View {
     public void createNewUser(String inputCommand) {
         getRegexMatcher(inputCommand, registerMenuCommands[3], true);
 
-        String username = "";
-        String password = "";
-        String nickname = "";
+        String username = null;
+        String password = null;
+        String nickname = null;
 
         //Finding username, password and nickname from command:
         for (int i = 1; i < 7; i += 2) {
@@ -190,7 +189,7 @@ public class View {
             else if (inputCommand.matches(mainMenuCommands[4])) profileMenu();
             else if (inputCommand.matches(mainMenuCommands[5])) shopMenu();
             else if (inputCommand.matches(mainMenuCommands[6])) importExportMenu();
-            //TODO: some remaining methods
+                //TODO: some remaining methods
             else System.out.println("invalid command");
         }
     }
@@ -228,8 +227,10 @@ public class View {
             else if (inputCommand.matches(importExportMenuCommands[1]))
                 System.out.println("menu navigation is not possible");
             else if (inputCommand.matches(importExportMenuCommands[2])) System.out.println("Import/Export");
-            else if (inputCommand.matches(importExportMenuCommands[3])) importOrExportCard(inputCommand,"Import card",3);
-            else if (inputCommand.matches(importExportMenuCommands[4])) importOrExportCard(inputCommand,"Export card",4);
+            else if (inputCommand.matches(importExportMenuCommands[3]))
+                importOrExportCard(inputCommand, "Import card", 3);
+            else if (inputCommand.matches(importExportMenuCommands[4]))
+                importOrExportCard(inputCommand, "Export card", 4);
             else System.out.println("invalid command");
         }
     }
