@@ -1,12 +1,24 @@
 package control;
 
 public class ImportExportController {
-    public String importCard(String cardName){
+
+    private static ImportExportController importExportController;
+
+    private ImportExportController() {
+    }
+
+    public static ImportExportController getInstance() {
+        if (importExportController == null)
+            importExportController = new ImportExportController();
+        return importExportController;
+    }
+
+    public String importCard(String cardName) {
         //TODO
         return null;
     }
 
-    public String exportCard(String cardName){
+    public String exportCard(String cardName) {
         //TODO
         return null;
     }
