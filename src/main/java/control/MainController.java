@@ -1,5 +1,6 @@
 package control;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 
@@ -39,8 +40,13 @@ public class MainController { // this class is responsible for view request and 
     }
 
     private String scoreBoardRequest(JSONObject valueObject) {
-        //TODO
-        return null;
+        // returning a json array as a value that holds the score board users information
+        JSONObject answerObject = new JSONObject();
+
+        JSONArray scoreBoard = ScoreBoardController.getInstance().getScoreBoard();
+        answerObject.put("Value", scoreBoard);
+
+        return answerObject.toString();
     }
 
     private String changePasswordRequest(JSONObject valueObject) {
