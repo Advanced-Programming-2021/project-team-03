@@ -40,8 +40,161 @@ public class MainController { // this class is responsible for view request and 
             case "Change nickname" -> changeNicknameRequest(valueObject);
             case "Change password" -> changePasswordRequest(valueObject);
             case "Scoreboard" -> scoreBoardRequest();
-            default -> null;
+            case "Show card" -> showCardRequest(valueObject);
+            case "Create deck" -> createANewDeck(valueObject);
+            case "Delete deck" -> deleteDeck(valueObject);
+            case "Set active deck" -> setActiveDeck(valueObject);
+            case "Add card to deck" -> addCardToDeck(valueObject);
+            case "Remove card from deck" -> removeCardFromDeck(valueObject);
+            case "Show all decks" -> showAllDecks(valueObject);
+            case "Show deck" -> showDeck(valueObject);
+            case "Show all player cards" -> showAllPlayerCards(valueObject);
+            case "Buy card" -> buyCard(valueObject);
+            case "Show all cards in shop" -> showAllCardsInShop(valueObject);
+            case "Cheat code" -> cheatCodes(valueObject);
+            case "New duel" -> newDuel(valueObject);
+            case "Select Card" -> selectCardInGame(valueObject);
+            case "Summon" -> summonACard(valueObject);
+            case "Set in field" -> setACard(valueObject);
+            case "Set position" -> setPosition(valueObject);
+            case "Flip summon" -> flipSummon(valueObject);
+            case "Attack" -> attack(valueObject);
+            case "Direct attack" -> directAttack(valueObject);
+            case "Active effect" -> activeEffect(valueObject);
+            case "Show graveyard" -> showGraveyard(valueObject);
+            case "Show selected card" -> showSelectedCard(valueObject);
+            case "Surrender" -> surrender(valueObject);
+            default -> error();
         };
+    }
+
+    private String surrender(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String showSelectedCard(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String showGraveyard(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String activeEffect(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String directAttack(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String attack(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String flipSummon(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String setPosition(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String setACard(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String summonACard(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String selectCardInGame(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String newDuel(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String cheatCodes(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String showAllCardsInShop(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String buyCard(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String showAllPlayerCards(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String showDeck(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String showAllDecks(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String removeCardFromDeck(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String addCardToDeck(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String setActiveDeck(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String deleteDeck(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String createANewDeck(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String showCardRequest(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String error() {
+        JSONObject answerObject = new JSONObject();
+
+        answerObject.put("Type", "Error");
+        answerObject.put("Value", "Invalid Request Type!!!");
+
+        return answerObject.toString();
     }
 
     private String scoreBoardRequest() {
