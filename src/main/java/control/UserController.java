@@ -15,13 +15,6 @@ public class UserController {
         return userController;
     }
 
-
-    public String login(String username, String password) {
-        //logging in and return a token for the user to identify the user for later requests
-        //TODO
-        return null;
-    }
-
     public boolean isUsernameExists(String username) { // checking if a user with this username exists
         // TODO check for the username
         return false;
@@ -42,20 +35,12 @@ public class UserController {
         return false;
     }
 
-    public void logout(String token) {
-        //TODO logging out the user
-    }
-
-    public void changeNickname(String token, String newNickname) {
+    public void changeNickname(String username, String newNickname) {
         //TODO
     }
 
-    public boolean doesTokenAndPasswordMatch(String token, String currentPassword) {
+    public void changePassword(String username, String newPassword) {
         //TODO
-        return false;
     }
 
-    public void changePassword(String token, String newPassword) {
-        //TODO
-    }
 }

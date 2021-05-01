@@ -3,12 +3,15 @@ package control;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 
 public class MainController { // this class is responsible for view request and send the feedback to thee view via a Json string
 
     private static MainController mainControllerInstance;
 
     private MainController() {
+        onlineUsers = new HashMap<>();
     }
 
     public static MainController getInstance() {
@@ -16,6 +19,8 @@ public class MainController { // this class is responsible for view request and 
             mainControllerInstance = new MainController();
         return mainControllerInstance;
     }
+
+    private final HashMap<String, String> onlineUsers;
 
     public String getRequest(String input) { //this method receives a input string and return a string as an answer
         /* note that this strings are in Json format */
@@ -34,12 +39,12 @@ public class MainController { // this class is responsible for view request and 
             case "Export card" -> exportCardRequest(valueObject);
             case "Change nickname" -> changeNicknameRequest(valueObject);
             case "Change password" -> changePasswordRequest(valueObject);
-            case "Scoreboard" -> scoreBoardRequest(valueObject);
+            case "Scoreboard" -> scoreBoardRequest();
             default -> null;
         };
     }
 
-    private String scoreBoardRequest(JSONObject valueObject) {
+    private String scoreBoardRequest() {
         // returning a json array as a value that holds the score board users information
         JSONObject answerObject = new JSONObject();
 
@@ -59,14 +64,14 @@ public class MainController { // this class is responsible for view request and 
         if (isTokenValid(token)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "invalid token!");
-        } else if (UserController.getInstance().doesTokenAndPasswordMatch(token, currentPassword)) {
+        } else if (UserController.getInstance().doesUsernameAndPasswordMatch(onlineUsers.get(token), currentPassword)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "current password is invalid!");
         } else if (newPassword.equals(currentPassword)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "please enter a new password!");
         } else {
-            UserController.getInstance().changePassword(token, newPassword);
+            UserController.getInstance().changePassword(onlineUsers.get(token), newPassword);
             answerObject.put("Type", "Successful");
             answerObject.put("Value", "password changed successfully!");
         }
@@ -87,7 +92,7 @@ public class MainController { // this class is responsible for view request and 
             answerObject.put("Type", "Error");
             answerObject.put("Value", "user with nickname " + newNickname + " already exists");
         } else {
-            UserController.getInstance().changeNickname(token, newNickname);
+            UserController.getInstance().changeNickname(onlineUsers.get(token), newNickname);
             answerObject.put("Type", "Successful");
             answerObject.put("Value", "nickname changed successfully!");
         }
@@ -141,23 +146,23 @@ public class MainController { // this class is responsible for view request and 
     private String logoutRequest(JSONObject valueObject) {
         String token = valueObject.getString("Token");
 
-        UserController.getInstance().logout(token);
-
         // creating the json response object
         JSONObject answerObject = new JSONObject();
         if (isTokenValid(token)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "invalid token!");
         } else {
+            logout(token);
             answerObject.put("Type", "Successful");
             answerObject.put("Value", "user logged out successfully!");
         }
+
         return answerObject.toString();
     }
 
-    private boolean isTokenValid(String token) {
-        // TODO
-        return false;
+    // removing the user from the online users hash map
+    private void logout(String token) {
+        onlineUsers.remove(token);
     }
 
     private String loginRequest(JSONObject valueObject) {
@@ -172,12 +177,49 @@ public class MainController { // this class is responsible for view request and 
             answerObject.put("Type", "Error");
             answerObject.put("Value", "Username or password is wrong!");
         } else {
-            String token = UserController.getInstance().login(username, password);
+            String token = login(username);
             answerObject.put("Type", "Successful");
             answerObject.put("Value", token);
         }
 
         return answerObject.toString();
+    }
+
+    // logging in the user and put it in the online users hashmap
+    private String login(String username) {
+        String token = createRandomStringToken(32);
+        onlineUsers.put(token, username);
+        return token;
+    }
+
+    // function to generate a random string of length n as a token
+    private String createRandomStringToken(int n) {
+
+        // chose a Character random from this String
+        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                + "0123456789"
+                + "abcdefghijklmnopqrstuvxyz"
+                + "!@#$%^&*+-/?";
+
+        // create StringBuffer size of AlphaNumericString
+        StringBuilder sb = new StringBuilder(n);
+
+        for (int i = 0; i < n; i++) {
+
+            // generate a random number between
+            // 0 to AlphaNumericString variable length
+            int index = (int) (AlphaNumericString.length() * Math.random());
+
+            // add Character one by one in end of sb
+            sb.append(AlphaNumericString
+                    .charAt(index));
+        }
+
+        return sb.toString();
+    }
+
+    private boolean isTokenValid(String token) {
+        return onlineUsers.containsKey(token);
     }
 
     private String registerRequest(JSONObject valueObject) {
@@ -201,5 +243,9 @@ public class MainController { // this class is responsible for view request and 
         }
 
         return answerObject.toString();
+    }
+
+    public HashMap<String, String> getOnlineUsers() {
+        return onlineUsers;
     }
 }
