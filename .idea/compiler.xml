@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Yu-Gi-Oh" target="16" />
+      <module name="Yu-Gi-Oh" target="15" />
     </bytecodeTargetLevel>
   </component>
 </project>

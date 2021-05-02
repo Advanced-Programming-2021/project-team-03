@@ -148,6 +148,9 @@ public class MainController { // this class is responsible for view request and 
         return null;
     }
 
+    /**
+     * Deck Requests
+     **/
     private String showDeck(JSONObject valueObject) {
         //TODO
         return null;
@@ -164,23 +167,101 @@ public class MainController { // this class is responsible for view request and 
     }
 
     private String addCardToDeck(JSONObject valueObject) {
-        //TODO
-        return null;
+        String token = valueObject.getString("Token");
+        String deckName = valueObject.getString("Deck name");
+        String cardName = valueObject.getString("Card name");
+        String deckType = valueObject.getString("Deck type");
+
+        // answer Json object
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else if (!DeckController.getInstance().doesDeckAlreadyExists(onlineUsers.get(token), deckName)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "deck with name " + deckName + " does not exist");
+        } else if (!DeckController.getInstance().doesCardExists(onlineUsers.get(token), cardName)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "card with name " + cardName + " does not exist");
+        } else if (!DeckController.getInstance().doesUserHaveAnymoreCard(onlineUsers.get(token), cardName)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "you don't have anymore " + cardName);
+        } else if (DeckController.getInstance().isDeckFull(onlineUsers.get(token), deckName, deckType)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", deckType + " deck is full");
+        } else if (!DeckController.getInstance().canUserAddCardToDeck(onlineUsers.get(token), deckName, deckType, cardName)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "here are already three cards with name " + cardName + " in deck " + deckName);
+        } else {
+            DeckController.getInstance().addCardToDeck(onlineUsers.get(token), deckName, deckType, cardName);
+            answerObject.put("Type", "Successful");
+            answerObject.put("Value", "card added to " + deckType + " deck successfully!");
+        }
+
+        return answerObject.toString();
     }
 
     private String setActiveDeck(JSONObject valueObject) {
-        //TODO
-        return null;
+        String deckName = valueObject.getString("Deck name");
+        String token = valueObject.getString("Token");
+
+        // answer Json object
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else if (!DeckController.getInstance().doesDeckAlreadyExists(onlineUsers.get(token), deckName)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "deck with name " + deckName + " does not exist");
+        } else {
+            DeckController.getInstance().deleteDeck(onlineUsers.get(token), deckName);
+            answerObject.put("Type", "Successful");
+            answerObject.put("Value", "deck activated successfully!");
+        }
+
+        return answerObject.toString();
     }
 
     private String deleteDeck(JSONObject valueObject) {
-        //TODO
-        return null;
+        String deckName = valueObject.getString("Deck name");
+        String token = valueObject.getString("Token");
+
+        // answer Json object
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else if (!DeckController.getInstance().doesDeckAlreadyExists(onlineUsers.get(token), deckName)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "deck with name " + deckName + " does not exist");
+        } else {
+            DeckController.getInstance().deleteDeck(onlineUsers.get(token), deckName);
+            answerObject.put("Type", "Successful");
+            answerObject.put("Value", "deck deleted successfully!");
+        }
+
+        return answerObject.toString();
     }
 
     private String createANewDeck(JSONObject valueObject) {
-        //TODO
-        return null;
+        String deckName = valueObject.getString("Deck name");
+        String token = valueObject.getString("Token");
+
+        // answer Json object
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else if (DeckController.getInstance().doesDeckAlreadyExists(onlineUsers.get(token), deckName)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "deck with name " + deckName + " already exists");
+        } else {
+            DeckController.getInstance().createNewDeck(onlineUsers.get(token), deckName);
+            answerObject.put("Type", "Successful");
+            answerObject.put("Value", "deck created successfully!");
+        }
+
+        return answerObject.toString();
     }
 
     private String showCardRequest(JSONObject valueObject) {
@@ -188,6 +269,7 @@ public class MainController { // this class is responsible for view request and 
         return null;
     }
 
+    // Invalid Deck Error
     private String error() {
         JSONObject answerObject = new JSONObject();
 
@@ -207,6 +289,7 @@ public class MainController { // this class is responsible for view request and 
         return answerObject.toString();
     }
 
+
     private String changePasswordRequest(JSONObject valueObject) {
         String token = valueObject.getString("Token");
         String currentPassword = valueObject.getString("Current password");
@@ -214,7 +297,7 @@ public class MainController { // this class is responsible for view request and 
 
         // creating the json response object
         JSONObject answerObject = new JSONObject();
-        if (isTokenValid(token)) {
+        if (isTokenInvalid(token)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "invalid token!");
         } else if (UserController.getInstance().doesUsernameAndPasswordMatch(onlineUsers.get(token), currentPassword)) {
@@ -238,7 +321,7 @@ public class MainController { // this class is responsible for view request and 
         JSONObject answerObject = new JSONObject();
 
         // check possible errors
-        if (isTokenValid(token)) {
+        if (isTokenInvalid(token)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "invalid token!");
         } else if (UserController.getInstance().isNicknameExists(newNickname)) {
@@ -260,7 +343,7 @@ public class MainController { // this class is responsible for view request and 
         // creating the json response object
         JSONObject answerObject = new JSONObject();
 
-        if (isTokenValid(token)) {
+        if (isTokenInvalid(token)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "invalid token!");
         } else if (!ImportExportController.getInstance().canExportThisCard(cardName)) {
@@ -282,7 +365,7 @@ public class MainController { // this class is responsible for view request and 
         // creating the json response object
         JSONObject answerObject = new JSONObject();
 
-        if (isTokenValid(token)) {
+        if (isTokenInvalid(token)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "invalid token!");
         } else if (!ImportExportController.getInstance().canImportThisCard(cardName)) {
@@ -301,7 +384,7 @@ public class MainController { // this class is responsible for view request and 
 
         // creating the json response object
         JSONObject answerObject = new JSONObject();
-        if (isTokenValid(token)) {
+        if (isTokenInvalid(token)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "invalid token!");
         } else {
@@ -371,8 +454,8 @@ public class MainController { // this class is responsible for view request and 
         return sb.toString();
     }
 
-    private boolean isTokenValid(String token) {
-        return onlineUsers.containsKey(token);
+    private boolean isTokenInvalid(String token) {
+        return !onlineUsers.containsKey(token);
     }
 
     private String registerRequest(JSONObject valueObject) {

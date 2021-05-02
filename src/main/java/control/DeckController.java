@@ -5,31 +5,51 @@ import model.user.Deck;
 import model.user.User;
 
 public class DeckController {
-    public static void createNewDeck(String username, User user){
+    private static DeckController deckController;
 
+    private DeckController() {
     }
 
-    public static void addCardToDeck(Card card, Deck deck){
-
+    public static DeckController getInstance() {
+        if (deckController == null)
+            deckController = new DeckController();
+        return deckController;
     }
 
-    public static String removeCardFromDeck(Card card,Deck deck){
+    public boolean doesDeckAlreadyExists(String username, String deckName) {
         //TODO
-        return null;
+        return false;
     }
 
-    public static String setActiveDeck(Deck deck,User user){
+    public void createNewDeck(String username, String deckName) {
         //TODO
-        return null;
     }
 
-    public static String showAllDeck(User user){
+    public void deleteDeck(String username, String deckName) {
         //TODO
-        return null;
     }
 
-    public static String showDeckInformation(Deck deck){
+    public boolean doesCardExists(String username, String cardName) {
         //TODO
-        return null;
+        return false;
+    }
+
+    public boolean doesUserHaveAnymoreCard(String username, String cardName) {
+        //TODO
+        return false;
+    }
+
+    public boolean isDeckFull(String username, String deckName, String deckType) {
+        //TODO
+        return false;
+    }
+
+    public boolean canUserAddCardToDeck(String username, String deckName, String deckType, String cardName) {
+        //TODO
+        return false;
+    }
+
+    public void addCardToDeck(String username, String deckName, String deckType, String cardName) {
+        //TODO
     }
 }
