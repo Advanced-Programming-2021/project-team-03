@@ -25,4 +25,16 @@ public abstract class Card {
     public void setCardIdInTheGame(int cardIdInTheGame) {
         this.cardIdInTheGame = cardIdInTheGame;
     }
+
+    public String getCardName() {
+        return cardName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getPrice() {
+        return price;
+    }
 }

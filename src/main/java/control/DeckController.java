@@ -77,4 +77,9 @@ public class DeckController {
     public Deck getDeck(String username, String deckName) {
         return null;
     }
+
+    public ArrayList<Card> getAllUsersCards(String username) {
+        // return all cards that owned by the user
+        return null;
+    }
 }

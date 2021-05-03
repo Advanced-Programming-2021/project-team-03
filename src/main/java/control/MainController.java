@@ -1,9 +1,11 @@
 package control;
 
+import model.card.Card;
 import model.user.Deck;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,7 +45,6 @@ public class MainController { // this class is responsible for view request and 
             case "Change nickname" -> changeNicknameRequest(valueObject);
             case "Change password" -> changePasswordRequest(valueObject);
             case "Scoreboard" -> scoreBoardRequest();
-            case "Show card" -> showCardRequest(valueObject);
             case "Create deck" -> createANewDeck(valueObject);
             case "Delete deck" -> deleteDeck(valueObject);
             case "Set active deck" -> setActiveDeck(valueObject);
@@ -136,26 +137,78 @@ public class MainController { // this class is responsible for view request and 
         return null;
     }
 
+    /**
+     * shop Requests
+     **/
     private String showAllCardsInShop(JSONObject valueObject) {
-        //TODO
-        return null;
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            answerObject.put("Type", "Successful");
+
+            JSONArray cardsArray = new JSONArray();
+            for (Card card : ShopController.getInstance().getAllCards()) {
+                cardsArray.put(card.getCardName() + ":" + card.getPrice());
+            }
+            answerObject.put("Value", cardsArray);
+        }
+
+        return answerObject.toString();
     }
 
     private String buyCard(JSONObject valueObject) {
-        //TODO
-        return null;
+        String token = valueObject.getString("Token");
+        String cardName = valueObject.getString("Card name");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else if (!ShopController.getInstance().doesCardExists(cardName)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "there is no card with this name in the shop!");
+        } else if (ShopController.getInstance().doesPlayerHaveEnoughMoney(onlineUsers.get(token), cardName)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "You don't have enough money to buy this card");
+        } else {
+            ShopController.getInstance().buyCard(onlineUsers.get(token), cardName);
+            answerObject.put("Type", "Successful");
+            answerObject.put("Value", cardName + " successfully purchased and added to your inventory");
+        }
+
+        return answerObject.toString();
     }
 
     private String showAllPlayerCards(JSONObject valueObject) {
-        //TODO
-        return null;
+        //TODO double check the card representation
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            answerObject.put("Type", "Successful");
+            ArrayList<Card> allUsersCards = DeckController.getInstance().getAllUsersCards(onlineUsers.get(token));
+            JSONArray cardsArray = new JSONArray();
+            for (Card card : allUsersCards) {
+                cardsArray.put(card.getCardName() + ":" + card.getDescription());
+            }
+            answerObject.put("Value", cardsArray);
+        }
+
+        return answerObject.toString();
     }
 
     /**
      * Deck Requests
      **/
     private String showDeck(JSONObject valueObject) {
-        //TODO
+        //TODO double check the deck representation
         String token = valueObject.getString("Token");
         String deckName = valueObject.getString("Deck name");
         String deckType = valueObject.getString("Deck type");
@@ -316,11 +369,6 @@ public class MainController { // this class is responsible for view request and 
         }
 
         return answerObject.toString();
-    }
-
-    private String showCardRequest(JSONObject valueObject) {
-        //TODO
-        return null;
     }
 
     // Invalid Deck Error
