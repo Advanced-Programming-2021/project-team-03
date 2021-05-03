@@ -3,6 +3,9 @@ package control;
 import model.card.Card;
 import model.user.Deck;
 import model.user.User;
+import org.json.JSONArray;
+
+import java.util.ArrayList;
 
 public class DeckController {
     private static DeckController deckController;
@@ -51,5 +54,27 @@ public class DeckController {
 
     public void addCardToDeck(String username, String deckName, String deckType, String cardName) {
         //TODO
+    }
+
+    public boolean doesDeckContainThisCard(String username, String deckName, String cardName) {
+        return false;
+    }
+
+    public void removeCardFromDeck(String username, String deckName, String deckType, String cardName) {
+
+    }
+
+    public Deck getUserActiveDeck(String username) {
+        //TODO
+        return null;
+    }
+
+    public ArrayList<Deck> getAllUsersDecks() {
+         /* this method returns all decks except the active deck */
+        return null;
+    }
+
+    public Deck getDeck(String username, String deckName) {
+        return null;
     }
 }

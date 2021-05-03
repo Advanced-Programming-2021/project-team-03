@@ -1,9 +1,12 @@
 package control;
 
+import model.user.Deck;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class MainController { // this class is responsible for view request and send the feedback to thee view via a Json string
@@ -153,17 +156,68 @@ public class MainController { // this class is responsible for view request and 
      **/
     private String showDeck(JSONObject valueObject) {
         //TODO
-        return null;
+        String token = valueObject.getString("Token");
+        String deckName = valueObject.getString("Deck name");
+        String deckType = valueObject.getString("Deck type");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else if (!DeckController.getInstance().doesDeckAlreadyExists(onlineUsers.get(token), deckName)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "deck with name " + deckName + " does not exist");
+        } else {
+            answerObject.put("Type", "Successful");
+            answerObject.put("Value", DeckController.getInstance().getDeck(onlineUsers.get(token), deckName).showDeck(deckType));
+        }
+
+        return answerObject.toString();
     }
 
     private String showAllDecks(JSONObject valueObject) {
-        //TODO
-        return null;
+        // TODO double check the other decks representation
+
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            answerObject.put("Type", "Successful");
+            answerObject.put("Active deck", DeckController.getInstance().getUserActiveDeck(onlineUsers.get(token)).generalOverview());
+            List<String> otherDecks = DeckController.getInstance().getAllUsersDecks().stream().map(Deck::generalOverview).collect(Collectors.toList());
+            answerObject.put("Other deck", otherDecks);
+        }
+
+        return answerObject.toString();
     }
 
     private String removeCardFromDeck(JSONObject valueObject) {
-        //TODO
-        return null;
+        String token = valueObject.getString("Token");
+        String deckName = valueObject.getString("Deck name");
+        String cardName = valueObject.getString("Card name");
+        String deckType = valueObject.getString("Deck type");
+
+        // answer Json object
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else if (!DeckController.getInstance().doesDeckAlreadyExists(onlineUsers.get(token), deckName)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "deck with name " + deckName + " does not exist");
+        } else if (!DeckController.getInstance().doesDeckContainThisCard(onlineUsers.get(token), deckName, cardName)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "card with name " + cardName + " does not exist in " + deckName + " deck");
+        } else {
+            DeckController.getInstance().removeCardFromDeck(onlineUsers.get(token), deckName, deckType, cardName);
+            answerObject.put("Type", "Successful");
+            answerObject.put("Value", cardName + " removed form deck successfully!");
+        }
+
+        return answerObject.toString();
     }
 
     private String addCardToDeck(JSONObject valueObject) {

@@ -41,4 +41,18 @@ public class Deck {
         //TODO
         return true;
     }
+
+    public String showDeck(String deckType) {
+        /*TODO showing the details of the given deck
+         * for show deck request
+         * */
+        return null;
+    }
+
+    public String generalOverview() {
+        /*TODO showing the general overview
+         * for show all deck request
+         * */
+        return null;
+    }
 }
