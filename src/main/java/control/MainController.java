@@ -5,13 +5,16 @@ import model.user.Deck;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class MainController { // this class is responsible for view request and send the feedback to thee view via a Json string
+public class MainController {
+    // this class is responsible for view request and send the feedback to thee view via a Json string
 
     private static MainController mainControllerInstance;
 
@@ -536,30 +539,13 @@ public class MainController { // this class is responsible for view request and 
         return token;
     }
 
-    // function to generate a random string of length n as a token
-    private String createRandomStringToken(int n) {
-
-        // chose a Character random from this String
-        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                + "0123456789"
-                + "abcdefghijklmnopqrstuvxyz"
-                + "!@#$%^&*+-/?";
-
-        // create StringBuffer size of AlphaNumericString
-        StringBuilder sb = new StringBuilder(n);
-
-        for (int i = 0; i < n; i++) {
-
-            // generate a random number between
-            // 0 to AlphaNumericString variable length
-            int index = (int) (AlphaNumericString.length() * Math.random());
-
-            // add Character one by one in end of sb
-            sb.append(AlphaNumericString
-                    .charAt(index));
-        }
-
-        return sb.toString();
+    // function to generate a random string of byte-length n as a token
+    /* https://stackoverflow.com/questions/41107/how-to-generate-a-random-alpha-numeric-string */
+    private String createRandomStringToken(int byteLength) {
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] token = new byte[byteLength];
+        secureRandom.nextBytes(token);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(token); //base64 encoding
     }
 
     private boolean isTokenInvalid(String token) {
