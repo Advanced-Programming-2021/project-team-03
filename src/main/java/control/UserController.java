@@ -19,7 +19,7 @@ public class UserController {
     }
 
     public boolean doesUsernameExist(String username) { // checking if a user with this username exists
-        // TODO check for the username
+
         return false;
     }
 
