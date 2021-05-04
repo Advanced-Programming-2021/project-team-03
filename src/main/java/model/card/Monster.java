@@ -39,8 +39,12 @@ public class Monster extends Card {
 
     @Override
     public String toString() {
-        //TODO
-        return null;
+        return "Name: " + this.cardName + "\n" +
+                "Level: " + this.level + "\n" +
+                "Type: " + this.model + "\n" +
+                "ATK: " + this.baseAttack + "\n" +
+                "DEF: " + this.baseDefence + "\n" +
+                "Description: " + this.description;
     }
 
     public IMonsterEffect getMonsterEffect() {
