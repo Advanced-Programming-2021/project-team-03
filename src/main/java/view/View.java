@@ -396,6 +396,7 @@ public class View {
     }
 
     private void showDeck(String inputCommand) {
+        // TODO add "Deck type" tag to the request
         getRegexMatcher(inputCommand, deckMenuCommands[14], true);
 
         String deckName = regexMatcher.group(1);
