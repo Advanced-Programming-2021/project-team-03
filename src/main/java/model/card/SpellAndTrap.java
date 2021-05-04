@@ -13,7 +13,9 @@ public class SpellAndTrap extends Card {
 
     @Override
     public String toString() {
-        //TODO
-        return null;
+        return "Name: " + this.cardName + "\n" +
+                "Model : " + this.attribute + "\n" +
+                "Type: " + this.icon + "\n" +
+                "Description: " + this.description;
     }
 }

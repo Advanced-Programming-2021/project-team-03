@@ -19,7 +19,7 @@ public class DeckController {
         return deckController;
     }
 
-    public boolean doesDeckAlreadyExists(String username, String deckName) {
+    public boolean doesDeckAlreadyExist(String username, String deckName) {
         //TODO
         return false;
     }
@@ -32,7 +32,7 @@ public class DeckController {
         //TODO
     }
 
-    public boolean doesCardExists(String username, String cardName) {
+    public boolean doesCardExist(String username, String cardName) {
         //TODO
         return false;
     }

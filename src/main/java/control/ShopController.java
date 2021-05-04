@@ -1,15 +1,16 @@
 package control;
 
 import model.card.Card;
+import model.user.User;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ShopController {
     private static ShopController shopController;
-    private final ArrayList<Card> allCards;
+    private final HashMap<String, Card> allCards;
 
     private ShopController() {
-        allCards = new ArrayList<>();
+        allCards = new HashMap<>();
     }
 
     public static ShopController getInstance() {
@@ -18,21 +19,19 @@ public class ShopController {
         return shopController;
     }
 
-    public boolean doesCardExists(String cardName) {
-        //TODO
-        return false;
+    public boolean doesCardExist(String cardName) {
+        return allCards.containsKey(cardName);
     }
 
     public boolean doesPlayerHaveEnoughMoney(String username, String cardName) {
-        //TODO
-        return false;
+        return allCards.get(cardName).getPrice() <= User.getUserByUsername(username).getBalance();
     }
 
     public void buyCard(String username, String cardName) {
         //TODO
     }
 
-    public ArrayList<Card> getAllCards() {
+    public HashMap<String, Card> getAllCards() {
         return allCards;
     }
 }

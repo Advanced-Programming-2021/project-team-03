@@ -18,12 +18,12 @@ public class UserController {
         return userController;
     }
 
-    public boolean isUsernameExists(String username) { // checking if a user with this username exists
+    public boolean doesUsernameExist(String username) { // checking if a user with this username exists
         // TODO check for the username
         return false;
     }
 
-    public boolean isNicknameExists(String nickname) {// checking if a user with this nickname exists
+    public boolean doesNicknameExist(String nickname) {// checking if a user with this nickname exists
         // TODO check for the nickname
         return false;
     }
