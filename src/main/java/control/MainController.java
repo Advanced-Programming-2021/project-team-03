@@ -534,7 +534,7 @@ public class MainController {
 
     // logging in the user and put it in the online users hashmap
     private String login(String username) {
-        String token = createRandomStringToken(32);
+        String token = createRandomStringToken(30);
         onlineUsers.put(token, username);
         return token;
     }
