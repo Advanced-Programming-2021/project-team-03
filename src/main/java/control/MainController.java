@@ -391,7 +391,7 @@ public class MainController { // this class is responsible for view request and 
         // returning a json array as a value that holds the score board users information
         JSONObject answerObject = new JSONObject();
 
-        JSONArray scoreBoard = ScoreBoardController.getInstance().getScoreBoard();
+        JSONArray scoreBoard = UserController.getInstance().getAllUsersForUsername();
         answerObject.put("Value", scoreBoard);
 
         return answerObject.toString();

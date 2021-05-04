@@ -1,6 +1,9 @@
 package control;
 
 import model.user.User;
+import org.json.JSONArray;
+
+import java.util.ArrayList;
 
 public class UserController {
 
@@ -43,4 +46,9 @@ public class UserController {
         //TODO
     }
 
+
+    public JSONArray getAllUsersForUsername() {
+        // TODO this method returns a JSON array of all users sorted by their scores
+        return null;
+    }
 }
