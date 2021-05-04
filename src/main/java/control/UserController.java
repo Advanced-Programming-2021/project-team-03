@@ -1,12 +1,11 @@
 package control;
 
 import model.user.User;
+import model.user.UserException;
 import org.json.JSONArray;
 
-import java.util.ArrayList;
 
 public class UserController {
-
     private static UserController userController;
 
     private UserController() {
@@ -19,36 +18,42 @@ public class UserController {
     }
 
     public boolean doesUsernameExist(String username) { // checking if a user with this username exists
-
-        return false;
+        return User.get(username) != null;
     }
 
     public boolean doesNicknameExist(String nickname) {// checking if a user with this nickname exists
-        // TODO check for the nickname
-        return false;
+        return User.doesNicknameExists(nickname);
     }
 
     public void registerUsername(String username, String password, String nickname) {
-        // register a new user with the given properties
-        //TODO register
+        try {
+            new User(username, password, nickname);
+        } catch (UserException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean doesUsernameAndPasswordMatch(String username, String password) {
-        // TODO
-        return false;
+        return User.get(username).doesMatchPassword(password);
     }
 
     public void changeNickname(String username, String newNickname) {
-        //TODO
+        try {
+            User.get(username).setNickname(newNickname);
+        } catch (UserException e) {
+            e.printStackTrace();
+        }
     }
 
     public void changePassword(String username, String newPassword) {
-        //TODO
+        try {
+            User.get(username).changePassword(newPassword);
+        } catch (UserException e) {
+            e.printStackTrace();
+        }
     }
 
-
     public JSONArray getAllUsersForUsername() {
-        // TODO this method returns a JSON array of all users sorted by their scores
-        return null;
+        return new JSONArray(User.getScoreBoard());
     }
 }
