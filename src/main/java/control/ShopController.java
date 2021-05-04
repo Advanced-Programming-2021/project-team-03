@@ -19,7 +19,7 @@ public class ShopController {
         return shopController;
     }
 
-    public boolean doesCardExists(String cardName) {
+    public boolean doesCardExist(String cardName) {
         return allCards.containsKey(cardName);
     }
 
