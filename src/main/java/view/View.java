@@ -23,6 +23,8 @@ public class View {
     private String[] importExportMenuCommands = new String[5];
     private String[] shopMenuCommands = new String[5];
     private String[] deckMenuCommands = new String[16];
+    private String[] duelMenuCommands = new String[16]; //TODO
+    private String[] gameMenuCommands = new String[16]; //TODO
 
     //region Initialization block
     {
@@ -99,6 +101,40 @@ public class View {
         deckMenuCommands[13] = "^deck show -(c|-cards)$";
         deckMenuCommands[14] = "^deck show -(d|-deck) ([\\S]+)(?: -(?:s|-side))?$";
         deckMenuCommands[15] = "^deck show(?: -(?:s|-side))? -(d|-deck) ([\\S]+)$";
+
+        //Duel menu valid commands
+        duelMenuCommands[0] = "^menu exit$";
+        duelMenuCommands[1] = "^menu enter (?:Duel|Deck|Scoreboard|Profile|Shop|Import/Export)$";
+        duelMenuCommands[2] = "^menu show-current$";
+        duelMenuCommands[3] = "^duel -(n|-new)() -(s|-second-player) (\\S+) -(r|-rounds) (\\d+)$";
+        duelMenuCommands[4] = "^duel -(n|-new)() -(r|-rounds) (\\d+) -(s|-second-player) (\\S+)$";
+        duelMenuCommands[5] = "^duel -(s|-second-player) (\\S+) -(n|-new)() -(r|-rounds) (\\d+)$";
+        duelMenuCommands[6] = "^duel -(s|-second-player) -(r|-rounds) (\\d+) -(n|-new)()$";
+        duelMenuCommands[7] = "^duel -(r|-rounds) (\\d+) -(s|-second-player) (\\S+) -(n|-new)()$";
+        duelMenuCommands[8] = "^duel -(r|-rounds) (\\d+) -(n|-new)() -(s|-second-player)$";
+        duelMenuCommands[9] = "^duel -(n|a|-new|-ai)() -(n|a|-new|-ai)() -(r|-rounds) (\\d+)$";
+        duelMenuCommands[10] = "^duel -(n|a|-new|-ai)() -(r|-rounds) (\\d+) -(n|a|-new|-ai)()$";
+        duelMenuCommands[11] = "^duel -(r|-rounds) (\\d+) -(n|a|-new|-ai)() -(n|a|-new|-ai)()$";
+
+        //Game menu valid commands
+        gameMenuCommands[0] = "^select -(m|-monster) (\\d+)$";
+        gameMenuCommands[1] = "^select -(s|-spell) (\\d+)$";
+        gameMenuCommands[2] = "^select -(f|-field)()$";
+        gameMenuCommands[3] = "^select -(h|-hand) (\\d+)$";
+        gameMenuCommands[4] = "^select -(m|o|-monster|-opponent)() -(m|o|-monster|-opponent) (\\d+)$";
+        gameMenuCommands[5] = "^select -(s|o|-spell|-opponent)() -(s|o|-spell|-opponent) (\\d+)$";
+        gameMenuCommands[6] = "^select -(f|o|-field|-opponent)() -(f|o|-field|-opponent)()$";
+        gameMenuCommands[7] = "^select -d$"; //for removing selection
+        gameMenuCommands[8] = "^select .+$"; //for invalid selection
+        gameMenuCommands[9] = "^summon$";
+        gameMenuCommands[10] = "^set$";
+        gameMenuCommands[11] = "^set -(?:p|-position) (attack|defense)$"; //syntax in dock in not correct
+        gameMenuCommands[12] = "^flip-summon$";
+        gameMenuCommands[13] = "^attack (1|2|3|4|5)$";
+        gameMenuCommands[14] = "^attack direct$";
+        gameMenuCommands[15] = "^surrender$";
+        gameMenuCommands[16] = "^card show -(?:s|-selected)$";
+        gameMenuCommands[17] = "^show graveyard$";
     }
     //endregion
 
@@ -379,9 +415,380 @@ public class View {
     }
     //endregion
 
+    //region duel menu methods
     private void duelMenu() {
-
+        int regexIndex = 0;
+        while (true) {
+            String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if (inputCommand.matches(duelMenuCommands[0])) break; //Duel exit and back to main menu
+            else if (inputCommand.matches(duelMenuCommands[1]))
+                System.out.println("menu navigation is not possible");
+            else if (inputCommand.matches(duelMenuCommands[2])) System.out.println("Duel");
+            else if ((regexIndex = doesInputMatchWithStartDuelWithAnotherPlayerCommand(inputCommand)) != 0) {
+                startDuelWithAnotherPlayer(inputCommand, regexIndex);
+            } else if ((regexIndex = doesInputMatchWithStartDuelWithAiCommand(inputCommand)) != 0) {
+                startDuelWithAi(inputCommand, regexIndex);
+            } else System.out.println("invalid command");
+        }
     }
+
+    private int doesInputMatchWithStartDuelWithAnotherPlayerCommand(String inputCommand) {
+        for (int i = 3; i <= 8; i++) {
+            if (inputCommand.matches(duelMenuCommands[i]))
+                return i;
+        }
+        return 0;
+    }
+
+    private void startDuelWithAnotherPlayer(String inputCommand, int commandRegexIndex) {
+        getRegexMatcher(inputCommand, duelMenuCommands[commandRegexIndex], true);
+
+        String secondPlayerName = "";
+        int roundCount = 0;
+
+        //Finding card second player name and rounds number from command:
+        for (int i = 1; i < 7; i += 2) {
+            switch (regexMatcher.group(i)) {
+                case "-second-player", "s" -> secondPlayerName = regexMatcher.group(i + 1);
+                case "-rounds", "r" -> roundCount = Integer.parseInt(regexMatcher.group(i + 1));
+            }
+        }
+
+        //Making message JSONObject and passing to sendControl function:
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Second player name", secondPlayerName);
+        value.put("Rounds number", String.valueOf(roundCount));
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "New duel");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        //TODO: go to game menu
+        String answerType = (String) controlAnswer.get("Type");
+        String answerValue = (String) controlAnswer.get("Value");
+        System.out.println(answerValue);
+    }
+
+    private int doesInputMatchWithStartDuelWithAiCommand(String inputCommand) {
+        for (int i = 9; i <= 11; i++) {
+            if (inputCommand.matches(duelMenuCommands[i]) && !doesInputCommandHaveRepeatedField(inputCommand, duelMenuCommands[i], 3))
+                return i;
+        }
+        return 0;
+    }
+
+    private void startDuelWithAi(String inputCommand, int commandRegexIndex) {
+        getRegexMatcher(inputCommand, duelMenuCommands[commandRegexIndex], true);
+
+        int roundCount = 0;
+
+        //Finding card second player name and rounds number from command:
+        for (int i = 1; i < 7; i += 2) {
+            switch (regexMatcher.group(i)) {
+                case "-rounds", "r" -> roundCount = Integer.parseInt(regexMatcher.group(i + 1));
+            }
+        }
+
+        //Making message JSONObject and passing to sendControl function:
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Rounds number", String.valueOf(roundCount));
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "New duel with ai");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        //TODO: go to game menu
+        String answerType = (String) controlAnswer.get("Type");
+        String answerValue = (String) controlAnswer.get("Value");
+        System.out.println(answerValue);
+    }
+    //endregion
+
+    //region game menu methods
+    private void gameMenu() {
+        int regexIndex;
+        while (true) {
+            String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if ((regexIndex = doesInputMatchWithSelectCardCommand(inputCommand)) != 0)
+                selectCard(inputCommand, regexIndex);
+            else if (inputCommand.matches(gameMenuCommands[7])) cancelCardSelection();
+            else if (inputCommand.matches(gameMenuCommands[8])) System.out.println("invalid selection");
+            else if (inputCommand.matches(gameMenuCommands[9])) summonCard();
+            else if (inputCommand.matches(gameMenuCommands[10])) setCard();
+            else if (inputCommand.matches(gameMenuCommands[11])) setAttackingOrDefending(inputCommand);
+            else if (inputCommand.matches(gameMenuCommands[12])) filipSummon();
+            else if (inputCommand.matches(gameMenuCommands[13])) attackToMonster(inputCommand);
+            else if (inputCommand.matches(gameMenuCommands[14])) directAttack();
+            else if (inputCommand.matches(gameMenuCommands[15])) surrender();
+            else if (inputCommand.matches(gameMenuCommands[16])) showSelectedCard();
+            else if (inputCommand.matches(gameMenuCommands[17])) showGraveyard();
+            else System.out.println("invalid command");
+        }
+    }
+
+    private int doesInputMatchWithSelectCardCommand(String inputCommand) {
+        for (int i = 0; i <= 6; i++) {
+            if (inputCommand.matches(gameMenuCommands[i])) {
+                if (i < 4) return i;
+                else if (!doesInputCommandHaveRepeatedField(inputCommand, gameMenuCommands[i], 2)) return i;
+            }
+        }
+        return 0;
+    }
+
+    private void selectCard(String inputCommand, int commandRegexIndex) {
+        getRegexMatcher(inputCommand, gameMenuCommands[commandRegexIndex], true);
+
+        String selectedCardType = "";
+        String cardOwner = "Myself";
+        int cardPosition = 0;
+
+        //Finding selection card type and card owner and card position from command:
+        switch (commandRegexIndex) {
+            case 0 -> {
+                selectedCardType = "Monster";
+                cardPosition = Integer.parseInt(regexMatcher.group(2));
+            }
+            case 1 -> {
+                selectedCardType = "Spell";
+                cardPosition = Integer.parseInt(regexMatcher.group(2));
+            }
+            case 2 -> {
+                selectedCardType = "Field"; //card position is 0 in this part but it is not important for control
+            }
+            case 3 -> {
+                selectedCardType = "Hand";
+                cardPosition = Integer.parseInt(regexMatcher.group(2));
+            }
+            case 4 -> {
+                selectedCardType = "Monster";
+                cardPosition = Integer.parseInt(regexMatcher.group(3));
+                cardOwner = "Opponent";
+            }
+            case 5 -> {
+                selectedCardType = "Spell";
+                cardPosition = Integer.parseInt(regexMatcher.group(3));
+                cardOwner = "Opponent";
+            }
+            case 6 -> {
+                selectedCardType = "Field"; //card position is 0 in this part but it is not important for control
+                cardOwner = "Opponent";
+            }
+        }
+
+        //Making message JSONObject and passing to sendControl function:
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Type", selectedCardType);
+        value.put("Position", String.valueOf(cardPosition));
+        value.put("Owner", cardOwner);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Select Card");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        String answerValue = (String) controlAnswer.get("Value");
+        System.out.println(answerValue);
+    }
+
+    private void cancelCardSelection() {
+        //Making message JSONObject and passing to sendControl function:
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Cancel card selection");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        String answerValue = (String) controlAnswer.get("Value");
+        System.out.println(answerValue);
+    }
+
+    private void summonCard() {
+        //Making message JSONObject and passing to sendControl function:
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Summon");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        String answerType = (String) controlAnswer.get("Type");
+        String answerValue = (String) controlAnswer.get("Value");
+        if (answerType.equals("Error")) System.out.println(answerValue);
+        else if (answerValue.equals("Need one tribute")) {
+            getTributeCard(1);
+        } else if (answerValue.equals("Need two tribute")) {
+            getTributeCard(2);
+        } else System.out.println(answerValue);
+    }
+
+    private void getTributeCard(int numberOfNeededCards) {
+        //Getting needed tribute cards
+        int[] tributeCardsPosition = new int[2];
+        int counter = 0;
+        while (counter < numberOfNeededCards) {
+            String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if (inputCommand.matches("^\\d+$")) {
+                tributeCardsPosition[counter] = Integer.parseInt(inputCommand);
+                counter++;
+            } else if (inputCommand.equals("cancel")) {
+                System.out.println("The order was canceled");
+                return;
+            } else System.out.println("invalid command");
+        }
+
+        //Making message JSONObject and passing to sendControl function:
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        if (numberOfNeededCards == 1) {
+            value.put("Position", String.valueOf(tributeCardsPosition[0]));
+        } else {
+            value.put("First position", String.valueOf(tributeCardsPosition[0]));
+            value.put("Second position", String.valueOf(tributeCardsPosition[1]));
+        }
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Tribute cards");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        String answerValue = (String) controlAnswer.get("Value");
+        System.out.println(answerValue);
+    }
+
+    private void setCard() {
+        //Making message JSONObject and passing to sendControl function:
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Set in field");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        String answerValue = (String) controlAnswer.get("Value");
+        System.out.println(answerValue);
+    }
+
+    private void setAttackingOrDefending(String inputCommand) {
+        getRegexMatcher(inputCommand, gameMenuCommands[11], true);
+
+        //Finding Position mode from command:
+        String positionMode = switch (regexMatcher.group(1)) {
+            case "attack" -> "Attack";
+            case "defense" -> "Defense";
+            default -> "";
+        };
+
+        //Making message JSONObject and passing to sendControl function:
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Mode", positionMode);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Set position");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        String answerValue = (String) controlAnswer.get("Value");
+        System.out.println(answerValue);
+    }
+
+    private void filipSummon() {
+        //Making message JSONObject and passing to sendControl function:
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Flip summon");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        String answerValue = (String) controlAnswer.get("Value");
+        System.out.println(answerValue);
+    }
+
+    private void attackToMonster(String inputCommand) {
+        getRegexMatcher(inputCommand, gameMenuCommands[13], true);
+
+        //Making message JSONObject and passing to sendControl function:
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Position", regexMatcher.group(1));
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Attack");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        String answerValue = (String) controlAnswer.get("Value");
+        System.out.println(answerValue);
+    }
+
+    private void directAttack() {
+        //Making message JSONObject and passing to sendControl function:
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Direct attack");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        String answerValue = (String) controlAnswer.get("Value");
+        System.out.println(answerValue);
+    }
+
+    private void surrender() {
+        //Making message JSONObject and passing to sendControl function:
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Surrender");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        String answerValue = (String) controlAnswer.get("Value");
+        System.out.println(answerValue);
+    }
+
+    private void showSelectedCard() {
+        //Making message JSONObject and passing to sendControl function:
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Show selected card");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        String answerValue = (String) controlAnswer.get("Value");
+        System.out.println(answerValue);
+    }
+
+    private void showGraveyard() {
+        //Making message JSONObject and passing to sendControl function:
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Show graveyard");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        String answerValue = (String) controlAnswer.get("Value");
+        System.out.println(answerValue);
+    }
+    //endregion
 
     //region shop menu methods
     private void shopMenu() {

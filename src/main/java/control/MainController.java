@@ -57,8 +57,14 @@ public class MainController { // this class is responsible for view request and 
             case "Show all cards in shop" -> showAllCardsInShop(valueObject);
             case "Cheat code" -> cheatCodes(valueObject);
             case "New duel" -> newDuel(valueObject);
+            //TODO: add this type of client command to code.
+            //case "New duel with ai"
             case "Select Card" -> selectCardInGame(valueObject);
+            //TODO: add this type of client command to code.
+            //case "Cancel card selection"
             case "Summon" -> summonACard(valueObject);
+            //TODO: add this type of client command to code.
+            //case "Tribute cards"
             case "Set in field" -> setACard(valueObject);
             case "Set position" -> setPosition(valueObject);
             case "Flip summon" -> flipSummon(valueObject);
