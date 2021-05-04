@@ -42,8 +42,7 @@ public class Deck {
     }
 
     public boolean isDeckValid() {
-        //TODO
-        return true;
+        return isValid;
     }
 
     public String showDeck(String deckType) {
@@ -79,13 +78,5 @@ public class Deck {
             return this.deckName + ": main deck " + this.mainDeck.size() + ", side deck " + this.sideDeck.size() + ", Valid";
         else
             return this.deckName + ": main deck " + this.mainDeck.size() + ", side deck " + this.sideDeck.size() + ", Invalid";
-    }
-
-    public boolean isValid() {
-        return isValid;
-    }
-
-    public void setValid(boolean valid) {
-        isValid = valid;
     }
 }

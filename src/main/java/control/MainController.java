@@ -157,7 +157,7 @@ public class MainController { // this class is responsible for view request and 
             answerObject.put("Type", "Successful");
 
             JSONArray cardsArray = new JSONArray();
-            for (Card card : ShopController.getInstance().getAllCards()) {
+            for (Card card : ShopController.getInstance().getAllCards().values()) {
                 cardsArray.put(card.getCardName() + ":" + card.getPrice());
             }
             answerObject.put("Value", cardsArray);
