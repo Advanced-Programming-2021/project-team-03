@@ -9,14 +9,14 @@ import java.util.HashMap;
 class UserDatabase {
     private static final String USER_DATABASE_PATH = "./database/users/";
 
-    static HashMap<String, User> updateAllUsers() {  // TODO change me to update "a" user
+    static HashMap<String, User> updateAllUsers() {
         Gson gson = new Gson();
         HashMap<String, User> allUsers = new HashMap<>();
 
         File[] listOfFiles = new File(USER_DATABASE_PATH).listFiles();
         assert listOfFiles != null;
 
-        Arrays.stream(listOfFiles).parallel()
+        Arrays.stream(listOfFiles)   // Using parallel may cause a crash
                 .filter(UserDatabase::isJsonFile)
                 .forEach(file -> {
                     try {

@@ -4,6 +4,7 @@ import model.card.Card;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 
@@ -23,14 +24,15 @@ public class User {
         allUsers = UserDatabase.updateAllUsers();
     }
 
-    public User(String username, String password, String nickName) throws UserException {
+    public User(String username, String password, String nickname) throws UserException {
         this.username = username;
-        setNickname(nickName); // may throw an exception
+        setNickname(nickname); // may throw an exception
         this.passwordHash = hashString(password);
         this.score = 0;
         this.balance = 0;
         this.level = 1;
 
+        allUsers.put(username, this);
         updateInDatabase(); // may throw an exception
     }
 
@@ -49,21 +51,21 @@ public class User {
         UserDatabase.removeUser(this);
     }
 
-    public static User getUserByUsername(String username) {
-        return allUsers.get(username);
-    }
-
     public String getNickname() {
         return nickname;
     }
 
     public void setNickname(String nickname) throws UserException {
-        if (allUsers.values().stream()
-                .anyMatch(user -> user.nickname.equals(nickname))) {
+        if (doesNicknameExists(nickname)) {
             throw new UserException("The nickname: \"" + nickname + "\" is already taken.");
         }
         this.nickname = nickname;
         updateInDatabase();
+    }
+
+    public static boolean doesNicknameExists(String nickname) {
+        return allUsers.values().stream()
+                .anyMatch(user -> user.nickname.equals(nickname));
     }
 
     public void changePassword(String oldPassword, String newPassword) throws UserException {
@@ -73,6 +75,11 @@ public class User {
             return;
         }
         throw new UserException("Entered password does not match the old password.");
+    }
+
+    public void changePassword(String newPassword) throws UserException {
+        this.passwordHash = hashString(newPassword);
+        updateInDatabase();
     }
 
     public String getUsername() {
@@ -132,5 +139,15 @@ public class User {
 
     public void updateInDatabase() throws UserException {
         UserDatabase.updateUser(this);
+    }
+
+    public static User get(String username) {
+        return allUsers.get(username);
+    }
+
+    public static ArrayList<User> getScoreBoard() {
+        ArrayList<User> scoreBoard = (new ArrayList<>(allUsers.values()));
+        scoreBoard.sort(Comparator.comparing(user -> -user.score));
+        return scoreBoard;
     }
 }

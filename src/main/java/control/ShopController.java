@@ -24,7 +24,7 @@ public class ShopController {
     }
 
     public boolean doesPlayerHaveEnoughMoney(String username, String cardName) {
-        return allCards.get(cardName).getPrice() <= User.getUserByUsername(username).getBalance();
+        return allCards.get(cardName).getPrice() <= User.get(username).getBalance();
     }
 
     public void buyCard(String username, String cardName) {
