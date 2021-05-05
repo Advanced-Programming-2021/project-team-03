@@ -29,9 +29,11 @@ public class User {
         setNickname(nickname); // may throw an exception
         this.passwordHash = hashString(password);
         this.score = 0;
-        this.balance = 0;
+        this.balance = 1000;
         this.level = 1;
 
+        Decks = new ArrayList<>();
+        Cards = new ArrayList<>();
         allUsers.put(username, this);
         updateInDatabase(); // may throw an exception
     }
@@ -91,7 +93,7 @@ public class User {
     }
 
     public void setScore(int score) throws UserException {
-        this.score = score;
+        this.score = Math.max(0, score);
         updateInDatabase();
     }
 
@@ -147,7 +149,10 @@ public class User {
 
     public static ArrayList<User> getScoreBoard() {
         ArrayList<User> scoreBoard = (new ArrayList<>(allUsers.values()));
-        scoreBoard.sort(Comparator.comparing(user -> -user.score));
+        scoreBoard.sort((user1, user2) -> {
+            if (user1.score == user2.score) return user1.nickname.compareTo(user2.nickname);
+            return user2.score - user1.score;
+        });
         return scoreBoard;
     }
 }

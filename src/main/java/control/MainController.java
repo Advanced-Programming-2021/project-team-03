@@ -47,7 +47,7 @@ public class MainController {
             case "Export card" -> exportCardRequest(valueObject);
             case "Change nickname" -> changeNicknameRequest(valueObject);
             case "Change password" -> changePasswordRequest(valueObject);
-            case "Scoreboard" -> scoreBoardRequest();
+            case "Scoreboard" -> scoreboardRequest();
             case "Create deck" -> createANewDeck(valueObject);
             case "Delete deck" -> deleteDeck(valueObject);
             case "Set active deck" -> setActiveDeck(valueObject);
@@ -57,6 +57,7 @@ public class MainController {
             case "Show deck" -> showDeck(valueObject);
             case "Show all player cards" -> showAllPlayerCards(valueObject);
             case "Buy card" -> buyCard(valueObject);
+            //TODO: add card-show command to menu commands, shop, deck
             case "Show all cards in shop" -> showAllCardsInShop(valueObject);
             case "Cheat code" -> cheatCodes(valueObject);
             case "New duel" -> newDuel(valueObject);
@@ -390,12 +391,12 @@ public class MainController {
         return answerObject.toString();
     }
 
-    private String scoreBoardRequest() {
+    private String scoreboardRequest() {
         // returning a json array as a value that holds the score board users information
         JSONObject answerObject = new JSONObject();
 
-        JSONArray scoreBoard = UserController.getInstance().getAllUsersForUsername();
-        answerObject.put("Value", scoreBoard);
+        String scoreboard = UserController.getInstance().getAllUsersForUsername();
+        answerObject.put("Value", scoreboard);
 
         return answerObject.toString();
     }
@@ -411,7 +412,7 @@ public class MainController {
         if (isTokenInvalid(token)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "invalid token!");
-        } else if (UserController.getInstance().doesUsernameAndPasswordMatch(onlineUsers.get(token), currentPassword)) {
+        } else if (!UserController.getInstance().doesUsernameAndPasswordMatch(onlineUsers.get(token), currentPassword)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "current password is invalid!");
         } else if (newPassword.equals(currentPassword)) {
@@ -520,7 +521,7 @@ public class MainController {
 
         // check possible errors
         if (!UserController.getInstance().doesUsernameExist(username) ||
-                UserController.getInstance().doesUsernameAndPasswordMatch(username, password)) {
+                !UserController.getInstance().doesUsernameAndPasswordMatch(username, password)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "Username or password is wrong!");
         } else {

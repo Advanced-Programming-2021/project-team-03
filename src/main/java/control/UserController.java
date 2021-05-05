@@ -4,6 +4,8 @@ import model.user.User;
 import model.user.UserException;
 import org.json.JSONArray;
 
+import java.util.ArrayList;
+
 
 public class UserController {
     private static UserController userController;
@@ -53,7 +55,15 @@ public class UserController {
         }
     }
 
-    public JSONArray getAllUsersForUsername() {
-        return new JSONArray(User.getScoreBoard());
+    public String getAllUsersForUsername() {
+        ArrayList<User> allUsersSorted = User.getScoreBoard();
+        StringBuilder scoreboard = new StringBuilder();
+        for (int i = 1; i <= allUsersSorted.size(); i++) {
+            User user = allUsersSorted.get(i - 1);
+            scoreboard.append(i).append("- ")
+                    .append(user.getNickname()).append(": ")
+                    .append(user.getScore()).append("\n");
+        }
+        return scoreboard.toString();
     }
 }

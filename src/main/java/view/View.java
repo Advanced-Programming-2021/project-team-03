@@ -24,7 +24,7 @@ public class View {
     private String[] shopMenuCommands = new String[5];
     private String[] deckMenuCommands = new String[16];
     private String[] duelMenuCommands = new String[16]; //TODO
-    private String[] gameMenuCommands = new String[16]; //TODO
+    private String[] gameMenuCommands = new String[18]; //TODO
 
     //region Initialization block
     {
@@ -210,7 +210,7 @@ public class View {
         String password = "";
 
         //Finding username and password from command:
-        for (int i = 1; i < 7; i += 2) {
+        for (int i = 1; i < 5; i += 2) {
             if (regexMatcher.group(i).equals("-username") || regexMatcher.group(i).equals("u")) {
                 username = regexMatcher.group(i + 1);
             } else if (regexMatcher.group(i).equals("-password") || regexMatcher.group(i).equals("p")) {
@@ -234,7 +234,7 @@ public class View {
             System.out.println("user logged in successfully!");
             token = answerValue;
             mainMenu(); //This line means user have logged in successfully and should go to the main menu.
-        } else System.out.println(answerType);
+        } else System.out.println(answerValue);
     }
     //endregion
 
