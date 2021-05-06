@@ -8,7 +8,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class View {
-    //TODO: check scoreboard input type
     //TODO: check deck and card input type
     private static View instance;
 
@@ -217,10 +216,9 @@ public class View {
 
         //Finding username and password from command:
         for (int i = 1; i < 5; i += 2) {
-            if (regexMatcher.group(i).equals("-username") || regexMatcher.group(i).equals("u")) {
-                username = regexMatcher.group(i + 1);
-            } else if (regexMatcher.group(i).equals("-password") || regexMatcher.group(i).equals("p")) {
-                password = regexMatcher.group(i + 1);
+            switch (regexMatcher.group(i)) {
+                case "-username", "u" -> username = regexMatcher.group(i + 1);
+                case "-password", "p" -> password = regexMatcher.group(i + 1);
             }
         }
 
@@ -486,10 +484,13 @@ public class View {
         JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
 
         //Survey control JSON message
-        //TODO: go to game menu
         String answerType = (String) controlAnswer.get("Type");
-        String answerValue = (String) controlAnswer.get("Value");
-        System.out.println(answerValue);
+        if (answerType.equals("Successful")) {
+            gameMenu(); //Will go to the game menu
+        } else {
+            String answerValue = (String) controlAnswer.get("Value");
+            System.out.println(answerValue);
+        }
     }
 
     private int doesInputMatchWithStartDuelWithAiCommand(String inputCommand) {
@@ -522,7 +523,7 @@ public class View {
         JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
 
         //Survey control JSON message
-        //TODO: go to game menu
+        //TODO: go to game menu (maybe i should make new game menu for playing with ai)
         String answerType = (String) controlAnswer.get("Type");
         String answerValue = (String) controlAnswer.get("Value");
         System.out.println(answerValue);
@@ -533,6 +534,7 @@ public class View {
     private void gameMenu() {
         int regexIndex;
         while (true) {
+            //TODO: When will the game end and I have to leave the menu
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
             if ((regexIndex = doesInputMatchWithSelectCardCommand(inputCommand)) != 0)
                 selectCard(inputCommand, regexIndex);
@@ -946,10 +948,9 @@ public class View {
 
         //Finding current and new password from command:
         for (int i = 1; i < 5; i += 2) {
-            if (regexMatcher.group(i).equals("-current") || regexMatcher.group(i).equals("c")) {
-                currentPassword = regexMatcher.group(i + 1);
-            } else if (regexMatcher.group(i).equals("-new") || regexMatcher.group(i).equals("n")) {
-                newPassword = regexMatcher.group(i + 1);
+            switch (regexMatcher.group(i)) {
+                case "-current", "c" -> currentPassword = regexMatcher.group(i + 1);
+                case "-new", "n" -> newPassword = regexMatcher.group(i + 1);
             }
         }
 

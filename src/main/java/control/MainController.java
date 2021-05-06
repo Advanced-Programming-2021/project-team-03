@@ -57,7 +57,7 @@ public class MainController {
             case "Show deck" -> showDeck(valueObject);
             case "Show all player cards" -> showAllPlayerCards(valueObject);
             case "Buy card" -> buyCard(valueObject);
-            //TODO: add card-show command to menu commands, shop, deck
+            //TODO: add card-show command to menu commands, shop, deck and Game
             case "Show all cards in shop" -> showAllCardsInShop(valueObject);
             case "Cheat code" -> cheatCodes(valueObject);
             case "New duel" -> newDuel(valueObject);
@@ -559,7 +559,7 @@ public class MainController {
         String nickname = valueObject.getString("Nickname");
         // creating the json response object
         JSONObject answerObject = new JSONObject();
-        
+
         // check possible errors
         if (UserController.getInstance().doesUsernameExist(username)) {
             answerObject.put("Type", "Error");
