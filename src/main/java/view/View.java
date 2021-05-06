@@ -132,7 +132,7 @@ public class View {
         gameMenuCommands[7] = "^select -d$"; //for removing selection
         gameMenuCommands[8] = "^select .+$"; //for invalid selection
         gameMenuCommands[9] = "^summon$";
-        gameMenuCommands[10] = "^set$";
+        gameMenuCommands[10] = "^set$"; //this command works for monsters and spells and traps
         gameMenuCommands[11] = "^set -(?:p|-position) (attack|defense)$"; //syntax in dock in not correct
         gameMenuCommands[12] = "^flip-summon$";
         gameMenuCommands[13] = "^attack (1|2|3|4|5)$";
@@ -140,6 +140,14 @@ public class View {
         gameMenuCommands[15] = "^surrender$";
         gameMenuCommands[16] = "^card show -(?:s|-selected)$";
         gameMenuCommands[17] = "^show graveyard$";
+        gameMenuCommands[18] = "^next phase$";
+        gameMenuCommands[19] = "^activate effect$";
+        //Cheat codes in game menu:
+        gameMenuCommands[20] = "^select -(?:h|-hand) (.+) -(?:f|-force)$";
+        gameMenuCommands[21] = "^select -(?:f|-force) -(?:h|-hand) (.+)$";
+        gameMenuCommands[22] = "^increase -(?:l|-LP) (.+)$";
+        gameMenuCommands[23] = "^duel set-winner (\\S+)$";
+        gameMenuCommands[24] = "^increase --money (\\d+)$";
     }
     //endregion
 
@@ -536,7 +544,9 @@ public class View {
         while (true) {
             //TODO: When will the game end and I have to leave the menu
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
-            if ((regexIndex = doesInputMatchWithSelectCardCommand(inputCommand)) != 0)
+            if (inputCommand.matches(gameMenuCommands[20])) activeCheat(inputCommand, 20);
+            if (inputCommand.matches(gameMenuCommands[21])) activeCheat(inputCommand, 21);
+            else if ((regexIndex = doesInputMatchWithSelectCardCommand(inputCommand)) != 0)
                 selectCard(inputCommand, regexIndex);
             else if (inputCommand.matches(gameMenuCommands[7])) cancelCardSelection();
             else if (inputCommand.matches(gameMenuCommands[8])) System.out.println("invalid selection");
@@ -549,6 +559,10 @@ public class View {
             else if (inputCommand.matches(gameMenuCommands[15])) surrender();
             else if (inputCommand.matches(gameMenuCommands[16])) showSelectedCard();
             else if (inputCommand.matches(gameMenuCommands[17])) showGraveyard();
+            else if (inputCommand.matches(gameMenuCommands[18])) goToTheNextPhase();
+            else if (inputCommand.matches(gameMenuCommands[19])) activateEffect();
+            if (inputCommand.matches(gameMenuCommands[22])) activeCheat(inputCommand, 22);
+            if (inputCommand.matches(gameMenuCommands[23])) activeCheat(inputCommand, 23);
             else if (inputCommand.matches(cardShowRegex)) showCard(inputCommand, "Game");
             else System.out.println("invalid command");
         }
@@ -805,6 +819,72 @@ public class View {
         value.put("Token", token);
         JSONObject messageToSendToControl = new JSONObject();
         messageToSendToControl.put("Type", "Show graveyard");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        String answerValue = (String) controlAnswer.get("Value");
+        System.out.println(answerValue);
+    }
+
+    private void goToTheNextPhase() {
+        //Making message JSONObject and passing to sendControl function:
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Next phase");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        String answerValue = (String) controlAnswer.get("Value");
+        System.out.println(answerValue);
+    }
+
+    private void activateEffect() {
+        //Making message JSONObject and passing to sendControl function:
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Active effect");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        String answerValue = (String) controlAnswer.get("Value");
+        System.out.println(answerValue);
+    }
+
+    private void activeCheat(String inputCommand, int regexCommandIndex) {
+        getRegexMatcher(inputCommand, gameMenuCommands[regexCommandIndex], true);
+
+        //Making message JSONObject and passing to sendControl function:
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Cheat code");
+
+        //Finding cheat type
+        //cheat type will be one of this types: 1-"Force increase" 2-"Increase LP" 3-"Set winner" 4-Increase money
+        switch (regexCommandIndex) {
+            case 20, 21 -> {
+                value.put("Type", "Force increase");
+                value.put("Card name", regexMatcher.group(1));
+            }
+            case 22 -> {
+                value.put("Type", "Increase LP");
+                value.put("Amount", regexMatcher.group(1));
+            }
+            case 23 -> {
+                value.put("Type", "Set winner");
+                value.put("Nickname", regexMatcher.group(1));
+            }
+            case 24 -> {
+                value.put("Type", "Increase money");
+                value.put("Amount", regexMatcher.group(1));
+            }
+        }
+
         messageToSendToControl.put("Value", value);
         JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
 

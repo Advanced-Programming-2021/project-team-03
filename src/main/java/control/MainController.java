@@ -63,6 +63,8 @@ public class MainController {
             case "New duel" -> newDuel(valueObject);
             //TODO: add this type of client command to code.
             //case "New duel with ai"
+            //TODO: add this type of client command to code.
+            //case "Next phase"
             case "Select Card" -> selectCardInGame(valueObject);
             //TODO: add this type of client command to code.
             //case "Cancel card selection"
