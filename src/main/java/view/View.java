@@ -23,7 +23,7 @@ public class View {
     private String[] importExportMenuCommands = new String[5];
     private String[] shopMenuCommands = new String[5];
     private String[] deckMenuCommands = new String[16];
-    private String[] duelMenuCommands = new String[16]; //TODO
+    private String[] duelMenuCommands = new String[12]; //TODO
     private String[] gameMenuCommands = new String[18]; //TODO
 
     //region Initialization block
@@ -302,8 +302,8 @@ public class View {
                 addOrDeleteCardFromDeck(inputCommand, "Remove card from deck", 11);
             else if (inputCommand.matches(deckMenuCommands[12])) showAllUserDecks();
             else if (inputCommand.matches(deckMenuCommands[13])) showAllUserCards();
-            else if (inputCommand.matches(deckMenuCommands[14])) showDeck(inputCommand);
-            else if (inputCommand.matches(deckMenuCommands[15])) showDeck(inputCommand);
+            else if (inputCommand.matches(deckMenuCommands[14])) showDeck(inputCommand, 14);
+            else if (inputCommand.matches(deckMenuCommands[15])) showDeck(inputCommand, 15);
             else System.out.println("invalid command");
         }
     }
@@ -395,16 +395,26 @@ public class View {
         System.out.println(answerValue);
     }
 
-    private void showDeck(String inputCommand) {
-        // TODO add "Deck type" tag to the request
-        getRegexMatcher(inputCommand, deckMenuCommands[14], true);
+    private void showDeck(String inputCommand, int commandRegexIndex) {
+        getRegexMatcher(inputCommand, deckMenuCommands[commandRegexIndex], true);
 
-        String deckName = regexMatcher.group(1);
+        String deckName = "";
+        String deckType = "Main";
+        
+        //Finding deck name and deck type from command
+        if (commandRegexIndex == 14) {
+            deckName = regexMatcher.group(2);
+            if (!(regexMatcher.group(3)).equals("")) deckType = "Side";
+        } else {
+            deckName = regexMatcher.group(4);
+            if (!(regexMatcher.group(1)).equals("")) deckType = "Side";
+        }
 
         //Making message JSONObject and passing to sendControl function:
         JSONObject value = new JSONObject();
         value.put("Token", token);
         value.put("Deck name", deckName);
+        value.put("Deck type", deckType);
         JSONObject messageToSendToControl = new JSONObject();
         messageToSendToControl.put("Type", "Show deck");
         messageToSendToControl.put("Value", value);
