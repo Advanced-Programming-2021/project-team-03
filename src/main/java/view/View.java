@@ -22,13 +22,16 @@ public class View {
     private String[] profileMenuCommands = new String[7];
     private String[] importExportMenuCommands = new String[5];
     private String[] shopMenuCommands = new String[5];
-    private String[] deckMenuCommands = new String[16];
+    private String[] deckMenuCommands = new String[19];
     private String[] duelMenuCommands = new String[12]; //TODO
     private String[] gameMenuCommands = new String[18]; //TODO
+
+    private String cardShowRegex;
 
     //region Initialization block
     {
         token = "";
+        cardShowRegex = "^card show (.+)$";
 
         //Register menu valid commands:
         registerMenuCommands[0] = "^menu exit$";
@@ -74,33 +77,36 @@ public class View {
         importExportMenuCommands[0] = "^menu exit$";
         importExportMenuCommands[1] = "^menu enter (?:Duel|Deck|Scoreboard|Profile|Shop|Import/Export)$";
         importExportMenuCommands[2] = "^menu show-current$";
-        importExportMenuCommands[3] = "^import card ([\\S]+)$"; //TODO: does card name have space?
-        importExportMenuCommands[4] = "^export card ([\\S]+)$"; //TODO: does card name have space?
+        importExportMenuCommands[3] = "^import card (.+)$";
+        importExportMenuCommands[4] = "^export card (.+)$";
 
         //Shop menu valid commands
         shopMenuCommands[0] = "^menu exit$";
         shopMenuCommands[1] = "^menu enter (?:Duel|Deck|Scoreboard|Profile|Shop|Import/Export)$";
         shopMenuCommands[2] = "^menu show-current$";
-        shopMenuCommands[3] = "^shop buy ([\\S]+)$"; //TODO: does card name have space?
+        shopMenuCommands[3] = "^shop buy (.+)$";
         shopMenuCommands[4] = "^shop show -(a|-all)$";
 
         //Deck menu valid commands
         deckMenuCommands[0] = "^menu exit$";
         deckMenuCommands[1] = "^menu enter (?:Duel|Deck|Scoreboard|Profile|Shop|Import/Export)$";
         deckMenuCommands[2] = "^menu show-current$";
-        deckMenuCommands[3] = "^deck create ([\\S]+)$"; //TODO: does deck name have space?
-        deckMenuCommands[4] = "^deck delete ([\\S]+)$"; //TODO: does deck name have space?
-        deckMenuCommands[5] = "^deck set-activate ([\\S]+)$"; //TODO: does deck name have space?
-        deckMenuCommands[6] = "^deck add-card -(c|d|-card|-deck) ([\\S]+) -(c|d|-card|-deck) ([\\S]+)(?: -(s|-side)())?$"; //TODO: does deck or card name have space?
-        deckMenuCommands[7] = "^deck add-card -(c|d|-card|-deck) ([\\S]+)(?: -(s|-side)())? -(c|d|-card|-deck) ([\\S]+)$"; //TODO: does deck or card name have space?
-        deckMenuCommands[8] = "^deck add-card(?: -(s|-side)())? -(c|d|-card|-deck) ([\\S]+) -(c|d|-card|-deck) ([\\S]+)$"; //TODO: does deck or card name have space?
-        deckMenuCommands[9] = "^deck rm-card -(c|d|-card|-deck) ([\\S]+) -(c|d|-card|-deck) ([\\S]+)(?: -(s|-side)())?$"; //TODO: does deck or card name have space?
-        deckMenuCommands[10] = "^deck rm-card -(c|d|-card|-deck) ([\\S]+)(?: -(s|-side)())? -(c|d|-card|-deck) ([\\S]+)$"; //TODO: does deck or card name have space?
-        deckMenuCommands[11] = "^deck rm-card(?: -(s|-side)())? -(c|d|-card|-deck) ([\\S]+) -(c|d|-card|-deck) ([\\S]+)$"; //TODO: does deck or card name have space?
+        deckMenuCommands[3] = "^deck create (.+)$";
+        deckMenuCommands[4] = "^deck delete (.+)$";
+        deckMenuCommands[5] = "^deck set-activate (.)$";
+        deckMenuCommands[6] = "^deck add-card -(c|d|-card|-deck) (.+) -(c|d|-card|-deck) (.+)(?: -(?:s|-side))$";
+        deckMenuCommands[7] = "^deck add-card -(c|d|-card|-deck) (.+)(?: -(?:s|-side)) -(c|d|-card|-deck) (.+)$";
+        deckMenuCommands[8] = "^deck add-card(?: -(?:s|-side)) -(c|d|-card|-deck) (.+) -(c|d|-card|-deck) (.+)$";
+        deckMenuCommands[17] = "^deck add-card -(c|d|-card|-deck) (.+) -(c|d|-card|-deck) (.+)$";
+        deckMenuCommands[9] = "^deck rm-card -(c|d|-card|-deck) (.+) -(c|d|-card|-deck) (.+)(?: -(?:s|-side))$";
+        deckMenuCommands[10] = "^deck rm-card -(c|d|-card|-deck) (.+)(?: -(?:s|-side)) -(c|d|-card|-deck) (.+)$";
+        deckMenuCommands[11] = "^deck rm-card(?: -(?:s|-side)) -(c|d|-card|-deck) (.+) -(c|d|-card|-deck) (.+)$";
+        deckMenuCommands[18] = "^deck rm-card -(c|d|-card|-deck) (.+) -(c|d|-card|-deck) (.+)$";
         deckMenuCommands[12] = "^deck show -(a|-all)$";
         deckMenuCommands[13] = "^deck show -(c|-cards)$";
-        deckMenuCommands[14] = "^deck show -(d|-deck) ([\\S]+)(?: -(?:s|-side))?$";
-        deckMenuCommands[15] = "^deck show(?: -(?:s|-side))? -(d|-deck) ([\\S]+)$";
+        deckMenuCommands[14] = "^deck show -(d|-deck) (.+)(?: -(?:s|-side))$";
+        deckMenuCommands[15] = "^deck show(?: -(?:s|-side)) -(d|-deck) (.+)$";
+        deckMenuCommands[16] = "^deck show -(d|-deck) (.+)$";
 
         //Duel menu valid commands
         duelMenuCommands[0] = "^menu exit$";
@@ -283,27 +289,35 @@ public class View {
             else if (inputCommand.matches(deckMenuCommands[5]))
                 preparatoryDeckWorks(inputCommand, "Set active deck", 5);
             else if (inputCommand.matches(deckMenuCommands[6]) &&
-                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[6], 3))
+                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[6], 2))
                 addOrDeleteCardFromDeck(inputCommand, "Add card to deck", 6);
             else if (inputCommand.matches(deckMenuCommands[7]) &&
-                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[7], 3))
+                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[7], 2))
                 addOrDeleteCardFromDeck(inputCommand, "Add card to deck", 7);
             else if (inputCommand.matches(deckMenuCommands[8]) &&
-                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[8], 3))
+                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[8], 2))
                 addOrDeleteCardFromDeck(inputCommand, "Add card to deck", 8);
+            else if (inputCommand.matches(deckMenuCommands[17]) &&
+                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[17], 2))
+                addOrDeleteCardFromDeck(inputCommand, "Add card to deck", 17);
             else if (inputCommand.matches(deckMenuCommands[9]) &&
-                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[9], 3))
+                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[9], 2))
                 addOrDeleteCardFromDeck(inputCommand, "Remove card from deck", 9);
             else if (inputCommand.matches(deckMenuCommands[10]) &&
-                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[10], 3))
+                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[10], 2))
                 addOrDeleteCardFromDeck(inputCommand, "Remove card from deck", 10);
             else if (inputCommand.matches(deckMenuCommands[11]) &&
-                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[11], 3))
+                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[11], 2))
                 addOrDeleteCardFromDeck(inputCommand, "Remove card from deck", 11);
+            else if (inputCommand.matches(deckMenuCommands[18]) &&
+                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[18], 2))
+                addOrDeleteCardFromDeck(inputCommand, "Remove card from deck", 18);
             else if (inputCommand.matches(deckMenuCommands[12])) showAllUserDecks();
             else if (inputCommand.matches(deckMenuCommands[13])) showAllUserCards();
             else if (inputCommand.matches(deckMenuCommands[14])) showDeck(inputCommand, 14);
             else if (inputCommand.matches(deckMenuCommands[15])) showDeck(inputCommand, 15);
+            else if (inputCommand.matches(deckMenuCommands[16])) showDeck(inputCommand, 16);
+            else if (inputCommand.matches(cardShowRegex)) showCard(inputCommand, "Deck");
             else System.out.println("invalid command");
         }
     }
@@ -325,7 +339,7 @@ public class View {
         value.put("Token", token);
         value.put("Deck name", deckName);
         JSONObject messageToSendToControl = new JSONObject();
-        messageToSendToControl.put("Type", commandType); //Command type will be "Delete deck" or "Create deck" or "Set activate deck"
+        messageToSendToControl.put("Type", commandType); //Command type will be "Delete deck" or "Create deck" or "Set active deck"
         messageToSendToControl.put("Value", value);
         JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
 
@@ -339,14 +353,15 @@ public class View {
 
         String deckName = "";
         String cardName = "";
-        boolean doesUserWantSideDeck = false;
+        String deckType = "Main";
 
         //Finding card name and deck name and deck type from command:
-        for (int i = 1; i < 7; i += 2) {
+        if ((6 <= commandRegexIndex && 8 >= commandRegexIndex) || (9 <= commandRegexIndex && 11 >= commandRegexIndex))
+            deckType = "Side";
+        for (int i = 1; i < 5; i += 2) {
             switch (regexMatcher.group(i)) {
                 case "-deck", "d" -> deckName = regexMatcher.group(i + 1);
                 case "-card", "c" -> cardName = regexMatcher.group(i + 1);
-                case "-side", "s" -> doesUserWantSideDeck = true;
             }
         }
 
@@ -354,8 +369,7 @@ public class View {
         JSONObject value = new JSONObject();
         value.put("Token", token);
         value.put("Deck name", deckName);
-        if (doesUserWantSideDeck) value.put("Deck type", "Side");
-        else value.put("Deck type", "Main");
+        value.put("Deck type", deckType);
         value.put("Card name", cardName);
         JSONObject messageToSendToControl = new JSONObject();
         messageToSendToControl.put("Type", commandType); //Command type will be "Add card to deck" or "Delete card from deck"
@@ -398,17 +412,12 @@ public class View {
     private void showDeck(String inputCommand, int commandRegexIndex) {
         getRegexMatcher(inputCommand, deckMenuCommands[commandRegexIndex], true);
 
-        String deckName = "";
+        String deckName = regexMatcher.group(2);
         String deckType = "Main";
-        
+
         //Finding deck name and deck type from command
-        if (commandRegexIndex == 14) {
-            deckName = regexMatcher.group(2);
-            if (!(regexMatcher.group(3)).equals("")) deckType = "Side";
-        } else {
-            deckName = regexMatcher.group(4);
-            if (!(regexMatcher.group(1)).equals("")) deckType = "Side";
-        }
+        if (commandRegexIndex == 14 || commandRegexIndex == 15)
+            deckType = "Side";
 
         //Making message JSONObject and passing to sendControl function:
         JSONObject value = new JSONObject();
@@ -435,6 +444,7 @@ public class View {
             else if (inputCommand.matches(duelMenuCommands[1]))
                 System.out.println("menu navigation is not possible");
             else if (inputCommand.matches(duelMenuCommands[2])) System.out.println("Duel");
+            else if (inputCommand.matches(cardShowRegex)) showCard(inputCommand, "Duel");
             else if ((regexIndex = doesInputMatchWithStartDuelWithAnotherPlayerCommand(inputCommand)) != 0) {
                 startDuelWithAnotherPlayer(inputCommand, regexIndex);
             } else if ((regexIndex = doesInputMatchWithStartDuelWithAiCommand(inputCommand)) != 0) {
@@ -537,6 +547,7 @@ public class View {
             else if (inputCommand.matches(gameMenuCommands[15])) surrender();
             else if (inputCommand.matches(gameMenuCommands[16])) showSelectedCard();
             else if (inputCommand.matches(gameMenuCommands[17])) showGraveyard();
+            else if (inputCommand.matches(cardShowRegex)) showCard(inputCommand, "Game");
             else System.out.println("invalid command");
         }
     }
@@ -811,6 +822,7 @@ public class View {
             else if (inputCommand.matches(shopMenuCommands[2])) System.out.println("Shop");
             else if (inputCommand.matches(shopMenuCommands[3])) buyCard(inputCommand);
             else if (inputCommand.matches(shopMenuCommands[4])) showAllCards();
+            else if (inputCommand.matches(cardShowRegex)) showCard(inputCommand, "Deck");
             else System.out.println("invalid command");
         }
     }
@@ -984,6 +996,34 @@ public class View {
         System.out.println(answerValue);
     }
     //endregion
+
+    /**
+     * This method will use in deck, duel, game and shop menu
+     * who Call Function String will be some of this:
+     * 1- "Game"
+     * 2- "Deck"
+     * 3- "Shop"
+     * 4- "Duel"
+     */
+    private void showCard(String inputCommand, String whoCallFunction) {
+        getRegexMatcher(inputCommand, cardShowRegex, true);
+
+        String cardName = regexMatcher.group(1);
+
+        //Making message JSONObject and passing to sendControl function:
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Card name", cardName);
+        value.put("Request menu", whoCallFunction);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Show card");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        String answerValue = (String) controlAnswer.get("Value");
+        System.out.println(answerValue);
+    }
 
     /**
      * This method will return true if user input two or more repeated fields and return false if all filed be different.
