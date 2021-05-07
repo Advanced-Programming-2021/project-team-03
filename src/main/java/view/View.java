@@ -15,139 +15,138 @@ public class View {
     private Matcher regexMatcher;
     private String token;
 
-    private String[] registerMenuCommands = new String[5];
-    private String[] mainMenuCommands = new String[7]; //TODO: change array size.
-    private String[] scoreboardMenuCommands = new String[4];
-    private String[] profileMenuCommands = new String[7];
-    private String[] importExportMenuCommands = new String[5];
-    private String[] shopMenuCommands = new String[5];
-    private String[] deckMenuCommands = new String[19];
-    private String[] duelMenuCommands = new String[12]; //TODO
-    private String[] gameMenuCommands = new String[25]; //TODO
+    private final String[] REGISTER_MENU_COMMANDS = new String[5];
+    private final String[] MAIN_MENU_COMMANDS = new String[7];
+    private final String[] SCOREBOARD_MENU_COMMANDS = new String[4];
+    private final String[] PROFILE_MENU_COMMANDS = new String[7];
+    private final String[] IMPORT_EXPORT_MENU_COMMANDS = new String[5];
+    private final String[] SHOP_MENU_COMMANDS = new String[5];
+    private final String[] DECK_MENU_COMMANDS = new String[19];
+    private final String[] DUEL_MENU_COMMANDS = new String[12];
+    private final String[] GAME_MENU_COMMANDS = new String[25]; //TODO: add remaining methods and fix array size
 
-    private String cardShowRegex;
+    private final String CARD_SHOW_REGEX = "^card show (.+)$";
 
     //region Initialization block
     {
         token = "";
-        cardShowRegex = "^card show (.+)$";
 
         //Register menu valid commands:
-        registerMenuCommands[0] = "^menu exit$";
-        registerMenuCommands[1] = "^menu enter (?:Duel|Deck|Scoreboard|Profile|Shop|Import/Export)$";
-        registerMenuCommands[2] = "^menu show-current$";
-        registerMenuCommands[3] = "^user create -(u|p|n|-username|-password|-nickname) ([\\S]+)" +
+        REGISTER_MENU_COMMANDS[0] = "^menu exit$";
+        REGISTER_MENU_COMMANDS[1] = "^menu enter (?:Duel|Deck|Scoreboard|Profile|Shop|Import/Export)$";
+        REGISTER_MENU_COMMANDS[2] = "^menu show-current$";
+        REGISTER_MENU_COMMANDS[3] = "^user create -(u|p|n|-username|-password|-nickname) ([\\S]+)" +
                 " -(u|p|n|-username|-password|nickname) ([\\S]+)" +
                 " -(u|p|n|-username|-password|nickname) ([\\S]+)$";
-        registerMenuCommands[4] = "^user login -(u|p|-username|-password) ([\\S]+)" +
+        REGISTER_MENU_COMMANDS[4] = "^user login -(u|p|-username|-password) ([\\S]+)" +
                 " -(u|p|-username|-password) ([\\S]+)$";
 
         //Main menu valid commands:
-        mainMenuCommands[0] = "^user logout$";
-        mainMenuCommands[1] = "^menu enter Duel$";
-        mainMenuCommands[2] = "^menu enter Deck$";
-        mainMenuCommands[3] = "^menu enter Scoreboard$";
-        mainMenuCommands[4] = "^menu enter Profile$";
-        mainMenuCommands[5] = "^menu enter Shop$";
-        mainMenuCommands[6] = "^menu enter Import/Export$";
+        MAIN_MENU_COMMANDS[0] = "^user logout$";
+        MAIN_MENU_COMMANDS[1] = "^menu enter Duel$";
+        MAIN_MENU_COMMANDS[2] = "^menu enter Deck$";
+        MAIN_MENU_COMMANDS[3] = "^menu enter Scoreboard$";
+        MAIN_MENU_COMMANDS[4] = "^menu enter Profile$";
+        MAIN_MENU_COMMANDS[5] = "^menu enter Shop$";
+        MAIN_MENU_COMMANDS[6] = "^menu enter Import/Export$";
 
         //Scoreboard menu valid commands:
-        scoreboardMenuCommands[0] = "^menu exit$";
-        scoreboardMenuCommands[1] = "^menu enter (?:Duel|Deck|Scoreboard|Profile|Shop|Import/Export)$";
-        scoreboardMenuCommands[2] = "^menu show-current$";
-        scoreboardMenuCommands[3] = "^scoreboard show$";
+        SCOREBOARD_MENU_COMMANDS[0] = "^menu exit$";
+        SCOREBOARD_MENU_COMMANDS[1] = "^menu enter (?:Duel|Deck|Scoreboard|Profile|Shop|Import/Export)$";
+        SCOREBOARD_MENU_COMMANDS[2] = "^menu show-current$";
+        SCOREBOARD_MENU_COMMANDS[3] = "^scoreboard show$";
 
         //Profile menu valid commands:
-        profileMenuCommands[0] = "^menu exit$";
-        profileMenuCommands[1] = "^menu enter (?:Duel|Deck|Scoreboard|Profile|Shop|Import/Export)$";
-        profileMenuCommands[2] = "^menu show-current$";
-        profileMenuCommands[3] = "^profile change -(n|-nickname) ([\\S]+)$";
-        profileMenuCommands[4] = "^profile change -(?:p|-password)" +
+        PROFILE_MENU_COMMANDS[0] = "^menu exit$";
+        PROFILE_MENU_COMMANDS[1] = "^menu enter (?:Duel|Deck|Scoreboard|Profile|Shop|Import/Export)$";
+        PROFILE_MENU_COMMANDS[2] = "^menu show-current$";
+        PROFILE_MENU_COMMANDS[3] = "^profile change -(n|-nickname) ([\\S]+)$";
+        PROFILE_MENU_COMMANDS[4] = "^profile change -(?:p|-password)" +
                 " -(c|n|-current|-new) ([\\S]+)" +
                 " -(c|n|-current|-new) ([\\S]+)$";
-        profileMenuCommands[5] = "^profile change -(c|n|-current|-new) ([\\S]+)" +
+        PROFILE_MENU_COMMANDS[5] = "^profile change -(c|n|-current|-new) ([\\S]+)" +
                 " -(?:p|-password)" +
                 " -(c|n|-current|-new) ([\\S]+)$";
-        profileMenuCommands[6] = "^profile change -(c|n|-current|-new) ([\\S]+)" +
+        PROFILE_MENU_COMMANDS[6] = "^profile change -(c|n|-current|-new) ([\\S]+)" +
                 " -(c|n|-current|-new) ([\\S]+)" +
                 " -(?:p|-password)$";
 
         //Import/export menu valid commands:
-        importExportMenuCommands[0] = "^menu exit$";
-        importExportMenuCommands[1] = "^menu enter (?:Duel|Deck|Scoreboard|Profile|Shop|Import/Export)$";
-        importExportMenuCommands[2] = "^menu show-current$";
-        importExportMenuCommands[3] = "^import card (.+)$";
-        importExportMenuCommands[4] = "^export card (.+)$";
+        IMPORT_EXPORT_MENU_COMMANDS[0] = "^menu exit$";
+        IMPORT_EXPORT_MENU_COMMANDS[1] = "^menu enter (?:Duel|Deck|Scoreboard|Profile|Shop|Import/Export)$";
+        IMPORT_EXPORT_MENU_COMMANDS[2] = "^menu show-current$";
+        IMPORT_EXPORT_MENU_COMMANDS[3] = "^import card (.+)$";
+        IMPORT_EXPORT_MENU_COMMANDS[4] = "^export card (.+)$";
 
         //Shop menu valid commands
-        shopMenuCommands[0] = "^menu exit$";
-        shopMenuCommands[1] = "^menu enter (?:Duel|Deck|Scoreboard|Profile|Shop|Import/Export)$";
-        shopMenuCommands[2] = "^menu show-current$";
-        shopMenuCommands[3] = "^shop buy (.+)$";
-        shopMenuCommands[4] = "^shop show -(a|-all)$";
+        SHOP_MENU_COMMANDS[0] = "^menu exit$";
+        SHOP_MENU_COMMANDS[1] = "^menu enter (?:Duel|Deck|Scoreboard|Profile|Shop|Import/Export)$";
+        SHOP_MENU_COMMANDS[2] = "^menu show-current$";
+        SHOP_MENU_COMMANDS[3] = "^shop buy (.+)$";
+        SHOP_MENU_COMMANDS[4] = "^shop show -(a|-all)$";
 
         //Deck menu valid commands
-        deckMenuCommands[0] = "^menu exit$";
-        deckMenuCommands[1] = "^menu enter (?:Duel|Deck|Scoreboard|Profile|Shop|Import/Export)$";
-        deckMenuCommands[2] = "^menu show-current$";
-        deckMenuCommands[3] = "^deck create (.+)$";
-        deckMenuCommands[4] = "^deck delete (.+)$";
-        deckMenuCommands[5] = "^deck set-activate (.)$";
-        deckMenuCommands[6] = "^deck add-card -(c|d|-card|-deck) (.+) -(c|d|-card|-deck) (.+)(?: -(?:s|-side))$";
-        deckMenuCommands[7] = "^deck add-card -(c|d|-card|-deck) (.+)(?: -(?:s|-side)) -(c|d|-card|-deck) (.+)$";
-        deckMenuCommands[8] = "^deck add-card(?: -(?:s|-side)) -(c|d|-card|-deck) (.+) -(c|d|-card|-deck) (.+)$";
-        deckMenuCommands[17] = "^deck add-card -(c|d|-card|-deck) (.+) -(c|d|-card|-deck) (.+)$";
-        deckMenuCommands[9] = "^deck rm-card -(c|d|-card|-deck) (.+) -(c|d|-card|-deck) (.+)(?: -(?:s|-side))$";
-        deckMenuCommands[10] = "^deck rm-card -(c|d|-card|-deck) (.+)(?: -(?:s|-side)) -(c|d|-card|-deck) (.+)$";
-        deckMenuCommands[11] = "^deck rm-card(?: -(?:s|-side)) -(c|d|-card|-deck) (.+) -(c|d|-card|-deck) (.+)$";
-        deckMenuCommands[18] = "^deck rm-card -(c|d|-card|-deck) (.+) -(c|d|-card|-deck) (.+)$";
-        deckMenuCommands[12] = "^deck show -(a|-all)$";
-        deckMenuCommands[13] = "^deck show -(c|-cards)$";
-        deckMenuCommands[14] = "^deck show -(d|-deck) (.+)(?: -(?:s|-side))$";
-        deckMenuCommands[15] = "^deck show(?: -(?:s|-side)) -(d|-deck) (.+)$";
-        deckMenuCommands[16] = "^deck show -(d|-deck) (.+)$";
+        DECK_MENU_COMMANDS[0] = "^menu exit$";
+        DECK_MENU_COMMANDS[1] = "^menu enter (?:Duel|Deck|Scoreboard|Profile|Shop|Import/Export)$";
+        DECK_MENU_COMMANDS[2] = "^menu show-current$";
+        DECK_MENU_COMMANDS[3] = "^deck create (.+)$";
+        DECK_MENU_COMMANDS[4] = "^deck delete (.+)$";
+        DECK_MENU_COMMANDS[5] = "^deck set-activate (.)$";
+        DECK_MENU_COMMANDS[6] = "^deck add-card -(c|d|-card|-deck) (.+) -(c|d|-card|-deck) (.+)(?: -(?:s|-side))$";
+        DECK_MENU_COMMANDS[7] = "^deck add-card -(c|d|-card|-deck) (.+)(?: -(?:s|-side)) -(c|d|-card|-deck) (.+)$";
+        DECK_MENU_COMMANDS[8] = "^deck add-card(?: -(?:s|-side)) -(c|d|-card|-deck) (.+) -(c|d|-card|-deck) (.+)$";
+        DECK_MENU_COMMANDS[17] = "^deck add-card -(c|d|-card|-deck) (.+) -(c|d|-card|-deck) (.+)$";
+        DECK_MENU_COMMANDS[9] = "^deck rm-card -(c|d|-card|-deck) (.+) -(c|d|-card|-deck) (.+)(?: -(?:s|-side))$";
+        DECK_MENU_COMMANDS[10] = "^deck rm-card -(c|d|-card|-deck) (.+)(?: -(?:s|-side)) -(c|d|-card|-deck) (.+)$";
+        DECK_MENU_COMMANDS[11] = "^deck rm-card(?: -(?:s|-side)) -(c|d|-card|-deck) (.+) -(c|d|-card|-deck) (.+)$";
+        DECK_MENU_COMMANDS[18] = "^deck rm-card -(c|d|-card|-deck) (.+) -(c|d|-card|-deck) (.+)$";
+        DECK_MENU_COMMANDS[12] = "^deck show -(a|-all)$";
+        DECK_MENU_COMMANDS[13] = "^deck show -(c|-cards)$";
+        DECK_MENU_COMMANDS[14] = "^deck show -(d|-deck) (.+)(?: -(?:s|-side))$";
+        DECK_MENU_COMMANDS[15] = "^deck show(?: -(?:s|-side)) -(d|-deck) (.+)$";
+        DECK_MENU_COMMANDS[16] = "^deck show -(d|-deck) (.+)$";
 
         //Duel menu valid commands
-        duelMenuCommands[0] = "^menu exit$";
-        duelMenuCommands[1] = "^menu enter (?:Duel|Deck|Scoreboard|Profile|Shop|Import/Export)$";
-        duelMenuCommands[2] = "^menu show-current$";
-        duelMenuCommands[3] = "^duel -(n|-new)() -(s|-second-player) (\\S+) -(r|-rounds) (\\d+)$";
-        duelMenuCommands[4] = "^duel -(n|-new)() -(r|-rounds) (\\d+) -(s|-second-player) (\\S+)$";
-        duelMenuCommands[5] = "^duel -(s|-second-player) (\\S+) -(n|-new)() -(r|-rounds) (\\d+)$";
-        duelMenuCommands[6] = "^duel -(s|-second-player) -(r|-rounds) (\\d+) -(n|-new)()$";
-        duelMenuCommands[7] = "^duel -(r|-rounds) (\\d+) -(s|-second-player) (\\S+) -(n|-new)()$";
-        duelMenuCommands[8] = "^duel -(r|-rounds) (\\d+) -(n|-new)() -(s|-second-player)$";
-        duelMenuCommands[9] = "^duel -(n|a|-new|-ai)() -(n|a|-new|-ai)() -(r|-rounds) (\\d+)$";
-        duelMenuCommands[10] = "^duel -(n|a|-new|-ai)() -(r|-rounds) (\\d+) -(n|a|-new|-ai)()$";
-        duelMenuCommands[11] = "^duel -(r|-rounds) (\\d+) -(n|a|-new|-ai)() -(n|a|-new|-ai)()$";
+        DUEL_MENU_COMMANDS[0] = "^menu exit$";
+        DUEL_MENU_COMMANDS[1] = "^menu enter (?:Duel|Deck|Scoreboard|Profile|Shop|Import/Export)$";
+        DUEL_MENU_COMMANDS[2] = "^menu show-current$";
+        DUEL_MENU_COMMANDS[3] = "^duel -(n|-new)() -(s|-second-player) (\\S+) -(r|-rounds) (\\d+)$";
+        DUEL_MENU_COMMANDS[4] = "^duel -(n|-new)() -(r|-rounds) (\\d+) -(s|-second-player) (\\S+)$";
+        DUEL_MENU_COMMANDS[5] = "^duel -(s|-second-player) (\\S+) -(n|-new)() -(r|-rounds) (\\d+)$";
+        DUEL_MENU_COMMANDS[6] = "^duel -(s|-second-player) -(r|-rounds) (\\d+) -(n|-new)()$";
+        DUEL_MENU_COMMANDS[7] = "^duel -(r|-rounds) (\\d+) -(s|-second-player) (\\S+) -(n|-new)()$";
+        DUEL_MENU_COMMANDS[8] = "^duel -(r|-rounds) (\\d+) -(n|-new)() -(s|-second-player)$";
+        DUEL_MENU_COMMANDS[9] = "^duel -(n|a|-new|-ai)() -(n|a|-new|-ai)() -(r|-rounds) (\\d+)$";
+        DUEL_MENU_COMMANDS[10] = "^duel -(n|a|-new|-ai)() -(r|-rounds) (\\d+) -(n|a|-new|-ai)()$";
+        DUEL_MENU_COMMANDS[11] = "^duel -(r|-rounds) (\\d+) -(n|a|-new|-ai)() -(n|a|-new|-ai)()$";
 
         //Game menu valid commands
-        gameMenuCommands[0] = "^select -(m|-monster) (\\d+)$";
-        gameMenuCommands[1] = "^select -(s|-spell) (\\d+)$";
-        gameMenuCommands[2] = "^select -(f|-field)()$";
-        gameMenuCommands[3] = "^select -(h|-hand) (\\d+)$";
-        gameMenuCommands[4] = "^select -(m|o|-monster|-opponent)() -(m|o|-monster|-opponent) (\\d+)$";
-        gameMenuCommands[5] = "^select -(s|o|-spell|-opponent)() -(s|o|-spell|-opponent) (\\d+)$";
-        gameMenuCommands[6] = "^select -(f|o|-field|-opponent)() -(f|o|-field|-opponent)()$";
-        gameMenuCommands[7] = "^select -d$"; //for removing selection
-        gameMenuCommands[8] = "^select .+$"; //for invalid selection
-        gameMenuCommands[9] = "^summon$";
-        gameMenuCommands[10] = "^set$"; //this command works for monsters and spells and traps
-        gameMenuCommands[11] = "^set -(?:p|-position) (attack|defense)$"; //syntax in dock in not correct
-        gameMenuCommands[12] = "^flip-summon$";
-        gameMenuCommands[13] = "^attack (1|2|3|4|5)$";
-        gameMenuCommands[14] = "^attack direct$";
-        gameMenuCommands[15] = "^surrender$";
-        gameMenuCommands[16] = "^card show -(?:s|-selected)$";
-        gameMenuCommands[17] = "^show graveyard$";
-        gameMenuCommands[18] = "^next phase$";
-        gameMenuCommands[19] = "^activate effect$";
+        GAME_MENU_COMMANDS[0] = "^select -(m|-monster) (\\d+)$";
+        GAME_MENU_COMMANDS[1] = "^select -(s|-spell) (\\d+)$";
+        GAME_MENU_COMMANDS[2] = "^select -(f|-field)()$";
+        GAME_MENU_COMMANDS[3] = "^select -(h|-hand) (\\d+)$";
+        GAME_MENU_COMMANDS[4] = "^select -(m|o|-monster|-opponent)() -(m|o|-monster|-opponent) (\\d+)$";
+        GAME_MENU_COMMANDS[5] = "^select -(s|o|-spell|-opponent)() -(s|o|-spell|-opponent) (\\d+)$";
+        GAME_MENU_COMMANDS[6] = "^select -(f|o|-field|-opponent)() -(f|o|-field|-opponent)()$";
+        GAME_MENU_COMMANDS[7] = "^select -d$"; //for removing selection
+        GAME_MENU_COMMANDS[8] = "^select .+$"; //for invalid selection
+        GAME_MENU_COMMANDS[9] = "^summon$";
+        GAME_MENU_COMMANDS[10] = "^set$"; //this command works for monsters and spells and traps
+        GAME_MENU_COMMANDS[11] = "^set -(?:p|-position) (attack|defense)$"; //syntax in dock in not correct
+        GAME_MENU_COMMANDS[12] = "^flip-summon$";
+        GAME_MENU_COMMANDS[13] = "^attack (1|2|3|4|5)$";
+        GAME_MENU_COMMANDS[14] = "^attack direct$";
+        GAME_MENU_COMMANDS[15] = "^surrender$";
+        GAME_MENU_COMMANDS[16] = "^card show -(?:s|-selected)$";
+        GAME_MENU_COMMANDS[17] = "^show graveyard$";
+        GAME_MENU_COMMANDS[18] = "^next phase$";
+        GAME_MENU_COMMANDS[19] = "^activate effect$";
         //Cheat codes in game menu:
-        gameMenuCommands[20] = "^select -(?:h|-hand) (.+) -(?:f|-force)$";
-        gameMenuCommands[21] = "^select -(?:f|-force) -(?:h|-hand) (.+)$";
-        gameMenuCommands[22] = "^increase -(?:l|-LP) (.+)$";
-        gameMenuCommands[23] = "^duel set-winner (\\S+)$";
-        gameMenuCommands[24] = "^increase --money (\\d+)$";
+        GAME_MENU_COMMANDS[20] = "^select -(?:h|-hand) (.+) -(?:f|-force)$";
+        GAME_MENU_COMMANDS[21] = "^select -(?:f|-force) -(?:h|-hand) (.+)$";
+        GAME_MENU_COMMANDS[22] = "^increase -(?:l|-LP) (.+)$";
+        GAME_MENU_COMMANDS[23] = "^duel set-winner (\\S+)$";
+        GAME_MENU_COMMANDS[24] = "^increase --money (\\d+)$";
     }
     //endregion
 
@@ -172,21 +171,21 @@ public class View {
     public void registerMenu() {
         while (true) {
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
-            if (inputCommand.matches(registerMenuCommands[0])) break; //Program will finish
-            else if (inputCommand.matches(registerMenuCommands[1])) System.out.println("please login first");
-            else if (inputCommand.matches(registerMenuCommands[2])) System.out.println("Login Menu");
-            else if (inputCommand.matches(registerMenuCommands[3]) &&
-                    !doesInputCommandHaveRepeatedField(inputCommand, registerMenuCommands[3], 3)) {
+            if (inputCommand.matches(REGISTER_MENU_COMMANDS[0])) break; //Program will finish
+            else if (inputCommand.matches(REGISTER_MENU_COMMANDS[1])) System.out.println("please login first");
+            else if (inputCommand.matches(REGISTER_MENU_COMMANDS[2])) System.out.println("Login Menu");
+            else if (inputCommand.matches(REGISTER_MENU_COMMANDS[3]) &&
+                    !doesInputCommandHaveRepeatedField(inputCommand, REGISTER_MENU_COMMANDS[3], 3)) {
                 createNewUser(inputCommand);
-            } else if (inputCommand.matches(registerMenuCommands[4]) &&
-                    !doesInputCommandHaveRepeatedField(inputCommand, registerMenuCommands[4], 2)) {
+            } else if (inputCommand.matches(REGISTER_MENU_COMMANDS[4]) &&
+                    !doesInputCommandHaveRepeatedField(inputCommand, REGISTER_MENU_COMMANDS[4], 2)) {
                 loginUser(inputCommand);
             } else System.out.println("invalid command");
         }
     }
 
     private void createNewUser(String inputCommand) {
-        getRegexMatcher(inputCommand, registerMenuCommands[3], true);
+        getRegexMatcher(inputCommand, REGISTER_MENU_COMMANDS[3], true);
 
         String username = null;
         String password = null;
@@ -217,7 +216,7 @@ public class View {
     }
 
     private void loginUser(String inputCommand) {
-        getRegexMatcher(inputCommand, registerMenuCommands[4], true);
+        getRegexMatcher(inputCommand, REGISTER_MENU_COMMANDS[4], true);
 
         String username = "";
         String password = "";
@@ -254,16 +253,15 @@ public class View {
     private void mainMenu() {
         while (true) {
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
-            if (inputCommand.matches(mainMenuCommands[0])) { //Main logout and back to register menu
+            if (inputCommand.matches(MAIN_MENU_COMMANDS[0])) { //Main logout and back to register menu
                 boolean canUserLogout = logoutUser();
                 if (canUserLogout) break;
-            } else if (inputCommand.matches(mainMenuCommands[1])) duelMenu();
-            else if (inputCommand.matches(mainMenuCommands[2])) deckMenu();
-            else if (inputCommand.matches(mainMenuCommands[3])) scoreBoardMenu();
-            else if (inputCommand.matches(mainMenuCommands[4])) profileMenu();
-            else if (inputCommand.matches(mainMenuCommands[5])) shopMenu();
-            else if (inputCommand.matches(mainMenuCommands[6])) importExportMenu();
-                //TODO: some remaining methods
+            } else if (inputCommand.matches(MAIN_MENU_COMMANDS[1])) duelMenu();
+            else if (inputCommand.matches(MAIN_MENU_COMMANDS[2])) deckMenu();
+            else if (inputCommand.matches(MAIN_MENU_COMMANDS[3])) scoreBoardMenu();
+            else if (inputCommand.matches(MAIN_MENU_COMMANDS[4])) profileMenu();
+            else if (inputCommand.matches(MAIN_MENU_COMMANDS[5])) shopMenu();
+            else if (inputCommand.matches(MAIN_MENU_COMMANDS[6])) importExportMenu();
             else System.out.println("invalid command");
         }
     }
@@ -286,44 +284,44 @@ public class View {
     private void deckMenu() {
         while (true) {
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
-            if (inputCommand.matches(deckMenuCommands[0])) break; //Deck exit and back to main menu
-            else if (inputCommand.matches(deckMenuCommands[1]))
+            if (inputCommand.matches(DECK_MENU_COMMANDS[0])) break; //Deck exit and back to main menu
+            else if (inputCommand.matches(DECK_MENU_COMMANDS[1]))
                 System.out.println("menu navigation is not possible");
-            else if (inputCommand.matches(deckMenuCommands[2])) System.out.println("Deck");
-            else if (inputCommand.matches(deckMenuCommands[3])) preparatoryDeckWorks(inputCommand, "Crate deck", 3);
-            else if (inputCommand.matches(deckMenuCommands[4])) preparatoryDeckWorks(inputCommand, "Delete deck", 4);
-            else if (inputCommand.matches(deckMenuCommands[5]))
+            else if (inputCommand.matches(DECK_MENU_COMMANDS[2])) System.out.println("Deck");
+            else if (inputCommand.matches(DECK_MENU_COMMANDS[3])) preparatoryDeckWorks(inputCommand, "Crate deck", 3);
+            else if (inputCommand.matches(DECK_MENU_COMMANDS[4])) preparatoryDeckWorks(inputCommand, "Delete deck", 4);
+            else if (inputCommand.matches(DECK_MENU_COMMANDS[5]))
                 preparatoryDeckWorks(inputCommand, "Set active deck", 5);
-            else if (inputCommand.matches(deckMenuCommands[6]) &&
-                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[6], 2))
+            else if (inputCommand.matches(DECK_MENU_COMMANDS[6]) &&
+                    !doesInputCommandHaveRepeatedField(inputCommand, DECK_MENU_COMMANDS[6], 2))
                 addOrDeleteCardFromDeck(inputCommand, "Add card to deck", 6);
-            else if (inputCommand.matches(deckMenuCommands[7]) &&
-                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[7], 2))
+            else if (inputCommand.matches(DECK_MENU_COMMANDS[7]) &&
+                    !doesInputCommandHaveRepeatedField(inputCommand, DECK_MENU_COMMANDS[7], 2))
                 addOrDeleteCardFromDeck(inputCommand, "Add card to deck", 7);
-            else if (inputCommand.matches(deckMenuCommands[8]) &&
-                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[8], 2))
+            else if (inputCommand.matches(DECK_MENU_COMMANDS[8]) &&
+                    !doesInputCommandHaveRepeatedField(inputCommand, DECK_MENU_COMMANDS[8], 2))
                 addOrDeleteCardFromDeck(inputCommand, "Add card to deck", 8);
-            else if (inputCommand.matches(deckMenuCommands[17]) &&
-                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[17], 2))
+            else if (inputCommand.matches(DECK_MENU_COMMANDS[17]) &&
+                    !doesInputCommandHaveRepeatedField(inputCommand, DECK_MENU_COMMANDS[17], 2))
                 addOrDeleteCardFromDeck(inputCommand, "Add card to deck", 17);
-            else if (inputCommand.matches(deckMenuCommands[9]) &&
-                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[9], 2))
+            else if (inputCommand.matches(DECK_MENU_COMMANDS[9]) &&
+                    !doesInputCommandHaveRepeatedField(inputCommand, DECK_MENU_COMMANDS[9], 2))
                 addOrDeleteCardFromDeck(inputCommand, "Remove card from deck", 9);
-            else if (inputCommand.matches(deckMenuCommands[10]) &&
-                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[10], 2))
+            else if (inputCommand.matches(DECK_MENU_COMMANDS[10]) &&
+                    !doesInputCommandHaveRepeatedField(inputCommand, DECK_MENU_COMMANDS[10], 2))
                 addOrDeleteCardFromDeck(inputCommand, "Remove card from deck", 10);
-            else if (inputCommand.matches(deckMenuCommands[11]) &&
-                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[11], 2))
+            else if (inputCommand.matches(DECK_MENU_COMMANDS[11]) &&
+                    !doesInputCommandHaveRepeatedField(inputCommand, DECK_MENU_COMMANDS[11], 2))
                 addOrDeleteCardFromDeck(inputCommand, "Remove card from deck", 11);
-            else if (inputCommand.matches(deckMenuCommands[18]) &&
-                    !doesInputCommandHaveRepeatedField(inputCommand, deckMenuCommands[18], 2))
+            else if (inputCommand.matches(DECK_MENU_COMMANDS[18]) &&
+                    !doesInputCommandHaveRepeatedField(inputCommand, DECK_MENU_COMMANDS[18], 2))
                 addOrDeleteCardFromDeck(inputCommand, "Remove card from deck", 18);
-            else if (inputCommand.matches(deckMenuCommands[12])) showAllUserDecks();
-            else if (inputCommand.matches(deckMenuCommands[13])) showAllUserCards();
-            else if (inputCommand.matches(deckMenuCommands[14])) showDeck(inputCommand, 14);
-            else if (inputCommand.matches(deckMenuCommands[15])) showDeck(inputCommand, 15);
-            else if (inputCommand.matches(deckMenuCommands[16])) showDeck(inputCommand, 16);
-            else if (inputCommand.matches(cardShowRegex)) showCard(inputCommand, "Deck");
+            else if (inputCommand.matches(DECK_MENU_COMMANDS[12])) showAllUserDecks();
+            else if (inputCommand.matches(DECK_MENU_COMMANDS[13])) showAllUserCards();
+            else if (inputCommand.matches(DECK_MENU_COMMANDS[14])) showDeck(inputCommand, 14);
+            else if (inputCommand.matches(DECK_MENU_COMMANDS[15])) showDeck(inputCommand, 15);
+            else if (inputCommand.matches(DECK_MENU_COMMANDS[16])) showDeck(inputCommand, 16);
+            else if (inputCommand.matches(CARD_SHOW_REGEX)) showCard(inputCommand, "Deck");
             else System.out.println("invalid command");
         }
     }
@@ -336,7 +334,7 @@ public class View {
      * 3- Set activate deck
      */
     private void preparatoryDeckWorks(String inputCommand, String commandType, int commandRegexIndex) {
-        getRegexMatcher(inputCommand, deckMenuCommands[commandRegexIndex], true);
+        getRegexMatcher(inputCommand, DECK_MENU_COMMANDS[commandRegexIndex], true);
 
         String deckName = regexMatcher.group(1);
 
@@ -355,7 +353,7 @@ public class View {
     }
 
     private void addOrDeleteCardFromDeck(String inputCommand, String commandType, int commandRegexIndex) {
-        getRegexMatcher(inputCommand, deckMenuCommands[commandRegexIndex], true);
+        getRegexMatcher(inputCommand, DECK_MENU_COMMANDS[commandRegexIndex], true);
 
         String deckName = "";
         String cardName = "";
@@ -416,7 +414,7 @@ public class View {
     }
 
     private void showDeck(String inputCommand, int commandRegexIndex) {
-        getRegexMatcher(inputCommand, deckMenuCommands[commandRegexIndex], true);
+        getRegexMatcher(inputCommand, DECK_MENU_COMMANDS[commandRegexIndex], true);
 
         String deckName = regexMatcher.group(2);
         String deckType = "Main";
@@ -446,11 +444,11 @@ public class View {
         int regexIndex = 0;
         while (true) {
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
-            if (inputCommand.matches(duelMenuCommands[0])) break; //Duel exit and back to main menu
-            else if (inputCommand.matches(duelMenuCommands[1]))
+            if (inputCommand.matches(DUEL_MENU_COMMANDS[0])) break; //Duel exit and back to main menu
+            else if (inputCommand.matches(DUEL_MENU_COMMANDS[1]))
                 System.out.println("menu navigation is not possible");
-            else if (inputCommand.matches(duelMenuCommands[2])) System.out.println("Duel");
-            else if (inputCommand.matches(cardShowRegex)) showCard(inputCommand, "Duel");
+            else if (inputCommand.matches(DUEL_MENU_COMMANDS[2])) System.out.println("Duel");
+            else if (inputCommand.matches(CARD_SHOW_REGEX)) showCard(inputCommand, "Duel");
             else if ((regexIndex = doesInputMatchWithStartDuelWithAnotherPlayerCommand(inputCommand)) != 0) {
                 startDuelWithAnotherPlayer(inputCommand, regexIndex);
             } else if ((regexIndex = doesInputMatchWithStartDuelWithAiCommand(inputCommand)) != 0) {
@@ -461,14 +459,14 @@ public class View {
 
     private int doesInputMatchWithStartDuelWithAnotherPlayerCommand(String inputCommand) {
         for (int i = 3; i <= 8; i++) {
-            if (inputCommand.matches(duelMenuCommands[i]))
+            if (inputCommand.matches(DUEL_MENU_COMMANDS[i]))
                 return i;
         }
         return 0;
     }
 
     private void startDuelWithAnotherPlayer(String inputCommand, int commandRegexIndex) {
-        getRegexMatcher(inputCommand, duelMenuCommands[commandRegexIndex], true);
+        getRegexMatcher(inputCommand, DUEL_MENU_COMMANDS[commandRegexIndex], true);
 
         String secondPlayerName = "";
         int roundCount = 0;
@@ -503,14 +501,14 @@ public class View {
 
     private int doesInputMatchWithStartDuelWithAiCommand(String inputCommand) {
         for (int i = 9; i <= 11; i++) {
-            if (inputCommand.matches(duelMenuCommands[i]) && !doesInputCommandHaveRepeatedField(inputCommand, duelMenuCommands[i], 3))
+            if (inputCommand.matches(DUEL_MENU_COMMANDS[i]) && !doesInputCommandHaveRepeatedField(inputCommand, DUEL_MENU_COMMANDS[i], 3))
                 return i;
         }
         return 0;
     }
 
     private void startDuelWithAi(String inputCommand, int commandRegexIndex) {
-        getRegexMatcher(inputCommand, duelMenuCommands[commandRegexIndex], true);
+        getRegexMatcher(inputCommand, DUEL_MENU_COMMANDS[commandRegexIndex], true);
 
         int roundCount = 0;
 
@@ -544,27 +542,27 @@ public class View {
         while (true) {
             if (isTheGameOver()) break;
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
-            if (inputCommand.matches(gameMenuCommands[20])) activeCheat(inputCommand, 20);
-            else if (inputCommand.matches(gameMenuCommands[21])) activeCheat(inputCommand, 21);
+            if (inputCommand.matches(GAME_MENU_COMMANDS[20])) activeCheat(inputCommand, 20);
+            else if (inputCommand.matches(GAME_MENU_COMMANDS[21])) activeCheat(inputCommand, 21);
             else if ((regexIndex = doesInputMatchWithSelectCardCommand(inputCommand)) != 0)
                 selectCard(inputCommand, regexIndex);
-            else if (inputCommand.matches(gameMenuCommands[7])) cancelCardSelection();
-            else if (inputCommand.matches(gameMenuCommands[8])) System.out.println("invalid selection");
-            else if (inputCommand.matches(gameMenuCommands[9])) summonCard();
-            else if (inputCommand.matches(gameMenuCommands[10])) setCard();
-            else if (inputCommand.matches(gameMenuCommands[11])) setAttackingOrDefending(inputCommand);
-            else if (inputCommand.matches(gameMenuCommands[12])) filipSummon();
-            else if (inputCommand.matches(gameMenuCommands[13])) attackToMonster(inputCommand);
-            else if (inputCommand.matches(gameMenuCommands[14])) directAttack();
-            else if (inputCommand.matches(gameMenuCommands[15])) {
+            else if (inputCommand.matches(GAME_MENU_COMMANDS[7])) cancelCardSelection();
+            else if (inputCommand.matches(GAME_MENU_COMMANDS[8])) System.out.println("invalid selection");
+            else if (inputCommand.matches(GAME_MENU_COMMANDS[9])) summonCard();
+            else if (inputCommand.matches(GAME_MENU_COMMANDS[10])) setCard();
+            else if (inputCommand.matches(GAME_MENU_COMMANDS[11])) setAttackingOrDefending(inputCommand);
+            else if (inputCommand.matches(GAME_MENU_COMMANDS[12])) filipSummon();
+            else if (inputCommand.matches(GAME_MENU_COMMANDS[13])) attackToMonster(inputCommand);
+            else if (inputCommand.matches(GAME_MENU_COMMANDS[14])) directAttack();
+            else if (inputCommand.matches(GAME_MENU_COMMANDS[15])) {
                 if (surrender()) break; // means surrender request accepted and the game is over.
-            } else if (inputCommand.matches(gameMenuCommands[16])) showSelectedCard();
-            else if (inputCommand.matches(gameMenuCommands[17])) showGraveyard();
-            else if (inputCommand.matches(gameMenuCommands[18])) goToTheNextPhase();
-            else if (inputCommand.matches(gameMenuCommands[19])) activateEffect();
-            else if (inputCommand.matches(gameMenuCommands[22])) activeCheat(inputCommand, 22);
-            else if (inputCommand.matches(gameMenuCommands[23])) activeCheat(inputCommand, 23);
-            else if (inputCommand.matches(cardShowRegex)) showCard(inputCommand, "Game");
+            } else if (inputCommand.matches(GAME_MENU_COMMANDS[16])) showSelectedCard();
+            else if (inputCommand.matches(GAME_MENU_COMMANDS[17])) showGraveyard();
+            else if (inputCommand.matches(GAME_MENU_COMMANDS[18])) goToTheNextPhase();
+            else if (inputCommand.matches(GAME_MENU_COMMANDS[19])) activateEffect();
+            else if (inputCommand.matches(GAME_MENU_COMMANDS[22])) activeCheat(inputCommand, 22);
+            else if (inputCommand.matches(GAME_MENU_COMMANDS[23])) activeCheat(inputCommand, 23);
+            else if (inputCommand.matches(CARD_SHOW_REGEX)) showCard(inputCommand, "Game");
             else System.out.println("invalid command");
         }
     }
@@ -587,28 +585,28 @@ public class View {
         } else {
             if (answerValue.equals("No")) return false;
             else {
-                showGameResult(answerValue); //TODO: fixme
+                showGameResult(answerValue); //TODO: fixme (answer value should have game results to show the user)
                 return true;
             }
         }
     }
 
-    private void showGameResult(String controlMessage){
-        //TODO:
+    private void showGameResult(String controlMessage) {
+        //TODO
     }
 
     private int doesInputMatchWithSelectCardCommand(String inputCommand) {
         for (int i = 0; i <= 6; i++) {
-            if (inputCommand.matches(gameMenuCommands[i])) {
+            if (inputCommand.matches(GAME_MENU_COMMANDS[i])) {
                 if (i < 4) return i;
-                else if (!doesInputCommandHaveRepeatedField(inputCommand, gameMenuCommands[i], 2)) return i;
+                else if (!doesInputCommandHaveRepeatedField(inputCommand, GAME_MENU_COMMANDS[i], 2)) return i;
             }
         }
         return 0;
     }
 
     private void selectCard(String inputCommand, int commandRegexIndex) {
-        getRegexMatcher(inputCommand, gameMenuCommands[commandRegexIndex], true);
+        getRegexMatcher(inputCommand, GAME_MENU_COMMANDS[commandRegexIndex], true);
 
         String selectedCardType = "";
         String cardOwner = "Myself";
@@ -746,7 +744,7 @@ public class View {
     }
 
     private void setAttackingOrDefending(String inputCommand) {
-        getRegexMatcher(inputCommand, gameMenuCommands[11], true);
+        getRegexMatcher(inputCommand, GAME_MENU_COMMANDS[11], true);
 
         //Finding Position mode from command:
         String positionMode = switch (regexMatcher.group(1)) {
@@ -784,7 +782,7 @@ public class View {
     }
 
     private void attackToMonster(String inputCommand) {
-        getRegexMatcher(inputCommand, gameMenuCommands[13], true);
+        getRegexMatcher(inputCommand, GAME_MENU_COMMANDS[13], true);
 
         //Making message JSONObject and passing to sendControl function:
         JSONObject value = new JSONObject();
@@ -889,7 +887,7 @@ public class View {
     }
 
     private void activeCheat(String inputCommand, int regexCommandIndex) {
-        getRegexMatcher(inputCommand, gameMenuCommands[regexCommandIndex], true);
+        getRegexMatcher(inputCommand, GAME_MENU_COMMANDS[regexCommandIndex], true);
 
         //Making message JSONObject and passing to sendControl function:
         JSONObject value = new JSONObject();
@@ -931,19 +929,19 @@ public class View {
     private void shopMenu() {
         while (true) {
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
-            if (inputCommand.matches(shopMenuCommands[0])) break; //Shop exit and back to main menu
-            else if (inputCommand.matches(shopMenuCommands[1]))
+            if (inputCommand.matches(SHOP_MENU_COMMANDS[0])) break; //Shop exit and back to main menu
+            else if (inputCommand.matches(SHOP_MENU_COMMANDS[1]))
                 System.out.println("menu navigation is not possible");
-            else if (inputCommand.matches(shopMenuCommands[2])) System.out.println("Shop");
-            else if (inputCommand.matches(shopMenuCommands[3])) buyCard(inputCommand);
-            else if (inputCommand.matches(shopMenuCommands[4])) showAllCards();
-            else if (inputCommand.matches(cardShowRegex)) showCard(inputCommand, "Deck");
+            else if (inputCommand.matches(SHOP_MENU_COMMANDS[2])) System.out.println("Shop");
+            else if (inputCommand.matches(SHOP_MENU_COMMANDS[3])) buyCard(inputCommand);
+            else if (inputCommand.matches(SHOP_MENU_COMMANDS[4])) showAllCards();
+            else if (inputCommand.matches(CARD_SHOW_REGEX)) showCard(inputCommand, "Deck");
             else System.out.println("invalid command");
         }
     }
 
     private void buyCard(String inputCommand) {
-        getRegexMatcher(inputCommand, shopMenuCommands[3], true);
+        getRegexMatcher(inputCommand, SHOP_MENU_COMMANDS[3], true);
 
         String cardName = regexMatcher.group(1);
 
@@ -980,20 +978,20 @@ public class View {
     private void importExportMenu() {
         while (true) {
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
-            if (inputCommand.matches(importExportMenuCommands[0])) break; //Import/export exit and back to main menu
-            else if (inputCommand.matches(importExportMenuCommands[1]))
+            if (inputCommand.matches(IMPORT_EXPORT_MENU_COMMANDS[0])) break; //Import/export exit and back to main menu
+            else if (inputCommand.matches(IMPORT_EXPORT_MENU_COMMANDS[1]))
                 System.out.println("menu navigation is not possible");
-            else if (inputCommand.matches(importExportMenuCommands[2])) System.out.println("Import/Export");
-            else if (inputCommand.matches(importExportMenuCommands[3]))
+            else if (inputCommand.matches(IMPORT_EXPORT_MENU_COMMANDS[2])) System.out.println("Import/Export");
+            else if (inputCommand.matches(IMPORT_EXPORT_MENU_COMMANDS[3]))
                 importOrExportCard(inputCommand, "Import card", 3);
-            else if (inputCommand.matches(importExportMenuCommands[4]))
+            else if (inputCommand.matches(IMPORT_EXPORT_MENU_COMMANDS[4]))
                 importOrExportCard(inputCommand, "Export card", 4);
             else System.out.println("invalid command");
         }
     }
 
     private void importOrExportCard(String inputCommand, String typeOfCommand, int regexIndex) {
-        getRegexMatcher(inputCommand, importExportMenuCommands[regexIndex], true);
+        getRegexMatcher(inputCommand, IMPORT_EXPORT_MENU_COMMANDS[regexIndex], true);
 
         String cardName = regexMatcher.group(1);
 
@@ -1016,26 +1014,26 @@ public class View {
     private void profileMenu() {
         while (true) {
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
-            if (inputCommand.matches(profileMenuCommands[0])) break; //Profile exit and back to main menu
-            else if (inputCommand.matches(profileMenuCommands[1]))
+            if (inputCommand.matches(PROFILE_MENU_COMMANDS[0])) break; //Profile exit and back to main menu
+            else if (inputCommand.matches(PROFILE_MENU_COMMANDS[1]))
                 System.out.println("menu navigation is not possible");
-            else if (inputCommand.matches(profileMenuCommands[2])) System.out.println("Profile");
-            else if (inputCommand.matches(profileMenuCommands[3])) changeNickname(inputCommand);
-            else if (inputCommand.matches(profileMenuCommands[4]) &&
-                    !doesInputCommandHaveRepeatedField(inputCommand, profileMenuCommands[4], 2))
+            else if (inputCommand.matches(PROFILE_MENU_COMMANDS[2])) System.out.println("Profile");
+            else if (inputCommand.matches(PROFILE_MENU_COMMANDS[3])) changeNickname(inputCommand);
+            else if (inputCommand.matches(PROFILE_MENU_COMMANDS[4]) &&
+                    !doesInputCommandHaveRepeatedField(inputCommand, PROFILE_MENU_COMMANDS[4], 2))
                 changePassword(inputCommand, 4);
-            else if (inputCommand.matches(profileMenuCommands[5]) &&
-                    !doesInputCommandHaveRepeatedField(inputCommand, profileMenuCommands[5], 2))
+            else if (inputCommand.matches(PROFILE_MENU_COMMANDS[5]) &&
+                    !doesInputCommandHaveRepeatedField(inputCommand, PROFILE_MENU_COMMANDS[5], 2))
                 changePassword(inputCommand, 5);
-            else if (inputCommand.matches(profileMenuCommands[6]) &&
-                    !doesInputCommandHaveRepeatedField(inputCommand, profileMenuCommands[6], 2))
+            else if (inputCommand.matches(PROFILE_MENU_COMMANDS[6]) &&
+                    !doesInputCommandHaveRepeatedField(inputCommand, PROFILE_MENU_COMMANDS[6], 2))
                 changePassword(inputCommand, 6);
             else System.out.println("invalid command");
         }
     }
 
     private void changeNickname(String inputCommand) {
-        getRegexMatcher(inputCommand, profileMenuCommands[3], true);
+        getRegexMatcher(inputCommand, PROFILE_MENU_COMMANDS[3], true);
 
         String nickname = regexMatcher.group(2);
 
@@ -1054,7 +1052,7 @@ public class View {
     }
 
     private void changePassword(String inputCommand, int regexIndex) {
-        getRegexMatcher(inputCommand, profileMenuCommands[regexIndex], true);
+        getRegexMatcher(inputCommand, PROFILE_MENU_COMMANDS[regexIndex], true);
 
         String currentPassword = "";
         String newPassword = "";
@@ -1087,11 +1085,11 @@ public class View {
     private void scoreBoardMenu() {
         while (true) {
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
-            if (inputCommand.matches(scoreboardMenuCommands[0])) break; //Scoreboard exit and back to main menu
-            else if (inputCommand.matches(scoreboardMenuCommands[1]))
+            if (inputCommand.matches(SCOREBOARD_MENU_COMMANDS[0])) break; //Scoreboard exit and back to main menu
+            else if (inputCommand.matches(SCOREBOARD_MENU_COMMANDS[1]))
                 System.out.println("menu navigation is not possible");
-            else if (inputCommand.matches(scoreboardMenuCommands[2])) System.out.println("Scoreboard");
-            else if (inputCommand.matches(scoreboardMenuCommands[3])) showScoreboard();
+            else if (inputCommand.matches(SCOREBOARD_MENU_COMMANDS[2])) System.out.println("Scoreboard");
+            else if (inputCommand.matches(SCOREBOARD_MENU_COMMANDS[3])) showScoreboard();
             else System.out.println("invalid command");
         }
     }
@@ -1120,7 +1118,7 @@ public class View {
      * 4- "Duel"
      */
     private void showCard(String inputCommand, String whoCallFunction) {
-        getRegexMatcher(inputCommand, cardShowRegex, true);
+        getRegexMatcher(inputCommand, CARD_SHOW_REGEX, true);
 
         String cardName = regexMatcher.group(1);
 
