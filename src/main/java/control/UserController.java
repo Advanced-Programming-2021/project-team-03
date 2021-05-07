@@ -1,8 +1,7 @@
 package control;
 
 import model.user.User;
-import model.user.UserException;
-import org.json.JSONArray;
+import model.user.DatabaseException;
 
 import java.util.ArrayList;
 
@@ -20,7 +19,7 @@ public class UserController {
     }
 
     public boolean doesUsernameExist(String username) { // checking if a user with this username exists
-        return User.get(username) != null;
+        return User.getByUsername(username) != null;
     }
 
     public boolean doesNicknameExist(String nickname) {// checking if a user with this nickname exists
@@ -30,27 +29,30 @@ public class UserController {
     public void registerUsername(String username, String password, String nickname) {
         try {
             new User(username, password, nickname);
-        } catch (UserException e) {
+        } catch (DatabaseException e) {
+            System.out.println(e.toString());
             e.printStackTrace();
         }
     }
 
     public boolean doesUsernameAndPasswordMatch(String username, String password) {
-        return User.get(username).doesMatchPassword(password);
+        return User.getByUsername(username).doesMatchPassword(password);
     }
 
     public void changeNickname(String username, String newNickname) {
         try {
-            User.get(username).setNickname(newNickname);
-        } catch (UserException e) {
+            User.getByUsername(username).setNickname(newNickname);
+        } catch (DatabaseException e) {
+            System.out.println(e.toString());
             e.printStackTrace();
         }
     }
 
     public void changePassword(String username, String newPassword) {
         try {
-            User.get(username).changePassword(newPassword);
-        } catch (UserException e) {
+            User.getByUsername(username).changePassword(newPassword);
+        } catch (DatabaseException e) {
+            System.out.println(e.toString());
             e.printStackTrace();
         }
     }

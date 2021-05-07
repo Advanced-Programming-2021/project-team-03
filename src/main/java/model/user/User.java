@@ -4,27 +4,26 @@ import model.card.Card;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 
 
 public class User {
-    private static HashMap<String, User> allUsers;
+    private static final HashMap<String, User> allUsers;
     private final String username;
     private String nickname;
     private String passwordHash;
     private int score;
     private int balance;
     private int level;
-    private ArrayList<Deck> Decks;
-    private ArrayList<Card> Cards;
+    private ArrayList<Deck> decks;
+    private ArrayList<Card> cards;
     private Deck activeDeck;
 
     static {
-        allUsers = UserDatabase.updateAllUsers();
+        allUsers = Database.updateAllUsers();
     }
 
-    public User(String username, String password, String nickname) throws UserException {
+    public User(String username, String password, String nickname) throws DatabaseException {
         this.username = username;
         setNickname(nickname); // may throw an exception
         this.passwordHash = hashString(password);
@@ -32,8 +31,8 @@ public class User {
         this.balance = 1000;
         this.level = 1;
 
-        Decks = new ArrayList<>();
-        Cards = new ArrayList<>();
+        decks = new ArrayList<>();
+        cards = new ArrayList<>();
         allUsers.put(username, this);
         updateInDatabase(); // may throw an exception
     }
@@ -48,18 +47,18 @@ public class User {
         return BCrypt.checkpw(candidatePassword, this.passwordHash);
     }
 
-    public void removeUser() throws UserException {
+    public void removeUser() throws DatabaseException {
         allUsers.remove(username);
-        UserDatabase.removeUser(this);
+        Database.remove(this);
     }
 
     public String getNickname() {
         return nickname;
     }
 
-    public void setNickname(String nickname) throws UserException {
+    public void setNickname(String nickname) throws DatabaseException {
         if (doesNicknameExists(nickname)) {
-            throw new UserException("The nickname: \"" + nickname + "\" is already taken.");
+            throw new DatabaseException("The nickname \"" + nickname + "\" is already taken.");
         }
         this.nickname = nickname;
         updateInDatabase();
@@ -70,16 +69,16 @@ public class User {
                 .anyMatch(user -> user.nickname.equals(nickname));
     }
 
-    public void changePassword(String oldPassword, String newPassword) throws UserException {
+    public void changePassword(String oldPassword, String newPassword) throws DatabaseException {
         if (doesMatchPassword(oldPassword)) {
             this.passwordHash = hashString(newPassword);
             updateInDatabase();
             return;
         }
-        throw new UserException("Entered password does not match the old password.");
+        throw new DatabaseException("Entered password does not match the old password.");
     }
 
-    public void changePassword(String newPassword) throws UserException {
+    public void changePassword(String newPassword) throws DatabaseException {
         this.passwordHash = hashString(newPassword);
         updateInDatabase();
     }
@@ -92,7 +91,7 @@ public class User {
         return score;
     }
 
-    public void setScore(int score) throws UserException {
+    public void setScore(int score) throws DatabaseException {
         this.score = Math.max(0, score);
         updateInDatabase();
     }
@@ -101,32 +100,32 @@ public class User {
         return balance;
     }
 
-    public void setBalance(int balance) throws UserException {
+    public void setBalance(int balance) throws DatabaseException {
         this.balance = balance;
         updateInDatabase();
     }
 
     public ArrayList<Deck> getDecks() {
-        return Decks;
+        return decks;
     }
 
-    public void setDecks(ArrayList<Deck> decks) {
-        Decks = decks;
+    public void addDeck(Deck deck) {
+        decks.add(deck);
     }
 
     public ArrayList<Card> getCards() {
-        return Cards;
+        return cards;
     }
 
     public void setCards(ArrayList<Card> cards) {
-        Cards = cards;
+        this.cards = cards;
     }
 
     public int getLevel() {
         return level;
     }
 
-    public void setLevel(int level) throws UserException {
+    public void setLevel(int level) throws DatabaseException {
         this.level = level;
         updateInDatabase();
     }
@@ -139,11 +138,11 @@ public class User {
         this.activeDeck = activeDeck;
     }
 
-    public void updateInDatabase() throws UserException {
-        UserDatabase.updateUser(this);
+    public void updateInDatabase() throws DatabaseException {
+        Database.save(this);
     }
 
-    public static User get(String username) {
+    public static User getByUsername(String username) {
         return allUsers.get(username);
     }
 
