@@ -1,9 +1,9 @@
 package control;
 
 import model.card.Card;
+import model.user.DatabaseException;
 import model.user.Deck;
 import model.user.User;
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 
@@ -20,16 +20,27 @@ public class DeckController {
     }
 
     public boolean doesDeckAlreadyExist(String username, String deckName) {
-        //TODO
-        return false;
+        return Deck.getByDeckName(deckName) != null;
     }
 
     public void createNewDeck(String username, String deckName) {
-        //TODO
+        try {
+            Deck deck = new Deck(deckName);
+            User.getByUsername(username).addDeck(deck);
+        } catch (DatabaseException e) {
+            System.out.println(e.toString());
+            e.printStackTrace();
+        }
     }
 
     public void deleteDeck(String username, String deckName) {
-        //TODO
+        /*try {
+            Deck.getByDeckName(deckName).r
+            User.getByUsername(username).addDeck(deck);
+        } catch (DatabaseException e) {
+            System.out.println(e.toString());
+            e.printStackTrace();
+        }*/ // TODO
     }
 
     public boolean doesCardExist(String username, String cardName) {
@@ -57,7 +68,7 @@ public class DeckController {
     }
 
     public boolean doesDeckContainThisCard(String username, String deckName, String cardName) {
-        return false;
+        return false; // TODO
     }
 
     public void removeCardFromDeck(String username, String deckName, String deckType, String cardName) {
