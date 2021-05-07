@@ -23,7 +23,7 @@ public class View {
     private String[] shopMenuCommands = new String[5];
     private String[] deckMenuCommands = new String[19];
     private String[] duelMenuCommands = new String[12]; //TODO
-    private String[] gameMenuCommands = new String[18]; //TODO
+    private String[] gameMenuCommands = new String[25]; //TODO
 
     private String cardShowRegex;
 
@@ -542,10 +542,10 @@ public class View {
     private void gameMenu() {
         int regexIndex;
         while (true) {
-            //TODO: When will the game end and I have to leave the menu
+            if (isTheGameOver()) break;
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
             if (inputCommand.matches(gameMenuCommands[20])) activeCheat(inputCommand, 20);
-            if (inputCommand.matches(gameMenuCommands[21])) activeCheat(inputCommand, 21);
+            else if (inputCommand.matches(gameMenuCommands[21])) activeCheat(inputCommand, 21);
             else if ((regexIndex = doesInputMatchWithSelectCardCommand(inputCommand)) != 0)
                 selectCard(inputCommand, regexIndex);
             else if (inputCommand.matches(gameMenuCommands[7])) cancelCardSelection();
@@ -556,16 +556,45 @@ public class View {
             else if (inputCommand.matches(gameMenuCommands[12])) filipSummon();
             else if (inputCommand.matches(gameMenuCommands[13])) attackToMonster(inputCommand);
             else if (inputCommand.matches(gameMenuCommands[14])) directAttack();
-            else if (inputCommand.matches(gameMenuCommands[15])) surrender();
-            else if (inputCommand.matches(gameMenuCommands[16])) showSelectedCard();
+            else if (inputCommand.matches(gameMenuCommands[15])) {
+                if (surrender()) break; // means surrender request accepted and the game is over.
+            } else if (inputCommand.matches(gameMenuCommands[16])) showSelectedCard();
             else if (inputCommand.matches(gameMenuCommands[17])) showGraveyard();
             else if (inputCommand.matches(gameMenuCommands[18])) goToTheNextPhase();
             else if (inputCommand.matches(gameMenuCommands[19])) activateEffect();
-            if (inputCommand.matches(gameMenuCommands[22])) activeCheat(inputCommand, 22);
-            if (inputCommand.matches(gameMenuCommands[23])) activeCheat(inputCommand, 23);
+            else if (inputCommand.matches(gameMenuCommands[22])) activeCheat(inputCommand, 22);
+            else if (inputCommand.matches(gameMenuCommands[23])) activeCheat(inputCommand, 23);
             else if (inputCommand.matches(cardShowRegex)) showCard(inputCommand, "Game");
             else System.out.println("invalid command");
         }
+    }
+
+    private boolean isTheGameOver() {
+        //Making message JSONObject and passing to sendControl function:
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Is the game over");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        String answerType = (String) controlAnswer.get("Type");
+        String answerValue = (String) controlAnswer.get("Value"); //Value will be "Yes" or "No"
+        if (answerType.equals("Error")) {
+            System.out.println(answerValue);
+            return false;
+        } else {
+            if (answerValue.equals("No")) return false;
+            else {
+                showGameResult(answerValue); //TODO: fixme
+                return true;
+            }
+        }
+    }
+
+    private void showGameResult(String controlMessage){
+        //TODO:
     }
 
     private int doesInputMatchWithSelectCardCommand(String inputCommand) {
@@ -785,7 +814,7 @@ public class View {
         System.out.println(answerValue);
     }
 
-    private void surrender() {
+    private boolean surrender() {
         //Making message JSONObject and passing to sendControl function:
         JSONObject value = new JSONObject();
         value.put("Token", token);
@@ -794,9 +823,13 @@ public class View {
         messageToSendToControl.put("Value", value);
         JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
 
+        boolean isTheGameOver = false;
         //Survey control JSON message
+        String answerType = (String) controlAnswer.get("Type");
+        if (answerType.equals("Successful")) isTheGameOver = true;
         String answerValue = (String) controlAnswer.get("Value");
         System.out.println(answerValue);
+        return isTheGameOver;
     }
 
     private void showSelectedCard() {

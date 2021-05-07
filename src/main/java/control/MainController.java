@@ -80,6 +80,8 @@ public class MainController {
             case "Show graveyard" -> showGraveyard(valueObject);
             case "Show selected card" -> showSelectedCard(valueObject);
             case "Surrender" -> surrender(valueObject);
+            //TODO: add this type of client command to code.
+            //case "Is the game over"
             default -> error();
         };
     }
