@@ -1,11 +1,7 @@
 package control;
 
 import model.card.Card;
-import model.card.Monster;
 import model.game.Game;
-import model.user.User;
-
-import java.util.regex.Matcher;
 
 enum Phase {
     DRAW,
@@ -16,86 +12,49 @@ enum Phase {
 }
 
 public class GameController {
+    private static GameController gameController;
+
+    private GameController() {
+    }
+
+    public static GameController getInstance() {
+        if (gameController == null)
+            gameController = new GameController();
+        return gameController;
+    }
+
+
     private Card selectedCard;
     private Phase currentPhase;
     private Game game;
 
-    public String makeNewDuel(String firstUsername, User SecondUsername, int roundsCount) {
+    public void newDuel(String firstPlayerName, String secondPlayerName, int numberOfRound) {
         //TODO
-        return null;
     }
 
-    public static String selectCard(String cardType, int position) {
+    public void newDuelWithAI(String username, int numberOfRound) {
         //TODO
-        return null;
     }
 
-    public static String deselectCard(String cardType, int position) {
+    public boolean isCardAddressValid(String cardType, int cardPosition) {
         //TODO
-        return null;
+        return false;
     }
 
-    private static void changePhase() {
-
-    }
-
-    public static String summonCard() {
+    public boolean isThereACardInGivenPosition(String cardType, int cardPosition, boolean isOpponentCard) {
         //TODO
-        return null;
+        return false;
     }
 
-    public static String setCard(String type) {
+    public void selectCard(String cardType, int cardPosition, boolean isOpponentCard) {
         //TODO
-        return null;
     }
 
-    public static String setCardStandFormat() {
+    public Card getSelectedCard() {
+        return selectedCard;
+    }
+
+    public void deselectCard() {
         //TODO
-        return null;
     }
-
-    public static String attackToRivalCard(int targetCardPosition) {
-        //TODO
-        return null;
-    }
-
-    public static String DirectAttackToRivalHealth() {
-        //TODO
-        return null;
-    }
-
-    public static String activateSpellCardInOnwTurn() {
-        //TODO
-        return null;
-    }
-
-    public static String activateSpellCardInRivalTurn() {
-        //TODO
-        return null;
-    }
-
-    public static String ritualSummon() {
-        //TODO
-        return null;
-    }
-
-    public static String specialSummon() {
-        //TODO
-        return null;
-    }
-
-    public static String showGraveyard(String whichGraveyard) {
-        //TODO
-        return null;
-    }
-
-    private static void rewardPlayers() {
-
-    }
-
-    public static String surrender(String username) {
-        //TODO
-        return null;
-    }
-
 }

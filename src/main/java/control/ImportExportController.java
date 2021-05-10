@@ -13,14 +13,12 @@ public class ImportExportController {
         return importExportController;
     }
 
-    public String importCard(String cardName) {
+    public void importCard(String cardName) {
         //TODO
-        return null;
     }
 
-    public String exportCard(String cardName) {
+    public void exportCard(String cardName) {
         //TODO
-        return null;
     }
 
     public boolean canImportThisCard(String cardName) {

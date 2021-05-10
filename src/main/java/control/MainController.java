@@ -57,20 +57,15 @@ public class MainController {
             case "Show deck" -> showDeck(valueObject);
             case "Show all player cards" -> showAllPlayerCards(valueObject);
             case "Buy card" -> buyCard(valueObject);
-            //TODO: add card-show command to menu commands, shop, deck and Game
+            case "Show card" -> showCard(valueObject);
             case "Show all cards in shop" -> showAllCardsInShop(valueObject);
             case "Cheat code" -> cheatCodes(valueObject);
             case "New duel" -> newDuel(valueObject);
-            //TODO: add this type of client command to code.
-            //case "New duel with ai"
-            //TODO: add this type of client command to code.
-            //case "Next phase"
+            case "New duel AI" -> newDuelWithAI(valueObject);
             case "Select Card" -> selectCardInGame(valueObject);
-            //TODO: add this type of client command to code.
-            //case "Cancel card selection"
+            case "Cancel card selection" -> deselectCardInGame(valueObject);
             case "Summon" -> summonACard(valueObject);
-            //TODO: add this type of client command to code.
-            //case "Tribute cards"
+            case "Tribute cards" -> tributeCard(valueObject);
             case "Set in field" -> setACard(valueObject);
             case "Set position" -> setPosition(valueObject);
             case "Flip summon" -> flipSummon(valueObject);
@@ -84,6 +79,28 @@ public class MainController {
             //case "Is the game over"
             default -> error();
         };
+    }
+
+    public String sendRequestToView(){
+        /*send the statements of the game to view
+        * such as phase name, players' turn, ask for card activation and etc*/
+        return null;
+    }
+
+    private String cheatCodes(JSONObject valueObject) {
+        //TODO
+        return null;
+    }
+
+    private String showCard(JSONObject valueObject) {
+        /*show details of a given card*/
+        //TODO
+        return null;
+    }
+
+    private String tributeCard(JSONObject valueObject) {
+        //TODO
+        return null;
     }
 
     private String surrender(JSONObject valueObject) {
@@ -136,19 +153,111 @@ public class MainController {
         return null;
     }
 
+
+    private String deselectCardInGame(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else if (GameController.getInstance().getSelectedCard() == null) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "no card is selected yet!");
+        } else {
+            GameController.getInstance().deselectCard();
+            answerObject.put("Type", "Successful");
+            answerObject.put("Value", "card deselected");
+        }
+
+        return answerObject.toString();
+    }
+
     private String selectCardInGame(JSONObject valueObject) {
-        //TODO
-        return null;
+        String token = valueObject.getString("Token");
+        String cardType = valueObject.getString("Type");
+        int cardPosition = Integer.parseInt(valueObject.getString("Position"));
+        boolean isOpponentCard = valueObject.getString("Owner").equals("Opponent");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else if (!GameController.getInstance().isCardAddressValid(cardType, cardPosition)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid selection!");
+        } else if (!GameController.getInstance().isThereACardInGivenPosition(cardType, cardPosition, isOpponentCard)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "no card found in the given position!");
+        } else {
+            GameController.getInstance().selectCard(cardType, cardPosition, isOpponentCard);
+            answerObject.put("Type", "Successful");
+            answerObject.put("Value", "card selected");
+        }
+
+        return answerObject.toString();
+    }
+
+    private String newDuelWithAI(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+        int numberOfRound = Integer.parseInt(valueObject.getString("Rounds number"));
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else if (numberOfRound != 1 && numberOfRound != 3) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "number of rounds is not supported!");
+        } else if (!UserController.getInstance().doesPlayerHaveActiveDeck(onlineUsers.get(token))) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", onlineUsers.get(token) + " has no active deck");
+        } else if (!UserController.getInstance().isUserActiveDeckValid(onlineUsers.get(token))) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", onlineUsers.get(token) + "’s deck is invalid");
+        } else {
+            GameController.getInstance().newDuelWithAI(onlineUsers.get(token), numberOfRound);
+            answerObject.put("Type", "Successful");
+            answerObject.put("Value", "Duel starts between " + onlineUsers.get(token) + " & AI");
+        }
+
+        return answerObject.toString();
     }
 
     private String newDuel(JSONObject valueObject) {
-        //TODO
-        return null;
-    }
+        String token = valueObject.getString("Token");
+        String rivalName = valueObject.getString("Second player name");
+        int numberOfRound = Integer.parseInt(valueObject.getString("Rounds number"));
 
-    private String cheatCodes(JSONObject valueObject) {
-        //TODO
-        return null;
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else if (!UserController.getInstance().doesUsernameExist(rivalName)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "there is no player with this username!");
+        } else if (numberOfRound != 1 && numberOfRound != 3) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "number of rounds is not supported!");
+        } else if (!UserController.getInstance().doesPlayerHaveActiveDeck(onlineUsers.get(token))) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", onlineUsers.get(token) + " has no active deck");
+        } else if (!UserController.getInstance().doesPlayerHaveActiveDeck(rivalName)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", rivalName + " has no active deck");
+        } else if (!UserController.getInstance().isUserActiveDeckValid(onlineUsers.get(token))) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", onlineUsers.get(token) + "’s deck is invalid");
+        } else if (!UserController.getInstance().isUserActiveDeckValid(rivalName)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", rivalName + "’s deck is invalid");
+        } else {
+            GameController.getInstance().newDuel(onlineUsers.get(token), rivalName, numberOfRound);
+            answerObject.put("Type", "Successful");
+            answerObject.put("Value", "Duel starts between " + onlineUsers.get(token) + " & " + rivalName);
+        }
+
+        return answerObject.toString();
     }
 
     /**
@@ -539,16 +648,16 @@ public class MainController {
 
     // logging in the user and put it in the online users hashmap
     private String login(String username) {
-        String token = createRandomStringToken(30);
+        String token = createRandomStringToken();
         onlineUsers.put(token, username);
         return token;
     }
 
     // function to generate a random string of byte-length n as a token
     /* https://stackoverflow.com/questions/41107/how-to-generate-a-random-alpha-numeric-string */
-    private String createRandomStringToken(int byteLength) {
+    private String createRandomStringToken() {
         SecureRandom secureRandom = new SecureRandom();
-        byte[] token = new byte[byteLength];
+        byte[] token = new byte[30];
         secureRandom.nextBytes(token);
         return Base64.getUrlEncoder().withoutPadding().encodeToString(token); //base64 encoding
     }

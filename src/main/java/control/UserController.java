@@ -68,4 +68,14 @@ public class UserController {
         }
         return scoreboard.toString();
     }
+
+    public boolean doesPlayerHaveActiveDeck(String username) {
+        //TODO
+        return false;
+    }
+
+    public boolean isUserActiveDeckValid(String username) {
+        //TODO
+        return false;
+    }
 }
