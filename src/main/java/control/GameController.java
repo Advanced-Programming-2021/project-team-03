@@ -67,7 +67,7 @@ public class GameController {
         return false;
     }
 
-    public boolean isMonsterFieldZoneFull(String username) {
+    public boolean isCardFieldZoneFull(String username) {
         //TODO
         return false;
     }
@@ -143,6 +143,57 @@ public class GameController {
     public String attack(String attacker, String position) {
         //TODO
         /*return the result of attack in a string*/
+        return null;
+    }
+
+    public boolean canAttackDirectly() {
+        //TODO
+        return false;
+    }
+
+    public int attackDirectlyToTheOpponent() {
+        //TODO
+        /*return the opponents receiving damage*/
+        return 0;
+    }
+
+    public boolean isSpellCard() {
+        //TODO
+        return false;
+    }
+
+    public boolean cardAlreadyActivated() {
+        //TODO
+        return false;
+    }
+
+    public boolean doesFieldHaveSpaceForThisCard() {
+        //TODO
+        return false;
+    }
+
+    public boolean canCardActivate() {
+        //TODO
+        return false;
+    }
+
+    public void activateSpellCard() {
+        //TODO
+    }
+
+    public String getGraveyard(String username) {
+        //TODO
+        return null;
+    }
+
+    public boolean canShowSelectedCardToPlayer(String username) {
+        //TODO
+        return false;
+    }
+
+    public String surrender(String username) {
+        //TODO
+        /*return the surrender message*/
         return null;
     }
 }

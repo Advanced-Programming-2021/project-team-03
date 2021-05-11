@@ -78,4 +78,9 @@ public class UserController {
         //TODO
         return false;
     }
+
+    public String showCardToUser(String cardName) {
+        //TODO
+        return null;
+    }
 }

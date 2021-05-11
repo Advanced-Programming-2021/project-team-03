@@ -67,7 +67,6 @@ public class MainController {
             case "Select Card" -> selectCardInGame(valueObject);
             case "Cancel card selection" -> deselectCardInGame(valueObject);
             case "Summon" -> summonACard(valueObject);
-            case "Tribute cards" -> tributeCard(valueObject);
             case "Set in field" -> setACard(valueObject);
             case "Set position" -> setPosition(valueObject);
             case "Flip summon" -> flipSummon(valueObject);
@@ -84,6 +83,7 @@ public class MainController {
     }
 
     public String sendRequestToView() {
+        //TODO
         /*send the statements of the game to view
          * such as phase name, players' turn, ask for card activation and etc*/
         return null;
@@ -96,38 +96,134 @@ public class MainController {
 
     private String showCard(JSONObject valueObject) {
         /*show details of a given card*/
-        //TODO
-        return null;
-    }
+        String token = valueObject.getString("Token");
+        String cardName = valueObject.getString("Card name");
 
-    private String tributeCard(JSONObject valueObject) {
-        //TODO
-        return null;
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            answerObject.put("Type", "Successful");
+            answerObject.put("Value", UserController.getInstance().showCardToUser(cardName));
+        }
+
+        return answerObject.toString();
     }
 
     private String surrender(JSONObject valueObject) {
-        //TODO
-        return null;
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            answerObject.put("Type", "Successful");
+            answerObject.put("Value", GameController.getInstance().surrender(onlineUsers.get(token)));
+        }
+
+        return answerObject.toString();
     }
 
     private String showSelectedCard(JSONObject valueObject) {
-        //TODO
-        return null;
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else if (GameController.getInstance().getSelectedCard() == null) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "no card is selected yet!");
+        } else if (!GameController.getInstance().canShowSelectedCardToPlayer(onlineUsers.get(token))) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "card is not visible!");
+        } else {
+            answerObject.put("Type", "Successful");
+            answerObject.put("Value", GameController.getInstance().getSelectedCard().toString());
+        }
+        return answerObject.toString();
     }
 
     private String showGraveyard(JSONObject valueObject) {
-        //TODO
-        return null;
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            answerObject.put("Type", "Graveyard");
+            answerObject.put("Value", GameController.getInstance().getGraveyard(onlineUsers.get(token)));
+        }
+        return answerObject.toString();
     }
 
     private String activeEffect(JSONObject valueObject) {
-        //TODO
-        return null;
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else if (GameController.getInstance().getSelectedCard() == null) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "no card is selected yet!");
+        } else if (!GameController.getInstance().isSpellCard()) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "activate effect is only for spell cards!");
+        } else if (GameController.getInstance().getCurrentPhase() != FIRST_MAIN &&
+                GameController.getInstance().getCurrentPhase() != SECOND_MAIN) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "you can’t activate an effect on this turn!");
+        } else if (GameController.getInstance().cardAlreadyActivated()) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "you have already activated this card!");
+        } else if (!GameController.getInstance().doesFieldHaveSpaceForThisCard()) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "spell card zone is full!");
+        } else if (!GameController.getInstance().canCardActivate()) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "preparations of this spell are not done yet!");
+        } else {
+            GameController.getInstance().activateSpellCard();
+            answerObject.put("Type", "Successful");
+            answerObject.put("Value", "spell activated!");
+        }
+
+        return answerObject.toString();
     }
 
     private String directAttack(JSONObject valueObject) {
-        //TODO
-        return null;
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else if (GameController.getInstance().getSelectedCard() == null) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "no card is selected yet!");
+        } else if (GameController.getInstance().getCurrentPhase() != BATTLE) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "can't direct attack phase!");
+        } else if (!GameController.getInstance().canAttackWithThisCard()) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "you can’t attack with this card!");
+        } else if (!GameController.getInstance().cardAlreadyAttacked()) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "this card already attacked!");
+        } else if (!GameController.getInstance().canAttackDirectly()) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "you can’t attack the opponent directly!");
+        } else {
+            int damage = GameController.getInstance().attackDirectlyToTheOpponent();
+            answerObject.put("Type", "Successful");
+            answerObject.put("Value", "you opponent receives " + damage + " battle damage");
+        }
+
+        return answerObject.toString();
     }
 
     private String attack(JSONObject valueObject) {
@@ -143,7 +239,7 @@ public class MainController {
             answerObject.put("Value", "no card is selected yet!");
         } else if (GameController.getInstance().getCurrentPhase() != BATTLE) {
             answerObject.put("Type", "Error");
-            answerObject.put("Value", "action not allowed in this phase!");
+            answerObject.put("Value", "can't attack in this phase!");
         } else if (!GameController.getInstance().canAttackWithThisCard()) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "you can’t attack with this card!");
@@ -175,7 +271,7 @@ public class MainController {
         } else if (GameController.getInstance().getCurrentPhase() != FIRST_MAIN &&
                 GameController.getInstance().getCurrentPhase() != SECOND_MAIN) {
             answerObject.put("Type", "Error");
-            answerObject.put("Value", "action not allowed in this phase!");
+            answerObject.put("Value", "can't flip summon in this phase!");
         } else if (!GameController.getInstance().canChangeCardPosition(onlineUsers.get(token))) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "you can’t change this card position!");
@@ -204,7 +300,7 @@ public class MainController {
         } else if (GameController.getInstance().getCurrentPhase() != FIRST_MAIN &&
                 GameController.getInstance().getCurrentPhase() != SECOND_MAIN) {
             answerObject.put("Type", "Error");
-            answerObject.put("Value", "action not allowed in this phase!");
+            answerObject.put("Value", "can't change position in this phase!");
         } else if (!GameController.getInstance().canChangeCardPosition(onlineUsers.get(token))) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "you can’t change this card position!");
@@ -240,9 +336,9 @@ public class MainController {
                 GameController.getInstance().getCurrentPhase() != SECOND_MAIN) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "action not allowed in this phase!");
-        } else if (GameController.getInstance().isMonsterFieldZoneFull(onlineUsers.get(token))) {
+        } else if (GameController.getInstance().isCardFieldZoneFull(onlineUsers.get(token))) {
             answerObject.put("Type", "Error");
-            answerObject.put("Value", "monster card zone is full!");
+            answerObject.put("Value", "card zone is full!");
         } else if (!GameController.getInstance().canPlayerSummonOrSetAnotherCard(onlineUsers.get(token))) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "you already summoned/set on this turn!");
@@ -272,7 +368,7 @@ public class MainController {
                 GameController.getInstance().getCurrentPhase() != SECOND_MAIN) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "action not allowed in this phase!");
-        } else if (GameController.getInstance().isMonsterFieldZoneFull(onlineUsers.get(token))) {
+        } else if (GameController.getInstance().isCardFieldZoneFull(onlineUsers.get(token))) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "monster card zone is full!");
         } else if (!GameController.getInstance().canPlayerSummonOrSetAnotherCard(onlineUsers.get(token))) {
