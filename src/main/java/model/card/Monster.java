@@ -10,11 +10,10 @@ import java.util.function.Supplier;
 import static model.enums.MonsterTypes.EFFECT;
 
 public class Monster extends Card {
-    private int level;
-    private int baseAttack;
-    private int baseDefence;
-    private MonsterModels model; // monster model is the model of the card for example warrior or spell caster or ..
-    private MonsterTypes monsterType; // monster type is the effect type of the card which could be normal, effect or ritual
+    private final int level;
+    private final int baseAttack;
+    private final int baseDefence;
+    private final MonsterModels model; // monster model is the model of the card for example warrior or spell caster or ..
     private IMonsterEffect monsterEffect; // this interface contains the special monster effect if exists
 
     /* two enums below contains the position of the monster card in the game board */
@@ -30,7 +29,7 @@ public class Monster extends Card {
         this.baseAttack = baseAttack;
         this.baseDefence = baseDefence;
         this.model = model;
-        this.monsterType = monsterType;
+        // monster type is the effect type of the card which could be normal, effect or ritual
         if (monsterType.equals(EFFECT))
             monsterEffect = AllMonsterEffects.getEffectByID(cardID);
         attackSupplier = new ArrayList<>();
