@@ -82,9 +82,10 @@ public class GameController {
         return false;
     }
 
-    public void summonCard(String username) {
+    public String summonCard(String username) {
         //TODO
         /*This method should ask and get tribute cards from user*/
+        return null;
     }
 
     public boolean canSetSelectedCard(String username) {
@@ -92,8 +93,9 @@ public class GameController {
         return false;
     }
 
-    public void setCard(String username) {
+    public String setCard(String username) {
         //TODO
+        return null;
     }
 
     public boolean canChangeCardPosition(String username) {

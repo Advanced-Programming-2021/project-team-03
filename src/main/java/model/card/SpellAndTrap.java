@@ -5,6 +5,7 @@ import model.enums.SpellAndTrapIcon;
 
 public class SpellAndTrap extends Card {
     private SpellAndTrapIcon icon;
+    private boolean isActive;
 
     public SpellAndTrap(String cardName, String cardID, String description, int price, CardAttributes attribute) {
         super(cardName, cardID, description, price, attribute);
@@ -17,5 +18,13 @@ public class SpellAndTrap extends Card {
                 "Model : " + this.attribute + "\n" +
                 "Type: " + this.icon + "\n" +
                 "Description: " + this.description;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

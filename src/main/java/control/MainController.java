@@ -343,9 +343,9 @@ public class MainController {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "you already summoned/set on this turn!");
         } else {
-            GameController.getInstance().setCard(onlineUsers.get(token));
+            String result = GameController.getInstance().setCard(onlineUsers.get(token));
             answerObject.put("Type", "Successful");
-            answerObject.put("Value", "set successfully!");
+            answerObject.put("Value", result);
         }
 
         return answerObject.toString();
@@ -378,9 +378,9 @@ public class MainController {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "there are not enough cards for tribute!");
         } else {
-            GameController.getInstance().summonCard(onlineUsers.get(token));
+            String result =  GameController.getInstance().summonCard(onlineUsers.get(token));
             answerObject.put("Type", "Successful");
-            answerObject.put("Value", "summoned successfully!");
+            answerObject.put("Value", result);
         }
 
         return answerObject.toString();

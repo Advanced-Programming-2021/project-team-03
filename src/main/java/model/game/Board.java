@@ -62,11 +62,6 @@ public class Board {
         return graveyard;
     }
 
-    public Monster getMonsterByPosition(int position) {
-        // TODO
-        return null;
-    }
-
     public Card getFieldCard() {
         return fieldCard;
     }
@@ -83,31 +78,43 @@ public class Board {
         return inHandCards;
     }
 
-    public void addCardToHand() {
-        // TODO
+    public Monster getMonsterByPosition(int position) {
+        return monstersInField.get(position);
+    }
+
+    public Card getSpellAndTrapByPosition(int position) { // returning the card in the given position if needed
+        return spellAndTrapsInField.get(position);
     }
 
     public void addCardToHand(Card card) {
-        // TODO
+        inHandCards.add(card);
     }
 
-    public void addSpellAndTrapByPosition(int position, SpellAndTrap spellAndTrap, boolean isActive) {
-        // TODO
-    }
-
-    public void addCardToGraveyard(Card card) {
-        // TODO
+    public void addSpellAndTrapByPosition(int position, SpellAndTrap spellAndTrap) {
+        spellAndTrapsInField.put(position, spellAndTrap);
     }
 
     public void addMonsterByPosition(int position, Monster monster, boolean isFacedUp, boolean isInAttackPosition) {
-        // TODO
+        monstersInField.put(position, monster);
     }
 
-    public Card getCardByPosition(int position) { // returning the card in the given position if needed
-        if (monstersInField.containsKey(position))
-            return monstersInField.get(position);
+    public void addCardToGraveyard(Card card) {
+        graveyard.add(card);
+    }
 
-        return spellAndTrapsInField.get(position);
+    public void removeCardFromGraveyard(Card card){
+        graveyard.remove(card);
+    }
+
+    public void removeCardFromHand(Card card){
+        inHandCards.remove(card);
+    }
+
+    public void removeCardFromField(int position,boolean isMonster){
+        if (isMonster)
+            monstersInField.remove(position);
+        else
+            spellAndTrapsInField.remove(position);
     }
 
     public boolean doesContainCard(int cardGameId) {
