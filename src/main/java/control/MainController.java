@@ -416,7 +416,7 @@ public class MainController {
         if (isTokenInvalid(token)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "invalid token!");
-        } else if (!GameController.getInstance().isCardAddressValid(cardType, cardPosition)) {
+        } else if (!GameController.getInstance().isCardAddressValid(cardPosition)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "invalid selection!");
         } else if (!GameController.getInstance().isThereACardInGivenPosition(cardType, cardPosition, isOpponentCard)) {

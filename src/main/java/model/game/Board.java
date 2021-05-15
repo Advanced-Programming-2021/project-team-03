@@ -142,7 +142,7 @@ public class Board {
             board.append(GY).append("\t\t\t\t\t\tO");
         else
             board.append(GY).append("\t\t\t\t\t\tE");
-
+        board.append("\n");
         return board.toString();
     }
 
@@ -163,6 +163,7 @@ public class Board {
 
         board.append("\t\t\t\t\t\t").append(DN).append("\n");
         board.append("c\t".repeat(inHandCards.size()));
+        board.append("\n");
         return board.toString();
     }
 

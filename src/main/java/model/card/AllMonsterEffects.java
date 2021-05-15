@@ -22,7 +22,7 @@ public class AllMonsterEffects {
         IMonsterEffect commandKnightEffect = new IMonsterEffect() {
             @Override
             public void activateMonsterEffect(Monster self, Game game) {
-                for (Monster monster : game.getCardBoard(self).getMonstersInField().values()) { // getting all monsters in friendly board
+                for (Monster monster : game.getCardsInBoard(self).getMonstersInField().values()) { // getting all monsters in friendly board
                     monster.addToAttackSupplier(monster1 -> 400);
                 }
             }

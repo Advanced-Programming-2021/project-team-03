@@ -2,6 +2,7 @@ package control;
 
 import model.card.Card;
 import model.game.Game;
+import model.user.User;
 
 enum Phase {
     DRAW,
@@ -30,15 +31,15 @@ public class GameController {
 
     public void newDuel(String firstPlayerName, String secondPlayerName, int numberOfRound) {
         //TODO
+        game = new Game(User.getByUsername(firstPlayerName),)
     }
 
     public void newDuelWithAI(String username, int numberOfRound) {
         //TODO
     }
 
-    public boolean isCardAddressValid(String cardType, int cardPosition) {
-        //TODO
-        return false;
+    public boolean isCardAddressValid(int cardPosition) {
+        return cardPosition <= 6 && cardPosition >= 1;
     }
 
     public boolean isThereACardInGivenPosition(String cardType, int cardPosition, boolean isOpponentCard) {
@@ -55,7 +56,7 @@ public class GameController {
     }
 
     public void deselectCard() {
-        //TODO
+        selectedCard = null;
     }
 
     public Phase getCurrentPhase() {
