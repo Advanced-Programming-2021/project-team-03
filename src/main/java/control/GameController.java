@@ -6,6 +6,9 @@ import model.game.Game;
 import model.game.PlayerTurn;
 import model.user.User;
 
+import static model.game.PlayerTurn.PLAYER1;
+import static model.game.PlayerTurn.PLAYER2;
+
 enum Phase {
     DRAW,
     STANDBY,
@@ -30,6 +33,7 @@ public class GameController {
     private Card selectedCard;
     private Phase currentPhase;
     private Game game;
+    private PlayerTurn turn;
 
     public void newDuel(String firstPlayerName, String secondPlayerName, int numberOfRound) {
         game = new Game(User.getByUsername(firstPlayerName), User.getByUsername(secondPlayerName), numberOfRound);
@@ -45,8 +49,8 @@ public class GameController {
 
     public boolean isThereACardInGivenPosition(String cardType, int cardPosition, boolean isOpponentCard) {
         Board board;
-        if ((game.getTurn() == PlayerTurn.PLAYER1 && isOpponentCard)
-                || (game.getTurn() == PlayerTurn.PLAYER2 && !isOpponentCard)) {
+        if ((turn == PlayerTurn.PLAYER1 && isOpponentCard)
+                || (turn == PlayerTurn.PLAYER2 && !isOpponentCard)) {
             board = game.getPlayer2().getBoard();
         } else {
             board = game.getPlayer1().getBoard();
@@ -77,10 +81,9 @@ public class GameController {
     }
 
     public void selectCard(String cardType, int cardPosition, boolean isOpponentCard) {
-        //TODO
         Board board;
-        if ((game.getTurn() == PlayerTurn.PLAYER1 && isOpponentCard)
-                || (game.getTurn() == PlayerTurn.PLAYER2 && !isOpponentCard)) {
+        if ((turn == PlayerTurn.PLAYER1 && isOpponentCard)
+                || (turn == PlayerTurn.PLAYER2 && !isOpponentCard)) {
             board = game.getPlayer2().getBoard();
         } else {
             board = game.getPlayer1().getBoard();
@@ -248,5 +251,16 @@ public class GameController {
         //TODO
         /*return the surrender message*/
         return null;
+    }
+
+    public void changeTurn() {
+        if (turn == PLAYER1)
+            turn = PLAYER2;
+        else
+            turn = PLAYER1;
+    }
+
+    public PlayerTurn getTurn() {
+        return turn;
     }
 }

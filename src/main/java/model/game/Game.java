@@ -1,5 +1,6 @@
 package model.game;
 
+import control.GameController;
 import model.card.Card;
 import model.user.User;
 
@@ -8,7 +9,7 @@ import static model.game.PlayerTurn.*;
 public class Game {
     private Player player1;
     private Player player2;
-    private PlayerTurn turn;
+
     private int numberOfRounds;
     private int currentRound;
 
@@ -18,7 +19,6 @@ public class Game {
         // TODO give each card in the main deck a "card in game" ID
         this.numberOfRounds = numberOfRounds;
         currentRound = 1;
-        turn = PLAYER1;
     }
 
     public Game(User user1, int numberOfRounds) {
@@ -36,16 +36,9 @@ public class Game {
         return numberOfRounds < currentRound;
     }
 
-    public void changeTurn() {
-        if (turn == PLAYER1)
-            turn = PLAYER2;
-        else
-            turn = PLAYER1;
-    }
-
     public String showGameBoards() {
         StringBuilder board = new StringBuilder();
-        if (turn == PLAYER1) {
+        if (GameController.getInstance().getTurn() == PLAYER1) {
             boardBuilder(board, player2, player1);
         } else {
             boardBuilder(board, player1, player2);
@@ -77,9 +70,5 @@ public class Game {
 
     public Player getPlayer2() {
         return player2;
-    }
-
-    public PlayerTurn getTurn() {
-        return turn;
     }
 }
