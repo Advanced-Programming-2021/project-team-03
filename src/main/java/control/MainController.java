@@ -78,6 +78,8 @@ public class MainController {
             case "Surrender" -> surrender(valueObject);
             //TODO: add this type of client command to code.
             //case "Is the game over"
+            //TODO : add this type of client command to code.
+            //case "Next phase"
             default -> error();
         };
     }
