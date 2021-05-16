@@ -11,14 +11,12 @@ public class Game {
     private Player player2;
 
     private int numberOfRounds;
-    private int currentRound;
 
     public Game(User user1, User user2, int numberOfRounds) { // TODO
         // TODO: Construct players with given users.
         // TODO: Construct boards with user decks.
         // TODO give each card in the main deck a "card in game" ID
         this.numberOfRounds = numberOfRounds;
-        currentRound = 1;
     }
 
     public Game(User user1, int numberOfRounds) {
@@ -30,10 +28,6 @@ public class Game {
             return player1;
         else
             return player2;
-    }
-
-    public boolean isGameFinished() {
-        return numberOfRounds < currentRound;
     }
 
     public String showGameBoards() {
@@ -70,5 +64,9 @@ public class Game {
 
     public Player getPlayer2() {
         return player2;
+    }
+
+    public int getNumberOfRounds() {
+        return numberOfRounds;
     }
 }

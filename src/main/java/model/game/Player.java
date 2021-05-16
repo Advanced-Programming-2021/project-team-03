@@ -11,6 +11,7 @@ public class Player {
         this.user = user;
         this.health = initialHealth;
         this.board = board;
+        this.health = 8000;
         // TODO
     }
 
@@ -26,7 +27,11 @@ public class Player {
         return health;
     }
 
-    public void setHealth(int health) {
-        this.health = health;
+    public void decreaseHealthByAmount(int amount) {
+        this.health -= amount;
+    }
+
+    public boolean canPlayerDrawCard() {
+        return (board.getRemainingCards().size() > 0);
     }
 }

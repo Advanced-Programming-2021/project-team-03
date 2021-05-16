@@ -6,8 +6,10 @@ import model.game.Game;
 import model.game.PlayerTurn;
 import model.user.User;
 
-import static model.game.PlayerTurn.PLAYER1;
-import static model.game.PlayerTurn.PLAYER2;
+import java.util.Random;
+
+import static control.Phase.*;
+import static model.game.PlayerTurn.*;
 
 enum Phase {
     DRAW,
@@ -21,6 +23,15 @@ public class GameController {
     private static GameController gameController;
 
     private GameController() {
+        this.currentPhase = DRAW;
+        this.currentRound = 1;
+
+        // creating a random number to determine the starting player
+        Random random = new Random();
+        if (random.nextInt(2) % 2 == 0)
+            turn = PLAYER1;
+        else
+            turn = PLAYER2;
     }
 
     public static GameController getInstance() {
@@ -29,11 +40,11 @@ public class GameController {
         return gameController;
     }
 
-
     private Card selectedCard;
     private Phase currentPhase;
     private Game game;
     private PlayerTurn turn;
+    private int currentRound;
 
     public void newDuel(String firstPlayerName, String secondPlayerName, int numberOfRound) {
         game = new Game(User.getByUsername(firstPlayerName), User.getByUsername(secondPlayerName), numberOfRound);
@@ -262,5 +273,13 @@ public class GameController {
 
     public PlayerTurn getTurn() {
         return turn;
+    }
+
+    public boolean isGameFinished() {
+        if (turn == PLAYER1 && !game.getPlayer1().canPlayerDrawCard())
+            return true;
+        if (turn == PLAYER2 && !game.getPlayer2().canPlayerDrawCard())
+            return true;
+        return game.getNumberOfRounds() < currentRound;
     }
 }
