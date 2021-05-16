@@ -1,10 +1,7 @@
 package model.game;
 
 import model.card.Card;
-import model.card.Monster;
 import model.user.User;
-
-import java.util.HashMap;
 
 import static model.game.PlayerTurn.*;
 
@@ -19,18 +16,31 @@ public class Game {
         // TODO: Construct players with given users.
         // TODO: Construct boards with user decks.
         // TODO give each card in the main deck a "card in game" ID
+        this.numberOfRounds = numberOfRounds;
         currentRound = 1;
         turn = PLAYER1;
+    }
 
+    public Game(User user1, int numberOfRounds) {
+        /*duel with AI*/
+    }
+
+    public Player getPlayerByName(String username) {
+        if (player1.getUser().getUsername().equals(username))
+            return player1;
+        else
+            return player2;
     }
 
     public boolean isGameFinished() {
-        // TODO
-        return true;
+        return numberOfRounds < currentRound;
     }
 
     public void changeTurn() {
-        // TODO
+        if (turn == PLAYER1)
+            turn = PLAYER2;
+        else
+            turn = PLAYER1;
     }
 
     public String showGameBoards() {
@@ -61,11 +71,15 @@ public class Game {
         return null;
     }
 
-    public PlayerTurn getTurn() {
-        return turn;
+    public Player getPlayer1() {
+        return player1;
     }
 
-    public void setTurn(PlayerTurn turn) {
-        this.turn = turn;
+    public Player getPlayer2() {
+        return player2;
+    }
+
+    public PlayerTurn getTurn() {
+        return turn;
     }
 }

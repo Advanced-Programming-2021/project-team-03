@@ -208,4 +208,8 @@ public class Board {
         }
         return false;
     }
+
+    public Card getInHandCardByPosition(int cardPosition) {
+        return inHandCards.get(cardPosition);
+    }
 }

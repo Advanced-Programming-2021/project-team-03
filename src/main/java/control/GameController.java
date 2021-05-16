@@ -1,7 +1,9 @@
 package control;
 
 import model.card.Card;
+import model.game.Board;
 import model.game.Game;
+import model.game.PlayerTurn;
 import model.user.User;
 
 enum Phase {
@@ -30,12 +32,11 @@ public class GameController {
     private Game game;
 
     public void newDuel(String firstPlayerName, String secondPlayerName, int numberOfRound) {
-        //TODO
-        game = new Game(User.getByUsername(firstPlayerName),)
+        game = new Game(User.getByUsername(firstPlayerName), User.getByUsername(secondPlayerName), numberOfRound);
     }
 
     public void newDuelWithAI(String username, int numberOfRound) {
-        //TODO
+        game = new Game(User.getByUsername(username), numberOfRound);
     }
 
     public boolean isCardAddressValid(int cardPosition) {
@@ -43,12 +44,61 @@ public class GameController {
     }
 
     public boolean isThereACardInGivenPosition(String cardType, int cardPosition, boolean isOpponentCard) {
-        //TODO
+        Board board;
+        if ((game.getTurn() == PlayerTurn.PLAYER1 && isOpponentCard)
+                || (game.getTurn() == PlayerTurn.PLAYER2 && !isOpponentCard)) {
+            board = game.getPlayer2().getBoard();
+        } else {
+            board = game.getPlayer1().getBoard();
+        }
+        return checkTheBoard(board, cardType, cardPosition);
+    }
+
+    private boolean checkTheBoard(Board board, String cardType, int cardPosition) {
+        switch (cardType) {
+            case "Monster" -> {
+                if (board.getMonstersInField().containsKey(cardPosition))
+                    return true;
+            }
+            case "Spell" -> {
+                if (board.getSpellAndTrapsInField().containsKey(cardPosition))
+                    return true;
+            }
+            case "Field" -> {
+                if (board.getFieldCard() != null)
+                    return true;
+            }
+            case "Hand" -> {
+                if (board.getInHandCards().size() <= cardPosition)
+                    return true;
+            }
+        }
         return false;
     }
 
     public void selectCard(String cardType, int cardPosition, boolean isOpponentCard) {
         //TODO
+        Board board;
+        if ((game.getTurn() == PlayerTurn.PLAYER1 && isOpponentCard)
+                || (game.getTurn() == PlayerTurn.PLAYER2 && !isOpponentCard)) {
+            board = game.getPlayer2().getBoard();
+        } else {
+            board = game.getPlayer1().getBoard();
+        }
+        switch (cardType) {
+            case "Monster" -> {
+                selectedCard = board.getMonsterByPosition(cardPosition);
+            }
+            case "Spell" -> {
+                selectedCard = board.getSpellAndTrapByPosition(cardPosition);
+            }
+            case "Field" -> {
+                selectedCard = board.getFieldCard();
+            }
+            case "Hand" -> {
+                selectedCard = board.getInHandCardByPosition(cardPosition);
+            }
+        }
     }
 
     public Card getSelectedCard() {
