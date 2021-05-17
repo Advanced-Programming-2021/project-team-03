@@ -2,7 +2,9 @@ package control;
 
 import model.card.Card;
 import model.card.Monster;
+import model.card.SpellAndTrap;
 import model.enums.AttackingFormat;
+import model.enums.CardAttributes;
 import model.enums.FaceUpSituation;
 import model.game.Board;
 import model.game.Game;
@@ -293,19 +295,20 @@ public class GameController {
     }
 
     public boolean canAttackDirectly() {
-        //TODO
-        return false;
+        return game.getPlayerOpponentByTurn(turn).getBoard().getMonstersInField().size() == 0;
     }
 
     public int attackDirectlyToTheOpponent() {
-        //TODO
         /*return the opponents receiving damage*/
-        return 0;
+
+        Monster attackingMonster = (Monster) selectedCard;
+        int attackingPower = attackingMonster.getAttackingPower();
+        game.getPlayerOpponentByTurn(turn).decreaseHealthByAmount(attackingPower);
+        return attackingPower;
     }
 
     public boolean isSpellCard() {
-        //TODO
-        return false;
+        return (selectedCard instanceof SpellAndTrap && selectedCard.getAttribute() == CardAttributes.SPELL);
     }
 
     public boolean cardAlreadyActivated() {
