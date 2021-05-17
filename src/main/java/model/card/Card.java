@@ -37,4 +37,8 @@ public abstract class Card {
     public int getPrice() {
         return price;
     }
+
+    public CardAttributes getAttribute() {
+        return attribute;
+    }
 }

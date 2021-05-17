@@ -88,6 +88,11 @@ public class Monster extends Card {
         return AttackingPower;
     }
 
+    public int getDefensivePower() {
+        //TODO
+        return baseDefence;
+    }
+
     public int getLevel() {
         return this.level;
     }

@@ -30,6 +30,13 @@ public class Game {
             return player2;
     }
 
+    public Player getPlayerOpponentByTurn(PlayerTurn turn) {
+        if (turn == PLAYER1)
+            return player2;
+        else
+            return player1;
+    }
+
     public String showGameBoards() {
         StringBuilder board = new StringBuilder();
         if (GameController.getInstance().getTurn() == PLAYER1) {
