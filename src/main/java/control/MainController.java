@@ -210,7 +210,7 @@ public class MainController {
         } else if (GameController.getInstance().getCurrentPhase() != BATTLE) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "can't direct attack phase!");
-        } else if (!GameController.getInstance().canAttackWithThisCard()) {
+        } else if (!GameController.getInstance().canAttackWithThisCard(onlineUsers.get(token))) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "you can’t attack with this card!");
         } else if (!GameController.getInstance().cardAlreadyAttacked()) {
@@ -242,7 +242,7 @@ public class MainController {
         } else if (GameController.getInstance().getCurrentPhase() != BATTLE) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "can't attack in this phase!");
-        } else if (!GameController.getInstance().canAttackWithThisCard()) {
+        } else if (!GameController.getInstance().canAttackWithThisCard(onlineUsers.get(token))) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "you can’t attack with this card!");
         } else if (!GameController.getInstance().cardAlreadyAttacked()) {
@@ -380,7 +380,7 @@ public class MainController {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "there are not enough cards for tribute!");
         } else {
-            String result =  GameController.getInstance().summonCard(onlineUsers.get(token));
+            String result = GameController.getInstance().summonCard(onlineUsers.get(token));
             answerObject.put("Type", "Successful");
             answerObject.put("Value", result);
         }

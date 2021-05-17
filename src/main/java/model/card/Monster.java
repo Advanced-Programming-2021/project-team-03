@@ -3,9 +3,7 @@ package model.card;
 import model.enums.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import static model.enums.MonsterTypes.EFFECT;
 

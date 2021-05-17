@@ -9,6 +9,7 @@ import model.user.User;
 import java.util.Random;
 
 import static control.Phase.*;
+import static control.TypeOfSelectedCard.*;
 import static model.game.PlayerTurn.*;
 
 enum Phase {
@@ -17,6 +18,13 @@ enum Phase {
     FIRST_MAIN,
     BATTLE,
     SECOND_MAIN,
+}
+
+enum TypeOfSelectedCard {
+    MONSTER,
+    SPELL,
+    FIELD_CARD,
+    HAND_CARD,
 }
 
 public class GameController {
@@ -41,6 +49,7 @@ public class GameController {
     }
 
     private Card selectedCard;
+    private TypeOfSelectedCard typeOfSelectedCard;
     private Phase currentPhase;
     private Game game;
     private PlayerTurn turn;
@@ -102,15 +111,19 @@ public class GameController {
         switch (cardType) {
             case "Monster" -> {
                 selectedCard = board.getMonsterByPosition(cardPosition);
+                typeOfSelectedCard = MONSTER;
             }
             case "Spell" -> {
                 selectedCard = board.getSpellAndTrapByPosition(cardPosition);
+                typeOfSelectedCard = SPELL;
             }
             case "Field" -> {
                 selectedCard = board.getFieldCard();
+                typeOfSelectedCard = FIELD_CARD;
             }
             case "Hand" -> {
                 selectedCard = board.getInHandCardByPosition(cardPosition);
+                typeOfSelectedCard = HAND_CARD;
             }
         }
     }
@@ -121,6 +134,7 @@ public class GameController {
 
     public void deselectCard() {
         selectedCard = null;
+        typeOfSelectedCard = null;
     }
 
     public Phase getCurrentPhase() {
@@ -191,8 +205,9 @@ public class GameController {
         //TODO
     }
 
-    public boolean canAttackWithThisCard() {
+    public boolean canAttackWithThisCard(String username) {
         //TODO
+        game.getPlayerByName(username).getBoard().getMonstersInField();
         return false;
     }
 
