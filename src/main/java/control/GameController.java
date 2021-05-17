@@ -1,6 +1,8 @@
 package control;
 
 import model.card.Card;
+import model.card.Monster;
+import model.enums.AttackingFormat;
 import model.game.Board;
 import model.game.Game;
 import model.game.PlayerTurn;
@@ -48,6 +50,7 @@ public class GameController {
         return gameController;
     }
 
+    private Update gameUpdates;
     private Card selectedCard;
     private TypeOfSelectedCard typeOfSelectedCard;
     private Phase currentPhase;
@@ -57,10 +60,12 @@ public class GameController {
 
     public void newDuel(String firstPlayerName, String secondPlayerName, int numberOfRound) {
         game = new Game(User.getByUsername(firstPlayerName), User.getByUsername(secondPlayerName), numberOfRound);
+        gameUpdates = new Update(game);
     }
 
     public void newDuelWithAI(String username, int numberOfRound) {
         game = new Game(User.getByUsername(username), numberOfRound);
+        gameUpdates = new Update(game);
     }
 
     public boolean isCardAddressValid(int cardPosition) {
@@ -79,6 +84,7 @@ public class GameController {
     }
 
     private boolean checkTheBoard(Board board, String cardType, int cardPosition) {
+        // return true if the board contain a card in given position
         switch (cardType) {
             case "Monster" -> {
                 if (board.getMonstersInField().containsKey(cardPosition))
@@ -206,23 +212,31 @@ public class GameController {
     }
 
     public boolean canAttackWithThisCard(String username) {
-        //TODO
-        game.getPlayerByName(username).getBoard().getMonstersInField();
+        if (typeOfSelectedCard == MONSTER) {
+            Monster monster = (Monster) selectedCard;
+            return monster.getAttackingFormat() == AttackingFormat.ATTACKING;
+        }
         return false;
     }
 
     public boolean cardAlreadyAttacked() {
-        //TODO
-        return false;
+        if (selectedCard instanceof Monster)
+            return gameUpdates.didMonsterAttack((Monster) selectedCard);
+        else return false;
     }
 
     public boolean canAttackThisPosition(String position) {
-        //TODO
-        return false;
+        int positionNumber;
+        try {
+            positionNumber = Integer.parseInt(position);
+        } catch (Exception e) {
+            return false;
+        }
+        return isThereACardInGivenPosition("Monster", positionNumber, true);
     }
 
 
-    public String attack(String attacker, String position) {
+    public String attack(String attackingPlayerUsername, String position) {
         //TODO
         /*return the result of attack in a string*/
         return null;
