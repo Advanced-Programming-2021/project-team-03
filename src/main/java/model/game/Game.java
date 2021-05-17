@@ -58,6 +58,14 @@ public class Game {
         return null;
     }
 
+    public PlayerTurn getCardsOwner(Card card) { /* monster effect */
+        if (player1.getBoard().doesContainCard(card.getCardIdInTheGame()))
+            return PLAYER1;
+        if (player2.getBoard().doesContainCard(card.getCardIdInTheGame()))
+            return PLAYER2;
+        return null;
+    }
+
     public Player getPlayer1() {
         return player1;
     }

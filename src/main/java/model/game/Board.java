@@ -11,6 +11,7 @@ import model.card.SpellAndTrap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 import static model.enums.AttackingFormat.*;
 import static model.enums.FaceUpSituation.*;
@@ -122,6 +123,23 @@ public class Board {
             monstersInField.remove(position);
         else
             spellAndTrapsInField.remove(position);
+    }
+
+    public void setOrSummonMonsterFromHandToFiled(Card card,String actionType) { //action type will be set or summon
+        int maxIndex = 1;
+        for (Map.Entry<Integer, Monster> entry : monstersInField.entrySet()) {
+            Integer key = entry.getKey();
+            if (maxIndex < key) maxIndex = key;
+        }
+        monstersInField.put(maxIndex, (Monster) card);
+        if (actionType.equals("Set")){
+            ((Monster) card).setAttackingFormat(DEFENDING);
+            ((Monster) card).setFaceUpSituation(FACE_DOWN);
+        }else if (actionType.equals("Summon")){
+            ((Monster) card).setAttackingFormat(ATTACKING);
+            ((Monster) card).setFaceUpSituation(FACE_UP);
+        }
+        removeCardFromHand(card);
     }
 
     //representation of the boards in console

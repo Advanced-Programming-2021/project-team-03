@@ -88,4 +88,7 @@ public class Monster extends Card {
         return AttackingPower;
     }
 
+    public int getLevel() {
+        return this.level;
+    }
 }

@@ -3,11 +3,16 @@ package control;
 import model.card.Card;
 import model.card.Monster;
 import model.enums.AttackingFormat;
+import model.enums.FaceUpSituation;
 import model.game.Board;
 import model.game.Game;
+import model.game.Player;
 import model.game.PlayerTurn;
 import model.user.User;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import static control.Phase.*;
@@ -53,10 +58,10 @@ public class GameController {
     private Update gameUpdates;
     private Card selectedCard;
     private TypeOfSelectedCard typeOfSelectedCard;
-    private Phase currentPhase;
+    private final Phase currentPhase;
     private Game game;
     private PlayerTurn turn;
-    private int currentRound;
+    private final int currentRound;
 
     public void newDuel(String firstPlayerName, String secondPlayerName, int numberOfRound) {
         game = new Game(User.getByUsername(firstPlayerName), User.getByUsername(secondPlayerName), numberOfRound);
@@ -147,59 +152,91 @@ public class GameController {
         return currentPhase;
     }
 
-    public boolean canSummonSelectedCard(String username) {
-        //TODO
+    public boolean canSummonSelectedCard() {
+        if (game.getCardsOwner(selectedCard) != turn) return false;
+        ArrayList<Card> inHandCards = game.getCardsInBoard(selectedCard).getInHandCards();
+        boolean isCardInHand = false;
+        for (Card card : inHandCards) {
+            if (card.getCardIdInTheGame() == selectedCard.getCardIdInTheGame()) {
+                isCardInHand = true;
+                break;
+            }
+        }
+        if (!isCardInHand) return false;
+        //TODO: check that card has normal summon or not.
+        return selectedCard instanceof Monster;
+    }
+
+    public boolean isCardFieldZoneFull() {
+        Player player = getPlayerByTurn();
+        return player.getBoard().getMonstersInField().size() >= 5;
+    }
+
+    public boolean canPlayerSummonOrSetAnotherCard() {
+        Player player = getPlayerByTurn();
+        return !gameUpdates.haveBeenSetOrSummonACard(player);
+    }
+
+    public boolean isThereEnoughCardToTribute() {
+        Monster monster = (Monster) selectedCard;
+        Board board = getPlayerByTurn().getBoard();
+        if (monster.getLevel() <= 4) return true;
+        if (monster.getLevel() <= 6) {
+            return board.getMonstersInField().size() >= 1;
+        }
+        return board.getMonstersInField().size() >= 2;
+    }
+
+    public String summonCard() {
+        Board board = getPlayerByTurn().getBoard();
+        board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
+        //TODO: tribute
+        return "summoned successfully";
+    }
+
+    public boolean canSetSelectedCard() {
+        if (game.getCardsOwner(selectedCard) != turn) return false;
+        ArrayList<Card> inHandCards = game.getCardsInBoard(selectedCard).getInHandCards();
+        for (Card card : inHandCards) {
+            if (card.getCardIdInTheGame() == selectedCard.getCardIdInTheGame()) return true;
+        }
         return false;
     }
 
-    public boolean isCardFieldZoneFull(String username) {
-        //TODO
-        return false;
+    public String setCard() {
+        Board board = getPlayerByTurn().getBoard();
+        board.setOrSummonMonsterFromHandToFiled(selectedCard, "Set");
+        return "set successfully";
     }
 
-    public boolean canPlayerSummonOrSetAnotherCard(String username) {
-        //TODO
-        return false;
-    }
-
-    public boolean isThereEnoughCardToTribute(String username) {
-        //TODO
-        return false;
-    }
-
-    public String summonCard(String username) {
-        //TODO
-        /*This method should ask and get tribute cards from user*/
-        return null;
-    }
-
-    public boolean canSetSelectedCard(String username) {
-        //TODO
-        return false;
-    }
-
-    public String setCard(String username) {
-        //TODO
-        return null;
-    }
-
-    public boolean canChangeCardPosition(String username) {
-        //TODO
+    public boolean canChangeCardPosition() {
+        HashMap<Integer, Monster> monstersInField = getPlayerByTurn().getBoard().getMonstersInField();
+        for (Map.Entry<Integer, Monster> entry : monstersInField.entrySet()) {
+            Monster monster = entry.getValue();
+            if (selectedCard.getCardIdInTheGame() == monster.getCardIdInTheGame()) return true;
+        }
         return false;
     }
 
     public boolean isCardAlreadyInThisPosition(String position) {
-        //TODO
-        return false;
+        Monster monster = (Monster) selectedCard;
+        if (position.equals("Attack")) {
+            return monster.getAttackingFormat() != AttackingFormat.DEFENDING ||
+                    monster.getFaceUpSituation() != FaceUpSituation.FACE_UP;
+        } else {
+            return monster.getAttackingFormat() != AttackingFormat.ATTACKING ||
+                    monster.getFaceUpSituation() != FaceUpSituation.FACE_UP;
+        }
     }
 
     public boolean isCardPositionChangedAlready() {
-        //TODO
-        return false;
+        return gameUpdates.isCardPositionChangedAlready(selectedCard);
     }
 
     public void changeCardPosition(String position) {
-        //TODO
+        Monster monster = (Monster) selectedCard;
+        if (position.equals("Attack")) monster.setAttackingFormat(AttackingFormat.ATTACKING);
+        else monster.setAttackingFormat(AttackingFormat.DEFENDING);
     }
 
     public boolean canFlipSummon() {
@@ -302,6 +339,11 @@ public class GameController {
 
     public PlayerTurn getTurn() {
         return turn;
+    }
+
+    public Player getPlayerByTurn() {
+        if (turn == PLAYER1) return game.getPlayer1();
+        return game.getPlayer2();
     }
 
     public boolean isGameFinished() {

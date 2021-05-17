@@ -1,7 +1,9 @@
 package control;
 
+import model.card.Card;
 import model.card.Monster;
 import model.game.Game;
+import model.game.Player;
 
 import java.util.ArrayList;
 
@@ -20,5 +22,15 @@ public class Update {
 
     public boolean didMonsterAttack(Monster monster) {
         return alreadyAttackedMonsters.contains(monster);
+    }
+
+    public boolean haveBeenSetOrSummonACard(Player player){
+        //TODO
+        return false;
+    }
+
+    public boolean isCardPositionChangedAlready(Card card){
+        //TODO
+        return false;
     }
 }

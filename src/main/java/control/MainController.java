@@ -274,7 +274,7 @@ public class MainController {
                 GameController.getInstance().getCurrentPhase() != SECOND_MAIN) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "can't flip summon in this phase!");
-        } else if (!GameController.getInstance().canChangeCardPosition(onlineUsers.get(token))) {
+        } else if (!GameController.getInstance().canChangeCardPosition() ){
             answerObject.put("Type", "Error");
             answerObject.put("Value", "you can’t change this card position!");
         } else if (!GameController.getInstance().canFlipSummon()) {
@@ -299,13 +299,13 @@ public class MainController {
         } else if (GameController.getInstance().getSelectedCard() == null) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "no card is selected yet!");
+        } else if (!GameController.getInstance().canChangeCardPosition()) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "you can’t change this card position!");
         } else if (GameController.getInstance().getCurrentPhase() != FIRST_MAIN &&
                 GameController.getInstance().getCurrentPhase() != SECOND_MAIN) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "can't change position in this phase!");
-        } else if (!GameController.getInstance().canChangeCardPosition(onlineUsers.get(token))) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "you can’t change this card position!");
         } else if (GameController.getInstance().isCardAlreadyInThisPosition(position)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "this card is already in the wanted position!");
@@ -331,21 +331,21 @@ public class MainController {
         } else if (GameController.getInstance().getSelectedCard() == null) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "no card is selected yet!");
-        } else if (!GameController.getInstance().canSetSelectedCard(onlineUsers.get(token))) {
+        } else if (!GameController.getInstance().canSetSelectedCard()){
             answerObject.put("Type", "Error");
             answerObject.put("Value", "you can’t set this card!");
         } else if (GameController.getInstance().getCurrentPhase() != FIRST_MAIN &&
                 GameController.getInstance().getCurrentPhase() != SECOND_MAIN) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "action not allowed in this phase!");
-        } else if (GameController.getInstance().isCardFieldZoneFull(onlineUsers.get(token))) {
+        } else if (GameController.getInstance().isCardFieldZoneFull()) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "card zone is full!");
-        } else if (!GameController.getInstance().canPlayerSummonOrSetAnotherCard(onlineUsers.get(token))) {
+        } else if (!GameController.getInstance().canPlayerSummonOrSetAnotherCard()) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "you already summoned/set on this turn!");
         } else {
-            String result = GameController.getInstance().setCard(onlineUsers.get(token));
+            String result = GameController.getInstance().setCard();
             answerObject.put("Type", "Successful");
             answerObject.put("Value", result);
         }
@@ -363,24 +363,24 @@ public class MainController {
         } else if (GameController.getInstance().getSelectedCard() == null) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "no card is selected yet!");
-        } else if (!GameController.getInstance().canSummonSelectedCard(onlineUsers.get(token))) {
+        } else if (!GameController.getInstance().canSummonSelectedCard()) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "you can’t summon this card!");
         } else if (GameController.getInstance().getCurrentPhase() != FIRST_MAIN &&
                 GameController.getInstance().getCurrentPhase() != SECOND_MAIN) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "action not allowed in this phase!");
-        } else if (GameController.getInstance().isCardFieldZoneFull(onlineUsers.get(token))) {
+        } else if (GameController.getInstance().isCardFieldZoneFull() ){
             answerObject.put("Type", "Error");
             answerObject.put("Value", "monster card zone is full!");
-        } else if (!GameController.getInstance().canPlayerSummonOrSetAnotherCard(onlineUsers.get(token))) {
+        } else if (!GameController.getInstance().canPlayerSummonOrSetAnotherCard() ){
             answerObject.put("Type", "Error");
             answerObject.put("Value", "you already summoned/set on this turn!");
-        } else if (!GameController.getInstance().isThereEnoughCardToTribute(onlineUsers.get(token))) {
+        } else if (!GameController.getInstance().isThereEnoughCardToTribute()) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "there are not enough cards for tribute!");
         } else {
-            String result = GameController.getInstance().summonCard(onlineUsers.get(token));
+            String result = GameController.getInstance().summonCard();
             answerObject.put("Type", "Successful");
             answerObject.put("Value", result);
         }
