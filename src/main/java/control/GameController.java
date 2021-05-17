@@ -3,6 +3,7 @@ package control;
 import model.card.Card;
 import model.card.Monster;
 import model.enums.AttackingFormat;
+import model.enums.FaceUpSituation;
 import model.game.Board;
 import model.game.Game;
 import model.game.PlayerTurn;
@@ -236,10 +237,59 @@ public class GameController {
     }
 
 
-    public String attack(String attackingPlayerUsername, String position) {
-        //TODO
+    public String attack(String attackingPlayerUsername, int position) {
         /*return the result of attack in a string*/
-        return null;
+
+        Board attackingPlayerBoard = game.getPlayerByName(attackingPlayerUsername).getBoard();
+        Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
+        Monster attackingMonster = (Monster) selectedCard;
+        Monster opponentMonster = game.getPlayerOpponentByTurn(turn).getBoard().getMonsterByPosition(position);
+        AttackingFormat opponentMonsterFormat = game.getPlayerOpponentByTurn(turn).getBoard().getMonsterByPosition(position).getAttackingFormat();
+        FaceUpSituation opponentMonsterFaceUpSit = game.getPlayerOpponentByTurn(turn).getBoard().getMonsterByPosition(position).getFaceUpSituation();
+        gameUpdates.addMonstersToAttackedMonsters(attackingMonster);
+        int attackingDef = attackingMonster.getAttackingPower() - opponentMonster.getAttackingPower();
+        int defendingDef = attackingMonster.getAttackingPower() - opponentMonster.getDefensivePower();
+        StringBuilder answerString = new StringBuilder();
+        switch (opponentMonsterFormat) {
+            case ATTACKING -> {
+                if (attackingDef == 0) {
+                    attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
+                    attackingPlayerBoard.addCardToGraveyard(attackingMonster);
+                    opponentBoard.removeCardFromField(opponentBoard.getMonsterPosition(opponentMonster), true);
+                    opponentBoard.addCardToGraveyard(opponentMonster);
+                    answerString.append("both you and your opponent monster cards are destroyed and no one receives damage");
+                } else if (attackingDef > 0) {
+                    opponentBoard.removeCardFromField(opponentBoard.getMonsterPosition(opponentMonster), true);
+                    opponentBoard.addCardToGraveyard(opponentMonster);
+                    game.getPlayerOpponentByTurn(turn).decreaseHealthByAmount(attackingDef);
+                    answerString.append("your opponent’s monster is destroyed and your opponent receives ").append(attackingDef).append(" battle damage");
+                } else {
+                    attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
+                    attackingPlayerBoard.addCardToGraveyard(attackingMonster);
+                    game.getPlayerByName(attackingPlayerUsername).decreaseHealthByAmount(attackingDef);
+                    answerString.append("Your monster card is destroyed and you received ").append(attackingDef).append(" battle damage");
+                }
+                return answerString.toString();
+            }
+            case DEFENDING -> {
+                if (opponentMonsterFaceUpSit == FaceUpSituation.FACE_DOWN) {
+                    opponentMonster.setFaceUpSituation(FaceUpSituation.FACE_UP);
+                    answerString.append("opponent’s monster card was ").append(opponentMonster.getCardName());
+                }
+                if (defendingDef == 0) {
+                    answerString.append("no card is destroyed!");
+                } else if (defendingDef > 0) {
+                    opponentBoard.removeCardFromField(opponentBoard.getMonsterPosition(opponentMonster), true);
+                    opponentBoard.addCardToGraveyard(opponentMonster);
+                    answerString.append("the defense position monster is destroyed!");
+                } else {
+                    game.getPlayerByName(attackingPlayerUsername).decreaseHealthByAmount(defendingDef);
+                    answerString.append("no card is destroyed and you received ").append(defendingDef).append(" battle damage!");
+                }
+                return answerString.toString();
+            }
+        }
+        return "Unknown Error";
     }
 
     public boolean canAttackDirectly() {

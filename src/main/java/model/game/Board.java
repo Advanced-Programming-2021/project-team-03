@@ -89,6 +89,14 @@ public class Board {
         return monstersInField.get(position);
     }
 
+    public int getMonsterPosition(Monster monster) {
+        for (Integer i : monstersInField.keySet()) {
+            if (monstersInField.get(i).equals(monster))
+                return i;
+        }
+        return 0;
+    }
+
     public Card getSpellAndTrapByPosition(int position) { // returning the card in the given position if needed
         return spellAndTrapsInField.get(position);
     }

@@ -252,7 +252,7 @@ public class MainController {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "there is no card to attack here!");
         } else {
-            String result = GameController.getInstance().attack(onlineUsers.get(token), position);
+            String result = GameController.getInstance().attack(onlineUsers.get(token), Integer.parseInt(position));
             answerObject.put("Type", "Successful");
             answerObject.put("Value", result);
         }
