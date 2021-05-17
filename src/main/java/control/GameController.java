@@ -6,7 +6,6 @@ import model.card.SpellAndTrap;
 import model.enums.AttackingFormat;
 import model.enums.FaceUpSituation;
 import model.enums.CardAttributes;
-import model.enums.FaceUpSituation;
 import model.game.Board;
 import model.game.Game;
 import model.game.Player;
@@ -252,7 +251,8 @@ public class GameController {
     }
 
     public boolean canAttackWithThisCard(String username) {
-        if (typeOfSelectedCard == MONSTER) {
+        if (typeOfSelectedCard == MONSTER &&
+                game.getPlayerByName(username).getBoard().getMonstersInField().containsValue((Monster) selectedCard)) {
             Monster monster = (Monster) selectedCard;
             return monster.getAttackingFormat() == AttackingFormat.ATTACKING;
         }
@@ -336,7 +336,6 @@ public class GameController {
     }
 
     public int attackDirectlyToTheOpponent() {
-        //TODO
         /*return the opponents receiving damage*/
 
         Monster attackingMonster = (Monster) selectedCard;
@@ -369,8 +368,14 @@ public class GameController {
     }
 
     public String getGraveyard(String username) {
-        //TODO
-        return null;
+        StringBuilder graveyardString = new StringBuilder();
+        int counter = 1;
+        for (Card card : game.getPlayerByName(username).getBoard().getGraveyard()) {
+            graveyardString.append(counter).append(". ").append(card.getCardName()).append(" : ").append(card.getDescription()).append("\n");
+        }
+        if (game.getPlayerByName(username).getBoard().getGraveyard().size() == 0)
+            graveyardString.append("graveyard empty!");
+        return graveyardString.toString();
     }
 
     public boolean canShowSelectedCardToPlayer(String username) {
