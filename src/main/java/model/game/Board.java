@@ -232,6 +232,10 @@ public class Board {
             if (spellAndTrap.getCardIdInTheGame() == cardGameId)
                 return true;
         }
+        for (Card card : inHandCards) {
+            if (card.getCardIdInTheGame() == cardGameId)
+                return true;
+        }
         return false;
     }
 

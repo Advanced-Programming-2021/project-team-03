@@ -277,7 +277,7 @@ public class MainController {
         } else if (!GameController.getInstance().canChangeCardPosition() ){
             answerObject.put("Type", "Error");
             answerObject.put("Value", "you can’t change this card position!");
-        } else if (!GameController.getInstance().canFlipSummon()) {
+        } else if (!GameController.getInstance().canFlipSummon(onlineUsers.get(token))) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "you can’t flip summon this card!");
         } else {

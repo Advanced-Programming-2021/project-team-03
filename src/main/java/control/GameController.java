@@ -241,13 +241,18 @@ public class GameController {
         else monster.setAttackingFormat(AttackingFormat.DEFENDING);
     }
 
-    public boolean canFlipSummon() {
-        //TODO
+    public boolean canFlipSummon(String username) {
+        if (game.getPlayerByName(username).getBoard().getMonstersInField().containsValue((Monster) selectedCard)) {
+            Monster monster = (Monster) selectedCard;
+            return monster.getFaceUpSituation().equals(FaceUpSituation.FACE_DOWN);
+        }
         return false;
     }
 
     public void flipSummon() {
-        //TODO
+        Monster monster = (Monster) selectedCard;
+        monster.setAttackingFormat(AttackingFormat.ATTACKING);
+        monster.setFaceUpSituation(FaceUpSituation.FACE_UP);
     }
 
     public boolean canAttackWithThisCard(String username) {
@@ -379,7 +384,7 @@ public class GameController {
     }
 
     public boolean canShowSelectedCardToPlayer(String username) {
-        //TODO
+
         return false;
     }
 
