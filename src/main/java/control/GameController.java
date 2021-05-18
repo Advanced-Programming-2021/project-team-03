@@ -384,8 +384,17 @@ public class GameController {
     }
 
     public boolean canShowSelectedCardToPlayer(String username) {
-
-        return false;
+        if (game.getPlayerOpponentByTurn(turn).getBoard().getInHandCards().contains(selectedCard))
+            return false;
+        if (selectedCard instanceof Monster &&
+                game.getPlayerOpponentByTurn(turn).getBoard().getMonstersInField().containsValue((Monster) selectedCard) &&
+                ((Monster) selectedCard).getFaceUpSituation().equals(FaceUpSituation.FACE_DOWN))
+            return false;
+        if (selectedCard instanceof SpellAndTrap &&
+                game.getPlayerOpponentByTurn(turn).getBoard().getSpellAndTrapsInField().containsValue((SpellAndTrap) selectedCard) &&
+                !((SpellAndTrap) selectedCard).isActive())
+            return false;
+        return true;
     }
 
     public String surrender(String username) {
