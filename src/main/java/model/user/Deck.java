@@ -5,14 +5,15 @@ import model.card.Monster;
 import model.card.SpellAndTrap;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.stream.Stream;
 
 public class Deck {
     private static final HashMap<String, Deck> allDecks;
     private String deckName;
     private ArrayList<Card> mainDeck;
     private ArrayList<Card> sideDeck;
-    private boolean isValid;
 
     static {
         allDecks = Database.updateAllDecks();
@@ -69,7 +70,11 @@ public class Deck {
     }
 
     public boolean isDeckValid() {
-        return isValid;
+        if (mainDeck.size() > 60 || mainDeck.size() < 40 || sideDeck.size() > 15) return false;
+
+         return Stream.concat(mainDeck.stream(), sideDeck.stream())
+                .map(card -> Collections.frequency(mainDeck, card) + Collections.frequency(sideDeck, card))
+                .max(Integer::compare).get() <= 3;
     }
 
     public String showDeck(String deckType) {
@@ -108,10 +113,8 @@ public class Deck {
     }
 
     public String generalOverview() {
-        if (isValid)
-            return this.deckName + ": main deck " + this.mainDeck.size() + ", side deck " + this.sideDeck.size() + ", Valid";
-        else
-            return this.deckName + ": main deck " + this.mainDeck.size() + ", side deck " + this.sideDeck.size() + ", Invalid";
+        return this.deckName + ": main deck " + this.mainDeck.size() + ", side deck " + this.sideDeck.size() +
+                (isDeckValid() ? ", Valid" : ", Invalid");
     }
 
     public static Deck getByDeckName(String deckName) {

@@ -74,13 +74,11 @@ public class UserController {
     }
 
     public boolean doesPlayerHaveActiveDeck(String username) {
-        //TODO Habib
-        return false;
+        return User.getByUsername(username).getActiveDeck() != null;
     }
 
     public boolean isUserActiveDeckValid(String username) {
-        //TODO Habib
-        return false;
+        return User.getByUsername(username).getActiveDeck().isDeckValid();
     }
 
     public String showCardToUser(String cardName) {
