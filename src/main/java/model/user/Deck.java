@@ -72,8 +72,10 @@ public class Deck {
     public boolean isDeckValid() {
         if (mainDeck.size() > 60 || mainDeck.size() < 40 || sideDeck.size() > 15) return false;
 
-         return Stream.concat(mainDeck.stream(), sideDeck.stream())
-                .map(card -> Collections.frequency(mainDeck, card) + Collections.frequency(sideDeck, card))
+        ArrayList<Card> allCards = new ArrayList<>(mainDeck);
+        allCards.addAll(sideDeck);
+
+        return allCards.stream().map(card -> Collections.frequency(allCards, card))
                 .max(Integer::compare).get() <= 3;
     }
 
