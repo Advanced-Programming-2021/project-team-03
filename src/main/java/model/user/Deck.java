@@ -7,13 +7,12 @@ import model.card.SpellAndTrap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.stream.Stream;
 
 public class Deck {
     private static final HashMap<String, Deck> allDecks;
     private String deckName;
-    private ArrayList<Card> mainDeck;
-    private ArrayList<Card> sideDeck;
+    private final ArrayList<Card> mainDeck;
+    private final ArrayList<Card> sideDeck;
 
     static {
         allDecks = Database.updateAllDecks();
@@ -21,6 +20,9 @@ public class Deck {
 
     public Deck(String deckName) throws DatabaseException {
         this.deckName = deckName;
+
+        mainDeck = new ArrayList<>();
+        sideDeck = new ArrayList<>();
 
         allDecks.put(deckName, this);
         updateInDatabase();
