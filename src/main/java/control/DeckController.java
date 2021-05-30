@@ -44,8 +44,7 @@ public class DeckController {
     }
 
     public boolean doesCardExist(String username, String cardName) {
-        //TODO
-        return false;
+        return Card.getCardByName(cardName) != null;
     }
 
     public boolean doesUserHaveAnymoreCard(String username, String cardName) {
@@ -64,20 +63,24 @@ public class DeckController {
     }
 
     public void addCardToDeck(String username, String deckName, String deckType, String cardName) {
-        //TODO
+        try {
+            Deck.getByDeckName(deckName).addCardToMainDeck(Card.getCardByName(cardName));
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+            System.out.println(e.errorMessage);
+        }
     }
 
     public boolean doesDeckContainThisCard(String username, String deckName, String cardName) {
-        return false; // TODO
+        return Deck.getByDeckName(deckName).doesContainCard(Card.getCardByName(cardName));
     }
 
     public void removeCardFromDeck(String username, String deckName, String deckType, String cardName) {
-
+        Deck.getByDeckName(deckName).removeCard(Card.getCardByName(cardName));
     }
 
     public Deck getUserActiveDeck(String username) {
-        //TODO
-        return null;
+        return User.getByUsername(username).getActiveDeck();
     }
 
     public ArrayList<Deck> getAllUsersDecks() {
@@ -91,6 +94,6 @@ public class DeckController {
 
     public ArrayList<Card> getAllUsersCards(String username) {
         // return all cards that owned by the user
-        return null;
+        return User.getByUsername(username).getCards();
     }
 }

@@ -60,9 +60,13 @@ public class UserController {
     public String getAllUsersForUsername() {
         ArrayList<User> allUsersSorted = User.getScoreBoard();
         StringBuilder scoreboard = new StringBuilder();
-        for (int i = 1; i <= allUsersSorted.size(); i++) {
-            User user = allUsersSorted.get(i - 1);
-            scoreboard.append(i).append("- ")
+
+        int rank = 1;
+        for (int i = 0; i < allUsersSorted.size(); i++) {
+            User user = allUsersSorted.get(i);
+            if (i != 0 && user.getScore() < allUsersSorted.get(i - 1).getScore()) rank++;
+
+            scoreboard.append(rank).append("- ")
                     .append(user.getNickname()).append(": ")
                     .append(user.getScore()).append("\n");
         }
@@ -70,17 +74,15 @@ public class UserController {
     }
 
     public boolean doesPlayerHaveActiveDeck(String username) {
-        //TODO
-        return false;
+        return User.getByUsername(username).getActiveDeck() != null;
     }
 
     public boolean isUserActiveDeckValid(String username) {
-        //TODO
-        return false;
+        return User.getByUsername(username).getActiveDeck().isDeckValid();
     }
 
     public String showCardToUser(String cardName) {
-        //TODO
+        //TODO Habib
         return null;
     }
 }

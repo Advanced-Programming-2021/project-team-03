@@ -1,18 +1,19 @@
 package model.user;
 
 import com.google.gson.Gson;
+import model.card.Card;
 
 import java.io.*;
 import java.util.Arrays;
 import java.util.HashMap;
 
-class Database {
+public class Database {
     private static final String USER_DATABASE_PATH = "./database/users/";
     private static final String DECK_DATABASE_PATH = "./database/decks/";
 
 
     // TODO: updateAllDecks and updateAllUsers can be merged or refactored
-    static HashMap<String, Deck> updateAllDecks() {
+    public static HashMap<String, Deck> updateAllDecks() {
         Gson gson = new Gson();
         HashMap<String, Deck> allDecks = new HashMap<>();
 
@@ -35,7 +36,7 @@ class Database {
         return allDecks;
     }
 
-    static HashMap<String, User> updateAllUsers() {
+    public static HashMap<String, User> updateAllUsers() {
         Gson gson = new Gson();
         HashMap<String, User> allUsers = new HashMap<>();
 
@@ -58,20 +59,24 @@ class Database {
         return allUsers;
     }
 
+    public static HashMap<String, Card> updateAllCards() {
+        return new HashMap<>(); // TODO
+    }
+
     private static boolean isJsonFile(File file) {
         String fileName = file.getName();
         int i = fileName.lastIndexOf('.');
         return i > 0 && fileName.substring(i + 1).equals("json");
     }
 
-    static void remove(Object object) throws DatabaseException {
+    public static void remove(Object object) throws DatabaseException {
         String path = pathFinder(object);
         if (!new File(path).delete()) {
-            throw new DatabaseException("Couldn't remove the from path: " + path);
+            throw new DatabaseException("Couldn't remove from the path: " + path);
         }
     }
 
-    static void save(Object object) throws DatabaseException {
+    public static void save(Object object) throws DatabaseException {
         writeToJson(object, pathFinder(object));
     }
 

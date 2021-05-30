@@ -5,14 +5,14 @@ import model.card.Monster;
 import model.card.SpellAndTrap;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class Deck {
     private static final HashMap<String, Deck> allDecks;
     private String deckName;
-    private ArrayList<Card> mainDeck;
-    private ArrayList<Card> sideDeck;
-    private boolean isValid;
+    private final ArrayList<Card> mainDeck;
+    private final ArrayList<Card> sideDeck;
 
     static {
         allDecks = Database.updateAllDecks();
@@ -20,6 +20,9 @@ public class Deck {
 
     public Deck(String deckName) throws DatabaseException {
         this.deckName = deckName;
+
+        mainDeck = new ArrayList<>();
+        sideDeck = new ArrayList<>();
 
         allDecks.put(deckName, this);
         updateInDatabase();
@@ -69,7 +72,13 @@ public class Deck {
     }
 
     public boolean isDeckValid() {
-        return isValid;
+        if (mainDeck.size() > 60 || mainDeck.size() < 40 || sideDeck.size() > 15) return false;
+
+        ArrayList<Card> allCards = new ArrayList<>(mainDeck);
+        allCards.addAll(sideDeck);
+
+        return allCards.stream().map(card -> Collections.frequency(allCards, card))
+                .max(Integer::compare).get() <= 3;
     }
 
     public String showDeck(String deckType) {
@@ -108,13 +117,20 @@ public class Deck {
     }
 
     public String generalOverview() {
-        if (isValid)
-            return this.deckName + ": main deck " + this.mainDeck.size() + ", side deck " + this.sideDeck.size() + ", Valid";
-        else
-            return this.deckName + ": main deck " + this.mainDeck.size() + ", side deck " + this.sideDeck.size() + ", Invalid";
+        return this.deckName + ": main deck " + this.mainDeck.size() + ", side deck " + this.sideDeck.size() +
+                (isDeckValid() ? ", Valid" : ", Invalid");
     }
 
     public static Deck getByDeckName(String deckName) {
         return allDecks.get(deckName);
+    }
+
+    public boolean doesContainCard(Card card) {
+        return mainDeck.contains(card) || sideDeck.contains(card);
+    }
+
+    public void removeCard(Card card) {
+        mainDeck.remove(card);
+        sideDeck.remove(card);
     }
 }
