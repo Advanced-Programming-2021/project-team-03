@@ -1,4 +1,4 @@
-package control;
+package control.game;
 
 import model.card.Card;
 import model.card.Monster;

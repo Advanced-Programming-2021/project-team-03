@@ -1,6 +1,6 @@
 package model.game;
 
-import control.GameController;
+import control.game.GameController;
 import model.card.Card;
 import model.user.User;
 
@@ -25,6 +25,13 @@ public class Game {
 
     public Player getPlayerByName(String username) {
         if (player1.getUser().getUsername().equals(username))
+            return player1;
+        else
+            return player2;
+    }
+
+    public Player getPlayerByTurn(PlayerTurn turn) {
+        if (turn == PLAYER1)
             return player1;
         else
             return player2;
