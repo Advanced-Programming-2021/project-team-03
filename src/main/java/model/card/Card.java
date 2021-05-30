@@ -1,6 +1,9 @@
 package model.card;
 
 import model.enums.CardAttributes;
+import model.user.Database;
+
+import java.util.HashMap;
 
 public abstract class Card {
     protected String cardName;
@@ -9,6 +12,15 @@ public abstract class Card {
     protected String description;
     protected int price;
     protected CardAttributes attribute;
+
+    private static final HashMap<String, Card> allCardsByName;
+
+    static {
+        allCardsByName = Database.updateAllCards();
+
+        // TODO: We have to set card effects to them here after importing them from database
+    }
+
 
     public Card(String cardName, String cardID, String description, int price, CardAttributes attribute) {
         this.cardName = cardName;
@@ -40,5 +52,9 @@ public abstract class Card {
 
     public CardAttributes getAttribute() {
         return attribute;
+    }
+
+    public static Card getCardByName(String cardName) {
+        return allCardsByName.get(cardName);
     }
 }

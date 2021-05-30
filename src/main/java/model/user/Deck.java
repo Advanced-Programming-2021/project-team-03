@@ -124,4 +124,13 @@ public class Deck {
     public static Deck getByDeckName(String deckName) {
         return allDecks.get(deckName);
     }
+
+    public boolean doesContainCard(Card card) {
+        return mainDeck.contains(card) || sideDeck.contains(card);
+    }
+
+    public void removeCard(Card card) {
+        mainDeck.remove(card);
+        sideDeck.remove(card);
+    }
 }

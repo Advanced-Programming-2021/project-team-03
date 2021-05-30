@@ -15,7 +15,7 @@ public class User {
     private int score;
     private int balance;
     private int level;
-    private ArrayList<Deck> decks;
+    private final ArrayList<Deck> decks;
     private ArrayList<Card> cards;
     private Deck activeDeck;
 
@@ -149,6 +149,7 @@ public class User {
     public static ArrayList<User> getScoreBoard() {
         ArrayList<User> scoreBoard = (new ArrayList<>(allUsers.values()));
         scoreBoard.sort((user1, user2) -> {
+            Integer.compare(user1.score, user2.score);
             if (user1.score == user2.score) return user1.nickname.compareTo(user2.nickname);
             return user2.score - user1.score;
         });
