@@ -2,6 +2,7 @@ package model.game;
 
 import control.game.GameController;
 import model.card.Card;
+import model.user.DatabaseException;
 import model.user.User;
 
 import static model.game.PlayerTurn.*;
@@ -90,5 +91,24 @@ public class Game {
 
     public int getNumberOfRounds() {
         return numberOfRounds;
+    }
+
+    public void surrender(PlayerTurn turn) {
+        getPlayerByTurn(turn).getUser().increaseScore(-1000);
+        getPlayerOpponentByTurn(turn).getUser().increaseScore(1000);
+    }
+
+    public Player getWinner() {
+        if (player1.getHealth() <= 0)
+            return player2;
+        if (player2.getHealth() <= 0)
+            return player1;
+        if (getPlayer1().canPlayerDrawCard())
+            return player1;
+        return player2;
+    }
+
+    public void checkRoundResults() {
+        getWinner().getUser().increaseScore(1000);
     }
 }

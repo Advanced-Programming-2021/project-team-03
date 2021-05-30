@@ -390,9 +390,10 @@ public class GameController {
     }
 
     public String surrender(String username) {
-        //TODO
         /*return the surrender message*/
-        return null;
+        currentRound += 1;
+        game.surrender(turn);
+        return game.getPlayerOpponentByTurn(turn).getUser().getUsername() + " won the game and the score is: 1000 - -1000";
     }
 
     public void changeTurn() {
@@ -463,9 +464,9 @@ public class GameController {
     }
 
     private String getRoundResults() {
-        //TODO returning the result of a round as a string
-
-        return null;
+        currentRound += 1;
+        game.checkRoundResults();
+        return game.getWinner().getUser().getUsername() + " won the game and the score is: 1000 - 0";
     }
 
     private String drawPhase() {
