@@ -1,4 +1,4 @@
-package control;
+package control.game;
 
 import model.card.Card;
 import model.card.Monster;
@@ -17,17 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import static control.Phase.*;
-import static control.TypeOfSelectedCard.*;
+import static control.game.GamePhases.*;
+import static control.game.TypeOfSelectedCard.*;
 import static model.game.PlayerTurn.*;
-
-enum Phase {
-    DRAW,
-    STANDBY,
-    FIRST_MAIN,
-    BATTLE,
-    SECOND_MAIN,
-}
 
 enum TypeOfSelectedCard {
     MONSTER,
@@ -60,7 +52,7 @@ public class GameController {
     private Update gameUpdates;
     private Card selectedCard;
     private TypeOfSelectedCard typeOfSelectedCard;
-    private Phase currentPhase;
+    private GamePhases currentPhase;
     private Game game;
     private PlayerTurn turn;
     private int currentRound;
@@ -150,7 +142,7 @@ public class GameController {
         typeOfSelectedCard = null;
     }
 
-    public Phase getCurrentPhase() {
+    public GamePhases getCurrentPhase() {
         return currentPhase;
     }
 
@@ -398,9 +390,10 @@ public class GameController {
     }
 
     public String surrender(String username) {
-        //TODO
         /*return the surrender message*/
-        return null;
+        currentRound += 1;
+        game.surrender(turn);
+        return game.getPlayerOpponentByTurn(turn).getUser().getUsername() + " won the game and the score is: 1000 - -1000";
     }
 
     public void changeTurn() {
@@ -419,11 +412,72 @@ public class GameController {
         return game.getPlayer2();
     }
 
-    public boolean isGameFinished() {
-        if (turn == PLAYER1 && !game.getPlayer1().canPlayerDrawCard())
-            return true;
-        if (turn == PLAYER2 && !game.getPlayer2().canPlayerDrawCard())
-            return true;
-        return game.getNumberOfRounds() < currentRound;
+    public boolean isRoundFinished() {
+        return !game.getPlayerByTurn(turn).canPlayerDrawCard() ||
+                game.getPlayerByTurn(turn).getHealth() <= 0;
+    }
+
+    public String checkGameStatus(String username) {
+        if (isRoundFinished())
+            return "This Round is over!";
+        return "the round is not over yet!";
+    }
+
+    public String endPhase(String username) {
+        StringBuilder answerAnswer = new StringBuilder();
+        switch (currentPhase) {
+            case DRAW -> {
+                answerAnswer.append("phase: Standby Phase");
+                currentPhase = STANDBY;
+                standbyPhase();
+            }
+            case STANDBY -> {
+                answerAnswer.append("phase: First Main Phase");
+                currentPhase = FIRST_MAIN;
+            }
+            case FIRST_MAIN -> {
+                answerAnswer.append("phase: Battle Phase");
+                currentPhase = BATTLE;
+            }
+            case BATTLE -> {
+                answerAnswer.append("phase: Second Phase");
+                currentPhase = SECOND_MAIN;
+            }
+            case SECOND_MAIN -> {
+                answerAnswer.append("phase: End Phase\n");
+                if (isRoundFinished()) {
+                    answerAnswer.append(getRoundResults());
+                } else {
+                    changeTurn();
+                    if (turn == PLAYER1)
+                        answerAnswer.append("its ").append(game.getPlayer1().getUser().getNickname()).append("’s turn\n");
+                    else
+                        answerAnswer.append("its ").append(game.getPlayer2().getUser().getNickname()).append("’s turn\n");
+
+                    answerAnswer.append("phase: Draw Phase\n");
+                    currentPhase = DRAW;
+                    answerAnswer.append(drawPhase());
+                }
+            }
+        }
+        return answerAnswer.toString();
+    }
+
+    private String getRoundResults() {
+        currentRound += 1;
+        game.checkRoundResults();
+        return game.getWinner().getUser().getUsername() + " won the game and the score is: 1000 - 0";
+    }
+
+    private String drawPhase() {
+        StringBuilder answer = new StringBuilder("new card added to the hand : ");
+        game.getPlayerByTurn(turn).getBoard().addCardFromRemainingToInHandCards();
+        answer.append(game.getPlayerByTurn(turn).getBoard().getInHandCards().get(game.getPlayerByTurn(turn).getBoard().getInHandCards().size() - 1).getCardName());
+        return answer.toString();
+    }
+
+    private void standbyPhase() {
+        //TODO
+        //checking for effects of cards
     }
 }

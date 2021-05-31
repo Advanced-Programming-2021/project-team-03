@@ -1,5 +1,6 @@
 package control;
 
+import control.game.GameController;
 import model.card.Card;
 import model.user.Deck;
 import org.json.JSONArray;
@@ -12,8 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static control.Phase.*;
-
+import static control.game.GamePhases.*;
 
 public class MainController {
     // this class is responsible for view request and send the feedback to thee view via a Json string
@@ -76,12 +76,40 @@ public class MainController {
             case "Show graveyard" -> showGraveyard(valueObject);
             case "Show selected card" -> showSelectedCard(valueObject);
             case "Surrender" -> surrender(valueObject);
-            //TODO: add this type of client command to code.
-            //case "Is the game over"
-            //TODO : add this type of client command to code.
-            //case "Next phase"
+            case "Is the game over" -> checkGameStatusCommand(valueObject);
+            case "Next phase" -> endPhaseCommand(valueObject);
             default -> error();
         };
+    }
+
+    private String endPhaseCommand(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            answerObject.put("Type", "Success");
+            answerObject.put("Value", GameController.getInstance().endPhase(onlineUsers.get(token)));
+        }
+
+        return answerObject.toString();
+    }
+
+    private String checkGameStatusCommand(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            answerObject.put("Type", "Game status");
+            answerObject.put("Value", GameController.getInstance().checkGameStatus(onlineUsers.get(token)));
+        }
+
+        return answerObject.toString();
     }
 
     public String sendRequestToView() {
@@ -274,7 +302,7 @@ public class MainController {
                 GameController.getInstance().getCurrentPhase() != SECOND_MAIN) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "can't flip summon in this phase!");
-        } else if (!GameController.getInstance().canChangeCardPosition() ){
+        } else if (!GameController.getInstance().canChangeCardPosition()) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "you can’t change this card position!");
         } else if (!GameController.getInstance().canFlipSummon(onlineUsers.get(token))) {
@@ -331,7 +359,7 @@ public class MainController {
         } else if (GameController.getInstance().getSelectedCard() == null) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "no card is selected yet!");
-        } else if (!GameController.getInstance().canSetSelectedCard()){
+        } else if (!GameController.getInstance().canSetSelectedCard()) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "you can’t set this card!");
         } else if (GameController.getInstance().getCurrentPhase() != FIRST_MAIN &&
@@ -370,10 +398,10 @@ public class MainController {
                 GameController.getInstance().getCurrentPhase() != SECOND_MAIN) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "action not allowed in this phase!");
-        } else if (GameController.getInstance().isCardFieldZoneFull() ){
+        } else if (GameController.getInstance().isCardFieldZoneFull()) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "monster card zone is full!");
-        } else if (!GameController.getInstance().canPlayerSummonOrSetAnotherCard() ){
+        } else if (!GameController.getInstance().canPlayerSummonOrSetAnotherCard()) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "you already summoned/set on this turn!");
         } else if (!GameController.getInstance().isThereEnoughCardToTribute()) {

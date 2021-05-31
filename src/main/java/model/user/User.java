@@ -157,4 +157,8 @@ public class User {
         });
         return scoreBoard;
     }
+
+    public void increaseScore(int amount) {
+        score += amount;
+    }
 }
