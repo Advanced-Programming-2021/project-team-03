@@ -1,22 +1,36 @@
 package model.card;
 
+import control.databaseController.Database;
 import model.enums.CardAttributes;
 import model.enums.SpellAndTrapIcon;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 
 public class SpellAndTrap extends Card {
     private SpellAndTrapIcon icon;
     private boolean isActive;
 
-    private static HashMap<String, Monster> allSpellAndTrapsByName;
+    private static HashMap<String, SpellAndTrap> allSpellAndTrapsByName;
 
-    public SpellAndTrap(String cardName, String cardID, String description, int price, CardAttributes attribute) {
+    static {
+        try {
+            allSpellAndTrapsByName = Database.updateSpellAndTraps();
+        } catch (FileNotFoundException e) {
+            System.out.println("Couldn't find spell and trap database files");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    public SpellAndTrap(String cardName, CardAttributes attribute, String description,
+                        int price, String cardID, SpellAndTrapIcon icon) {
         super(cardName, cardID, description, price, attribute);
+        this.icon = icon;
         //TODO create a constructor
     }
 
-    public static Card getSpellAndTrapByName(String cardName) {
+    public static SpellAndTrap getSpellAndTrapByName(String cardName) {
         return allSpellAndTrapsByName.get(cardName);
     }
 

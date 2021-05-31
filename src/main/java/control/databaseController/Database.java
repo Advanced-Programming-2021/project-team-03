@@ -3,6 +3,7 @@ package control.databaseController;
 import com.google.gson.Gson;
 import com.opencsv.bean.CsvToBeanBuilder;
 import model.card.Monster;
+import model.card.SpellAndTrap;
 import model.user.Deck;
 import model.user.User;
 
@@ -25,8 +26,7 @@ public class Database {
                 .withSeparator(',')
                 .withIgnoreLeadingWhiteSpace(true)
                 .withIgnoreEmptyLine(true)
-                .build()
-                .parse();
+                .build().parse();
 
         for (MonsterCSV monsterCSV : monsters) {
             try {
@@ -40,12 +40,28 @@ public class Database {
         return monstersByName;
     }
 
-    public static HashMap<String, Monster> updateSpellAndTraps() throws FileNotFoundException {
-        // TODO
-        return new HashMap<>();
+    public static HashMap<String, SpellAndTrap> updateSpellAndTraps() throws FileNotFoundException {
+        HashMap<String, SpellAndTrap> spellsByName = new HashMap<>();
+        Reader reader = new BufferedReader(new FileReader(CARDS_PATH + "SpellTrap.csv"));
+
+        List<SpellAndTrapCSV> spells =  new CsvToBeanBuilder(reader)
+                .withType(SpellAndTrapCSV.class)
+                .withSeparator(',')
+                .withIgnoreLeadingWhiteSpace(true)
+                .withIgnoreEmptyLine(true)
+                .build().parse();
+
+        for (SpellAndTrapCSV spellCSV : spells) {
+            try {
+                SpellAndTrap spellAndTrap = spellCSV.convert();
+                spellsByName.put(spellAndTrap.getCardName(), spellAndTrap);
+            } catch (IllegalArgumentException exception) {
+                System.out.println("\n!!! Couldn't import spell and trap card: " + spellCSV.getName());
+                System.out.println(exception.getMessage() + "\n");
+            }
+        }
+        return spellsByName;
     }
-
-
 
     // TODO: updateAllDecks and updateAllUsers can be merged or refactored
     public static HashMap<String, Deck> updateAllDecks() {
@@ -67,7 +83,6 @@ public class Database {
                     } catch (FileNotFoundException ignored) {
                     }
                 });
-
         return allDecks;
     }
 
@@ -123,7 +138,9 @@ public class Database {
 
     private static void writeToJson(Object object, String filePath) throws DatabaseException {
         try {
-            Writer writer = new FileWriter(filePath);
+            File file = new File(filePath);
+            file.getParentFile().mkdirs();
+            Writer writer = new FileWriter(file);
             new Gson().toJson(object, writer);
             writer.close();
         } catch (IOException e) {
@@ -131,4 +148,10 @@ public class Database {
         }
     }
     // TODO: we need a garbage collector for decks to remove decks that users don't have any reference to
+
+    static String toEnumCase(String string) {
+        return string.toUpperCase()
+                .replace(' ', '_')
+                .replace('-', '_');
+    }
 }
