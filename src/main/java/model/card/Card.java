@@ -1,11 +1,6 @@
 package model.card;
 
-import com.opencsv.exceptions.CsvException;
 import model.enums.CardAttributes;
-import control.databaseController.Database;
-
-import java.io.IOException;
-import java.util.HashMap;
 
 public abstract class Card {
     protected String cardName;
@@ -15,17 +10,8 @@ public abstract class Card {
     protected int price;
     protected CardAttributes attribute;
 
-    private static HashMap<String, Card> allCardsByName = null;
 
-    static {
-        try {
-            allCardsByName = Database.updateAllCards();
-        } catch (IOException | CsvException e) {
-            e.printStackTrace();
-        }
-
-        // TODO: We have to set card effects to them here after importing them from database
-    }
+    // TODO: We have to set card effects to them here after importing them from database
 
 
     public Card(String cardName, String cardID, String description, int price, CardAttributes attribute) {
@@ -61,6 +47,7 @@ public abstract class Card {
     }
 
     public static Card getCardByName(String cardName) {
-        return allCardsByName.get(cardName);
+        if (Monster.getMonsterByName(cardName) != null) return Monster.getMonsterByName(cardName);
+        return SpellAndTrap.getSpellAndTrapByName(cardName);
     }
 }

@@ -1,7 +1,7 @@
 package control;
 
-import model.card.Card;
 import control.databaseController.DatabaseException;
+import model.card.Card;
 import model.user.Deck;
 import model.user.User;
 
@@ -44,6 +44,7 @@ public class DeckController {
     }
 
     public boolean doesCardExist(String username, String cardName) {
+
         return Card.getCardByName(cardName) != null;
     }
 

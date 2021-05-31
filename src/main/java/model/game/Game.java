@@ -2,10 +2,10 @@ package model.game;
 
 import control.game.GameController;
 import model.card.Card;
-import model.user.DatabaseException;
 import model.user.User;
 
-import static model.game.PlayerTurn.*;
+import static model.game.PlayerTurn.PLAYER1;
+import static model.game.PlayerTurn.PLAYER2;
 
 public class Game {
     private Player player1;

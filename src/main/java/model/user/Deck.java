@@ -1,10 +1,10 @@
 package model.user;
 
+import control.databaseController.Database;
+import control.databaseController.DatabaseException;
 import model.card.Card;
 import model.card.Monster;
 import model.card.SpellAndTrap;
-import control.databaseController.Database;
-import control.databaseController.DatabaseException;
 
 import java.util.ArrayList;
 import java.util.Collections;

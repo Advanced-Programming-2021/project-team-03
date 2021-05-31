@@ -1,20 +1,22 @@
 package model.game;
 
+import model.card.Card;
+import model.card.Monster;
+import model.card.SpellAndTrap;
 import model.enums.AttackingFormat;
 import model.enums.FaceUpSituation;
 import model.user.Deck;
 import model.user.User;
-import model.card.Card;
-import model.card.Monster;
-import model.card.SpellAndTrap;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static model.enums.AttackingFormat.*;
-import static model.enums.FaceUpSituation.*;
+import static model.enums.AttackingFormat.ATTACKING;
+import static model.enums.AttackingFormat.DEFENDING;
+import static model.enums.FaceUpSituation.FACE_DOWN;
+import static model.enums.FaceUpSituation.FACE_UP;
 
 public class Board {
     private final User owner;

@@ -1,0 +1,46 @@
+package control.databaseController;
+
+import lombok.Data;
+import model.card.Monster;
+import model.enums.CardAttributes;
+import model.enums.MonsterModels;
+import model.enums.MonsterTypes;
+
+@Data
+public class MonsterCSV {
+    private String Name;
+    private int Level;
+    private String Attribute;
+    private String MonsterType;
+    private String CardType;
+    private int Atk;
+    private int Def;
+    private String Description;
+    private int Price;
+    private String CardID;
+
+
+    public Monster convert() {
+        return new Monster(Name, Level,
+                CardAttributes.valueOf(Attribute.toUpperCase()),
+                MonsterModels.valueOf(MonsterType.toUpperCase()),
+                MonsterTypes.valueOf(CardType.toUpperCase()),
+                Atk, Def, Description, Price, CardID);
+    }
+
+    @Override
+    public String toString() { // For testing
+        return "MonsterCSV{" +
+                "Name='" + Name + '\'' +
+                ", Level=" + Level +
+                ", Attribute='" + Attribute + '\'' +
+                ", MonsterType='" + MonsterType + '\'' +
+                ", CardType='" + CardType + '\'' +
+                ", Atk=" + Atk +
+                ", Def=" + Def +
+                ", Description='" + Description + '\'' +
+                ", Price=" + Price +
+                ", CardID='" + CardID + '\'' +
+                '}';
+    }
+}

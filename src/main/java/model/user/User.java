@@ -1,8 +1,8 @@
 package model.user;
 
-import model.card.Card;
 import control.databaseController.Database;
 import control.databaseController.DatabaseException;
+import model.card.Card;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.ArrayList;

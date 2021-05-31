@@ -3,7 +3,7 @@ package control.databaseController;
 public class DatabaseException extends Exception {
     public final String errorMessage;
 
-    DatabaseException(String errorMessage) {
+    public DatabaseException(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 

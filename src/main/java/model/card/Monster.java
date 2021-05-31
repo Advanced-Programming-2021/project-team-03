@@ -1,8 +1,11 @@
 package model.card;
 
+import control.databaseController.Database;
 import model.enums.*;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.function.Function;
 
 import static model.enums.MonsterTypes.EFFECT;
@@ -19,6 +22,18 @@ public class Monster extends Card {
     private FaceUpSituation faceUpSituation;
 
     private ArrayList<Function<Monster, Integer>> attackSupplier; // contains all game effects which determine the attacking power of the monster
+
+    private static HashMap<String, Monster> allMonstersByName;
+
+    static {
+        try {
+            allMonstersByName = Database.updateMonsters();
+        } catch (FileNotFoundException e) {
+            System.out.println("Couldn't find monsters database files");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
 
     public Monster(String cardName, int level, CardAttributes attribute, MonsterModels model, MonsterTypes monsterType,
                    int baseAttack, int baseDefence, String description, int price, String cardID) {
@@ -95,5 +110,9 @@ public class Monster extends Card {
 
     public int getLevel() {
         return this.level;
+    }
+
+    public static Monster getMonsterByName(String name) {
+        return allMonstersByName.get(name);
     }
 }

@@ -5,8 +5,8 @@ import model.game.Game;
 
 import java.util.HashMap;
 
-import static model.enums.FaceUpSituation.*;
-import static model.enums.MonsterEffectTypes.*;
+import static model.enums.FaceUpSituation.FACE_UP;
+import static model.enums.MonsterEffectTypes.CONTINUOUS;
 
 public class AllMonsterEffects {
     static HashMap<String, IMonsterEffect> effectID;

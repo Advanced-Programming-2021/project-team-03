@@ -1,50 +1,50 @@
 package control.databaseController;
 
 import com.google.gson.Gson;
-import com.opencsv.exceptions.CsvException;
-import model.card.Card;
+import com.opencsv.bean.CsvToBeanBuilder;
+import model.card.Monster;
+import model.user.Deck;
+import model.user.User;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
-import com.opencsv.CSVReader;
-import model.user.Deck;
-import model.user.User;
 
 public class Database {
     private static final String USERS_PATH = "./database/users/";
     private static final String DECKS_PATH = "./database/decks/";
     private static final String CARDS_PATH = "./database/cards/";
 
+    public static HashMap<String, Monster> updateMonsters() throws FileNotFoundException {
+        HashMap<String, Monster> monstersByName = new HashMap<>();
+        Reader reader = new BufferedReader(new FileReader(CARDS_PATH + "Monster.csv"));
 
-    public static HashMap<String, Card> updateAllCards() throws IOException, CsvException {
-        HashMap<String, Card> allCardsByName = new HashMap<>();
+        List<MonsterCSV> monsters =  new CsvToBeanBuilder(reader)
+                .withType(MonsterCSV.class)
+                .withSeparator(',')
+                .withIgnoreLeadingWhiteSpace(true)
+                .withIgnoreEmptyLine(true)
+                .build()
+                .parse();
 
-        Reader reader = Files.newBufferedReader(Path.of(CARDS_PATH + "Monster.csv"),  StandardCharsets.UTF_8);
-
-        CSVReader csvReader = new CSVReader(reader);
-        List<String[]> list = csvReader.readAll();
-        reader.close();
-        csvReader.close();
-
-        List<String> header = Arrays.asList(list.get(0));
-        HashMap<String, Integer> indexes = new HashMap<>();
-
-        indexes.put("Name", header.indexOf("Name"));
-        indexes.put("Level", header.indexOf("Level"));
-        indexes.put("Attribute", header.indexOf("Attribute"));
-        indexes.put("Monster Type", header.indexOf("Monster Type"));
-        indexes.put("Card Type", header.indexOf("Card Type"));
-        indexes.put("Level", header.indexOf("Level"));
-
-
-        return allCardsByName; // TODO
+        for (MonsterCSV monsterCSV : monsters) {
+            try {
+                Monster monster = monsterCSV.convert();
+                monstersByName.put(monster.getCardName(), monster);
+            } catch (IllegalArgumentException exception) {
+                System.out.println("\n!!! Couldn't import monster card: " + monsterCSV.getName());
+                System.out.println(exception.getMessage() + "\n");
+            }
+        }
+        return monstersByName;
     }
+
+    public static HashMap<String, Monster> updateSpellAndTraps() throws FileNotFoundException {
+        // TODO
+        return new HashMap<>();
+    }
+
 
 
     // TODO: updateAllDecks and updateAllUsers can be merged or refactored
@@ -131,9 +131,4 @@ public class Database {
         }
     }
     // TODO: we need a garbage collector for decks to remove decks that users don't have any reference to
-
-
-    public static void main(String[] args) throws IOException, CsvException {
-        updateAllCards();
-    }
 }

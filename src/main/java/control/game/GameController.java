@@ -4,8 +4,8 @@ import model.card.Card;
 import model.card.Monster;
 import model.card.SpellAndTrap;
 import model.enums.AttackingFormat;
-import model.enums.FaceUpSituation;
 import model.enums.CardAttributes;
+import model.enums.FaceUpSituation;
 import model.game.Board;
 import model.game.Game;
 import model.game.Player;
@@ -19,7 +19,8 @@ import java.util.Random;
 
 import static control.game.GamePhases.*;
 import static control.game.TypeOfSelectedCard.*;
-import static model.game.PlayerTurn.*;
+import static model.game.PlayerTurn.PLAYER1;
+import static model.game.PlayerTurn.PLAYER2;
 
 enum TypeOfSelectedCard {
     MONSTER,
