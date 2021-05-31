@@ -1,4 +1,4 @@
-package model.user;
+package control.databaseController;
 
 public class DatabaseException extends Exception {
     public final String errorMessage;

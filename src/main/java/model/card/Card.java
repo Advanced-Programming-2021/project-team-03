@@ -1,8 +1,10 @@
 package model.card;
 
+import com.opencsv.exceptions.CsvException;
 import model.enums.CardAttributes;
-import model.user.Database;
+import control.databaseController.Database;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public abstract class Card {
@@ -13,10 +15,14 @@ public abstract class Card {
     protected int price;
     protected CardAttributes attribute;
 
-    private static final HashMap<String, Card> allCardsByName;
+    private static HashMap<String, Card> allCardsByName = null;
 
     static {
-        allCardsByName = Database.updateAllCards();
+        try {
+            allCardsByName = Database.updateAllCards();
+        } catch (IOException | CsvException e) {
+            e.printStackTrace();
+        }
 
         // TODO: We have to set card effects to them here after importing them from database
     }

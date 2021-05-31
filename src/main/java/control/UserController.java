@@ -1,7 +1,7 @@
 package control;
 
 import model.user.User;
-import model.user.DatabaseException;
+import control.databaseController.DatabaseException;
 
 import java.util.ArrayList;
 
