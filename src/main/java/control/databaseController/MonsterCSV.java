@@ -19,28 +19,12 @@ public class MonsterCSV {
     private int Price;
     private String CardID;
 
-
     public Monster convert() {
         return new Monster(Name, Level,
-                CardAttributes.valueOf(Attribute.toUpperCase()),
-                MonsterModels.valueOf(MonsterType.toUpperCase()),
-                MonsterTypes.valueOf(CardType.toUpperCase()),
-                Atk, Def, Description, Price, CardID);
-    }
-
-    @Override
-    public String toString() { // For testing
-        return "MonsterCSV{" +
-                "Name='" + Name + '\'' +
-                ", Level=" + Level +
-                ", Attribute='" + Attribute + '\'' +
-                ", MonsterType='" + MonsterType + '\'' +
-                ", CardType='" + CardType + '\'' +
-                ", Atk=" + Atk +
-                ", Def=" + Def +
-                ", Description='" + Description + '\'' +
-                ", Price=" + Price +
-                ", CardID='" + CardID + '\'' +
-                '}';
+                CardAttributes.valueOf(Database.toEnumCase(Attribute)),
+                MonsterModels.valueOf(Database.toEnumCase(MonsterType)),
+                MonsterTypes.valueOf(Database.toEnumCase(CardType)),
+                Atk, Def, Description, Price, CardID
+        );
     }
 }
