@@ -1,16 +1,13 @@
 package control;
 
+import control.databaseController.DatabaseException;
 import model.card.Card;
 import model.user.User;
 
-import java.util.HashMap;
-
 public class ShopController {
     private static ShopController shopController;
-    private final HashMap<String, Card> allCards;
 
     private ShopController() {
-        allCards = new HashMap<>();
     }
 
     public static ShopController getInstance() {
@@ -20,18 +17,19 @@ public class ShopController {
     }
 
     public boolean doesCardExist(String cardName) {
-        return allCards.containsKey(cardName);
+        return Card.getCardByName(cardName) != null;
     }
 
     public boolean doesPlayerHaveEnoughMoney(String username, String cardName) {
-        return allCards.get(cardName).getPrice() <= User.getByUsername(username).getBalance();
+        return Card.getCardByName(cardName).getPrice() <= User.getByUsername(username).getBalance();
     }
 
     public void buyCard(String username, String cardName) {
-        //TODO
-    }
-
-    public HashMap<String, Card> getAllCards() {
-        return allCards;
+        User.getByUsername(username).getCards().add(Card.getCardByName(cardName));
+        try {
+            User.getByUsername(username).increaseBalance(Card.getCardByName(cardName).getPrice());
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
     }
 }

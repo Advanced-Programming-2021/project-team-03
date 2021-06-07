@@ -11,11 +11,11 @@ public class SpellAndTrap extends Card {
     private SpellAndTrapIcon icon;
     private boolean isActive;
 
-    private static HashMap<String, SpellAndTrap> allSpellAndTrapsByName;
+    private static HashMap<String, SpellAndTrap> allSpellAndTraps;
 
     static {
         try {
-            allSpellAndTrapsByName = Database.updateSpellAndTraps();
+            allSpellAndTraps = Database.updateSpellAndTraps();
         } catch (FileNotFoundException e) {
             System.out.println("Couldn't find spell and trap database files");
             e.printStackTrace();
@@ -31,7 +31,7 @@ public class SpellAndTrap extends Card {
     }
 
     public static SpellAndTrap getSpellAndTrapByName(String cardName) {
-        return allSpellAndTrapsByName.get(cardName);
+        return allSpellAndTraps.get(cardName);
     }
 
     @Override
@@ -48,5 +48,9 @@ public class SpellAndTrap extends Card {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public static HashMap<String, SpellAndTrap> getAllSpellAndTraps() {
+        return allSpellAndTraps;
     }
 }

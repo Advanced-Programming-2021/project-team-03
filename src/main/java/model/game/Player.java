@@ -11,8 +11,6 @@ public class Player {
         this.user = user;
         this.health = initialHealth;
         this.board = board;
-        this.health = 8000;
-        // TODO
     }
 
     public Board getBoard() {

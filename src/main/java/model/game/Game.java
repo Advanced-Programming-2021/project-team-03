@@ -13,10 +13,9 @@ public class Game {
 
     private int numberOfRounds;
 
-    public Game(User user1, User user2, int numberOfRounds) { // TODO
-        // TODO: Construct players with given users.
-        // TODO: Construct boards with user decks.
-        // TODO give each card in the main deck a "card in game" ID
+    public Game(User user1, User user2, int numberOfRounds) {
+        this.player1 = new Player(8000, new Board(user1.getActiveDeck(), user1), user1);
+        this.player2 = new Player(8000, new Board(user2.getActiveDeck(), user2), user2);
         this.numberOfRounds = numberOfRounds;
     }
 

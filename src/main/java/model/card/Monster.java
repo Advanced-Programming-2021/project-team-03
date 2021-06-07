@@ -23,11 +23,11 @@ public class Monster extends Card {
 
     private ArrayList<Function<Monster, Integer>> attackSupplier; // contains all game effects which determine the attacking power of the monster
 
-    private static HashMap<String, Monster> allMonstersByName;
+    private static HashMap<String, Monster> allMonsters;
 
     static {
         try {
-            allMonstersByName = Database.updateMonsters();
+            allMonsters = Database.updateMonsters();
         } catch (FileNotFoundException e) {
             System.out.println("Couldn't find monsters database files");
             e.printStackTrace();
@@ -113,6 +113,10 @@ public class Monster extends Card {
     }
 
     public static Monster getMonsterByName(String name) {
-        return allMonstersByName.get(name);
+        return allMonsters.get(name);
+    }
+
+    public static HashMap<String, Monster> getAllMonsters() {
+        return allMonsters;
     }
 }

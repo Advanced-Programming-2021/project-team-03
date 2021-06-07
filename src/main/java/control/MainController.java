@@ -2,6 +2,8 @@ package control;
 
 import control.game.GameController;
 import model.card.Card;
+import model.card.Monster;
+import model.card.SpellAndTrap;
 import model.user.Deck;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -77,7 +79,7 @@ public class MainController {
             case "Show graveyard" -> showGraveyard(valueObject);
             case "Show selected card" -> showSelectedCard(valueObject);
             case "Surrender" -> surrender(valueObject);
-            case "Is the game over" -> checkGameStatusCommand(valueObject);
+            case "Is the game over" -> checkGameStatusCommand(valueObject); //TODO game -> round
             case "Next phase" -> endPhaseCommand(valueObject);
             default -> error();
         };
@@ -538,7 +540,10 @@ public class MainController {
             answerObject.put("Type", "Successful");
 
             JSONArray cardsArray = new JSONArray();
-            for (Card card : ShopController.getInstance().getAllCards().values()) {
+            for (Card card : Monster.getAllMonsters().values()) {
+                cardsArray.put(card.getCardName() + ":" + card.getPrice());
+            }
+            for (Card card : SpellAndTrap.getAllSpellAndTraps().values()) {
                 cardsArray.put(card.getCardName() + ":" + card.getPrice());
             }
             answerObject.put("Value", cardsArray);

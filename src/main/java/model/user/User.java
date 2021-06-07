@@ -102,8 +102,8 @@ public class User {
         return balance;
     }
 
-    public void setBalance(int balance) throws DatabaseException {
-        this.balance = balance;
+    public void increaseBalance(int balance) throws DatabaseException {
+        this.balance += balance;
         updateInDatabase();
     }
 

@@ -68,6 +68,7 @@ public class GameController {
     public void newDuelWithAI(String username, int numberOfRound) {
         game = new Game(User.getByUsername(username), numberOfRound);
         gameUpdates = new Update(game);
+        //TODO AI controller
     }
 
     public boolean isCardAddressValid(int cardPosition) {
@@ -202,8 +203,7 @@ public class GameController {
             messageToSendToView.put("Value", value);
         }
         String viewAnswer = MainController.getInstance().sendRequestToView(messageToSendToView);
-        String tributeResult = tributeCards(viewAnswer, board);
-        return tributeResult;
+        return tributeCards(viewAnswer, board);
     }
 
     public String tributeCards(String message, Board board) {
@@ -440,6 +440,9 @@ public class GameController {
             return false;
         return true;
     }
+
+    //TODO game status
+    //TODO get winner in 3 round games
 
     public String surrender(String username) {
         /*return the surrender message*/
