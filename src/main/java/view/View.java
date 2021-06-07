@@ -168,7 +168,6 @@ public class View {
     }
 
     public String getRequest(String input) {
-
         // parsing the json string request with JSONObject library
         JSONObject inputObject = new JSONObject(input);
         String requestType = inputObject.getString("Type");
@@ -698,15 +697,8 @@ public class View {
         JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
 
         //Survey control JSON message
-        String answerType = (String) controlAnswer.get("Type");
         String answerValue = (String) controlAnswer.get("Value");
         System.out.println(answerValue);
-//        if (answerType.equals("Error")) System.out.println(answerValue);
-//        else if (answerValue.equals("Need one tribute")) {
-//            getTributeCard(1);
-//        } else if (answerValue.equals("Need two tribute")) {
-//            getTributeCard(2);
-//        } else System.out.println(answerValue);
     }
 
     private String getTributeCards(JSONObject valueObject) {
@@ -1173,10 +1165,8 @@ public class View {
 
     private String error() {
         JSONObject answerObject = new JSONObject();
-
         answerObject.put("Type", "Error");
         answerObject.put("Value", "Invalid Request Type!!!");
-
         return answerObject.toString();
     }
 
