@@ -167,6 +167,19 @@ public class View {
         return new JSONObject(controlAnswerString);
     }
 
+    public String getRequest(String input) {
+
+        // parsing the json string request with JSONObject library
+        JSONObject inputObject = new JSONObject(input);
+        String requestType = inputObject.getString("Type");
+        JSONObject valueObject = inputObject.getJSONObject("Value");
+
+        return switch (requestType) {
+            case "Get tribute cards" -> getTributeCards(valueObject);
+            default -> error();
+        };
+    }
+
     //region register menu methods
     public void registerMenu() {
         while (true) {
@@ -585,14 +598,14 @@ public class View {
         } else {
             if (answerValue.equals("No")) return false;
             else {
-                showGameResult(answerValue); //TODO: fixme (answer value should have game results to show the user)
+                showGameResult(answerValue);
                 return true;
             }
         }
     }
 
     private void showGameResult(String controlMessage) {
-        //TODO
+        System.out.println(controlMessage);
     }
 
     private int doesInputMatchWithSelectCardCommand(String inputCommand) {
@@ -687,18 +700,28 @@ public class View {
         //Survey control JSON message
         String answerType = (String) controlAnswer.get("Type");
         String answerValue = (String) controlAnswer.get("Value");
-        if (answerType.equals("Error")) System.out.println(answerValue);
-        else if (answerValue.equals("Need one tribute")) {
-            getTributeCard(1);
-        } else if (answerValue.equals("Need two tribute")) {
-            getTributeCard(2);
-        } else System.out.println(answerValue);
+        System.out.println(answerValue);
+//        if (answerType.equals("Error")) System.out.println(answerValue);
+//        else if (answerValue.equals("Need one tribute")) {
+//            getTributeCard(1);
+//        } else if (answerValue.equals("Need two tribute")) {
+//            getTributeCard(2);
+//        } else System.out.println(answerValue);
     }
 
-    private void getTributeCard(int numberOfNeededCards) {
+    private String getTributeCards(JSONObject valueObject) {
+        int numberOfRequiredCards = Integer.parseInt(valueObject.getString("Number of required cards"));
+        JSONObject answerObject = getTributeCardFromUser(numberOfRequiredCards);
+        return answerObject.toString();
+    }
+
+    private JSONObject getTributeCardFromUser(int numberOfNeededCards) {
         //Getting needed tribute cards
         int[] tributeCardsPosition = new int[2];
         int counter = 0;
+        JSONObject value = new JSONObject();
+        JSONObject messageToSendToControl = new JSONObject();
+        value.put("Token", token);
         while (counter < numberOfNeededCards) {
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
             if (inputCommand.matches("^\\d+$")) {
@@ -706,27 +729,23 @@ public class View {
                 counter++;
             } else if (inputCommand.equals("cancel")) {
                 System.out.println("The order was canceled");
-                return;
+                messageToSendToControl.put("Type", "Cancel");
+                messageToSendToControl.put("Value", value);
+                return messageToSendToControl;
             } else System.out.println("invalid command");
         }
 
         //Making message JSONObject and passing to sendControl function:
-        JSONObject value = new JSONObject();
-        value.put("Token", token);
         if (numberOfNeededCards == 1) {
             value.put("Position", String.valueOf(tributeCardsPosition[0]));
+            messageToSendToControl.put("Type", "One card");
         } else {
             value.put("First position", String.valueOf(tributeCardsPosition[0]));
             value.put("Second position", String.valueOf(tributeCardsPosition[1]));
+            messageToSendToControl.put("Type", "Two card");
         }
-        JSONObject messageToSendToControl = new JSONObject();
-        messageToSendToControl.put("Type", "Tribute cards");
         messageToSendToControl.put("Value", value);
-        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
-
-        //Survey control JSON message
-        String answerValue = (String) controlAnswer.get("Value");
-        System.out.println(answerValue);
+        return messageToSendToControl;
     }
 
     private void setCard() {
@@ -1150,6 +1169,15 @@ public class View {
             }
         }
         return false;
+    }
+
+    private String error() {
+        JSONObject answerObject = new JSONObject();
+
+        answerObject.put("Type", "Error");
+        answerObject.put("Value", "Invalid Request Type!!!");
+
+        return answerObject.toString();
     }
 
     private void getRegexMatcher(String command, String regex, boolean findMatches) {
