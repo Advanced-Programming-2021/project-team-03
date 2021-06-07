@@ -79,8 +79,8 @@ public class Database {
                                 new FileReader(DECKS_PATH + file.getName()));
                         Deck deck = gson.fromJson(reader, Deck.class);
                         allDecks.put(deck.getDeckName(), deck);
-
-                    } catch (FileNotFoundException ignored) {
+                        reader.close();
+                    } catch (IOException ignored) {
                     }
                 });
         return allDecks;
@@ -101,8 +101,8 @@ public class Database {
                                 new FileReader(USERS_PATH + file.getName()));
                         User user = gson.fromJson(reader, User.class);
                         allUsers.put(user.getUsername(), user);
-
-                    } catch (FileNotFoundException ignored) {
+                        reader.close();
+                    } catch (IOException ignored) {
                     }
                 });
 
