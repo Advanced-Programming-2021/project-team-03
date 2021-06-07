@@ -5,6 +5,7 @@ import model.card.Card;
 import model.user.Deck;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import view.View;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -112,11 +113,11 @@ public class MainController {
         return answerObject.toString();
     }
 
-    public String sendRequestToView() {
-        //TODO
+    public String sendRequestToView(JSONObject messageToSend) {
+        //TODO: will be complete in future
         /*send the statements of the game to view
          * such as phase name, players' turn, ask for card activation and etc*/
-        return null;
+        return View.getInstance().getRequest(messageToSend.toString());
     }
 
     private String cheatCodes(JSONObject valueObject) {
