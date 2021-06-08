@@ -16,6 +16,7 @@ public class Monster extends Card {
     private final int baseDefence;
     private final MonsterModels model; // monster model is the model of the card for example warrior or spell caster or ..
     private IMonsterEffect monsterEffect; // this interface contains the special monster effect if exists
+    private final MonsterTypes type;
 
     /* two enums below contains the position of the monster card in the game board */
     private AttackingFormat attackingFormat;
@@ -42,9 +43,10 @@ public class Monster extends Card {
         this.baseAttack = baseAttack;
         this.baseDefence = baseDefence;
         this.model = model;
+        this.type = monsterType;
         // monster type is the effect type of the card which could be normal, effect or ritual
         if (monsterType.equals(EFFECT))
-            monsterEffect = AllMonsterEffects.getEffectByID(cardID);
+            monsterEffect = AllMonsterEffects.getInstance().getEffectByID(cardID);
         attackSupplier = new ArrayList<>();
     }
 
@@ -118,5 +120,9 @@ public class Monster extends Card {
 
     public static HashMap<String, Monster> getAllMonsters() {
         return allMonsters;
+    }
+
+    public MonsterTypes getType() {
+        return type;
     }
 }

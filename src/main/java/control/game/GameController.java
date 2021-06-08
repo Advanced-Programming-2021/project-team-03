@@ -1,6 +1,7 @@
 package control.game;
 
 import control.MainController;
+import model.card.AllMonsterEffects;
 import model.card.Card;
 import model.card.Monster;
 import model.card.SpellAndTrap;
@@ -21,6 +22,7 @@ import java.util.Random;
 
 import static control.game.GamePhases.*;
 import static control.game.TypeOfSelectedCard.*;
+import static control.game.UpdateEnum.*;
 import static model.game.PlayerTurn.PLAYER1;
 import static model.game.PlayerTurn.PLAYER2;
 
@@ -338,22 +340,31 @@ public class GameController {
         int attackingDef = attackingMonster.getAttackingPower() - opponentMonster.getAttackingPower();
         int defendingDef = attackingMonster.getAttackingPower() - opponentMonster.getDefensivePower();
         StringBuilder answerString = new StringBuilder();
+        if (opponentMonster.getCardName().equals("Suijin") && !isSuijinActivatedBefore()) {
+            answerString.append(AllMonsterEffects.getInstance().attackSuijin(game, gameUpdates, attackingPlayerUsername,
+                    attackingPlayerBoard, attackingMonster, opponentMonster, opponentMonsterFormat, opponentMonsterFaceUpSit));
+            return answerString.toString();
+        }
         switch (opponentMonsterFormat) {
             case ATTACKING -> {
                 if (attackingDef == 0) {
                     attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
                     attackingPlayerBoard.addCardToGraveyard(attackingMonster);
+                    gameUpdates.addMonsterToGraveyard(attackingMonster);
                     opponentBoard.removeCardFromField(opponentBoard.getMonsterPosition(opponentMonster), true);
                     opponentBoard.addCardToGraveyard(opponentMonster);
+                    gameUpdates.addMonsterToGraveyard(opponentMonster);
                     answerString.append("both you and your opponent monster cards are destroyed and no one receives damage");
                 } else if (attackingDef > 0) {
                     opponentBoard.removeCardFromField(opponentBoard.getMonsterPosition(opponentMonster), true);
                     opponentBoard.addCardToGraveyard(opponentMonster);
+                    gameUpdates.addMonsterToGraveyard(opponentMonster);
                     game.getPlayerOpponentByTurn(turn).decreaseHealthByAmount(attackingDef);
                     answerString.append("your opponent’s monster is destroyed and your opponent receives ").append(attackingDef).append(" battle damage");
                 } else {
                     attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
                     attackingPlayerBoard.addCardToGraveyard(attackingMonster);
+                    gameUpdates.addMonsterToGraveyard(attackingMonster);
                     game.getPlayerByName(attackingPlayerUsername).decreaseHealthByAmount(attackingDef);
                     answerString.append("Your monster card is destroyed and you received ").append(attackingDef).append(" battle damage");
                 }
@@ -369,6 +380,7 @@ public class GameController {
                 } else if (defendingDef > 0) {
                     opponentBoard.removeCardFromField(opponentBoard.getMonsterPosition(opponentMonster), true);
                     opponentBoard.addCardToGraveyard(opponentMonster);
+                    gameUpdates.addMonsterToGraveyard(opponentMonster);
                     answerString.append("the defense position monster is destroyed!");
                 } else {
                     game.getPlayerByName(attackingPlayerUsername).decreaseHealthByAmount(defendingDef);
@@ -378,6 +390,15 @@ public class GameController {
             }
         }
         return "Unknown Error";
+    }
+
+    private boolean isSuijinActivatedBefore() {
+        for (UpdateEnum updateEnum : gameUpdates.getAllUpdates().keySet()) {
+            if (updateEnum.equals(SUIJIN_ACTIVATED)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean canAttackDirectly() {
@@ -535,4 +556,5 @@ public class GameController {
         //TODO
         //checking for effects of cards
     }
+
 }
