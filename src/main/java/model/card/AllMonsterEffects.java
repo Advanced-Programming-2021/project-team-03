@@ -9,6 +9,7 @@ import model.enums.MonsterEffectTypes;
 import model.game.Board;
 import model.game.Game;
 import model.game.PlayerTurn;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -94,8 +95,11 @@ public class AllMonsterEffects {
 
 
     public void ManEaterEffect(Game game, PlayerTurn turn) {
+        int position;
         try {
-            int position = Integer.parseInt(MainController.getInstance().sendRequestToView(null));
+            JSONObject messageToSendToView = new JSONObject();
+            messageToSendToView.put("Type", "Get one monster number");
+            position = Integer.parseInt(MainController.getInstance().sendRequestToView(messageToSendToView));
         } catch (Exception e) {
             return;
         }
