@@ -1,5 +1,6 @@
 package model.card;
 
+import control.MainController;
 import control.game.GameController;
 import control.game.Update;
 import model.enums.AttackingFormat;
@@ -58,7 +59,7 @@ public class AllMonsterEffects {
     }
 
     //Yomi Ship effect
-    public void destroySelectedCard(Game game, PlayerTurn turn, Card selectedCard, Update gameUpdates) {
+    public void yomiShipEffect(Game game, PlayerTurn turn, Card selectedCard, Update gameUpdates) {
         game.getPlayerByTurn(turn).getBoard().removeCardFromField(game.getPlayerByTurn(turn).getBoard().getMonsterPosition((Monster) selectedCard), true);
         game.getPlayerByTurn(turn).getBoard().addCardToGraveyard(selectedCard);
         gameUpdates.addMonsterToGraveyard(selectedCard);
@@ -91,4 +92,13 @@ public class AllMonsterEffects {
         return "Unknown Error";
     }
 
+
+    public void ManEaterEffect(Game game, PlayerTurn turn) {
+        try {
+            int position = Integer.parseInt(MainController.getInstance().sendRequestToView(null));
+        } catch (Exception e) {
+            return;
+        }
+
+    }
 }
