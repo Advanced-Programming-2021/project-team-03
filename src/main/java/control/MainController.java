@@ -122,6 +122,15 @@ public class MainController {
         return View.getInstance().getRequest(messageToSend.toString());
     }
 
+    public void sendPrintRequestToView(String message) {
+        JSONObject messageToSendToView = new JSONObject();
+        messageToSendToView.put("Type", "Print message");
+        JSONObject value = new JSONObject();
+        value.put("Message", message);
+        messageToSendToView.put("Value", value);
+        sendRequestToView(messageToSendToView);
+    }
+
     private String cheatCodes(JSONObject valueObject) {
         //TODO
         return null;

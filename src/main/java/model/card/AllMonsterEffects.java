@@ -95,7 +95,7 @@ public class AllMonsterEffects {
 
 
     //Man-Eater effect
-    public void ManEaterEffect(Game game, PlayerTurn turn,Update update) {
+    public void ManEaterEffect(Game game, PlayerTurn turn, Update update) {
         int position;
         try {
             JSONObject messageToSendToView = new JSONObject();
@@ -106,13 +106,15 @@ public class AllMonsterEffects {
         }
         Player defendingPlayer = game.getPlayerOpponentByTurn(turn);
         Monster opponentMonster = defendingPlayer.getBoard().getMonsterByPosition(position);
-        if (opponentMonster == null)
-            return;
         StringBuilder answerString = new StringBuilder();
-        defendingPlayer.getBoard().removeCardFromField(defendingPlayer.getBoard().getMonsterPosition(opponentMonster), true);
-        defendingPlayer.getBoard().addCardToGraveyard(opponentMonster);
-        update.addMonsterToGraveyard(opponentMonster);
-        answerString.append(opponentMonster.getCardName()).append("destroyed!");
-        //MainController.getInstance().sendRequestToView(); TODO send answer to view.
+        if (opponentMonster == null)
+            answerString.append("No card was destroyed.");
+        else {
+            defendingPlayer.getBoard().removeCardFromField(defendingPlayer.getBoard().getMonsterPosition(opponentMonster), true);
+            defendingPlayer.getBoard().addCardToGraveyard(opponentMonster);
+            update.addMonsterToGraveyard(opponentMonster);
+            answerString.append(opponentMonster.getCardName()).append("destroyed!");
+        }
+        MainController.getInstance().sendPrintRequestToView(answerString.toString());
     }
 }

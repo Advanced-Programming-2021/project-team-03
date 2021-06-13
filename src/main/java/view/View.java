@@ -178,8 +178,15 @@ public class View {
         return switch (requestType) {
             case "Get tribute cards" -> getTributeCards(valueObject);
             case "Get one monster number" -> getOneMonsterNumber();
+            case "Print message" -> printMessage(valueObject);
             default -> error();
         };
+    }
+
+    private String printMessage(JSONObject valueObject) {
+        String message = valueObject.getString("Value");
+        System.out.println(message);
+        return "Do not need request answer";
     }
 
     //region register menu methods
