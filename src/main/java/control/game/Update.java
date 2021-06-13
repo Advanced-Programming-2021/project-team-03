@@ -59,9 +59,15 @@ public class Update {
         return allUpdates;
     }
 
+    public void flipCard(Card card) {
+        allUpdates.put(CARD_FLIPPED, card);
+        if (card.getCardName().equals("Man-Eater Bug"))
+            AllMonsterEffects.getInstance().ManEaterEffect(game,GameController.getInstance().getTurn());
+    }
+
     public void addMonsterToGraveyard(Card card) {
         allUpdates.put(CARD_DESTROYED, card);
         if (card.getCardName().equals("Yomi Ship"))
-            AllMonsterEffects.getInstance().destroySelectedCard(game, GameController.getInstance().getTurn(), GameController.getInstance().getSelectedCard(), this);
+            AllMonsterEffects.getInstance().yomiShipEffect(game, GameController.getInstance().getTurn(), GameController.getInstance().getSelectedCard(), this);
     }
 }
