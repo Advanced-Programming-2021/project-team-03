@@ -350,7 +350,7 @@ public class GameController {
         int defendingDef = attackingMonster.getAttackingPower() - opponentMonster.getDefensivePower();
         StringBuilder answerString = new StringBuilder();
         if (opponentMonster.getCardName().equals("Suijin") && !isSuijinActivatedBefore()) {
-            answerString.append(AllMonsterEffects.getInstance().attackSuijin(game, gameUpdates, attackingPlayerUsername,
+            answerString.append(AllMonsterEffects.getInstance().suijinEffect(game, gameUpdates, attackingPlayerUsername,
                     attackingPlayerBoard, attackingMonster, opponentMonster, opponentMonsterFormat, opponentMonsterFaceUpSit));
             return answerString.toString();
         }

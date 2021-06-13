@@ -1,13 +1,13 @@
 package model.card;
 
 import control.MainController;
-import control.game.GameController;
 import control.game.Update;
 import model.enums.AttackingFormat;
 import model.enums.FaceUpSituation;
 import model.enums.MonsterEffectTypes;
 import model.game.Board;
 import model.game.Game;
+import model.game.Player;
 import model.game.PlayerTurn;
 import org.json.JSONObject;
 
@@ -69,7 +69,7 @@ public class AllMonsterEffects {
     }
 
     //Suijin effect
-    public String attackSuijin(Game game, Update gameUpdates, String attackingPlayerUsername, Board attackingPlayerBoard, Monster attackingMonster, Monster opponentMonster, AttackingFormat opponentMonsterFormat, FaceUpSituation opponentMonsterFaceUpSit) {
+    public String suijinEffect(Game game, Update gameUpdates, String attackingPlayerUsername, Board attackingPlayerBoard, Monster attackingMonster, Monster opponentMonster, AttackingFormat opponentMonsterFormat, FaceUpSituation opponentMonsterFaceUpSit) {
         StringBuilder answerString = new StringBuilder();
         switch (opponentMonsterFormat) {
             case ATTACKING -> {
@@ -94,7 +94,8 @@ public class AllMonsterEffects {
     }
 
 
-    public void ManEaterEffect(Game game, PlayerTurn turn) {
+    //Man-Eater effect
+    public void ManEaterEffect(Game game, PlayerTurn turn,Update update) {
         int position;
         try {
             JSONObject messageToSendToView = new JSONObject();
@@ -103,6 +104,15 @@ public class AllMonsterEffects {
         } catch (Exception e) {
             return;
         }
-
+        Player defendingPlayer = game.getPlayerOpponentByTurn(turn);
+        Monster opponentMonster = defendingPlayer.getBoard().getMonsterByPosition(position);
+        if (opponentMonster == null)
+            return;
+        StringBuilder answerString = new StringBuilder();
+        defendingPlayer.getBoard().removeCardFromField(defendingPlayer.getBoard().getMonsterPosition(opponentMonster), true);
+        defendingPlayer.getBoard().addCardToGraveyard(opponentMonster);
+        update.addMonsterToGraveyard(opponentMonster);
+        answerString.append(opponentMonster.getCardName()).append("destroyed!");
+        //MainController.getInstance().sendRequestToView(); TODO send answer to view.
     }
 }

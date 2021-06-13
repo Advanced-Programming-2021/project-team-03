@@ -63,7 +63,7 @@ public class Update {
     public void flipCard(Card card) {
         allUpdates.put(CARD_FLIPPED, card);
         if (card.getCardName().equals("Man-Eater Bug"))
-            AllMonsterEffects.getInstance().ManEaterEffect(game,GameController.getInstance().getTurn());
+            AllMonsterEffects.getInstance().ManEaterEffect(game, GameController.getInstance().getTurn(), this);
     }
 
     public void addMonsterToGraveyard(Card card) {
