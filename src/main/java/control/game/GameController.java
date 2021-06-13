@@ -8,6 +8,7 @@ import model.card.SpellAndTrap;
 import model.enums.AttackingFormat;
 import model.enums.CardAttributes;
 import model.enums.FaceUpSituation;
+import model.enums.MonsterTypes;
 import model.game.Board;
 import model.game.Game;
 import model.game.Player;
@@ -163,8 +164,16 @@ public class GameController {
             }
         }
         if (!isCardInHand) return false;
-        //TODO: check that card has normal summon or not.
-        return selectedCard instanceof Monster;
+        if (!(selectedCard instanceof Monster)) return false;
+        Monster monster = (Monster) selectedCard;
+        if (monster.getType() == MonsterTypes.EFFECT || monster.getType() == MonsterTypes.NORMAL){
+            return true;
+        }
+        if (monster.getType() == MonsterTypes.RITUAL || gameUpdates.haveRitualSpellBeenActivated()){
+            gameUpdates.setHaveRitualSpellBeenActivated(false);
+            return true;
+        }
+        return false;
     }
 
     public boolean isCardFieldZoneFull() {

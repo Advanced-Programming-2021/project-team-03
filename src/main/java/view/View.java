@@ -173,6 +173,8 @@ public class View {
         String requestType = inputObject.getString("Type");
         JSONObject valueObject = inputObject.getJSONObject("Value");
 
+
+        //TODO: add command to print control message
         return switch (requestType) {
             case "Get tribute cards" -> getTributeCards(valueObject);
             default -> error();
