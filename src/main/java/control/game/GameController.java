@@ -24,6 +24,7 @@ import java.util.Random;
 import static control.game.GamePhases.*;
 import static control.game.TypeOfSelectedCard.*;
 import static control.game.UpdateEnum.*;
+import static model.enums.FaceUpSituation.*;
 import static model.game.PlayerTurn.PLAYER1;
 import static model.game.PlayerTurn.PLAYER2;
 
@@ -299,7 +300,7 @@ public class GameController {
     public boolean canFlipSummon(String username) {
         if (game.getPlayerByName(username).getBoard().getMonstersInField().containsValue((Monster) selectedCard)) {
             Monster monster = (Monster) selectedCard;
-            return monster.getFaceUpSituation().equals(FaceUpSituation.FACE_DOWN);
+            return monster.getFaceUpSituation().equals(FACE_DOWN);
         }
         return false;
     }
@@ -356,7 +357,8 @@ public class GameController {
             return answerString.toString();
         }
         if (opponentMonster.getCardName().equals("Marshmallon")) {
-            answerString.append(AllMonsterEffects.getInstance().marshmallonEffect());
+            answerString.append(AllMonsterEffects.getInstance().marshmallonEffect(game, opponentMonster, opponentMonsterFaceUpSit, game.getPlayerByTurn(turn), opponentMonsterFormat
+                    , attackingMonster, attackingPlayerBoard, opponentBoard, attackingDef, defendingDef, gameUpdates, turn));
             return answerString.toString();
         }
         switch (opponentMonsterFormat) {
@@ -385,7 +387,7 @@ public class GameController {
                 return answerString.toString();
             }
             case DEFENDING -> {
-                if (opponentMonsterFaceUpSit == FaceUpSituation.FACE_DOWN) {
+                if (opponentMonsterFaceUpSit == FACE_DOWN) {
                     opponentMonster.setFaceUpSituation(FaceUpSituation.FACE_UP);
                     gameUpdates.flipCard(opponentMonster);
                     answerString.append("opponent’s monster card was ").append(opponentMonster.getCardName());
@@ -468,7 +470,7 @@ public class GameController {
             return false;
         if (selectedCard instanceof Monster &&
                 game.getPlayerOpponentByTurn(turn).getBoard().getMonstersInField().containsValue((Monster) selectedCard) &&
-                ((Monster) selectedCard).getFaceUpSituation().equals(FaceUpSituation.FACE_DOWN))
+                ((Monster) selectedCard).getFaceUpSituation().equals(FACE_DOWN))
             return false;
         return !(selectedCard instanceof SpellAndTrap) ||
                 !game.getPlayerOpponentByTurn(turn).getBoard().getSpellAndTrapsInField().containsValue((SpellAndTrap) selectedCard) ||
