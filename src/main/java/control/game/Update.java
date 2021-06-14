@@ -16,6 +16,7 @@ public class Update {
     private boolean haveBeenSetOrSummonACardInPhase; //TODO make this filed false for each turn
     private ArrayList<Monster> alreadyChangedPositionMonsters; //TODO initialize this filed for each turn
     private final HashMap<UpdateEnum, Object> allUpdates;
+    private boolean haveRitualSpellBeenActivated = false; //TODO: make this field true if ritual spell activated.
 
 
     public Update(Game game) {
@@ -59,9 +60,23 @@ public class Update {
         return allUpdates;
     }
 
+    public void flipCard(Card card) {
+        allUpdates.put(CARD_FLIPPED, card);
+        if (card.getCardName().equals("Man-Eater Bug"))
+            AllMonsterEffects.getInstance().ManEaterEffect(game, GameController.getInstance().getTurn(), this);
+    }
+
     public void addMonsterToGraveyard(Card card) {
         allUpdates.put(CARD_DESTROYED, card);
         if (card.getCardName().equals("Yomi Ship"))
-            AllMonsterEffects.getInstance().destroySelectedCard(game, GameController.getInstance().getTurn(), GameController.getInstance().getSelectedCard(), this);
+            AllMonsterEffects.getInstance().yomiShipEffect(game, GameController.getInstance().getTurn(), GameController.getInstance().getSelectedCard(), this);
+    }
+
+    public boolean haveRitualSpellBeenActivated() {
+        return haveRitualSpellBeenActivated;
+    }
+
+    public void setHaveRitualSpellBeenActivated(boolean haveRitualSpellBeenActivated) {
+        this.haveRitualSpellBeenActivated = haveRitualSpellBeenActivated;
     }
 }

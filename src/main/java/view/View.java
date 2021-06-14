@@ -173,10 +173,20 @@ public class View {
         String requestType = inputObject.getString("Type");
         JSONObject valueObject = inputObject.getJSONObject("Value");
 
+
+        //TODO: add command to print control message
         return switch (requestType) {
             case "Get tribute cards" -> getTributeCards(valueObject);
+            case "Get one monster number" -> getOneMonsterNumber();
+            case "Print message" -> printMessage(valueObject);
             default -> error();
         };
+    }
+
+    private String printMessage(JSONObject valueObject) {
+        String message = valueObject.getString("Value");
+        System.out.println(message);
+        return "Do not need request answer";
     }
 
     //region register menu methods
@@ -576,6 +586,20 @@ public class View {
             else if (inputCommand.matches(GAME_MENU_COMMANDS[23])) activeCheat(inputCommand, 23);
             else if (inputCommand.matches(CARD_SHOW_REGEX)) showCard(inputCommand, "Game");
             else System.out.println("invalid command");
+        }
+    }
+
+    private String getOneMonsterNumber() {
+        while (true) {
+            String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if (inputCommand.equals("Cancel")) return "Cancel";
+            else if (inputCommand.equals("1") ||
+                    inputCommand.equals("2") ||
+                    inputCommand.equals("3") ||
+                    inputCommand.equals("4") ||
+                    inputCommand.equals("5")) {
+                return inputCommand;
+            } else System.out.println("invalid command.\nTry again.");
         }
     }
 

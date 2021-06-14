@@ -1,13 +1,15 @@
 package model.card;
 
-import control.game.GameController;
+import control.MainController;
 import control.game.Update;
 import model.enums.AttackingFormat;
 import model.enums.FaceUpSituation;
 import model.enums.MonsterEffectTypes;
 import model.game.Board;
 import model.game.Game;
+import model.game.Player;
 import model.game.PlayerTurn;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -59,7 +61,7 @@ public class AllMonsterEffects {
     }
 
     //Yomi Ship effect
-    public void destroySelectedCard(Game game, PlayerTurn turn, Card selectedCard, Update gameUpdates) {
+    public void yomiShipEffect(Game game, PlayerTurn turn, Card selectedCard, Update gameUpdates) {
         game.getPlayerByTurn(turn).getBoard().removeCardFromField(game.getPlayerByTurn(turn).getBoard().getMonsterPosition((Monster) selectedCard), true);
         game.getPlayerByTurn(turn).getBoard().addCardToGraveyard(selectedCard);
         gameUpdates.addMonsterToGraveyard(selectedCard);
@@ -68,7 +70,7 @@ public class AllMonsterEffects {
     }
 
     //Suijin effect
-    public String attackSuijin(Game game, Update gameUpdates, String attackingPlayerUsername, Board attackingPlayerBoard, Monster attackingMonster, Monster opponentMonster, AttackingFormat opponentMonsterFormat, FaceUpSituation opponentMonsterFaceUpSit) {
+    public String suijinEffect(Game game, Update gameUpdates, String attackingPlayerUsername, Board attackingPlayerBoard, Monster attackingMonster, Monster opponentMonster, AttackingFormat opponentMonsterFormat, FaceUpSituation opponentMonsterFaceUpSit) {
         StringBuilder answerString = new StringBuilder();
         switch (opponentMonsterFormat) {
             case ATTACKING -> {
@@ -92,4 +94,34 @@ public class AllMonsterEffects {
         return "Unknown Error";
     }
 
+
+    //Man-Eater effect
+    public void ManEaterEffect(Game game, PlayerTurn turn, Update update) {
+        int position;
+        try {
+            JSONObject messageToSendToView = new JSONObject();
+            messageToSendToView.put("Type", "Get one monster number");
+            position = Integer.parseInt(MainController.getInstance().sendRequestToView(messageToSendToView));
+        } catch (Exception e) {
+            return;
+        }
+        Player defendingPlayer = game.getPlayerOpponentByTurn(turn);
+        Monster opponentMonster = defendingPlayer.getBoard().getMonsterByPosition(position);
+        StringBuilder answerString = new StringBuilder();
+        if (opponentMonster == null)
+            answerString.append("No card destroyed.");
+        else {
+            defendingPlayer.getBoard().removeCardFromField(defendingPlayer.getBoard().getMonsterPosition(opponentMonster), true);
+            defendingPlayer.getBoard().addCardToGraveyard(opponentMonster);
+            update.addMonsterToGraveyard(opponentMonster);
+            answerString.append(opponentMonster.getCardName()).append("destroyed!");
+        }
+        MainController.getInstance().sendPrintRequestToView(answerString.toString());
+    }
+
+    //Marshmallon effect
+    public String marshmallonEffect() {
+
+        return null;
+    }
 }
