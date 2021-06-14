@@ -24,7 +24,7 @@ public class UserJson {
         score = user.getScore();
         balance = user.getBalance();
         level = user.getLevel();
-        activeDeck = user.getActiveDeck().getDeckName();
+        if (user.getActiveDeck() != null) activeDeck = user.getActiveDeck().getDeckName();
 
         decks = new ArrayList<>();
         cards = new ArrayList<>();

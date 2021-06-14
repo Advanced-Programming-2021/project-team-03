@@ -1,5 +1,6 @@
 package model.user;
 
+import control.MainController;
 import control.databaseController.Database;
 import control.databaseController.DatabaseException;
 import model.card.Card;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 
 
 public class User {
-    private static HashMap<String, User> allUsers;
+    private static final HashMap<String, User> allUsers = new HashMap<>();
     private final String username;
     private String nickname;
     private String passwordHash;
@@ -22,12 +23,11 @@ public class User {
     private Deck activeDeck;
 
     public static void initialize() {
-        allUsers = Database.updateAllUsers();
+        Database.updateAllUsers();
     }
 
     public User(String username, String password, String nickname) throws DatabaseException {
         this.username = username;
-        setNickname(nickname); // may throw an exception
         this.passwordHash = hashString(password);
         this.score = 0;
         this.balance = 1000;
@@ -36,7 +36,8 @@ public class User {
         decks = new ArrayList<>();
         cards = new ArrayList<>();
         allUsers.put(username, this);
-        updateInDatabase(); // may throw an exception
+        setNickname(nickname); // may throw an exception
+        // line above also updates the user in database
     }
 
     private String hashString(String rawString) {
@@ -68,7 +69,7 @@ public class User {
 
     public static boolean doesNicknameExists(String nickname) {
         return allUsers.values().stream()
-                .anyMatch(user -> user.nickname.equals(nickname));
+                .anyMatch(user -> user.nickname != null && user.nickname.equals(nickname));
     }
 
     public void changePassword(String oldPassword, String newPassword) throws DatabaseException {

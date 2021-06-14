@@ -40,7 +40,7 @@ public class SpellAndTrap extends Card {
         return "Name: " + this.cardName + "\n" +
                 "Model : " + this.attribute + "\n" +
                 "Type: " + this.icon + "\n" +
-                "Description: " + this.description;
+                "Description: " + this.description + "\n";
     }
 
     public boolean isActive() {

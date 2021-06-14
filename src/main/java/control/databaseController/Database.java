@@ -66,9 +66,8 @@ public class Database {
         return spellsByName;
     }
 
-    public static HashMap<String, Deck> updateAllDecks() {
+    public static void updateAllDecks() {
         Gson gson = new Gson();
-        HashMap<String, Deck> allDecks = new HashMap<>();
 
         File[] listOfFiles = new File(DECKS_PATH).listFiles();
         assert listOfFiles != null;
@@ -79,18 +78,16 @@ public class Database {
                     try {
                         BufferedReader reader = new BufferedReader(
                                 new FileReader(DECKS_PATH + file.getName()));
-                        Deck deck = gson.fromJson(reader, Deck.class);
-                        allDecks.put(deck.getDeckName(), deck);
+                        gson.fromJson(reader, DeckJson.class).convert();
+                        reader.close();
 
-                    } catch (FileNotFoundException ignored) {
+                    } catch (IOException | DatabaseException ignored) {
                     }
                 });
-        return allDecks;
     }
 
-    public static HashMap<String, User> updateAllUsers() {
+    public static void updateAllUsers() {
         Gson gson = new Gson();
-        HashMap<String, User> allUsers = new HashMap<>();
 
         File[] listOfFiles = new File(USERS_PATH).listFiles();
         assert listOfFiles != null;
@@ -101,14 +98,12 @@ public class Database {
                     try {
                         BufferedReader reader = new BufferedReader(
                                 new FileReader(USERS_PATH + file.getName()));
-                        User user = gson.fromJson(reader, User.class);
-                        allUsers.put(user.getUsername(), user);
+                        gson.fromJson(reader, UserJson.class).convert();
+                        reader.close();
 
-                    } catch (FileNotFoundException ignored) {
+                    } catch (DatabaseException | IOException ignored) {
                     }
                 });
-
-        return allUsers;
     }
 
     private static boolean isJsonFile(File file) {
@@ -124,8 +119,14 @@ public class Database {
         }
     }
 
-    public static void save(Object object) throws DatabaseException {
-        if (!MainController.initializing) writeToJson(object, pathFinder(object));
+    public static void save(User user) throws DatabaseException {
+        UserJson userJson = new UserJson(user);
+        writeToJson(userJson, pathFinder(user));
+    }
+
+    public static void save(Deck deck) throws DatabaseException {
+        DeckJson deckJson = new DeckJson(deck);
+        writeToJson(deckJson, pathFinder(deck));
     }
 
     private static String pathFinder(Object object) throws DatabaseException {
@@ -139,6 +140,7 @@ public class Database {
     }
 
     private static void writeToJson(Object object, String filePath) throws DatabaseException {
+        if (MainController.initializing) return;
         try {
             File file = new File(filePath);
             file.getParentFile().mkdirs();

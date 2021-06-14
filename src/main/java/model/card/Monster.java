@@ -58,7 +58,7 @@ public class Monster extends Card {
                 "Type: " + this.model + "\n" +
                 "ATK: " + this.baseAttack + "\n" +
                 "DEF: " + this.baseDefence + "\n" +
-                "Description: " + this.description;
+                "Description: " + this.description + "\n";
     }
 
     public IMonsterEffect getMonsterEffect() {
