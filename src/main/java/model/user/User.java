@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 
 public class User {
-    private static final HashMap<String, User> allUsers;
+    private static HashMap<String, User> allUsers;
     private final String username;
     private String nickname;
     private String passwordHash;
@@ -21,7 +21,7 @@ public class User {
     private ArrayList<Card> cards;
     private Deck activeDeck;
 
-    static {
+    public static void initialize() {
         allUsers = Database.updateAllUsers();
     }
 
@@ -148,6 +148,10 @@ public class User {
         return allUsers.get(username);
     }
 
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
     public static ArrayList<User> getScoreBoard() {
         ArrayList<User> scoreBoard = (new ArrayList<>(allUsers.values()));
         scoreBoard.sort((user1, user2) -> {
@@ -160,5 +164,13 @@ public class User {
 
     public void increaseScore(int amount) {
         score += amount;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public void addCard(Card card) {
+        cards.add(card);
     }
 }

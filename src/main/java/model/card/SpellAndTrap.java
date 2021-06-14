@@ -13,7 +13,8 @@ public class SpellAndTrap extends Card {
 
     private static HashMap<String, SpellAndTrap> allSpellAndTraps;
 
-    static {
+
+    public static void initialize() {
         try {
             allSpellAndTraps = Database.updateSpellAndTraps();
         } catch (FileNotFoundException e) {

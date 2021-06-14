@@ -63,7 +63,6 @@ public class Database {
         return spellsByName;
     }
 
-    // TODO: updateAllDecks and updateAllUsers can be merged or refactored
     public static HashMap<String, Deck> updateAllDecks() {
         Gson gson = new Gson();
         HashMap<String, Deck> allDecks = new HashMap<>();

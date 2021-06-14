@@ -26,7 +26,7 @@ public class Monster extends Card {
 
     private static HashMap<String, Monster> allMonsters;
 
-    static {
+    public static void initialize() {
         try {
             allMonsters = Database.updateMonsters();
         } catch (FileNotFoundException e) {

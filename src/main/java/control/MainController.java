@@ -5,6 +5,7 @@ import model.card.Card;
 import model.card.Monster;
 import model.card.SpellAndTrap;
 import model.user.Deck;
+import model.user.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import view.View;
@@ -25,6 +26,11 @@ public class MainController {
 
     private MainController() {
         onlineUsers = new HashMap<>();
+
+        Monster.initialize();
+        SpellAndTrap.initialize();
+        Deck.initialize();
+        User.initialize();
     }
 
     public static MainController getInstance() {

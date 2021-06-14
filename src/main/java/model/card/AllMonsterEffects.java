@@ -18,6 +18,7 @@ public class AllMonsterEffects {
     private static AllMonsterEffects allMonsterEffects;
 
     private AllMonsterEffects() {
+        initialize();
     }
 
     public static AllMonsterEffects getInstance() {

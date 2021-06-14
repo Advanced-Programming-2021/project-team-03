@@ -11,12 +11,12 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class Deck {
-    private static final HashMap<String, Deck> allDecks;
+    private static HashMap<String, Deck> allDecks;
     private String deckName;
     private final ArrayList<Card> mainDeck;
     private final ArrayList<Card> sideDeck;
 
-    static {
+    public static void initialize() {
         allDecks = Database.updateAllDecks();
     }
 
