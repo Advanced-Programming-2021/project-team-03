@@ -108,7 +108,7 @@ public class AllMonsterEffects {
         Monster opponentMonster = defendingPlayer.getBoard().getMonsterByPosition(position);
         StringBuilder answerString = new StringBuilder();
         if (opponentMonster == null)
-            answerString.append("No card was destroyed.");
+            answerString.append("No card destroyed.");
         else {
             defendingPlayer.getBoard().removeCardFromField(defendingPlayer.getBoard().getMonsterPosition(opponentMonster), true);
             defendingPlayer.getBoard().addCardToGraveyard(opponentMonster);
@@ -116,5 +116,11 @@ public class AllMonsterEffects {
             answerString.append(opponentMonster.getCardName()).append("destroyed!");
         }
         MainController.getInstance().sendPrintRequestToView(answerString.toString());
+    }
+
+    //Marshmallon effect
+    public String marshmallonEffect() {
+
+        return null;
     }
 }

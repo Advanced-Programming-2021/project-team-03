@@ -166,10 +166,10 @@ public class GameController {
         if (!isCardInHand) return false;
         if (!(selectedCard instanceof Monster)) return false;
         Monster monster = (Monster) selectedCard;
-        if (monster.getType() == MonsterTypes.EFFECT || monster.getType() == MonsterTypes.NORMAL){
+        if (monster.getType() == MonsterTypes.EFFECT || monster.getType() == MonsterTypes.NORMAL) {
             return true;
         }
-        if (monster.getType() == MonsterTypes.RITUAL || gameUpdates.haveRitualSpellBeenActivated()){
+        if (monster.getType() == MonsterTypes.RITUAL || gameUpdates.haveRitualSpellBeenActivated()) {
             gameUpdates.setHaveRitualSpellBeenActivated(false);
             return true;
         }
@@ -308,6 +308,7 @@ public class GameController {
         Monster monster = (Monster) selectedCard;
         monster.setAttackingFormat(AttackingFormat.ATTACKING);
         monster.setFaceUpSituation(FaceUpSituation.FACE_UP);
+        gameUpdates.flipCard(monster);
     }
 
     public boolean canAttackWithThisCard(String username) {
@@ -354,6 +355,10 @@ public class GameController {
                     attackingPlayerBoard, attackingMonster, opponentMonster, opponentMonsterFormat, opponentMonsterFaceUpSit));
             return answerString.toString();
         }
+        if (opponentMonster.getCardName().equals("Marshmallon")) {
+            answerString.append(AllMonsterEffects.getInstance().marshmallonEffect());
+            return answerString.toString();
+        }
         switch (opponentMonsterFormat) {
             case ATTACKING -> {
                 if (attackingDef == 0) {
@@ -382,6 +387,7 @@ public class GameController {
             case DEFENDING -> {
                 if (opponentMonsterFaceUpSit == FaceUpSituation.FACE_DOWN) {
                     opponentMonster.setFaceUpSituation(FaceUpSituation.FACE_UP);
+                    gameUpdates.flipCard(opponentMonster);
                     answerString.append("opponent’s monster card was ").append(opponentMonster.getCardName());
                 }
                 if (defendingDef == 0) {
@@ -457,18 +463,16 @@ public class GameController {
         return graveyardString.toString();
     }
 
-    public boolean canShowSelectedCardToPlayer(String username) {
+    public boolean canShowSelectedCardToPlayer() {
         if (game.getPlayerOpponentByTurn(turn).getBoard().getInHandCards().contains(selectedCard))
             return false;
         if (selectedCard instanceof Monster &&
                 game.getPlayerOpponentByTurn(turn).getBoard().getMonstersInField().containsValue((Monster) selectedCard) &&
                 ((Monster) selectedCard).getFaceUpSituation().equals(FaceUpSituation.FACE_DOWN))
             return false;
-        if (selectedCard instanceof SpellAndTrap &&
-                game.getPlayerOpponentByTurn(turn).getBoard().getSpellAndTrapsInField().containsValue((SpellAndTrap) selectedCard) &&
-                !((SpellAndTrap) selectedCard).isActive())
-            return false;
-        return true;
+        return !(selectedCard instanceof SpellAndTrap) ||
+                !game.getPlayerOpponentByTurn(turn).getBoard().getSpellAndTrapsInField().containsValue((SpellAndTrap) selectedCard) ||
+                ((SpellAndTrap) selectedCard).isActive();
     }
 
     //TODO game status
