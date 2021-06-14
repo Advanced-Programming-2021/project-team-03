@@ -131,6 +131,15 @@ public class MainController {
         return View.getInstance().getRequest(messageToSend.toString());
     }
 
+    public void sendPrintRequestToView(String message) {
+        JSONObject messageToSendToView = new JSONObject();
+        messageToSendToView.put("Type", "Print message");
+        JSONObject value = new JSONObject();
+        value.put("Message", message);
+        messageToSendToView.put("Value", value);
+        sendRequestToView(messageToSendToView);
+    }
+
     private String cheatCodes(JSONObject valueObject) {
         //TODO
         return null;
@@ -178,7 +187,7 @@ public class MainController {
         } else if (GameController.getInstance().getSelectedCard() == null) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "no card is selected yet!");
-        } else if (!GameController.getInstance().canShowSelectedCardToPlayer(onlineUsers.get(token))) {
+        } else if (!GameController.getInstance().canShowSelectedCardToPlayer()) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "card is not visible!");
         } else {
