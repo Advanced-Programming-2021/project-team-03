@@ -1,5 +1,6 @@
 package model.game;
 
+import control.databaseController.DatabaseException;
 import control.game.GameController;
 import model.card.Card;
 import model.user.User;
@@ -93,8 +94,13 @@ public class Game {
     }
 
     public void surrender(PlayerTurn turn) {
-        getPlayerByTurn(turn).getUser().increaseScore(-1000);
-        getPlayerOpponentByTurn(turn).getUser().increaseScore(1000);
+        try {
+            getPlayerByTurn(turn).getUser().increaseScore(-1000);
+            getPlayerOpponentByTurn(turn).getUser().increaseScore(1000);
+        } catch (DatabaseException e) {
+            System.out.println(e);
+        }
+
     }
 
     public Player getWinner() {
@@ -108,6 +114,10 @@ public class Game {
     }
 
     public void checkRoundResults() {
-        getWinner().getUser().increaseScore(1000);
+        try {
+            getWinner().getUser().increaseScore(1000);
+        } catch (DatabaseException e) {
+            System.out.println(e);
+        }
     }
 }

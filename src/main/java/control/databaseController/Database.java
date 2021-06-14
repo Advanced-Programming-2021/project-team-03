@@ -2,6 +2,7 @@ package control.databaseController;
 
 import com.google.gson.Gson;
 import com.opencsv.bean.CsvToBeanBuilder;
+import control.MainController;
 import model.card.Monster;
 import model.card.SpellAndTrap;
 import model.user.Deck;
@@ -17,7 +18,7 @@ public class Database {
     private static final String DECKS_PATH = "./database/decks/";
     private static final String CARDS_PATH = "./database/cards/";
 
-    public static HashMap<String, Monster> updateMonsters() throws FileNotFoundException {
+    public static HashMap<String, Monster> updateMonsters() throws IOException {
         HashMap<String, Monster> monstersByName = new HashMap<>();
         Reader reader = new BufferedReader(new FileReader(CARDS_PATH + "Monster.csv"));
 
@@ -27,6 +28,7 @@ public class Database {
                 .withIgnoreLeadingWhiteSpace(true)
                 .withIgnoreEmptyLine(true)
                 .build().parse();
+        reader.close();
 
         for (MonsterCSV monsterCSV : monsters) {
             try {
@@ -40,7 +42,7 @@ public class Database {
         return monstersByName;
     }
 
-    public static HashMap<String, SpellAndTrap> updateSpellAndTraps() throws FileNotFoundException {
+    public static HashMap<String, SpellAndTrap> updateSpellAndTraps() throws IOException {
         HashMap<String, SpellAndTrap> spellsByName = new HashMap<>();
         Reader reader = new BufferedReader(new FileReader(CARDS_PATH + "SpellTrap.csv"));
 
@@ -50,6 +52,7 @@ public class Database {
                 .withIgnoreLeadingWhiteSpace(true)
                 .withIgnoreEmptyLine(true)
                 .build().parse();
+        reader.close();
 
         for (SpellAndTrapCSV spellCSV : spells) {
             try {
@@ -122,7 +125,7 @@ public class Database {
     }
 
     public static void save(Object object) throws DatabaseException {
-        writeToJson(object, pathFinder(object));
+        if (!MainController.initializing) writeToJson(object, pathFinder(object));
     }
 
     private static String pathFinder(Object object) throws DatabaseException {

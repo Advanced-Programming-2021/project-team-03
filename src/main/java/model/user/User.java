@@ -111,16 +111,18 @@ public class User {
         return decks;
     }
 
-    public void addDeck(Deck deck) {
+    public void addDeck(Deck deck) throws DatabaseException {
         decks.add(deck);
+        updateInDatabase();
     }
 
     public ArrayList<Card> getCards() {
         return cards;
     }
 
-    public void setCards(ArrayList<Card> cards) {
+    public void setCards(ArrayList<Card> cards) throws DatabaseException {
         this.cards = cards;
+        updateInDatabase();
     }
 
     public int getLevel() {
@@ -136,8 +138,9 @@ public class User {
         return activeDeck;
     }
 
-    public void setActiveDeck(Deck activeDeck) {
+    public void setActiveDeck(Deck activeDeck) throws DatabaseException {
         this.activeDeck = activeDeck;
+        updateInDatabase();
     }
 
     public void updateInDatabase() throws DatabaseException {
@@ -162,15 +165,17 @@ public class User {
         return scoreBoard;
     }
 
-    public void increaseScore(int amount) {
+    public void increaseScore(int amount) throws DatabaseException {
         score += amount;
+        updateInDatabase();
     }
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
     }
 
-    public void addCard(Card card) {
+    public void addCard(Card card) throws DatabaseException {
         cards.add(card);
+        updateInDatabase();
     }
 }

@@ -23,14 +23,17 @@ public class MainController {
     // this class is responsible for view request and send the feedback to thee view via a Json string
 
     private static MainController mainControllerInstance;
+    public static boolean initializing;
 
     private MainController() {
         onlineUsers = new HashMap<>();
 
+        initializing = true;
         Monster.initialize();
         SpellAndTrap.initialize();
         Deck.initialize();
         User.initialize();
+        initializing = false;
     }
 
     public static MainController getInstance() {

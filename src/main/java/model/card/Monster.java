@@ -3,7 +3,7 @@ package model.card;
 import control.databaseController.Database;
 import model.enums.*;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Function;
@@ -29,7 +29,7 @@ public class Monster extends Card {
     public static void initialize() {
         try {
             allMonsters = Database.updateMonsters();
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             System.out.println("Couldn't find monsters database files");
             e.printStackTrace();
             System.exit(1);
