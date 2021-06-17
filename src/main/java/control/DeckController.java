@@ -1,8 +1,10 @@
 package control;
 
+import control.databaseController.Database;
 import control.databaseController.DatabaseException;
 import model.card.Card;
 import model.user.Deck;
+import model.user.DeckType;
 import model.user.User;
 
 import java.util.ArrayList;
@@ -34,67 +36,79 @@ public class DeckController {
     }
 
     public void deleteDeck(String username, String deckName) {
-        /*try {
-            Deck.getByDeckName(deckName).r
-            User.getByUsername(username).addDeck(deck);
+        try {
+            User.getByUsername(username).deleteDeck(Deck.getByDeckName(deckName));
+            Deck.getByDeckName(deckName).deleteDeck();
         } catch (DatabaseException e) {
-            System.out.println(e.toString());
             e.printStackTrace();
-        }*/ // TODO
+        }
     }
 
-    public boolean doesCardExist(String username, String cardName) {
-
+    public boolean doesCardExist(String cardName) {
         return Card.getCardByName(cardName) != null;
     }
 
     public boolean doesUserHaveAnymoreCard(String username, String cardName) {
-        //TODO
+        //TODO count the number of cards in user cards if he/she has enough cards
         return false;
     }
 
     public boolean isDeckFull(String username, String deckName, String deckType) {
-        //TODO
+        //TODO 15 for side 60 for main
         return false;
     }
 
     public boolean canUserAddCardToDeck(String username, String deckName, String deckType, String cardName) {
-        //TODO
+        //TODO check if number of cards is greater than 3
         return false;
     }
 
-    public void addCardToDeck(String username, String deckName, String deckType, String cardName) {
+    public void addCardToDeck(String username, String deckName, DeckType deckType, String cardName) {
         try {
-            Deck.getByDeckName(deckName).addCardToMainDeck(Card.getCardByName(cardName));
+            Deck.getByDeckName(deckName).addCard(Card.getCardByName(cardName), deckType);
         } catch (DatabaseException e) {
             e.printStackTrace();
             System.out.println(e.errorMessage);
         }
     }
 
-    public boolean doesDeckContainThisCard(String username, String deckName, String cardName) {
-        return Deck.getByDeckName(deckName).doesContainCard(Card.getCardByName(cardName));
+    public boolean doesDeckContainThisCard(String deckName, DeckType deckType, String cardName) {
+        return Deck.getByDeckName(deckName).doesContainCard(Card.getCardByName(cardName), deckType);
     }
 
-    public void removeCardFromDeck(String username, String deckName, String deckType, String cardName) {
-        Deck.getByDeckName(deckName).removeCard(Card.getCardByName(cardName));
+    public void removeCardFromDeck(String deckName, DeckType deckType, String cardName) {
+        try {
+            Deck.getByDeckName(deckName).removeCard(Card.getCardByName(cardName), deckType);
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
     }
 
-    public Deck getUserActiveDeck(String username) {
-        return User.getByUsername(username).getActiveDeck();
+    public String getUserActiveDeck(String username) {
+        if (User.getByUsername(username).getActiveDeck() == null) return "No active deck\n";
+        return User.getByUsername(username).getActiveDeck().generalOverview();
     }
 
-    public ArrayList<Deck> getAllUsersDecks() {
-         /* this method returns all decks except the active deck */
-        return null;
+    public ArrayList<Deck> getAllUserDecks(String username) {
+        /* this method returns all decks except the active deck */
+        return User.getByUsername(username).getDecks();
     }
 
-    public Deck getDeck(String username, String deckName) {
-        return null;
+    public Deck getDeck(String deckName) {
+        return Deck.getByDeckName(deckName);
     }
 
     public ArrayList<Card> getAllUsersCards(String username) {
         // return all cards that owned by the user
         return User.getByUsername(username).getCards();
+    }
+
+    public void setActiveDeck(String username, String deckName) {
+        try {
+            User.getByUsername(username).setActiveDeck(Deck.getByDeckName(deckName));
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+            System.out.println(e);
+        }
     }
 }

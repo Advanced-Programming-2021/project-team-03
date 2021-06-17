@@ -4,19 +4,20 @@ import control.databaseController.Database;
 import model.enums.CardAttributes;
 import model.enums.SpellAndTrapIcon;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 
 public class SpellAndTrap extends Card {
     private SpellAndTrapIcon icon;
     private boolean isActive;
 
-    private static HashMap<String, SpellAndTrap> allSpellAndTrapsByName;
+    private static HashMap<String, SpellAndTrap> allSpellAndTraps;
 
-    static {
+
+    public static void initialize() {
         try {
-            allSpellAndTrapsByName = Database.updateSpellAndTraps();
-        } catch (FileNotFoundException e) {
+            allSpellAndTraps = Database.updateSpellAndTraps();
+        } catch (IOException e) {
             System.out.println("Couldn't find spell and trap database files");
             e.printStackTrace();
             System.exit(1);
@@ -31,7 +32,7 @@ public class SpellAndTrap extends Card {
     }
 
     public static SpellAndTrap getSpellAndTrapByName(String cardName) {
-        return allSpellAndTrapsByName.get(cardName);
+        return allSpellAndTraps.get(cardName);
     }
 
     @Override
@@ -39,7 +40,7 @@ public class SpellAndTrap extends Card {
         return "Name: " + this.cardName + "\n" +
                 "Model : " + this.attribute + "\n" +
                 "Type: " + this.icon + "\n" +
-                "Description: " + this.description;
+                "Description: " + this.description + "\n";
     }
 
     public boolean isActive() {
@@ -48,5 +49,9 @@ public class SpellAndTrap extends Card {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public static HashMap<String, SpellAndTrap> getAllSpellAndTraps() {
+        return allSpellAndTraps;
     }
 }

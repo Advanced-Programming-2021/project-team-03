@@ -1,12 +1,14 @@
 package control.game;
 
 import control.MainController;
+import model.card.AllMonsterEffects;
 import model.card.Card;
 import model.card.Monster;
 import model.card.SpellAndTrap;
 import model.enums.AttackingFormat;
 import model.enums.CardAttributes;
 import model.enums.FaceUpSituation;
+import model.enums.MonsterTypes;
 import model.game.Board;
 import model.game.Game;
 import model.game.Player;
@@ -21,6 +23,7 @@ import java.util.Random;
 
 import static control.game.GamePhases.*;
 import static control.game.TypeOfSelectedCard.*;
+import static control.game.UpdateEnum.*;
 import static model.game.PlayerTurn.PLAYER1;
 import static model.game.PlayerTurn.PLAYER2;
 
@@ -68,6 +71,7 @@ public class GameController {
     public void newDuelWithAI(String username, int numberOfRound) {
         game = new Game(User.getByUsername(username), numberOfRound);
         gameUpdates = new Update(game);
+        //TODO AI controller
     }
 
     public boolean isCardAddressValid(int cardPosition) {
@@ -160,8 +164,16 @@ public class GameController {
             }
         }
         if (!isCardInHand) return false;
-        //TODO: check that card has normal summon or not.
-        return selectedCard instanceof Monster;
+        if (!(selectedCard instanceof Monster)) return false;
+        Monster monster = (Monster) selectedCard;
+        if (monster.getType() == MonsterTypes.EFFECT || monster.getType() == MonsterTypes.NORMAL) {
+            return true;
+        }
+        if (monster.getType() == MonsterTypes.RITUAL || gameUpdates.haveRitualSpellBeenActivated()) {
+            gameUpdates.setHaveRitualSpellBeenActivated(false);
+            return true;
+        }
+        return false;
     }
 
     public boolean isCardFieldZoneFull() {
@@ -202,8 +214,7 @@ public class GameController {
             messageToSendToView.put("Value", value);
         }
         String viewAnswer = MainController.getInstance().sendRequestToView(messageToSendToView);
-        String tributeResult = tributeCards(viewAnswer, board);
-        return tributeResult;
+        return tributeCards(viewAnswer, board);
     }
 
     public String tributeCards(String message, Board board) {
@@ -297,6 +308,7 @@ public class GameController {
         Monster monster = (Monster) selectedCard;
         monster.setAttackingFormat(AttackingFormat.ATTACKING);
         monster.setFaceUpSituation(FaceUpSituation.FACE_UP);
+        gameUpdates.flipCard(monster);
     }
 
     public boolean canAttackWithThisCard(String username) {
@@ -338,22 +350,35 @@ public class GameController {
         int attackingDef = attackingMonster.getAttackingPower() - opponentMonster.getAttackingPower();
         int defendingDef = attackingMonster.getAttackingPower() - opponentMonster.getDefensivePower();
         StringBuilder answerString = new StringBuilder();
+        if (opponentMonster.getCardName().equals("Suijin") && !isSuijinActivatedBefore()) {
+            answerString.append(AllMonsterEffects.getInstance().suijinEffect(game, gameUpdates, attackingPlayerUsername,
+                    attackingPlayerBoard, attackingMonster, opponentMonster, opponentMonsterFormat, opponentMonsterFaceUpSit));
+            return answerString.toString();
+        }
+        if (opponentMonster.getCardName().equals("Marshmallon")) {
+            answerString.append(AllMonsterEffects.getInstance().marshmallonEffect());
+            return answerString.toString();
+        }
         switch (opponentMonsterFormat) {
             case ATTACKING -> {
                 if (attackingDef == 0) {
                     attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
                     attackingPlayerBoard.addCardToGraveyard(attackingMonster);
+                    gameUpdates.addMonsterToGraveyard(attackingMonster);
                     opponentBoard.removeCardFromField(opponentBoard.getMonsterPosition(opponentMonster), true);
                     opponentBoard.addCardToGraveyard(opponentMonster);
+                    gameUpdates.addMonsterToGraveyard(opponentMonster);
                     answerString.append("both you and your opponent monster cards are destroyed and no one receives damage");
                 } else if (attackingDef > 0) {
                     opponentBoard.removeCardFromField(opponentBoard.getMonsterPosition(opponentMonster), true);
                     opponentBoard.addCardToGraveyard(opponentMonster);
+                    gameUpdates.addMonsterToGraveyard(opponentMonster);
                     game.getPlayerOpponentByTurn(turn).decreaseHealthByAmount(attackingDef);
                     answerString.append("your opponent’s monster is destroyed and your opponent receives ").append(attackingDef).append(" battle damage");
                 } else {
                     attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
                     attackingPlayerBoard.addCardToGraveyard(attackingMonster);
+                    gameUpdates.addMonsterToGraveyard(attackingMonster);
                     game.getPlayerByName(attackingPlayerUsername).decreaseHealthByAmount(attackingDef);
                     answerString.append("Your monster card is destroyed and you received ").append(attackingDef).append(" battle damage");
                 }
@@ -362,6 +387,7 @@ public class GameController {
             case DEFENDING -> {
                 if (opponentMonsterFaceUpSit == FaceUpSituation.FACE_DOWN) {
                     opponentMonster.setFaceUpSituation(FaceUpSituation.FACE_UP);
+                    gameUpdates.flipCard(opponentMonster);
                     answerString.append("opponent’s monster card was ").append(opponentMonster.getCardName());
                 }
                 if (defendingDef == 0) {
@@ -369,6 +395,7 @@ public class GameController {
                 } else if (defendingDef > 0) {
                     opponentBoard.removeCardFromField(opponentBoard.getMonsterPosition(opponentMonster), true);
                     opponentBoard.addCardToGraveyard(opponentMonster);
+                    gameUpdates.addMonsterToGraveyard(opponentMonster);
                     answerString.append("the defense position monster is destroyed!");
                 } else {
                     game.getPlayerByName(attackingPlayerUsername).decreaseHealthByAmount(defendingDef);
@@ -378,6 +405,15 @@ public class GameController {
             }
         }
         return "Unknown Error";
+    }
+
+    private boolean isSuijinActivatedBefore() {
+        for (UpdateEnum updateEnum : gameUpdates.getAllUpdates().keySet()) {
+            if (updateEnum.equals(SUIJIN_ACTIVATED)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean canAttackDirectly() {
@@ -427,19 +463,20 @@ public class GameController {
         return graveyardString.toString();
     }
 
-    public boolean canShowSelectedCardToPlayer(String username) {
+    public boolean canShowSelectedCardToPlayer() {
         if (game.getPlayerOpponentByTurn(turn).getBoard().getInHandCards().contains(selectedCard))
             return false;
         if (selectedCard instanceof Monster &&
                 game.getPlayerOpponentByTurn(turn).getBoard().getMonstersInField().containsValue((Monster) selectedCard) &&
                 ((Monster) selectedCard).getFaceUpSituation().equals(FaceUpSituation.FACE_DOWN))
             return false;
-        if (selectedCard instanceof SpellAndTrap &&
-                game.getPlayerOpponentByTurn(turn).getBoard().getSpellAndTrapsInField().containsValue((SpellAndTrap) selectedCard) &&
-                !((SpellAndTrap) selectedCard).isActive())
-            return false;
-        return true;
+        return !(selectedCard instanceof SpellAndTrap) ||
+                !game.getPlayerOpponentByTurn(turn).getBoard().getSpellAndTrapsInField().containsValue((SpellAndTrap) selectedCard) ||
+                ((SpellAndTrap) selectedCard).isActive();
     }
+
+    //TODO game status
+    //TODO get winner in 3 round games
 
     public String surrender(String username) {
         /*return the surrender message*/
@@ -532,4 +569,5 @@ public class GameController {
         //TODO
         //checking for effects of cards
     }
+
 }

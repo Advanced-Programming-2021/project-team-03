@@ -28,7 +28,7 @@ public class UserController {
 
     public void registerUsername(String username, String password, String nickname) {
         try {
-            new User(username, password, nickname);
+            new User(username, password, nickname).setStartingCards();
         } catch (DatabaseException e) {
             System.out.println(e.toString());
             e.printStackTrace();

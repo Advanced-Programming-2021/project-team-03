@@ -3,7 +3,7 @@ package model.card;
 import control.databaseController.Database;
 import model.enums.*;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Function;
@@ -16,6 +16,7 @@ public class Monster extends Card {
     private final int baseDefence;
     private final MonsterModels model; // monster model is the model of the card for example warrior or spell caster or ..
     private IMonsterEffect monsterEffect; // this interface contains the special monster effect if exists
+    private final MonsterTypes type;
 
     /* two enums below contains the position of the monster card in the game board */
     private AttackingFormat attackingFormat;
@@ -23,12 +24,12 @@ public class Monster extends Card {
 
     private ArrayList<Function<Monster, Integer>> attackSupplier; // contains all game effects which determine the attacking power of the monster
 
-    private static HashMap<String, Monster> allMonstersByName;
+    private static HashMap<String, Monster> allMonsters;
 
-    static {
+    public static void initialize() {
         try {
-            allMonstersByName = Database.updateMonsters();
-        } catch (FileNotFoundException e) {
+            allMonsters = Database.updateMonsters();
+        } catch (IOException e) {
             System.out.println("Couldn't find monsters database files");
             e.printStackTrace();
             System.exit(1);
@@ -42,9 +43,10 @@ public class Monster extends Card {
         this.baseAttack = baseAttack;
         this.baseDefence = baseDefence;
         this.model = model;
+        this.type = monsterType;
         // monster type is the effect type of the card which could be normal, effect or ritual
         if (monsterType.equals(EFFECT))
-            monsterEffect = AllMonsterEffects.getEffectByID(cardID);
+            monsterEffect = AllMonsterEffects.getInstance().getEffectByID(cardID);
         attackSupplier = new ArrayList<>();
     }
 
@@ -56,7 +58,7 @@ public class Monster extends Card {
                 "Type: " + this.model + "\n" +
                 "ATK: " + this.baseAttack + "\n" +
                 "DEF: " + this.baseDefence + "\n" +
-                "Description: " + this.description;
+                "Description: " + this.description + "\n";
     }
 
     public IMonsterEffect getMonsterEffect() {
@@ -113,6 +115,14 @@ public class Monster extends Card {
     }
 
     public static Monster getMonsterByName(String name) {
-        return allMonstersByName.get(name);
+        return allMonsters.get(name);
+    }
+
+    public static HashMap<String, Monster> getAllMonsters() {
+        return allMonsters;
+    }
+
+    public MonsterTypes getType() {
+        return type;
     }
 }

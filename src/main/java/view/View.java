@@ -1,6 +1,7 @@
 package view;
 
 import control.MainController;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Scanner;
@@ -91,7 +92,7 @@ public class View {
         DECK_MENU_COMMANDS[2] = "^menu show-current$";
         DECK_MENU_COMMANDS[3] = "^deck create (.+)$";
         DECK_MENU_COMMANDS[4] = "^deck delete (.+)$";
-        DECK_MENU_COMMANDS[5] = "^deck set-activate (.)$";
+        DECK_MENU_COMMANDS[5] = "^deck set-activate (.+)$";
         DECK_MENU_COMMANDS[6] = "^deck add-card -(c|d|-card|-deck) (.+) -(c|d|-card|-deck) (.+)(?: -(?:s|-side))$";
         DECK_MENU_COMMANDS[7] = "^deck add-card -(c|d|-card|-deck) (.+)(?: -(?:s|-side)) -(c|d|-card|-deck) (.+)$";
         DECK_MENU_COMMANDS[8] = "^deck add-card(?: -(?:s|-side)) -(c|d|-card|-deck) (.+) -(c|d|-card|-deck) (.+)$";
@@ -173,10 +174,20 @@ public class View {
         String requestType = inputObject.getString("Type");
         JSONObject valueObject = inputObject.getJSONObject("Value");
 
+
+        //TODO: add command to print control message
         return switch (requestType) {
             case "Get tribute cards" -> getTributeCards(valueObject);
+            case "Get one monster number" -> getOneMonsterNumber();
+            case "Print message" -> printMessage(valueObject);
             default -> error();
         };
+    }
+
+    private String printMessage(JSONObject valueObject) {
+        String message = valueObject.getString("Value");
+        System.out.println(message);
+        return "Do not need request answer";
     }
 
     //region register menu methods
@@ -300,7 +311,7 @@ public class View {
             else if (inputCommand.matches(DECK_MENU_COMMANDS[1]))
                 System.out.println("menu navigation is not possible");
             else if (inputCommand.matches(DECK_MENU_COMMANDS[2])) System.out.println("Deck");
-            else if (inputCommand.matches(DECK_MENU_COMMANDS[3])) preparatoryDeckWorks(inputCommand, "Crate deck", 3);
+            else if (inputCommand.matches(DECK_MENU_COMMANDS[3])) preparatoryDeckWorks(inputCommand, "Create deck", 3);
             else if (inputCommand.matches(DECK_MENU_COMMANDS[4])) preparatoryDeckWorks(inputCommand, "Delete deck", 4);
             else if (inputCommand.matches(DECK_MENU_COMMANDS[5]))
                 preparatoryDeckWorks(inputCommand, "Set active deck", 5);
@@ -407,8 +418,14 @@ public class View {
         JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
 
         //Survey control JSON message
-        String answerValue = (String) controlAnswer.get("Value");
-        System.out.println(answerValue);
+        String activeDeck = (String) controlAnswer.get("Active deck");
+        JSONArray otherDecks = (JSONArray) controlAnswer.get("Other deck");
+
+        System.out.println("Deck:\n" +
+                "Active deck:\n" +
+                activeDeck +
+                "Other decks:");
+        otherDecks.forEach(System.out::println);
     }
 
     private void showAllUserCards() {
@@ -576,6 +593,20 @@ public class View {
             else if (inputCommand.matches(GAME_MENU_COMMANDS[23])) activeCheat(inputCommand, 23);
             else if (inputCommand.matches(CARD_SHOW_REGEX)) showCard(inputCommand, "Game");
             else System.out.println("invalid command");
+        }
+    }
+
+    private String getOneMonsterNumber() {
+        while (true) {
+            String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if (inputCommand.equals("Cancel")) return "Cancel";
+            else if (inputCommand.equals("1") ||
+                    inputCommand.equals("2") ||
+                    inputCommand.equals("3") ||
+                    inputCommand.equals("4") ||
+                    inputCommand.equals("5")) {
+                return inputCommand;
+            } else System.out.println("invalid command.\nTry again.");
         }
     }
 
@@ -980,8 +1011,8 @@ public class View {
         JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
 
         //Survey control JSON message
-        String answerValue = (String) controlAnswer.get("Value");
-        System.out.println(answerValue);
+        JSONArray allCardsInShop = (JSONArray) controlAnswer.get("Value");
+        allCardsInShop.forEach(System.out::println);
     }
     //endregion
 

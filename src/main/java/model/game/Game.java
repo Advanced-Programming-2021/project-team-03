@@ -1,5 +1,6 @@
 package model.game;
 
+import control.databaseController.DatabaseException;
 import control.game.GameController;
 import model.card.Card;
 import model.user.User;
@@ -13,10 +14,9 @@ public class Game {
 
     private int numberOfRounds;
 
-    public Game(User user1, User user2, int numberOfRounds) { // TODO
-        // TODO: Construct players with given users.
-        // TODO: Construct boards with user decks.
-        // TODO give each card in the main deck a "card in game" ID
+    public Game(User user1, User user2, int numberOfRounds) {
+        this.player1 = new Player(8000, new Board(user1.getActiveDeck(), user1), user1);
+        this.player2 = new Player(8000, new Board(user2.getActiveDeck(), user2), user2);
         this.numberOfRounds = numberOfRounds;
     }
 
@@ -94,8 +94,13 @@ public class Game {
     }
 
     public void surrender(PlayerTurn turn) {
-        getPlayerByTurn(turn).getUser().increaseScore(-1000);
-        getPlayerOpponentByTurn(turn).getUser().increaseScore(1000);
+        try {
+            getPlayerByTurn(turn).getUser().increaseScore(-1000);
+            getPlayerOpponentByTurn(turn).getUser().increaseScore(1000);
+        } catch (DatabaseException e) {
+            System.out.println(e);
+        }
+
     }
 
     public Player getWinner() {
@@ -109,6 +114,10 @@ public class Game {
     }
 
     public void checkRoundResults() {
-        getWinner().getUser().increaseScore(1000);
+        try {
+            getWinner().getUser().increaseScore(1000);
+        } catch (DatabaseException e) {
+            System.out.println(e);
+        }
     }
 }
