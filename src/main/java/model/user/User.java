@@ -1,13 +1,16 @@
 package model.user;
 
-import control.MainController;
 import control.databaseController.Database;
 import control.databaseController.DatabaseException;
 import model.card.Card;
+import model.card.Monster;
+import model.card.SpellAndTrap;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 
 public class User {
@@ -18,7 +21,7 @@ public class User {
     private int score;
     private int balance;
     private int level;
-    private ArrayList<Deck> decks;
+    private final ArrayList<Deck> decks;
     private ArrayList<Card> cards;
     private Deck activeDeck;
 
@@ -30,7 +33,7 @@ public class User {
         this.username = username;
         this.passwordHash = hashString(password);
         this.score = 0;
-        this.balance = 1000;
+        this.balance = 10000;
         this.level = 1;
 
         decks = new ArrayList<>();
@@ -183,6 +186,17 @@ public class User {
     public void deleteDeck(Deck deck) throws DatabaseException {
         if (activeDeck == deck) activeDeck = null;
         decks.removeIf(userDeck -> userDeck == deck);
+        updateInDatabase();
+    }
+
+    public void setStartingCards() throws DatabaseException {
+        ArrayList<Monster> monsters = new ArrayList<>(Monster.getAllMonsters().values());
+        ArrayList<SpellAndTrap> spellAndTraps = new ArrayList<>(SpellAndTrap.getAllSpellAndTraps().values());
+        Collections.shuffle(monsters);
+        Collections.shuffle(spellAndTraps);
+
+        cards.addAll(monsters.stream().limit(30).collect(Collectors.toList()));
+        cards.addAll(spellAndTraps.stream().limit(20).collect(Collectors.toList()));
         updateInDatabase();
     }
 }

@@ -139,7 +139,7 @@ public class Database {
         }
     }
 
-    private static void writeToJson(Object object, String filePath) throws DatabaseException {
+    private static void writeToJson(Object object, String filePath) throws DatabaseException { // TODO pretty print JSON
         if (MainController.initializing) return;
         try {
             File file = new File(filePath);
@@ -152,6 +152,7 @@ public class Database {
         }
     }
     // TODO: we need a garbage collector for decks to remove decks that users don't have any reference to
+    // TODO: remove upper TODO
 
     public static String toEnumCase(String string) {
         return string.toUpperCase()

@@ -25,9 +25,9 @@ public class ShopController {
     }
 
     public void buyCard(String username, String cardName) {
-        User.getByUsername(username).getCards().add(Card.getCardByName(cardName));
         try {
-            User.getByUsername(username).increaseBalance(Card.getCardByName(cardName).getPrice());
+            User.getByUsername(username).addCard(Card.getCardByName(cardName));
+            User.getByUsername(username).increaseBalance(-Card.getCardByName(cardName).getPrice());
         } catch (DatabaseException e) {
             e.printStackTrace();
         }
