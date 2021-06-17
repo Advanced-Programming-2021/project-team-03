@@ -18,7 +18,7 @@ public class User {
     private int score;
     private int balance;
     private int level;
-    private final ArrayList<Deck> decks;
+    private ArrayList<Deck> decks;
     private ArrayList<Card> cards;
     private Deck activeDeck;
 
@@ -177,6 +177,12 @@ public class User {
 
     public void addCard(Card card) throws DatabaseException {
         cards.add(card);
+        updateInDatabase();
+    }
+
+    public void deleteDeck(Deck deck) throws DatabaseException {
+        if (activeDeck == deck) activeDeck = null;
+        decks.removeIf(userDeck -> userDeck == deck);
         updateInDatabase();
     }
 }

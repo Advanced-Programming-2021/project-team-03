@@ -153,7 +153,7 @@ public class Database {
     }
     // TODO: we need a garbage collector for decks to remove decks that users don't have any reference to
 
-    static String toEnumCase(String string) {
+    public static String toEnumCase(String string) {
         return string.toUpperCase()
                 .replace(' ', '_')
                 .replace('-', '_');

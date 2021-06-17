@@ -2,6 +2,7 @@ package control.databaseController;
 
 import model.card.Card;
 import model.user.Deck;
+import model.user.DeckType;
 
 import java.util.ArrayList;
 
@@ -28,8 +29,8 @@ public class DeckJson {
         mainDeck.forEach(cardName -> mainDeckCards.add(Card.getCardByName(cardName)));
         sideDeck.forEach(cardName -> sideDeckCards.add(Card.getCardByName(cardName)));
 
-        deck.addCardToMainDeck(mainDeckCards);
-        deck.addCardToSideDeck(sideDeckCards);
+        deck.addCard(mainDeckCards, DeckType.MAIN);
+        deck.addCard(mainDeckCards, DeckType.SIDE);
 
         return deck;
     }
