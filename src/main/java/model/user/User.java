@@ -3,14 +3,18 @@ package model.user;
 import control.databaseController.Database;
 import control.databaseController.DatabaseException;
 import model.card.Card;
+import model.card.Monster;
+import model.card.SpellAndTrap;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 
 public class User {
-    private static final HashMap<String, User> allUsers;
+    private static final HashMap<String, User> allUsers = new HashMap<>();
     private final String username;
     private String nickname;
     private String passwordHash;
@@ -21,22 +25,22 @@ public class User {
     private ArrayList<Card> cards;
     private Deck activeDeck;
 
-    static {
-        allUsers = Database.updateAllUsers();
+    public static void initialize() {
+        Database.updateAllUsers();
     }
 
     public User(String username, String password, String nickname) throws DatabaseException {
         this.username = username;
-        setNickname(nickname); // may throw an exception
         this.passwordHash = hashString(password);
         this.score = 0;
-        this.balance = 1000;
+        this.balance = 10000;
         this.level = 1;
 
         decks = new ArrayList<>();
         cards = new ArrayList<>();
         allUsers.put(username, this);
-        updateInDatabase(); // may throw an exception
+        setNickname(nickname); // may throw an exception
+        // line above also updates the user in database
     }
 
     private String hashString(String rawString) {
@@ -68,7 +72,7 @@ public class User {
 
     public static boolean doesNicknameExists(String nickname) {
         return allUsers.values().stream()
-                .anyMatch(user -> user.nickname.equals(nickname));
+                .anyMatch(user -> user.nickname != null && user.nickname.equals(nickname));
     }
 
     public void changePassword(String oldPassword, String newPassword) throws DatabaseException {
@@ -111,16 +115,18 @@ public class User {
         return decks;
     }
 
-    public void addDeck(Deck deck) {
+    public void addDeck(Deck deck) throws DatabaseException {
         decks.add(deck);
+        updateInDatabase();
     }
 
     public ArrayList<Card> getCards() {
         return cards;
     }
 
-    public void setCards(ArrayList<Card> cards) {
+    public void setCards(ArrayList<Card> cards) throws DatabaseException {
         this.cards = cards;
+        updateInDatabase();
     }
 
     public int getLevel() {
@@ -136,8 +142,9 @@ public class User {
         return activeDeck;
     }
 
-    public void setActiveDeck(Deck activeDeck) {
+    public void setActiveDeck(Deck activeDeck) throws DatabaseException {
         this.activeDeck = activeDeck;
+        updateInDatabase();
     }
 
     public void updateInDatabase() throws DatabaseException {
@@ -146,6 +153,10 @@ public class User {
 
     public static User getByUsername(String username) {
         return allUsers.get(username);
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
     public static ArrayList<User> getScoreBoard() {
@@ -158,7 +169,34 @@ public class User {
         return scoreBoard;
     }
 
-    public void increaseScore(int amount) {
+    public void increaseScore(int amount) throws DatabaseException {
         score += amount;
+        updateInDatabase();
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public void addCard(Card card) throws DatabaseException {
+        cards.add(card);
+        updateInDatabase();
+    }
+
+    public void deleteDeck(Deck deck) throws DatabaseException {
+        if (activeDeck == deck) activeDeck = null;
+        decks.removeIf(userDeck -> userDeck == deck);
+        updateInDatabase();
+    }
+
+    public void setStartingCards() throws DatabaseException {
+        ArrayList<Monster> monsters = new ArrayList<>(Monster.getAllMonsters().values());
+        ArrayList<SpellAndTrap> spellAndTraps = new ArrayList<>(SpellAndTrap.getAllSpellAndTraps().values());
+        Collections.shuffle(monsters);
+        Collections.shuffle(spellAndTraps);
+
+        cards.addAll(monsters.stream().limit(30).collect(Collectors.toList()));
+        cards.addAll(spellAndTraps.stream().limit(20).collect(Collectors.toList()));
+        updateInDatabase();
     }
 }

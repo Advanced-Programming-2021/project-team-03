@@ -2,6 +2,7 @@ package control.databaseController;
 
 import com.google.gson.Gson;
 import com.opencsv.bean.CsvToBeanBuilder;
+import control.MainController;
 import model.card.Monster;
 import model.card.SpellAndTrap;
 import model.user.Deck;
@@ -17,7 +18,7 @@ public class Database {
     private static final String DECKS_PATH = "./database/decks/";
     private static final String CARDS_PATH = "./database/cards/";
 
-    public static HashMap<String, Monster> updateMonsters() throws FileNotFoundException {
+    public static HashMap<String, Monster> updateMonsters() throws IOException {
         HashMap<String, Monster> monstersByName = new HashMap<>();
         Reader reader = new BufferedReader(new FileReader(CARDS_PATH + "Monster.csv"));
 
@@ -27,6 +28,7 @@ public class Database {
                 .withIgnoreLeadingWhiteSpace(true)
                 .withIgnoreEmptyLine(true)
                 .build().parse();
+        reader.close();
 
         for (MonsterCSV monsterCSV : monsters) {
             try {
@@ -40,7 +42,7 @@ public class Database {
         return monstersByName;
     }
 
-    public static HashMap<String, SpellAndTrap> updateSpellAndTraps() throws FileNotFoundException {
+    public static HashMap<String, SpellAndTrap> updateSpellAndTraps() throws IOException {
         HashMap<String, SpellAndTrap> spellsByName = new HashMap<>();
         Reader reader = new BufferedReader(new FileReader(CARDS_PATH + "SpellTrap.csv"));
 
@@ -50,6 +52,7 @@ public class Database {
                 .withIgnoreLeadingWhiteSpace(true)
                 .withIgnoreEmptyLine(true)
                 .build().parse();
+        reader.close();
 
         for (SpellAndTrapCSV spellCSV : spells) {
             try {
@@ -63,10 +66,8 @@ public class Database {
         return spellsByName;
     }
 
-    // TODO: updateAllDecks and updateAllUsers can be merged or refactored
-    public static HashMap<String, Deck> updateAllDecks() {
+    public static void updateAllDecks() {
         Gson gson = new Gson();
-        HashMap<String, Deck> allDecks = new HashMap<>();
 
         File[] listOfFiles = new File(DECKS_PATH).listFiles();
         assert listOfFiles != null;
@@ -77,18 +78,16 @@ public class Database {
                     try {
                         BufferedReader reader = new BufferedReader(
                                 new FileReader(DECKS_PATH + file.getName()));
-                        Deck deck = gson.fromJson(reader, Deck.class);
-                        allDecks.put(deck.getDeckName(), deck);
+                        gson.fromJson(reader, DeckJson.class).convert();
+                        reader.close();
 
-                    } catch (FileNotFoundException ignored) {
+                    } catch (IOException | DatabaseException ignored) {
                     }
                 });
-        return allDecks;
     }
 
-    public static HashMap<String, User> updateAllUsers() {
+    public static void updateAllUsers() {
         Gson gson = new Gson();
-        HashMap<String, User> allUsers = new HashMap<>();
 
         File[] listOfFiles = new File(USERS_PATH).listFiles();
         assert listOfFiles != null;
@@ -99,14 +98,12 @@ public class Database {
                     try {
                         BufferedReader reader = new BufferedReader(
                                 new FileReader(USERS_PATH + file.getName()));
-                        User user = gson.fromJson(reader, User.class);
-                        allUsers.put(user.getUsername(), user);
+                        gson.fromJson(reader, UserJson.class).convert();
+                        reader.close();
 
-                    } catch (FileNotFoundException ignored) {
+                    } catch (DatabaseException | IOException ignored) {
                     }
                 });
-
-        return allUsers;
     }
 
     private static boolean isJsonFile(File file) {
@@ -122,8 +119,14 @@ public class Database {
         }
     }
 
-    public static void save(Object object) throws DatabaseException {
-        writeToJson(object, pathFinder(object));
+    public static void save(User user) throws DatabaseException {
+        UserJson userJson = new UserJson(user);
+        writeToJson(userJson, pathFinder(user));
+    }
+
+    public static void save(Deck deck) throws DatabaseException {
+        DeckJson deckJson = new DeckJson(deck);
+        writeToJson(deckJson, pathFinder(deck));
     }
 
     private static String pathFinder(Object object) throws DatabaseException {
@@ -136,7 +139,8 @@ public class Database {
         }
     }
 
-    private static void writeToJson(Object object, String filePath) throws DatabaseException {
+    private static void writeToJson(Object object, String filePath) throws DatabaseException { // TODO pretty print JSON
+        if (MainController.initializing) return;
         try {
             File file = new File(filePath);
             file.getParentFile().mkdirs();
@@ -148,8 +152,9 @@ public class Database {
         }
     }
     // TODO: we need a garbage collector for decks to remove decks that users don't have any reference to
+    // TODO: remove upper TODO
 
-    static String toEnumCase(String string) {
+    public static String toEnumCase(String string) {
         return string.toUpperCase()
                 .replace(' ', '_')
                 .replace('-', '_');

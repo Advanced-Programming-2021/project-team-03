@@ -4,7 +4,7 @@ import control.databaseController.Database;
 import model.enums.CardAttributes;
 import model.enums.SpellAndTrapIcon;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 
 public class SpellAndTrap extends Card {
@@ -13,10 +13,11 @@ public class SpellAndTrap extends Card {
 
     private static HashMap<String, SpellAndTrap> allSpellAndTraps;
 
-    static {
+
+    public static void initialize() {
         try {
             allSpellAndTraps = Database.updateSpellAndTraps();
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             System.out.println("Couldn't find spell and trap database files");
             e.printStackTrace();
             System.exit(1);
@@ -39,7 +40,7 @@ public class SpellAndTrap extends Card {
         return "Name: " + this.cardName + "\n" +
                 "Model : " + this.attribute + "\n" +
                 "Type: " + this.icon + "\n" +
-                "Description: " + this.description;
+                "Description: " + this.description + "\n";
     }
 
     public boolean isActive() {

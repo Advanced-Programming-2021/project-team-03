@@ -11,13 +11,13 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class Deck {
-    private static final HashMap<String, Deck> allDecks;
+    private static final HashMap<String, Deck> allDecks = new HashMap<>();
     private String deckName;
     private final ArrayList<Card> mainDeck;
     private final ArrayList<Card> sideDeck;
 
-    static {
-        allDecks = Database.updateAllDecks();
+    public static void initialize() {
+        Database.updateAllDecks();
     }
 
     public Deck(String deckName) throws DatabaseException {
@@ -37,27 +37,6 @@ public class Deck {
         Database.remove(this);
         allDecks.put(deckName, this);
         this.deckName = deckName;
-        updateInDatabase();
-        // TODO (high-priority!): remove the previous deck from database
-    }
-
-    public void addCardToMainDeck(Card card) throws DatabaseException {
-        mainDeck.add(card);
-        updateInDatabase();
-    }
-
-    public void addCardToMainDeck(ArrayList<Card> cards) throws DatabaseException {
-        mainDeck.addAll(cards);
-        updateInDatabase();
-    }
-
-    public void addCardToSideDeck(Card card) throws DatabaseException {
-        sideDeck.add(card);
-        updateInDatabase();
-    }
-
-    public void addCardToSideDeck(ArrayList<Card> cards) throws DatabaseException {
-        sideDeck.addAll(cards);
         updateInDatabase();
     }
 
@@ -83,10 +62,10 @@ public class Deck {
                 .max(Integer::compare).get() <= 3;
     }
 
-    public String showDeck(String deckType) {
+    public String showDeck(DeckType deckType) { // TODO: rename to toString
         StringBuilder showDeck = new StringBuilder();
         switch (deckType) {
-            case "Side" -> {
+            case SIDE -> {
                 showDeck.append("Deck: ").append(deckName).append("\n");
                 showDeck.append("Side deck: \n");
                 showDeck.append("Monsters: \n");
@@ -98,7 +77,7 @@ public class Deck {
                         .sorted((card1, card2) -> card1.getCardName().compareToIgnoreCase(card2.getCardName()))
                         .forEach(card -> showDeck.append(card.getCardName()).append(": ").append(card.getDescription()));
             }
-            case "Main" -> {
+            case MAIN -> {
                 showDeck.append("Deck: ").append(deckName).append("\n");
                 showDeck.append("Main deck: \n");
                 showDeck.append("Monsters: \n");
@@ -127,12 +106,31 @@ public class Deck {
         return allDecks.get(deckName);
     }
 
-    public boolean doesContainCard(Card card) {
-        return mainDeck.contains(card) || sideDeck.contains(card);
+    public boolean doesContainCard(Card card, DeckType deckType) {
+        if (deckType == DeckType.MAIN) return mainDeck.contains(card);
+        return sideDeck.contains(card);
     }
 
-    public void removeCard(Card card) {
-        mainDeck.remove(card);
-        sideDeck.remove(card);
+    public void removeCard(Card card, DeckType deckType) throws DatabaseException {
+        if (deckType == DeckType.MAIN) mainDeck.remove(card);
+        else sideDeck.remove(card);
+        updateInDatabase();
+    }
+
+    public void deleteDeck() throws DatabaseException {
+        allDecks.remove(this.deckName);
+        Database.remove(this);
+    }
+
+    public void addCard(Card card, DeckType deckType) throws DatabaseException {
+        if (deckType == DeckType.MAIN) mainDeck.add(card);
+        else sideDeck.add(card);
+        updateInDatabase();
+    }
+
+    public void addCard(ArrayList<Card> cards, DeckType deckType) throws DatabaseException {
+        if (deckType == DeckType.MAIN) mainDeck.addAll(cards);
+        else sideDeck.addAll(cards);
+        updateInDatabase();
     }
 }

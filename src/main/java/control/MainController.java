@@ -5,6 +5,8 @@ import model.card.Card;
 import model.card.Monster;
 import model.card.SpellAndTrap;
 import model.user.Deck;
+import model.user.DeckType;
+import model.user.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import view.View;
@@ -22,9 +24,17 @@ public class MainController {
     // this class is responsible for view request and send the feedback to thee view via a Json string
 
     private static MainController mainControllerInstance;
+    public static boolean initializing;
 
     private MainController() {
         onlineUsers = new HashMap<>();
+
+        initializing = true;
+        Monster.initialize();
+        SpellAndTrap.initialize();
+        Deck.initialize();
+        User.initialize();
+        initializing = false;
     }
 
     public static MainController getInstance() {
@@ -116,7 +126,7 @@ public class MainController {
     }
 
     public String sendRequestToView(JSONObject messageToSend) {
-        //TODO: will be complete in future
+        //TODO: will be completed in future
         /*send the statements of the game to view
          * such as phase name, players' turn, ask for card activation and etc*/
         return View.getInstance().getRequest(messageToSend.toString());
@@ -550,10 +560,10 @@ public class MainController {
 
             JSONArray cardsArray = new JSONArray();
             for (Card card : Monster.getAllMonsters().values()) {
-                cardsArray.put(card.getCardName() + ":" + card.getPrice());
+                cardsArray.put(card.getCardName() + ": " + card.getPrice());
             }
             for (Card card : SpellAndTrap.getAllSpellAndTraps().values()) {
-                cardsArray.put(card.getCardName() + ":" + card.getPrice());
+                cardsArray.put(card.getCardName() + ": " + card.getPrice());
             }
             answerObject.put("Value", cardsArray);
         }
@@ -623,7 +633,7 @@ public class MainController {
             answerObject.put("Value", "deck with name " + deckName + " does not exist");
         } else {
             answerObject.put("Type", "Successful");
-            answerObject.put("Value", DeckController.getInstance().getDeck(onlineUsers.get(token), deckName).showDeck(deckType));
+            answerObject.put("Value", DeckController.getInstance().getDeck(deckName).showDeck(DeckType.valueOf(deckType.toUpperCase())));
         }
 
         return answerObject.toString();
@@ -638,10 +648,11 @@ public class MainController {
         if (isTokenInvalid(token)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "invalid token!");
-        } else {
+        }
+        else {
             answerObject.put("Type", "Successful");
-            answerObject.put("Active deck", DeckController.getInstance().getUserActiveDeck(onlineUsers.get(token)).generalOverview());
-            List<String> otherDecks = DeckController.getInstance().getAllUsersDecks().stream().map(Deck::generalOverview).collect(Collectors.toList());
+            answerObject.put("Active deck", DeckController.getInstance().getUserActiveDeck(onlineUsers.get(token)));
+            List<String> otherDecks = DeckController.getInstance().getAllUserDecks(onlineUsers.get(token)).stream().map(Deck::generalOverview).collect(Collectors.toList());
             answerObject.put("Other deck", otherDecks);
         }
 
@@ -662,11 +673,11 @@ public class MainController {
         } else if (!DeckController.getInstance().doesDeckAlreadyExist(onlineUsers.get(token), deckName)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "deck with name " + deckName + " does not exist");
-        } else if (!DeckController.getInstance().doesDeckContainThisCard(onlineUsers.get(token), deckName, cardName)) {
+        } else if (!DeckController.getInstance().doesDeckContainThisCard(deckName, DeckType.valueOf(deckType.toUpperCase()), cardName)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "card with name " + cardName + " does not exist in " + deckName + " deck");
         } else {
-            DeckController.getInstance().removeCardFromDeck(onlineUsers.get(token), deckName, deckType, cardName);
+            DeckController.getInstance().removeCardFromDeck(deckName, DeckType.valueOf(deckType.toUpperCase()), cardName);
             answerObject.put("Type", "Successful");
             answerObject.put("Value", cardName + " removed form deck successfully!");
         }
@@ -688,7 +699,7 @@ public class MainController {
         } else if (!DeckController.getInstance().doesDeckAlreadyExist(onlineUsers.get(token), deckName)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "deck with name " + deckName + " does not exist");
-        } else if (!DeckController.getInstance().doesCardExist(onlineUsers.get(token), cardName)) {
+        } else if (!DeckController.getInstance().doesCardExist(cardName)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "card with name " + cardName + " does not exist");
         } else if (!DeckController.getInstance().doesUserHaveAnymoreCard(onlineUsers.get(token), cardName)) {
@@ -699,9 +710,9 @@ public class MainController {
             answerObject.put("Value", deckType + " deck is full");
         } else if (!DeckController.getInstance().canUserAddCardToDeck(onlineUsers.get(token), deckName, deckType, cardName)) {
             answerObject.put("Type", "Error");
-            answerObject.put("Value", "here are already three cards with name " + cardName + " in deck " + deckName);
+            answerObject.put("Value", "There are already three cards with name " + cardName + " in deck " + deckName);
         } else {
-            DeckController.getInstance().addCardToDeck(onlineUsers.get(token), deckName, deckType, cardName);
+            DeckController.getInstance().addCardToDeck(onlineUsers.get(token), deckName, DeckType.valueOf(deckType.toUpperCase()), cardName);
             answerObject.put("Type", "Successful");
             answerObject.put("Value", "card added to " + deckType + " deck successfully!");
         }
@@ -722,7 +733,7 @@ public class MainController {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "deck with name " + deckName + " does not exist");
         } else {
-            DeckController.getInstance().deleteDeck(onlineUsers.get(token), deckName);
+            DeckController.getInstance().setActiveDeck(onlineUsers.get(token), deckName);
             answerObject.put("Type", "Successful");
             answerObject.put("Value", "deck activated successfully!");
         }
