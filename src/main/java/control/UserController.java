@@ -79,9 +79,4 @@ public class UserController {
     public boolean isUserActiveDeckValid(String username) {
         return User.getByUsername(username).getActiveDeck().isDeckValid();
     }
-
-    public String showCardToUser(String cardName) {
-        //TODO Habib
-        return null;
-    }
 }

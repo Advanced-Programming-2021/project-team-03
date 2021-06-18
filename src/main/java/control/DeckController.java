@@ -30,7 +30,6 @@ public class DeckController {
             Deck deck = new Deck(deckName);
             User.getByUsername(username).addDeck(deck);
         } catch (DatabaseException e) {
-            System.out.println(e.toString());
             e.printStackTrace();
         }
     }

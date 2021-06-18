@@ -30,13 +30,11 @@ public class Deck {
         updateInDatabase();
     }
 
-    // TODO: add remove deck
-
-    public void setDeckName(String deckName) throws DatabaseException {
+    public void rename(String newName) throws DatabaseException {
         allDecks.remove(this.deckName);
         Database.remove(this);
-        allDecks.put(deckName, this);
-        this.deckName = deckName;
+        allDecks.put(newName, this);
+        this.deckName = newName;
         updateInDatabase();
     }
 
@@ -62,7 +60,7 @@ public class Deck {
                 .max(Integer::compare).get() <= 3;
     }
 
-    public String showDeck(DeckType deckType) { // TODO: rename to toString
+    public String showDeck(DeckType deckType) {
         StringBuilder showDeck = new StringBuilder();
         switch (deckType) {
             case SIDE -> {
@@ -99,7 +97,7 @@ public class Deck {
 
     public String generalOverview() {
         return this.deckName + ": main deck " + this.mainDeck.size() + ", side deck " + this.sideDeck.size() +
-                (isDeckValid() ? ", Valid" : ", Invalid");
+                (isDeckValid() ? ", Valid" : ", Invalid") + "\n";
     }
 
     public static Deck getByDeckName(String deckName) {
