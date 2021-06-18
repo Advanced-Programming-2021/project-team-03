@@ -103,7 +103,7 @@ public class MainController {
             answerObject.put("Value", "invalid token!");
         } else {
             answerObject.put("Type", "Success");
-            answerObject.put("Value", GameController.getInstance().endPhase(onlineUsers.get(token)));
+            answerObject.put("Value", GameController.getInstance().endPhase());
         }
 
         return answerObject.toString();
@@ -156,7 +156,7 @@ public class MainController {
             answerObject.put("Value", "invalid token!");
         } else {
             answerObject.put("Type", "Successful");
-            answerObject.put("Value", GameController.getInstance().surrender(onlineUsers.get(token)));
+            answerObject.put("Value", GameController.getInstance().surrender());
         }
 
         return answerObject.toString();
