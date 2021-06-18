@@ -8,6 +8,7 @@ import model.user.DeckType;
 import model.user.User;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class DeckController {
     private static DeckController deckController;
@@ -48,19 +49,20 @@ public class DeckController {
         return Card.getCardByName(cardName) != null;
     }
 
-    public boolean doesUserHaveAnymoreCard(String username, String cardName) {
-        //TODO count the number of cards in user cards if he/she has enough cards
-        return false;
+    public boolean doesUserHaveAnymoreCard(String username, String cardName, String deckName) {
+        Card card = Card.getCardByName(cardName);
+        Deck deck = Deck.getByDeckName(deckName);
+
+        return Collections.frequency(User.getByUsername(username).getCards(), card) >
+                Collections.frequency(deck.getMainDeck(), card) + Collections.frequency(deck.getSideDeck(), card);
     }
 
-    public boolean isDeckFull(String username, String deckName, String deckType) {
-        //TODO 15 for side 60 for main
-        return false;
+    public boolean isDeckFull(String deckName, DeckType deckType) {
+        return Deck.getByDeckName(deckName).isDeckFull(deckType);
     }
 
-    public boolean canUserAddCardToDeck(String username, String deckName, String deckType, String cardName) {
-        //TODO check if number of cards is greater than 3
-        return false;
+    public boolean canUserAddCardToDeck(String deckName, DeckType deckType, String cardName) {
+        return !Deck.getByDeckName(deckName).isCardMaxedOut(Card.getCardByName(cardName), deckType);
     }
 
     public void addCardToDeck(String username, String deckName, DeckType deckType, String cardName) {
@@ -68,7 +70,6 @@ public class DeckController {
             Deck.getByDeckName(deckName).addCard(Card.getCardByName(cardName), deckType);
         } catch (DatabaseException e) {
             e.printStackTrace();
-            System.out.println(e.errorMessage);
         }
     }
 
@@ -108,7 +109,6 @@ public class DeckController {
             User.getByUsername(username).setActiveDeck(Deck.getByDeckName(deckName));
         } catch (DatabaseException e) {
             e.printStackTrace();
-            System.out.println(e);
         }
     }
 }

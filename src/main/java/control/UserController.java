@@ -52,7 +52,6 @@ public class UserController {
         try {
             User.getByUsername(username).changePassword(newPassword);
         } catch (DatabaseException e) {
-            System.out.println(e.toString());
             e.printStackTrace();
         }
     }

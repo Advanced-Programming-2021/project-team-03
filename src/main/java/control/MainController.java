@@ -702,13 +702,13 @@ public class MainController {
         } else if (!DeckController.getInstance().doesCardExist(cardName)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "card with name " + cardName + " does not exist");
-        } else if (!DeckController.getInstance().doesUserHaveAnymoreCard(onlineUsers.get(token), cardName)) {
+        } else if (!DeckController.getInstance().doesUserHaveAnymoreCard(onlineUsers.get(token), cardName, deckName)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "you don't have anymore " + cardName);
-        } else if (DeckController.getInstance().isDeckFull(onlineUsers.get(token), deckName, deckType)) {
+        } else if (DeckController.getInstance().isDeckFull(deckName, DeckType.valueOf(deckType.toUpperCase()))) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", deckType + " deck is full");
-        } else if (!DeckController.getInstance().canUserAddCardToDeck(onlineUsers.get(token), deckName, deckType, cardName)) {
+        } else if (!DeckController.getInstance().canUserAddCardToDeck(deckName, DeckType.valueOf(deckType.toUpperCase()), cardName)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "There are already three cards with name " + cardName + " in deck " + deckName);
         } else {

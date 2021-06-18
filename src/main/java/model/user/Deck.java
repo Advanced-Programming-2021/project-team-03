@@ -133,4 +133,14 @@ public class Deck {
         else sideDeck.addAll(cards);
         updateInDatabase();
     }
+
+    public boolean isDeckFull(DeckType deckType) {
+        if (deckType == DeckType.MAIN) return mainDeck.size() >= 60;
+        else return sideDeck.size() >= 15;
+    }
+
+    public boolean isCardMaxedOut(Card card, DeckType deckType) {
+        if (deckType == DeckType.MAIN) return Collections.frequency(mainDeck, card) >= 3;
+        else return Collections.frequency(sideDeck, card) >= 3;
+    }
 }
