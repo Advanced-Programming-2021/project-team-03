@@ -1,6 +1,7 @@
 package control.game;
 
 import control.MainController;
+import control.databaseController.DatabaseException;
 import model.card.AllMonsterEffects;
 import model.card.Card;
 import model.card.Monster;
@@ -558,7 +559,7 @@ public class GameController {
 
     public void roundIsOver() {
         currentRound += 1;
-        game.checkRoundResults();
+        game.checkRoundResults(gameUpdates);
         String results = game.getWinner().getUser().getUsername() + " won the game and the score is: 1000 - 0";
         JSONObject answerObject = new JSONObject();
         if (IsGameOver()) {
@@ -572,10 +573,22 @@ public class GameController {
     }
 
     private boolean IsGameOver() {
-        return false;
+        if (currentRound > game.getNumberOfRounds())
+            return true;
+        else return gameUpdates.isGameOver();
     }
 
     private String checkGameStatus() {
-        return null;
+        Player gameWinner = gameUpdates.getWinner();
+        int winnerNumberOfWins = gameUpdates.getWins(gameWinner);
+        Player looser = gameUpdates.getLooser(gameWinner);
+        int looserNumberOfWins = gameUpdates.getWins(looser);
+        try {
+            gameWinner.getUser().increaseBalance((winnerNumberOfWins * 1000) + 3 * gameWinner.getHealth());
+            looser.getUser().increaseBalance((looserNumberOfWins * 1000));
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return gameWinner.getUser().getUsername() + " won the whole match with score: " + winnerNumberOfWins * 1000 + "-" + looserNumberOfWins * 1000;
     }
 }
