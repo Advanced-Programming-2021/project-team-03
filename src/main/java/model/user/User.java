@@ -75,15 +75,6 @@ public class User {
                 .anyMatch(user -> user.nickname != null && user.nickname.equals(nickname));
     }
 
-    public void changePassword(String oldPassword, String newPassword) throws DatabaseException {
-        if (doesMatchPassword(oldPassword)) {
-            this.passwordHash = hashString(newPassword);
-            updateInDatabase();
-            return;
-        }
-        throw new DatabaseException("Entered password does not match the old password.");
-    }
-
     public void changePassword(String newPassword) throws DatabaseException {
         this.passwordHash = hashString(newPassword);
         updateInDatabase();
@@ -162,7 +153,6 @@ public class User {
     public static ArrayList<User> getScoreBoard() {
         ArrayList<User> scoreBoard = (new ArrayList<>(allUsers.values()));
         scoreBoard.sort((user1, user2) -> {
-            Integer.compare(user1.score, user2.score);
             if (user1.score == user2.score) return user1.nickname.compareTo(user2.nickname);
             return user2.score - user1.score;
         });

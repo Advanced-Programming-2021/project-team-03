@@ -157,7 +157,7 @@ public class MainController {
             answerObject.put("Value", "invalid token!");
         } else {
             answerObject.put("Type", "Successful");
-            answerObject.put("Value", UserController.getInstance().showCardToUser(cardName));
+            answerObject.put("Value", UserController.getInstance().toString());
         }
 
         return answerObject.toString();

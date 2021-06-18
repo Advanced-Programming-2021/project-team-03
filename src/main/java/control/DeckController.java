@@ -1,6 +1,5 @@
 package control;
 
-import control.databaseController.Database;
 import control.databaseController.DatabaseException;
 import model.card.Card;
 import model.user.Deck;
@@ -31,7 +30,6 @@ public class DeckController {
             Deck deck = new Deck(deckName);
             User.getByUsername(username).addDeck(deck);
         } catch (DatabaseException e) {
-            System.out.println(e.toString());
             e.printStackTrace();
         }
     }
