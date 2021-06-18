@@ -197,6 +197,7 @@ public class MainController {
     }
 
     private String activeEffect(JSONObject valueObject) {
+        //TODO field spell card
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
@@ -213,21 +214,32 @@ public class MainController {
                 GameController.getInstance().getCurrentPhase() != SECOND_MAIN) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "you can’t activate an effect on this turn!");
-        } else if (GameController.getInstance().cardAlreadyActivated()) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "you have already activated this card!");
-        } else if (!GameController.getInstance().doesFieldHaveSpaceForThisCard()) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "spell card zone is full!");
-        } else if (!GameController.getInstance().canCardActivate()) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "preparations of this spell are not done yet!");
+        } else if (GameController.getInstance().isCardInField()) {
+            if (GameController.getInstance().cardAlreadyActivated()) {
+                answerObject.put("Type", "Error");
+                answerObject.put("Value", "you have already activated this card!");
+            } else if (!GameController.getInstance().canCardActivate()) {
+                answerObject.put("Type", "Error");
+                answerObject.put("Value", "preparations of this spell are not done yet!");
+            } else {
+                GameController.getInstance().activateSpellCard();
+                answerObject.put("Type", "Successful");
+                answerObject.put("Value", "spell activated!");
+            }
         } else {
-            GameController.getInstance().activateSpellCard();
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", "spell activated!");
+            if (!GameController.getInstance().doesFieldHaveSpaceForThisCard()) {
+                answerObject.put("Type", "Error");
+                answerObject.put("Value", "spell card zone is full!");
+            } else if (!GameController.getInstance().canCardActivate()) {
+                answerObject.put("Type", "Error");
+                answerObject.put("Value", "preparations of this spell are not done yet!");
+            } else {
+                GameController.getInstance().setCard();
+                GameController.getInstance().activateSpellCard();
+                answerObject.put("Type", "Successful");
+                answerObject.put("Value", "spell activated!");
+            }
         }
-
         return answerObject.toString();
     }
 
@@ -356,6 +368,7 @@ public class MainController {
     }
 
     private String setACard(JSONObject valueObject) {
+        //TODO field spell card
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();

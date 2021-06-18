@@ -440,13 +440,19 @@ public class GameController {
         return (selectedCard instanceof SpellAndTrap && selectedCard.getAttribute() == CardAttributes.SPELL);
     }
 
+    public boolean isCardInField() {
+        Board board = getPlayerByTurn().getBoard();
+        return board.getSpellAndTrapsInField().containsValue((SpellAndTrap) selectedCard);
+    }
+
     public boolean cardAlreadyActivated() {
-        //TODO
-        return false;
+        SpellAndTrap spell = (SpellAndTrap) selectedCard;
+        return spell.isActive();
     }
 
     public boolean doesFieldHaveSpaceForThisCard() {
-        //TODO
+        Board board = getPlayerByTurn().getBoard();
+        if (board.getSpellAndTrapsInField().size() <= 4) return true;
         return false;
     }
 
@@ -456,6 +462,8 @@ public class GameController {
     }
 
     public void activateSpellCard() {
+        SpellAndTrap spell = (SpellAndTrap) selectedCard;
+        spell.setActive(true);
         //TODO
     }
 
@@ -589,4 +597,5 @@ public class GameController {
         }
         return gameWinner.getUser().getUsername() + " won the whole match with score: " + winnerNumberOfWins * 1000 + "-" + looserNumberOfWins * 1000;
     }
+
 }
