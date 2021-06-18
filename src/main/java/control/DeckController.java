@@ -1,6 +1,5 @@
 package control;
 
-import control.databaseController.Database;
 import control.databaseController.DatabaseException;
 import model.card.Card;
 import model.user.Deck;

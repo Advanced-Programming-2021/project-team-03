@@ -22,7 +22,8 @@ public class Monster extends Card {
     private AttackingFormat attackingFormat;
     private FaceUpSituation faceUpSituation;
 
-    private ArrayList<Function<Monster, Integer>> attackSupplier; // contains all game effects which determine the attacking power of the monster
+    private final ArrayList<Function<Monster, Integer>> attackSupplier; // contains all game effects which determine the attacking power of the monster
+    private final ArrayList<Integer> defensiveSupplies;
 
     private static HashMap<String, Monster> allMonsters;
 
@@ -48,6 +49,7 @@ public class Monster extends Card {
         if (monsterType.equals(EFFECT))
             monsterEffect = AllMonsterEffects.getInstance().getEffectByID(cardID);
         attackSupplier = new ArrayList<>();
+        defensiveSupplies = new ArrayList<>();
     }
 
 
@@ -106,8 +108,9 @@ public class Monster extends Card {
     }
 
     public int getDefensivePower() {
-        //TODO
-        return baseDefence;
+        int power = baseDefence;
+        power += defensiveSupplies.stream().mapToInt(p -> p).sum();
+        return power;
     }
 
     public int getLevel() {
@@ -124,5 +127,9 @@ public class Monster extends Card {
 
     public MonsterTypes getType() {
         return type;
+    }
+
+    public ArrayList<Integer> getDefensiveSupplies() {
+        return defensiveSupplies;
     }
 }

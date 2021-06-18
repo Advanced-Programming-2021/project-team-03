@@ -3,16 +3,14 @@ package model.card;
 import control.databaseController.Database;
 import model.enums.CardAttributes;
 import model.enums.SpellAndTrapIcon;
-
 import java.io.IOException;
 import java.util.HashMap;
 
 public class SpellAndTrap extends Card {
-    private SpellAndTrapIcon icon;
+    private final SpellAndTrapIcon icon;
     private boolean isActive;
 
     private static HashMap<String, SpellAndTrap> allSpellAndTraps;
-
 
     public static void initialize() {
         try {

@@ -89,7 +89,6 @@ public class MainController {
             case "Show graveyard" -> showGraveyard(valueObject);
             case "Show selected card" -> showSelectedCard(valueObject);
             case "Surrender" -> surrender(valueObject);
-            case "Is the game over" -> checkGameStatusCommand(valueObject); //TODO game -> round
             case "Next phase" -> endPhaseCommand(valueObject);
             default -> error();
         };
@@ -105,21 +104,6 @@ public class MainController {
         } else {
             answerObject.put("Type", "Success");
             answerObject.put("Value", GameController.getInstance().endPhase(onlineUsers.get(token)));
-        }
-
-        return answerObject.toString();
-    }
-
-    private String checkGameStatusCommand(JSONObject valueObject) {
-        String token = valueObject.getString("Token");
-
-        JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else {
-            answerObject.put("Type", "Game status");
-            answerObject.put("Value", GameController.getInstance().checkGameStatus(onlineUsers.get(token)));
         }
 
         return answerObject.toString();
@@ -648,8 +632,7 @@ public class MainController {
         if (isTokenInvalid(token)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "invalid token!");
-        }
-        else {
+        } else {
             answerObject.put("Type", "Successful");
             answerObject.put("Active deck", DeckController.getInstance().getUserActiveDeck(onlineUsers.get(token)));
             List<String> otherDecks = DeckController.getInstance().getAllUserDecks(onlineUsers.get(token)).stream().map(Deck::generalOverview).collect(Collectors.toList());
