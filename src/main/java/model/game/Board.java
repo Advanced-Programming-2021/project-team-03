@@ -153,6 +153,7 @@ public class Board {
     public void setSpellAndTrapsInField(SpellAndTrap spellAndTrap) {
         int index = findPositionToSetSpellOrTrapCard(spellAndTrapsInField);
         addSpellAndTrapByPosition(index, spellAndTrap);
+        spellAndTrap.setActive(false);
         removeCardFromHand((Card) spellAndTrap);
     }
 
