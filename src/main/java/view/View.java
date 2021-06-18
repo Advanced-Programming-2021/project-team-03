@@ -9,7 +9,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class View {
-    //TODO: check deck and card input type
     private static View instance;
 
     private final Scanner SCANNER = new Scanner(System.in);
@@ -27,7 +26,7 @@ public class View {
     private final String[] SHOP_MENU_COMMANDS = new String[5];
     private final String[] DECK_MENU_COMMANDS = new String[19];
     private final String[] DUEL_MENU_COMMANDS = new String[12];
-    private final String[] GAME_MENU_COMMANDS = new String[25]; //TODO: add remaining methods and fix array size
+    private final String[] GAME_MENU_COMMANDS = new String[25];
 
     private final String CARD_SHOW_REGEX = "^card show (.+)$";
 
@@ -186,24 +185,6 @@ public class View {
             case "Round is over" -> roundIsOver(valueObject);
             default -> error();
         };
-    }
-
-    private String roundIsOver(JSONObject valueObject) {
-        printMessage(valueObject);
-        isRoundOver = true;
-        return "Do not need request answer";
-    }
-
-    private String gameIsOver(JSONObject valueObject) {
-        printMessage(valueObject);
-        isGameOver = true;
-        return "Do not need request answer";
-    }
-
-    private String printMessage(JSONObject valueObject) {
-        String message = valueObject.getString("Value");
-        System.out.println(message);
-        return "Do not need request answer";
     }
 
     //region register menu methods
@@ -615,6 +596,7 @@ public class View {
             else System.out.println("invalid command");
         }
         if (!isGameOver) {
+            //TODO: run cardTransferMenu
             gameMenu();
         }
     }
@@ -632,7 +614,7 @@ public class View {
             } else System.out.println("invalid command.\nTry again.");
         }
     }
-    
+
     private int doesInputMatchWithSelectCardCommand(String inputCommand) {
         for (int i = 0; i <= 6; i++) {
             if (inputCommand.matches(GAME_MENU_COMMANDS[i])) {
@@ -1146,6 +1128,33 @@ public class View {
     }
     //endregion
 
+    //region Control Requests
+    private String roundIsOver(JSONObject valueObject) {
+        printMessage(valueObject);
+        isRoundOver = true;
+        return "Do not need request answer";
+    }
+
+    private String gameIsOver(JSONObject valueObject) {
+        printMessage(valueObject);
+        isGameOver = true;
+        return "Do not need request answer";
+    }
+
+    private String printMessage(JSONObject valueObject) {
+        String message = valueObject.getString("Value");
+        System.out.println(message);
+        return "Do not need request answer";
+    }
+
+    private String error() {
+        JSONObject answerObject = new JSONObject();
+        answerObject.put("Type", "Error");
+        answerObject.put("Value", "Invalid Request Type!!!");
+        return answerObject.toString();
+    }
+    //endregion
+
     /**
      * This method will use in deck, duel, game and shop menu
      * who Call Function String will be some of this:
@@ -1187,13 +1196,6 @@ public class View {
             }
         }
         return false;
-    }
-
-    private String error() {
-        JSONObject answerObject = new JSONObject();
-        answerObject.put("Type", "Error");
-        answerObject.put("Value", "Invalid Request Type!!!");
-        return answerObject.toString();
     }
 
     private void getRegexMatcher(String command, String regex, boolean findMatches) {
