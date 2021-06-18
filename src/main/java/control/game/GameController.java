@@ -501,17 +501,6 @@ public class GameController {
         return game.getPlayer2();
     }
 
-    public boolean isRoundFinished() {
-        return !game.getPlayerByTurn(turn).canPlayerDrawCard() ||
-                game.getPlayerByTurn(turn).getHealth() <= 0;
-    }
-
-    public String checkGameStatus(String username) {
-        if (isRoundFinished())
-            return "This Round is over!";
-        return "the round is not over yet!";
-    }
-
     public String endPhase(String username) {
         StringBuilder answerAnswer = new StringBuilder();
         switch (currentPhase) {
@@ -534,28 +523,19 @@ public class GameController {
             }
             case SECOND_MAIN -> {
                 answerAnswer.append("phase: End Phase\n");
-                if (isRoundFinished()) {
-                    answerAnswer.append(getRoundResults());
-                } else {
-                    changeTurn();
-                    if (turn == PLAYER1)
-                        answerAnswer.append("its ").append(game.getPlayer1().getUser().getNickname()).append("’s turn\n");
-                    else
-                        answerAnswer.append("its ").append(game.getPlayer2().getUser().getNickname()).append("’s turn\n");
-
+                changeTurn();
+                if (turn == PLAYER1)
+                    answerAnswer.append("its ").append(game.getPlayer1().getUser().getNickname()).append("’s turn\n");
+                else
+                    answerAnswer.append("its ").append(game.getPlayer2().getUser().getNickname()).append("’s turn\n");
+                if (getPlayerByTurn().canPlayerDrawCard()) {
                     answerAnswer.append("phase: Draw Phase\n");
                     currentPhase = DRAW;
                     answerAnswer.append(drawPhase());
-                }
+                } else roundIsOver();
             }
         }
         return answerAnswer.toString();
-    }
-
-    private String getRoundResults() {
-        currentRound += 1;
-        game.checkRoundResults();
-        return game.getWinner().getUser().getUsername() + " won the game and the score is: 1000 - 0";
     }
 
     private String drawPhase() {
@@ -570,4 +550,26 @@ public class GameController {
         //checking for effects of cards
     }
 
+    public void roundIsOver() {
+        currentRound += 1;
+        game.checkRoundResults();
+        String results = game.getWinner().getUser().getUsername() + " won the game and the score is: 1000 - 0";
+        JSONObject answerObject = new JSONObject();
+        if (IsGameOver()) {
+            answerObject.put("Type", "Game is over");
+            answerObject.put("Value", checkGameStatus());
+        } else {
+            answerObject.put("Type", "Round is over");
+            answerObject.put("Value", results);
+        }
+        MainController.getInstance().sendRequestToView(answerObject);
+    }
+
+    private boolean IsGameOver() {
+        return false;
+    }
+
+    private String checkGameStatus() {
+        return null;
+    }
 }

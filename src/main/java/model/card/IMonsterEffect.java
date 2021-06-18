@@ -2,7 +2,6 @@ package model.card;
 
 import control.game.Update;
 import model.enums.MonsterEffectTypes;
-import model.game.Game;
 
 public interface IMonsterEffect {
 
