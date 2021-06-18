@@ -16,6 +16,9 @@ public class View {
     private Matcher regexMatcher;
     private String token;
 
+    private boolean isGameOver;
+    private boolean isRoundOver;
+
     private final String[] REGISTER_MENU_COMMANDS = new String[5];
     private final String[] MAIN_MENU_COMMANDS = new String[7];
     private final String[] SCOREBOARD_MENU_COMMANDS = new String[4];
@@ -27,6 +30,7 @@ public class View {
     private final String[] GAME_MENU_COMMANDS = new String[25]; //TODO: add remaining methods and fix array size
 
     private final String CARD_SHOW_REGEX = "^card show (.+)$";
+
 
     //region Initialization block
     {
@@ -174,14 +178,26 @@ public class View {
         String requestType = inputObject.getString("Type");
         JSONObject valueObject = inputObject.getJSONObject("Value");
 
-
-        //TODO: add command to print control message
         return switch (requestType) {
             case "Get tribute cards" -> getTributeCards(valueObject);
             case "Get one monster number" -> getOneMonsterNumber();
             case "Print message" -> printMessage(valueObject);
+            case "Game is over" -> gameIsOver(valueObject);
+            case "Round is over" -> roundIsOver(valueObject);
             default -> error();
         };
+    }
+
+    private String roundIsOver(JSONObject valueObject) {
+        printMessage(valueObject);
+        isRoundOver = true;
+        return "Do not need request answer";
+    }
+
+    private String gameIsOver(JSONObject valueObject) {
+        printMessage(valueObject);
+        isGameOver = true;
+        return "Do not need request answer";
     }
 
     private String printMessage(JSONObject valueObject) {
@@ -567,9 +583,13 @@ public class View {
 
     //region game menu methods
     private void gameMenu() {
+        isGameOver = false;
+        isRoundOver = false;
         int regexIndex;
         while (true) {
-            if (isTheGameOver()) break;
+            if (isRoundOver || isGameOver) {
+                break;
+            }
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
             if (inputCommand.matches(GAME_MENU_COMMANDS[20])) activeCheat(inputCommand, 20);
             else if (inputCommand.matches(GAME_MENU_COMMANDS[21])) activeCheat(inputCommand, 21);
@@ -594,6 +614,9 @@ public class View {
             else if (inputCommand.matches(CARD_SHOW_REGEX)) showCard(inputCommand, "Game");
             else System.out.println("invalid command");
         }
+        if (!isGameOver) {
+            gameMenu();
+        }
     }
 
     private String getOneMonsterNumber() {
@@ -609,35 +632,7 @@ public class View {
             } else System.out.println("invalid command.\nTry again.");
         }
     }
-
-    private boolean isTheGameOver() {
-        //Making message JSONObject and passing to sendControl function:
-        JSONObject value = new JSONObject();
-        value.put("Token", token);
-        JSONObject messageToSendToControl = new JSONObject();
-        messageToSendToControl.put("Type", "Is the game over");
-        messageToSendToControl.put("Value", value);
-        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
-
-        //Survey control JSON message
-        String answerType = (String) controlAnswer.get("Type");
-        String answerValue = (String) controlAnswer.get("Value"); //Value will be "Yes" or "No"
-        if (answerType.equals("Error")) {
-            System.out.println(answerValue);
-            return false;
-        } else {
-            if (answerValue.equals("No")) return false;
-            else {
-                showGameResult(answerValue);
-                return true;
-            }
-        }
-    }
-
-    private void showGameResult(String controlMessage) {
-        System.out.println(controlMessage);
-    }
-
+    
     private int doesInputMatchWithSelectCardCommand(String inputCommand) {
         for (int i = 0; i <= 6; i++) {
             if (inputCommand.matches(GAME_MENU_COMMANDS[i])) {
