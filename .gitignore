@@ -9,6 +9,8 @@
 database/users/
 database/decks/
 
+.idea/*
+.idea
 .idea/
 
 # User-specific stuff
