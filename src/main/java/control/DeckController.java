@@ -65,7 +65,7 @@ public class DeckController {
         return !Deck.getByDeckName(deckName).isCardMaxedOut(Card.getCardByName(cardName), deckType);
     }
 
-    public void addCardToDeck(String username, String deckName, DeckType deckType, String cardName) {
+    public void addCardToDeck(String deckName, DeckType deckType, String cardName) {
         try {
             Deck.getByDeckName(deckName).addCard(Card.getCardByName(cardName), deckType);
         } catch (DatabaseException e) {

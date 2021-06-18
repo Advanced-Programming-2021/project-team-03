@@ -712,7 +712,7 @@ public class MainController {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "There are already three cards with name " + cardName + " in deck " + deckName);
         } else {
-            DeckController.getInstance().addCardToDeck(onlineUsers.get(token), deckName, DeckType.valueOf(deckType.toUpperCase()), cardName);
+            DeckController.getInstance().addCardToDeck(deckName, DeckType.valueOf(deckType.toUpperCase()), cardName);
             answerObject.put("Type", "Successful");
             answerObject.put("Value", "card added to " + deckType + " deck successfully!");
         }
