@@ -13,8 +13,7 @@ import java.util.HashMap;
 public class Deck {
     private static final HashMap<String, Deck> allDecks = new HashMap<>();
     private String deckName;
-    private final ArrayList<Card> mainDeck;
-    private final ArrayList<Card> sideDeck;
+    private final HashMap<DeckType, ArrayList<Card>> decks = new HashMap<>();
 
     public static void initialize() {
         Database.updateAllDecks();
@@ -23,8 +22,8 @@ public class Deck {
     public Deck(String deckName) throws DatabaseException {
         this.deckName = deckName;
 
-        mainDeck = new ArrayList<>();
-        sideDeck = new ArrayList<>();
+        decks.put(DeckType.MAIN, new ArrayList<>());
+        decks.put(DeckType.SIDE, new ArrayList<>());
 
         allDecks.put(deckName, this);
         updateInDatabase();
@@ -42,19 +41,17 @@ public class Deck {
         return deckName;
     }
 
-    public ArrayList<Card> getMainDeck() {
-        return mainDeck;
-    }
-
-    public ArrayList<Card> getSideDeck() {
-        return sideDeck;
+    public ArrayList<Card> getDeck(DeckType deckType) {
+        return decks.get(deckType);
     }
 
     public boolean isDeckValid() {
-        if (mainDeck.size() > 60 || mainDeck.size() < 40 || sideDeck.size() > 15) return false;
+        if (decks.get(DeckType.MAIN).size() > DeckType.MAIN.maxCards
+                || decks.get(DeckType.MAIN).size() < DeckType.MAIN.minCards
+                || decks.get(DeckType.SIDE).size() > DeckType.SIDE.maxCards) return false;
 
-        ArrayList<Card> allCards = new ArrayList<>(mainDeck);
-        allCards.addAll(sideDeck);
+        ArrayList<Card> allCards = new ArrayList<>(decks.get(DeckType.MAIN));
+        allCards.addAll(decks.get(DeckType.SIDE));
 
         return allCards.stream().map(card -> Collections.frequency(allCards, card))
                 .max(Integer::compare).get() <= 3;
@@ -62,32 +59,18 @@ public class Deck {
 
     public String showDeck(DeckType deckType) {
         StringBuilder showDeck = new StringBuilder();
-        switch (deckType) {
-            case SIDE -> {
-                showDeck.append("Deck: ").append(deckName).append("\n");
-                showDeck.append("Side deck: \n");
-                showDeck.append("Monsters: \n");
-                sideDeck.stream().filter(card -> card instanceof Monster)
-                        .sorted((card1, card2) -> card1.getCardName().compareToIgnoreCase(card2.getCardName()))
-                        .forEach(card -> showDeck.append(card.getCardName()).append(": ").append(card.getDescription()));
-                showDeck.append("Spell and Traps: \n");
-                sideDeck.stream().filter(card -> card instanceof SpellAndTrap)
-                        .sorted((card1, card2) -> card1.getCardName().compareToIgnoreCase(card2.getCardName()))
-                        .forEach(card -> showDeck.append(card.getCardName()).append(": ").append(card.getDescription()));
-            }
-            case MAIN -> {
-                showDeck.append("Deck: ").append(deckName).append("\n");
-                showDeck.append("Main deck: \n");
-                showDeck.append("Monsters: \n");
-                mainDeck.stream().filter(card -> card instanceof Monster)
-                        .sorted((card1, card2) -> card1.getCardName().compareToIgnoreCase(card2.getCardName()))
-                        .forEach(card -> showDeck.append(card.getCardName()).append(": ").append(card.getDescription()));
-                showDeck.append("Spell and Traps: \n");
-                mainDeck.stream().filter(card -> card instanceof SpellAndTrap)
-                        .sorted((card1, card2) -> card1.getCardName().compareToIgnoreCase(card2.getCardName()))
-                        .forEach(card -> showDeck.append(card.getCardName()).append(": ").append(card.getDescription()));
-            }
-        }
+
+        showDeck.append("Deck: ").append(deckName).append("\n");
+        showDeck.append(deckType.name);
+        showDeck.append(":\nMonsters: \n");
+        decks.get(deckType).stream().filter(card -> card instanceof Monster)
+                .sorted((card1, card2) -> card1.getCardName().compareToIgnoreCase(card2.getCardName()))
+                .forEach(card -> showDeck.append(card.getCardName()).append(": ").append(card.getDescription()));
+        showDeck.append("Spell and Traps: \n");
+        decks.get(deckType).stream().filter(card -> card instanceof SpellAndTrap)
+                .sorted((card1, card2) -> card1.getCardName().compareToIgnoreCase(card2.getCardName()))
+                .forEach(card -> showDeck.append(card.getCardName()).append(": ").append(card.getDescription()));
+
         return showDeck.toString();
     }
 
@@ -96,7 +79,8 @@ public class Deck {
     }
 
     public String generalOverview() {
-        return this.deckName + ": main deck " + this.mainDeck.size() + ", side deck " + this.sideDeck.size() +
+        return this.deckName + ": main deck " + decks.get(DeckType.MAIN).size()
+                + ", side deck " + decks.get(DeckType.SIDE).size() +
                 (isDeckValid() ? ", Valid" : ", Invalid") + "\n";
     }
 
@@ -105,13 +89,11 @@ public class Deck {
     }
 
     public boolean doesContainCard(Card card, DeckType deckType) {
-        if (deckType == DeckType.MAIN) return mainDeck.contains(card);
-        return sideDeck.contains(card);
+        return decks.get(deckType).contains(card);
     }
 
     public void removeCard(Card card, DeckType deckType) throws DatabaseException {
-        if (deckType == DeckType.MAIN) mainDeck.remove(card);
-        else sideDeck.remove(card);
+        decks.get(deckType).remove(card);
         updateInDatabase();
     }
 
@@ -121,24 +103,20 @@ public class Deck {
     }
 
     public void addCard(Card card, DeckType deckType) throws DatabaseException {
-        if (deckType == DeckType.MAIN) mainDeck.add(card);
-        else sideDeck.add(card);
+        decks.get(deckType).add(card);
         updateInDatabase();
     }
 
     public void addCard(ArrayList<Card> cards, DeckType deckType) throws DatabaseException {
-        if (deckType == DeckType.MAIN) mainDeck.addAll(cards);
-        else sideDeck.addAll(cards);
+        decks.get(deckType).addAll(cards);
         updateInDatabase();
     }
 
     public boolean isDeckFull(DeckType deckType) {
-        if (deckType == DeckType.MAIN) return mainDeck.size() >= 60;
-        else return sideDeck.size() >= 15;
+        return decks.get(deckType).size() >= deckType.maxCards;
     }
 
     public boolean isCardMaxedOut(Card card, DeckType deckType) {
-        if (deckType == DeckType.MAIN) return Collections.frequency(mainDeck, card) >= 3;
-        else return Collections.frequency(sideDeck, card) >= 3;
+        return Collections.frequency(decks.get(deckType), card) >= 3;
     }
 }

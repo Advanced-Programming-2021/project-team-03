@@ -52,7 +52,7 @@ public class DeckController {
         Deck deck = Deck.getByDeckName(deckName);
 
         return Collections.frequency(User.getByUsername(username).getCards(), card) >
-                Collections.frequency(deck.getMainDeck(), card) + Collections.frequency(deck.getSideDeck(), card);
+                Collections.frequency(deck.getDeck(DeckType.MAIN), card) + Collections.frequency(deck.getDeck(DeckType.SIDE), card);
     }
 
     public boolean isDeckFull(String deckName, DeckType deckType) {

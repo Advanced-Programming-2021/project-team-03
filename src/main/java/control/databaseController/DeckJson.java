@@ -7,7 +7,7 @@ import model.user.DeckType;
 import java.util.ArrayList;
 
 public class DeckJson {
-    private String deckName;
+    private final String deckName;
     private final ArrayList<String> mainDeck;
     private final ArrayList<String> sideDeck;
 
@@ -16,8 +16,8 @@ public class DeckJson {
         sideDeck = new ArrayList<>();
 
         deckName = deck.getDeckName();
-        deck.getMainDeck().forEach(card -> mainDeck.add(card.getCardName()));
-        deck.getSideDeck().forEach(card -> sideDeck.add(card.getCardName()));
+        deck.getDeck(DeckType.MAIN).forEach(card -> mainDeck.add(card.getCardName()));
+        deck.getDeck(DeckType.SIDE).forEach(card -> sideDeck.add(card.getCardName()));
     }
 
     public Deck convert() throws DatabaseException {
@@ -30,7 +30,7 @@ public class DeckJson {
         sideDeck.forEach(cardName -> sideDeckCards.add(Card.getCardByName(cardName)));
 
         deck.addCard(mainDeckCards, DeckType.MAIN);
-        deck.addCard(mainDeckCards, DeckType.SIDE);
+        deck.addCard(sideDeckCards, DeckType.SIDE);
 
         return deck;
     }

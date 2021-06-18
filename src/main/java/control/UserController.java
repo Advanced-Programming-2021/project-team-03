@@ -30,7 +30,6 @@ public class UserController {
         try {
             new User(username, password, nickname).setStartingCards();
         } catch (DatabaseException e) {
-            System.out.println(e.toString());
             e.printStackTrace();
         }
     }
@@ -43,7 +42,6 @@ public class UserController {
         try {
             User.getByUsername(username).setNickname(newNickname);
         } catch (DatabaseException e) {
-            System.out.println(e.toString());
             e.printStackTrace();
         }
     }
