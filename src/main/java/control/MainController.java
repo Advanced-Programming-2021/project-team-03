@@ -227,7 +227,10 @@ public class MainController {
                 answerObject.put("Value", "spell activated!");
             }
         } else {
-            if (!GameController.getInstance().doesFieldHaveSpaceForThisCard()) {
+            if (!GameController.getInstance().canSetSelectedCard()) {
+                answerObject.put("Type", "Error");
+                answerObject.put("Value", "selected card is not in your filed And you can not set and activate it.");
+            } else if (!GameController.getInstance().doesFieldHaveSpaceForThisCard()) {
                 answerObject.put("Type", "Error");
                 answerObject.put("Value", "spell card zone is full!");
             } else if (!GameController.getInstance().canCardActivate()) {
