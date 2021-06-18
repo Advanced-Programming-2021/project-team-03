@@ -9,9 +9,7 @@
 database/users/
 database/decks/
 
-.idea/*
-.idea
-.idea/
+.idea/*.xml
 
 # User-specific stuff
 .idea/**/workspace.xml
