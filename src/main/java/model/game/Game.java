@@ -2,6 +2,7 @@ package model.game;
 
 import control.databaseController.DatabaseException;
 import control.game.GameController;
+import control.game.Update;
 import model.card.Card;
 import model.user.User;
 
@@ -113,9 +114,10 @@ public class Game {
         return player2;
     }
 
-    public void checkRoundResults() {
+    public void checkRoundResults(Update gameUpdates) {
         try {
             getWinner().getUser().increaseScore(1000);
+            gameUpdates.playerWins(getWinner());
         } catch (DatabaseException e) {
             System.out.println(e);
         }

@@ -4,6 +4,8 @@ import model.card.AllMonsterEffects;
 import model.card.Card;
 import model.card.Monster;
 import model.game.Game;
+import model.game.Player;
+import model.user.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +19,7 @@ public class Update {
     private ArrayList<Monster> alreadyChangedPositionMonsters; //TODO initialize this filed for each turn
     private final HashMap<UpdateEnum, Object> allUpdates;
     private boolean haveRitualSpellBeenActivated = false; //TODO: make this field true if ritual spell activated.
+    private final ArrayList<Player> roundWinners;
 
 
     public Update(Game game) {
@@ -25,6 +28,7 @@ public class Update {
         haveBeenSetOrSummonACardInPhase = false;
         alreadyChangedPositionMonsters = new ArrayList<>();
         allUpdates = new HashMap<>();
+        roundWinners = new ArrayList<>();
     }
 
     public void addMonstersToAttackedMonsters(Monster monster) {
@@ -78,5 +82,58 @@ public class Update {
 
     public void setHaveRitualSpellBeenActivated(boolean haveRitualSpellBeenActivated) {
         this.haveRitualSpellBeenActivated = haveRitualSpellBeenActivated;
+    }
+
+    public ArrayList<Player> getRoundWinners() {
+        return roundWinners;
+    }
+
+    public void playerWins(Player winner) {
+        roundWinners.add(winner);
+    }
+
+    public boolean isGameOver() {
+        Player firstWinner = roundWinners.get(0);
+        int count = 0;
+        for (Player winner : roundWinners) {
+            if (winner.getUser().getUsername().equals(firstWinner.getUser().getUsername()))
+                count += 1;
+        }
+        return count >= 2;
+    }
+
+    public Player getWinner() {
+        Player firstWinner = roundWinners.get(0);
+        int count = 0;
+        for (Player winner : roundWinners) {
+            if (winner.getUser().getUsername().equals(firstWinner.getUser().getUsername()))
+                count += 1;
+        }
+        if (count >= 2)
+            return firstWinner;
+        else {
+            for (Player winner : roundWinners) {
+                if (!winner.getUser().getUsername().equals(firstWinner.getUser().getUsername()))
+                    return winner;
+            }
+        }
+        return null;
+    }
+
+    public int getWins(Player gameWinner) {
+        int count = 0;
+        for (Player winner : roundWinners) {
+            if (winner.getUser().getUsername().equals(gameWinner.getUser().getUsername()))
+                count += 1;
+        }
+        return count;
+    }
+
+    public Player getLooser(Player gameWinner) {
+        for (Player looser : roundWinners) {
+            if (!looser.getUser().getUsername().equals(gameWinner.getUser().getUsername()))
+                return looser;
+        }
+        return null;
     }
 }
