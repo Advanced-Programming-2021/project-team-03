@@ -178,7 +178,9 @@ public class GameController {
 
     public boolean isCardFieldZoneFull() {
         Player player = getPlayerByTurn();
-        return player.getBoard().getMonstersInField().size() >= 5;
+        if (selectedCard instanceof Monster) {
+            return player.getBoard().getMonstersInField().size() >= 5;
+        } else return player.getBoard().getSpellAndTrapsInField().size() >= 5;
     }
 
     public boolean canPlayerSummonOrSetAnotherCard() {
@@ -260,8 +262,12 @@ public class GameController {
 
     public String setCard() {
         Board board = getPlayerByTurn().getBoard();
-        board.setOrSummonMonsterFromHandToFiled(selectedCard, "Set");
-        gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
+        if (selectedCard instanceof Monster) {
+            board.setOrSummonMonsterFromHandToFiled(selectedCard, "Set");
+            gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
+        } else {
+            board.setSpellAndTrapsInField((SpellAndTrap) selectedCard);
+        }
         return "set successfully";
     }
 

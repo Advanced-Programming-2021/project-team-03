@@ -136,17 +136,33 @@ public class Board {
             spellAndTrapsInField.remove(position);
     }
 
-    public void setOrSummonMonsterFromHandToFiled(Card card,String actionType) { //action type will be set or summon
-        int maxIndex = 1;
-        for (Map.Entry<Integer, Monster> entry : monstersInField.entrySet()) {
-            Integer key = entry.getKey();
-            if (maxIndex < key) maxIndex = key;
+    private int findPositionToSetOrSummonMonsterCard(HashMap<Integer, Monster> monsters) {
+        for (int i = 1; i <= 5; i++) {
+            if (!monsters.containsKey(i)) return i;
         }
-        monstersInField.put(maxIndex, (Monster) card);
-        if (actionType.equals("Set")){
+        return 5;
+    }
+
+    private int findPositionToSetSpellOrTrapCard(HashMap<Integer, SpellAndTrap> spellAndTraps) {
+        for (int i = 1; i <= 5; i++) {
+            if (!spellAndTraps.containsKey(i)) return i;
+        }
+        return 5;
+    }
+
+    public void setSpellAndTrapsInField(SpellAndTrap spellAndTrap) {
+        int index = findPositionToSetSpellOrTrapCard(spellAndTrapsInField);
+        addSpellAndTrapByPosition(index, spellAndTrap);
+        removeCardFromHand((Card) spellAndTrap);
+    }
+
+    public void setOrSummonMonsterFromHandToFiled(Card card, String actionType) { //action type will be set or summon
+        int index = findPositionToSetOrSummonMonsterCard(monstersInField);
+        monstersInField.put(index, (Monster) card);
+        if (actionType.equals("Set")) {
             ((Monster) card).setAttackingFormat(DEFENDING);
             ((Monster) card).setFaceUpSituation(FACE_DOWN);
-        }else if (actionType.equals("Summon")){
+        } else if (actionType.equals("Summon")) {
             ((Monster) card).setAttackingFormat(ATTACKING);
             ((Monster) card).setFaceUpSituation(FACE_UP);
         }
