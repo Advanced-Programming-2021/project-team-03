@@ -30,7 +30,6 @@ public class UserController {
         try {
             new User(username, password, nickname).setStartingCards();
         } catch (DatabaseException e) {
-            System.out.println(e.toString());
             e.printStackTrace();
         }
     }
@@ -43,7 +42,6 @@ public class UserController {
         try {
             User.getByUsername(username).setNickname(newNickname);
         } catch (DatabaseException e) {
-            System.out.println(e.toString());
             e.printStackTrace();
         }
     }
@@ -52,7 +50,6 @@ public class UserController {
         try {
             User.getByUsername(username).changePassword(newPassword);
         } catch (DatabaseException e) {
-            System.out.println(e.toString());
             e.printStackTrace();
         }
     }
@@ -79,10 +76,5 @@ public class UserController {
 
     public boolean isUserActiveDeckValid(String username) {
         return User.getByUsername(username).getActiveDeck().isDeckValid();
-    }
-
-    public String showCardToUser(String cardName) {
-        //TODO Habib
-        return null;
     }
 }

@@ -1,5 +1,6 @@
 package model.game;
 
+import control.game.GameController;
 import model.user.User;
 
 public class Player {
@@ -27,6 +28,8 @@ public class Player {
 
     public void decreaseHealthByAmount(int amount) {
         this.health -= amount;
+        if (this.health <= 0)
+            GameController.getInstance().roundIsOver();
     }
 
     public boolean canPlayerDrawCard() {

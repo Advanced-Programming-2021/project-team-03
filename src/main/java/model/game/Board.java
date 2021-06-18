@@ -6,6 +6,7 @@ import model.card.SpellAndTrap;
 import model.enums.AttackingFormat;
 import model.enums.FaceUpSituation;
 import model.user.Deck;
+import model.user.DeckType;
 import model.user.User;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class Board {
     }
 
     private void addStartingDeckToTheRemainingCards(Deck deck) {
-        remainingCards.addAll(deck.getMainDeck());
+        remainingCards.addAll(deck.getDeck(DeckType.MAIN));
         Collections.shuffle(remainingCards); // shuffle all cards for start the game
     }
 
