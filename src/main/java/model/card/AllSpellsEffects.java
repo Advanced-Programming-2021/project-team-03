@@ -6,7 +6,6 @@ import model.game.Game;
 import model.game.PlayerTurn;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class AllSpellsEffects {
     private static AllSpellsEffects allSpellsEffects;
@@ -22,23 +21,21 @@ public class AllSpellsEffects {
 
     public void cardActivator(SpellAndTrap spell, Game game, Update gameUpdates, PlayerTurn turn) {
         switch (spell.cardName) {
-            case "Terraforming":
-                terraformingEffect(game, turn);
-                break;
-            case "Pot of Greed":
-                potOfGreedEffect(game, turn);
-                break;
-            case "Raigeki":
-                raigekiEffect(game, gameUpdates, turn);
-                break;
-            case "Harpie's Feather Duster":
-                harpiesFeatherDusterEffect(game, gameUpdates, turn);
-                break;
+            case "Terraforming" -> terraformingEffect(game, turn);
+            case "Pot of Greed" -> potOfGreedEffect(game, turn);
+            case "Raigeki" -> raigekiEffect(game, gameUpdates, turn);
+            case "Harpie's Feather Duster" -> harpiesFeatherDusterEffect(game, gameUpdates, turn);
         }
     }
 
     private void harpiesFeatherDusterEffect(Game game, Update gameUpdates, PlayerTurn turn) {
-
+        Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
+        ArrayList<SpellAndTrap> allOpponentsSpellsAndTraps = new ArrayList<>(opponentBoard.getSpellAndTrapsInField().values());
+        for (SpellAndTrap opponentSpell : allOpponentsSpellsAndTraps) {
+            opponentBoard.removeCardFromField(opponentBoard.getSpellPosition(opponentSpell), true);
+            opponentBoard.addCardToGraveyard(opponentSpell);
+            gameUpdates.addMonsterToGraveyard(opponentSpell);
+        }
     }
 
     private void raigekiEffect(Game game, Update gameUpdates, PlayerTurn turn) {

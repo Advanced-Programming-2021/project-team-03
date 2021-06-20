@@ -280,4 +280,12 @@ public class Board {
             }
         }
     }
+
+    public int getSpellPosition(SpellAndTrap spell) {
+        for (Integer i : spellAndTrapsInField.keySet()) {
+            if (spellAndTrapsInField.get(i).equals(spell))
+                return i;
+        }
+        return 0;
+    }
 }
