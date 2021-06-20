@@ -14,6 +14,7 @@ public class Deck {
     private static final HashMap<String, Deck> allDecks = new HashMap<>();
     private String deckName;
     private final HashMap<DeckType, ArrayList<Card>> decks = new HashMap<>();
+    private final HashMap<DeckType, ArrayList<String>> decksCardNames = new HashMap<>();
 
     public static void initialize() {
         Database.updateAllDecks();
@@ -24,6 +25,9 @@ public class Deck {
 
         decks.put(DeckType.MAIN, new ArrayList<>());
         decks.put(DeckType.SIDE, new ArrayList<>());
+
+        decksCardNames.put(DeckType.MAIN, new ArrayList<>());
+        decksCardNames.put(DeckType.SIDE, new ArrayList<>());
 
         allDecks.put(deckName, this);
         updateInDatabase();
@@ -53,7 +57,8 @@ public class Deck {
         ArrayList<Card> allCards = new ArrayList<>(decks.get(DeckType.MAIN));
         allCards.addAll(decks.get(DeckType.SIDE));
 
-        return allCards.stream().map(card -> Collections.frequency(allCards, card))
+        return allCards.stream().map(Card::getCardName)
+                .map(cardName -> Collections.frequency(allCards, cardName))
                 .max(Integer::compare).get() <= 3;
     }
 
@@ -89,11 +94,12 @@ public class Deck {
     }
 
     public boolean doesContainCard(Card card, DeckType deckType) {
-        return decks.get(deckType).contains(card);
+        return decksCardNames.get(deckType).contains(card.getCardName());
     }
 
     public void removeCard(Card card, DeckType deckType) throws DatabaseException {
         decks.get(deckType).remove(card);
+        decksCardNames.get(deckType).remove(card.getCardName());
         updateInDatabase();
     }
 
@@ -104,11 +110,15 @@ public class Deck {
 
     public void addCard(Card card, DeckType deckType) throws DatabaseException {
         decks.get(deckType).add(card.cloneForDeck());
+        decksCardNames.get(deckType).add(card.getCardName());
         updateInDatabase();
     }
 
     public void addCard(ArrayList<Card> cards, DeckType deckType) throws DatabaseException {
-        decks.get(deckType).addAll(cards);
+        cards.forEach(card -> {
+            decks.get(deckType).add(card.cloneForDeck());
+            decksCardNames.get(deckType).add(card.getCardName());
+        });
         updateInDatabase();
     }
 
@@ -117,6 +127,10 @@ public class Deck {
     }
 
     public boolean isCardMaxedOut(Card card, DeckType deckType) {
-        return Collections.frequency(decks.get(deckType), card) >= 3;
+        return Collections.frequency(decksCardNames.get(deckType), card.getCardName()) >= 3;
+    }
+
+    public ArrayList<String> getCardNames(DeckType deckType) {
+        return decksCardNames.get(deckType);
     }
 }
