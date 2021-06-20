@@ -9,7 +9,6 @@ import java.util.HashMap;
 public class SpellAndTrap extends Card {
     private final SpellAndTrapIcon icon;
     private boolean isActive;
-
     private static HashMap<String, SpellAndTrap> allSpellAndTraps;
 
     public static void initialize() {
