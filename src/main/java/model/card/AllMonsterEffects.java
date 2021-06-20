@@ -125,9 +125,45 @@ public class AllMonsterEffects {
     }
 
     //Marshmallon effect
-    public String marshmallonEffect() {
-
-        return null;
+    public String marshmallonEffect(Game game, Monster opponentMonster, FaceUpSituation opponentMonsterFaceUpSit, Player attackingPlayer,
+                                    AttackingFormat opponentMonsterFormat, Monster attackingMonster, Board attackingPlayerBoard, Board opponentBoard,
+                                    int attackingDef, int defendingDef, Update gameUpdates, PlayerTurn turn) {
+        StringBuilder answerString = new StringBuilder();
+        answerString.append("Marshmallon effect activated!\n");
+        switch (opponentMonsterFormat) {
+            case ATTACKING -> {
+                if (attackingDef == 0) {
+                    attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
+                    attackingPlayerBoard.addCardToGraveyard(attackingMonster);
+                    gameUpdates.addMonsterToGraveyard(attackingMonster);
+                    answerString.append("your monster card is destroyed!\n");
+                } else if (attackingDef > 0) {
+                    game.getPlayerOpponentByTurn(turn).decreaseHealthByAmount(attackingDef);
+                    answerString.append("Your opponent receives ").append(attackingDef).append(" battle damage!\n");
+                } else {
+                    attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
+                    attackingPlayerBoard.addCardToGraveyard(attackingMonster);
+                    gameUpdates.addMonsterToGraveyard(attackingMonster);
+                    attackingPlayer.decreaseHealthByAmount(attackingDef);
+                    answerString.append("Your monster card is destroyed and you received ").append(attackingDef).append(" battle damage\n");
+                }
+            }
+            case DEFENDING -> {
+                if (opponentMonsterFaceUpSit == FACE_DOWN) {
+                    opponentMonster.setFaceUpSituation(FaceUpSituation.FACE_UP);
+                    gameUpdates.flipCard(opponentMonster);
+                    attackingPlayer.decreaseHealthByAmount(1000);
+                    answerString.append("you received 1000 battle damage!\n");
+                }
+                if (defendingDef == 0) {
+                    answerString.append("no card is destroyed!\n");
+                } else if (defendingDef < 0) {
+                    attackingPlayer.decreaseHealthByAmount(defendingDef);
+                    answerString.append("no card is destroyed and you received ").append(defendingDef).append(" battle damage!\n");
+                }
+            }
+        }
+        return answerString.toString();
     }
 
     public boolean isSuijinActivatedBefore(Update gameUpdates) {
