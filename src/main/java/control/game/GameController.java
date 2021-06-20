@@ -205,6 +205,9 @@ public class GameController {
         if (monster.getLevel() < 5) {
             board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
             gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
+            if (selectedCard.getCardName().equals("Mirage Dragon")) {
+                AllMonsterEffects.getInstance().mirageDragonEffect(gameUpdates, turn, game);
+            }
             return "summoned successfully";
         }
         JSONObject value = new JSONObject();
@@ -363,7 +366,6 @@ public class GameController {
                     attackingPlayerBoard, attackingMonster, opponentMonster, opponentMonsterFormat, opponentMonsterFaceUpSit));
             return answerString.toString();
         }
-        if (opponentMonster.getCardName().equals("Texchanger") && !AllMonsterEffects.getInstance().isTexChangerActivatedBefore(gameUpdates))
         if (opponentMonster.getCardName().equals("Marshmallon")) {
             answerString.append(AllMonsterEffects.getInstance().marshmallonEffect(game, opponentMonster, opponentMonsterFaceUpSit, game.getPlayerByTurn(turn), opponentMonsterFormat
                     , attackingMonster, attackingPlayerBoard, opponentBoard, attackingDef, defendingDef, gameUpdates, turn));
