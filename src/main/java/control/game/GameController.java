@@ -2,10 +2,7 @@ package control.game;
 
 import control.MainController;
 import control.databaseController.DatabaseException;
-import model.card.AllMonsterEffects;
-import model.card.Card;
-import model.card.Monster;
-import model.card.SpellAndTrap;
+import model.card.*;
 import model.enums.AttackingFormat;
 import model.enums.CardAttributes;
 import model.enums.FaceUpSituation;
@@ -519,7 +516,7 @@ public class GameController {
     public void activateSpellCard() {
         SpellAndTrap spell = (SpellAndTrap) selectedCard;
         spell.setActive(true);
-        //TODO
+        AllSpellsEffects.getInstance().cardActivator(spell, game, gameUpdates, turn);
     }
 
     public String getGraveyard(String username) {
