@@ -52,4 +52,8 @@ public class SpellAndTrap extends Card {
     public static HashMap<String, SpellAndTrap> getAllSpellAndTraps() {
         return allSpellAndTraps;
     }
+
+    public SpellAndTrapIcon getIcon() {
+        return icon;
+    }
 }
