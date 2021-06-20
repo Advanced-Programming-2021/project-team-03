@@ -12,7 +12,6 @@ import model.game.Player;
 import model.game.PlayerTurn;
 import org.json.JSONObject;
 
-import java.util.Collection;
 import java.util.HashMap;
 
 import static control.game.UpdateEnum.*;
@@ -190,4 +189,9 @@ public class AllMonsterEffects {
              ((card instanceof Monster) && ((Monster) card).getFaceUpSituation() == FACE_UP))
                 .mapToInt(card -> ((Monster) card).getAttackingPower()).sum();
     }
+
+    public void mirageDragonEffect(Update gameUpdates, PlayerTurn turn, Game game) {
+        gameUpdates.getCanPlayerActiveATrap().put(game.getPlayerOpponentByTurn(turn), false);
+    }
+
 }

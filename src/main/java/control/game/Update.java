@@ -5,7 +5,6 @@ import model.card.Card;
 import model.card.Monster;
 import model.game.Game;
 import model.game.Player;
-import model.user.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +19,7 @@ public class Update {
     private final HashMap<UpdateEnum, Object> allUpdates;
     private boolean haveRitualSpellBeenActivated = false; //TODO: make this field true if ritual spell activated.
     private final ArrayList<Player> roundWinners;
-
+    private final HashMap<Player, Boolean> canPlayerActiveATrap;
 
     public Update(Game game) {
         this.game = game;
@@ -29,11 +28,18 @@ public class Update {
         alreadyChangedPositionMonsters = new ArrayList<>();
         allUpdates = new HashMap<>();
         roundWinners = new ArrayList<>();
+        canPlayerActiveATrap = new HashMap<>();
+        canPlayerActiveATrap.put(game.getPlayer1(), true);
+        canPlayerActiveATrap.put(game.getPlayer2(), true);
     }
 
     public void addMonstersToAttackedMonsters(Monster monster) {
         alreadyAttackedMonsters.add(monster);
         allUpdates.put(ATTACKING_CARD, monster);
+    }
+
+    public HashMap<Player, Boolean> getCanPlayerActiveATrap() {
+        return canPlayerActiveATrap;
     }
 
     public boolean didMonsterAttack(Monster monster) {
@@ -68,12 +74,16 @@ public class Update {
         allUpdates.put(CARD_FLIPPED, card);
         if (card.getCardName().equals("Man-Eater Bug"))
             AllMonsterEffects.getInstance().ManEaterEffect(game, GameController.getInstance().getTurn(), this);
+        if (card.getCardName().equals("Mirage Dragon"))
+            AllMonsterEffects.getInstance().mirageDragonEffect(this, GameController.getInstance().getTurn(), game);
     }
 
     public void addMonsterToGraveyard(Card card) {
         allUpdates.put(CARD_DESTROYED, card);
         if (card.getCardName().equals("Yomi Ship"))
             AllMonsterEffects.getInstance().yomiShipEffect(game, GameController.getInstance().getTurn(), GameController.getInstance().getSelectedCard(), this);
+        if (card.getCardName().equals("Mirage Dragon"))
+            canPlayerActiveATrap.put(game.getPlayerOpponentByTurn(GameController.getInstance().getTurn()), true);
     }
 
     public boolean haveRitualSpellBeenActivated() {

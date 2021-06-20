@@ -205,6 +205,9 @@ public class GameController {
         if (monster.getLevel() < 5) {
             board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
             gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
+            if (selectedCard.getCardName().equals("Mirage Dragon")) {
+                AllMonsterEffects.getInstance().mirageDragonEffect(gameUpdates, turn, game);
+            }
             return "summoned successfully";
         }
         JSONObject value = new JSONObject();
