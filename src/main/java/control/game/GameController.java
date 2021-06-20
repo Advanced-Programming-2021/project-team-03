@@ -357,6 +357,10 @@ public class GameController {
         gameUpdates.addMonstersToAttackedMonsters(attackingMonster);
         int attackingDef = attackingMonster.getAttackingPower() - opponentMonster.getAttackingPower();
         int defendingDef = attackingMonster.getAttackingPower() - opponentMonster.getDefensivePower();
+
+        if (opponentMonster.getCardName().equals("The Calculator"))
+            attackingDef += AllMonsterEffects.getInstance().theCalculatorAtkPower(attackingPlayerBoard);
+
         StringBuilder answerString = new StringBuilder();
         if (opponentMonster.getCardName().equals("Suijin") && !AllMonsterEffects.getInstance().isSuijinActivatedBefore(gameUpdates)) {
             answerString.append(AllMonsterEffects.getInstance().suijinEffect(game, gameUpdates, attackingPlayerUsername,

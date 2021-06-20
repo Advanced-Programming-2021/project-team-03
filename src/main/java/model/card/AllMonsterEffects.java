@@ -12,6 +12,7 @@ import model.game.Player;
 import model.game.PlayerTurn;
 import org.json.JSONObject;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 import static control.game.UpdateEnum.*;
@@ -184,4 +185,9 @@ public class AllMonsterEffects {
         return false;
     }
 
+    public int theCalculatorAtkPower(Board attackingPlayerBoard) {
+        return attackingPlayerBoard.getInHandCards().stream().filter(card ->
+             ((card instanceof Monster) && ((Monster) card).getFaceUpSituation() == FACE_UP))
+                .mapToInt(card -> ((Monster) card).getAttackingPower()).sum();
+    }
 }
