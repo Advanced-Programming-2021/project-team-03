@@ -48,4 +48,6 @@ public abstract class Card {
         if (Monster.getMonsterByName(cardName) != null) return Monster.getMonsterByName(cardName);
         return SpellAndTrap.getSpellAndTrapByName(cardName);
     }
+
+    public abstract Card cloneForDeck();
 }

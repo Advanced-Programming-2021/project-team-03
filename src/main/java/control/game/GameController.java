@@ -26,6 +26,7 @@ import static control.game.GamePhases.*;
 import static control.game.TypeOfSelectedCard.*;
 import static control.game.UpdateEnum.*;
 import static model.enums.FaceUpSituation.*;
+import static model.enums.SpellAndTrapIcon.RITUAL;
 import static model.game.PlayerTurn.PLAYER1;
 import static model.game.PlayerTurn.PLAYER2;
 
@@ -457,8 +458,37 @@ public class GameController {
     }
 
     public boolean canCardActivate() {
+        SpellAndTrap spellAndTrap = (SpellAndTrap) selectedCard;
+        Board board = getPlayerByTurn().getBoard();
+        HashMap<Integer, Monster> monstersInField = board.getMonstersInField();
+        ArrayList<Card> inHandCards = board.getInHandCards();
+        if (spellAndTrap.getIcon() == RITUAL) {
+            ArrayList<Monster> ritualMonstersInHand = new ArrayList<>();
+            for (Card card : inHandCards) {
+                if ((card instanceof Monster)) {
+                    Monster monster = (Monster) card;
+                    if (monster.getType() == MonsterTypes.RITUAL) {
+                        ritualMonstersInHand.add(monster);
+                    }
+                }
+            }
+            int monstersLevelSum = 0;
+            for (Map.Entry<Integer, Monster> entry : monstersInField.entrySet()) {
+                Monster monster = entry.getValue();
+                monstersLevelSum += monster.getLevel();
+            }
+            if (ritualMonstersInHand.size() != 0) {
+                for (Monster monster : ritualMonstersInHand) {
+                    if (monster.getLevel() <= monstersLevelSum) {
+                        return true;
+                    }
+                }
+            }
+            MainController.getInstance().sendPrintRequestToView("there is no way you could ritual summon a monster");
+            return false;
+        }
         //TODO
-        return false;
+        return true;
     }
 
     public void activateSpellCard() {
