@@ -222,9 +222,14 @@ public class MainController {
                 answerObject.put("Type", "Error");
                 answerObject.put("Value", "preparations of this spell are not done yet!");
             } else {
-                GameController.getInstance().activateSpellCard();
-                answerObject.put("Type", "Successful");
-                answerObject.put("Value", "spell activated!");
+                boolean success = GameController.getInstance().activateSpellCard();
+                if (success) {
+                    answerObject.put("Type", "Successful");
+                    answerObject.put("Value", "spell activated!");
+                } else {
+                    answerObject.put("Type", "Cancel");
+                    answerObject.put("Value", "Command canceled.");
+                }
             }
         } else {
             if (!GameController.getInstance().canSetSelectedCard()) {
@@ -238,9 +243,14 @@ public class MainController {
                 answerObject.put("Value", "preparations of this spell are not done yet!");
             } else {
                 GameController.getInstance().setCard();
-                GameController.getInstance().activateSpellCard();
-                answerObject.put("Type", "Successful");
-                answerObject.put("Value", "spell activated!");
+                boolean success = GameController.getInstance().activateSpellCard();
+                if (success) {
+                    answerObject.put("Type", "Successful");
+                    answerObject.put("Value", "spell activated!");
+                } else {
+                    answerObject.put("Type", "Cancel");
+                    answerObject.put("Value", "Command canceled.");
+                }
             }
         }
         return answerObject.toString();

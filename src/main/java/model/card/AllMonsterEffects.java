@@ -111,7 +111,7 @@ public class AllMonsterEffects {
             return;
         }
         Player defendingPlayer = game.getPlayerOpponentByTurn(turn);
-        Monster opponentMonster = defendingPlayer.getBoard().getMonsterByPosition(position);
+        Monster opponentMonster = defendingPlayer.getBoard().getMonsterInFieldByPosition(position);
         StringBuilder answerString = new StringBuilder();
         if (opponentMonster == null)
             answerString.append("No card destroyed.");

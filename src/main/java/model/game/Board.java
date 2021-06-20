@@ -89,8 +89,12 @@ public class Board {
         return inHandCards;
     }
 
-    public Monster getMonsterByPosition(int position) {
+    public Monster getMonsterInFieldByPosition(int position) {
         return monstersInField.get(position);
+    }
+
+    public Card getCardInHandByPosition(int position) {
+        return inHandCards.get(position - 1);
     }
 
     public int getMonsterPosition(Monster monster) {
