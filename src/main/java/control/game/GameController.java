@@ -363,7 +363,11 @@ public class GameController {
                     attackingPlayerBoard, attackingMonster, opponentMonster, opponentMonsterFormat, opponentMonsterFaceUpSit));
             return answerString.toString();
         }
-        if (opponentMonster.getCardName().equals("Texchanger") && !AllMonsterEffects.getInstance().isTexChangerActivatedBefore(gameUpdates))
+        if (opponentMonster.getCardName().equals("Texchanger") && !AllMonsterEffects.getInstance().isTexChangerActivatedBefore(gameUpdates)) {
+            gameUpdates.getAllUpdates().put(TEXCHANGER_ACTIVATED, opponentMonster);
+            answerString.append("Texchanger Monster Activated!!!");
+            return answerString.toString();
+        }
         if (opponentMonster.getCardName().equals("Marshmallon")) {
             answerString.append(AllMonsterEffects.getInstance().marshmallonEffect(game, opponentMonster, opponentMonsterFaceUpSit, game.getPlayerByTurn(turn), opponentMonsterFormat
                     , attackingMonster, attackingPlayerBoard, opponentBoard, attackingDef, defendingDef, gameUpdates, turn));

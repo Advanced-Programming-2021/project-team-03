@@ -183,4 +183,5 @@ public class AllMonsterEffects {
         }
         return false;
     }
+
 }
