@@ -361,7 +361,7 @@ public class GameController {
         int defendingDef = attackingMonster.getAttackingPower() - opponentMonster.getDefensivePower();
         StringBuilder answerString = new StringBuilder();
 
-        if (opponentMonster.getCardName().equals("The Calculator")){
+        if (opponentMonster.getCardName().equals("The Calculator")) {
             int attack = AllMonsterEffects.getInstance().theCalculatorAtkPower(attackingPlayerBoard);
             attackingDef += attack;
             answerString.append("\nThe Calculator Monster activated, giving you ")
@@ -566,11 +566,10 @@ public class GameController {
                     //TODO Summon card
                 } else return false;
             } else return false;
+        } else {
+            AllSpellsEffects.getInstance().cardActivator(spell, game, gameUpdates, turn);
         }
-        //TODO
         return true;
-        spell.setActive(true);
-        AllSpellsEffects.getInstance().cardActivator(spell, game, gameUpdates, turn);
     }
 
     public String getGraveyard(String username) {
