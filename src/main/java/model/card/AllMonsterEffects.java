@@ -2,6 +2,7 @@ package model.card;
 
 import control.MainController;
 import control.game.Update;
+import control.game.UpdateEnum;
 import model.enums.AttackingFormat;
 import model.enums.FaceUpSituation;
 import model.enums.MonsterEffectTypes;
@@ -13,8 +14,9 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-import static model.enums.FaceUpSituation.FACE_UP;
-import static model.enums.MonsterEffectTypes.CONTINUOUS;
+import static control.game.UpdateEnum.*;
+import static model.enums.FaceUpSituation.*;
+import static model.enums.MonsterEffectTypes.*;
 
 public class AllMonsterEffects {
     private static AllMonsterEffects allMonsterEffects;
@@ -70,8 +72,11 @@ public class AllMonsterEffects {
     }
 
     //Suijin effect
-    public String suijinEffect(Game game, Update gameUpdates, String attackingPlayerUsername, Board attackingPlayerBoard, Monster attackingMonster, Monster opponentMonster, AttackingFormat opponentMonsterFormat, FaceUpSituation opponentMonsterFaceUpSit) {
+    public String suijinEffect(Game game, Update gameUpdates, String attackingPlayerUsername, Board attackingPlayerBoard,
+                               Monster attackingMonster, Monster opponentMonster, AttackingFormat opponentMonsterFormat,
+                               FaceUpSituation opponentMonsterFaceUpSit) {
         StringBuilder answerString = new StringBuilder();
+        gameUpdates.getAllUpdates().put(UpdateEnum.SUIJIN_ACTIVATED, opponentMonster);
         switch (opponentMonsterFormat) {
             case ATTACKING -> {
                 attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
@@ -123,5 +128,23 @@ public class AllMonsterEffects {
     public String marshmallonEffect() {
 
         return null;
+    }
+
+    public boolean isSuijinActivatedBefore(Update gameUpdates) {
+        for (UpdateEnum updateEnum : gameUpdates.getAllUpdates().keySet()) {
+            if (updateEnum.equals(SUIJIN_ACTIVATED)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isTexChangerActivatedBefore(Update gameUpdates) {
+        for (UpdateEnum updateEnum : gameUpdates.getAllUpdates().keySet()) {
+            if (updateEnum.equals(TEXCHANGER_ACTIVATED)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

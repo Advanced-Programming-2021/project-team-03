@@ -357,11 +357,12 @@ public class GameController {
         int attackingDef = attackingMonster.getAttackingPower() - opponentMonster.getAttackingPower();
         int defendingDef = attackingMonster.getAttackingPower() - opponentMonster.getDefensivePower();
         StringBuilder answerString = new StringBuilder();
-        if (opponentMonster.getCardName().equals("Suijin") && !isSuijinActivatedBefore()) {
+        if (opponentMonster.getCardName().equals("Suijin") && !AllMonsterEffects.getInstance().isSuijinActivatedBefore(gameUpdates)) {
             answerString.append(AllMonsterEffects.getInstance().suijinEffect(game, gameUpdates, attackingPlayerUsername,
                     attackingPlayerBoard, attackingMonster, opponentMonster, opponentMonsterFormat, opponentMonsterFaceUpSit));
             return answerString.toString();
         }
+        if (opponentMonster.getCardName().equals("Texchanger") && !AllMonsterEffects.getInstance().isTexChangerActivatedBefore(gameUpdates))
         if (opponentMonster.getCardName().equals("Marshmallon")) {
             answerString.append(AllMonsterEffects.getInstance().marshmallonEffect());
             return answerString.toString();
@@ -414,22 +415,12 @@ public class GameController {
         return "Unknown Error";
     }
 
-    private boolean isSuijinActivatedBefore() {
-        for (UpdateEnum updateEnum : gameUpdates.getAllUpdates().keySet()) {
-            if (updateEnum.equals(SUIJIN_ACTIVATED)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public boolean canAttackDirectly() {
         return game.getPlayerOpponentByTurn(turn).getBoard().getMonstersInField().size() == 0;
     }
 
     public int attackDirectlyToTheOpponent() {
         /*return the opponents receiving damage*/
-
         Monster attackingMonster = (Monster) selectedCard;
         int attackingPower = attackingMonster.getAttackingPower();
         game.getPlayerOpponentByTurn(turn).decreaseHealthByAmount(attackingPower);
