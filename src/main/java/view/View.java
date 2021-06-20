@@ -4,17 +4,20 @@ import control.MainController;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class View {
-    //TODO: check deck and card input type
     private static View instance;
 
     private final Scanner SCANNER = new Scanner(System.in);
     private Matcher regexMatcher;
     private String token;
+
+    private boolean isGameOver;
+    private boolean isRoundOver;
 
     private final String[] REGISTER_MENU_COMMANDS = new String[5];
     private final String[] MAIN_MENU_COMMANDS = new String[7];
@@ -24,9 +27,10 @@ public class View {
     private final String[] SHOP_MENU_COMMANDS = new String[5];
     private final String[] DECK_MENU_COMMANDS = new String[19];
     private final String[] DUEL_MENU_COMMANDS = new String[12];
-    private final String[] GAME_MENU_COMMANDS = new String[25]; //TODO: add remaining methods and fix array size
+    private final String[] GAME_MENU_COMMANDS = new String[25];
 
     private final String CARD_SHOW_REGEX = "^card show (.+)$";
+
 
     //region Initialization block
     {
@@ -174,20 +178,52 @@ public class View {
         String requestType = inputObject.getString("Type");
         JSONObject valueObject = inputObject.getJSONObject("Value");
 
-
-        //TODO: add command to print control message
         return switch (requestType) {
             case "Get tribute cards" -> getTributeCards(valueObject);
             case "Get one monster number" -> getOneMonsterNumber();
             case "Print message" -> printMessage(valueObject);
+            case "Game is over" -> gameIsOver(valueObject);
+            case "Round is over" -> roundIsOver(valueObject);
+            case "Ritual summon" -> ritualSummon();
             default -> error();
         };
     }
 
-    private String printMessage(JSONObject valueObject) {
-        String message = valueObject.getString("Value");
-        System.out.println(message);
-        return "Do not need request answer";
+    private String ritualSummon() {
+        System.out.println("Write your ritual monster card number to summon");
+        JSONObject answerObject = new JSONObject();
+        int ritualMonsterNumber = -1;
+        while (true) {
+            String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if (inputCommand.matches("Cancel")) {
+                answerObject.put("Type", "Cancel");
+                return answerObject.toString();
+            } else if (inputCommand.matches("\\d+")) {
+                ritualMonsterNumber = Integer.parseInt(inputCommand);
+                break;
+            } else System.out.println("invalid command!\n" +
+                    "you should special summon right now");
+        }
+        System.out.println("Write tribute monster cards number\n" +
+                "Write Finish when its finished.");
+        JSONObject messageValue = new JSONObject();
+        messageValue.put("Ritual monster number",String.valueOf(ritualMonsterNumber));
+        ArrayList<Integer> tributeCardNumbers = new ArrayList<>();
+        while (true) {
+            String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if (inputCommand.matches("Cancel")) {
+                answerObject.put("Type", "Cancel");
+                messageValue.put("Tribute card numbers",tributeCardNumbers);
+                answerObject.put("Value",messageValue);
+                return answerObject.toString();
+            } else if (inputCommand.matches("Finish")) {
+                answerObject.put("Type", "Successful");
+                return answerObject.toString();
+            } else if (inputCommand.matches("\\d+")) {
+                tributeCardNumbers.add(Integer.parseInt(inputCommand));
+            } else System.out.println("invalid command!\n" +
+                    "you should special summon right now");
+        }
     }
 
     //region register menu methods
@@ -567,9 +603,13 @@ public class View {
 
     //region game menu methods
     private void gameMenu() {
+        isGameOver = false;
+        isRoundOver = false;
         int regexIndex;
         while (true) {
-            if (isTheGameOver()) break;
+            if (isRoundOver || isGameOver) {
+                break;
+            }
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
             if (inputCommand.matches(GAME_MENU_COMMANDS[20])) activeCheat(inputCommand, 20);
             else if (inputCommand.matches(GAME_MENU_COMMANDS[21])) activeCheat(inputCommand, 21);
@@ -594,6 +634,10 @@ public class View {
             else if (inputCommand.matches(CARD_SHOW_REGEX)) showCard(inputCommand, "Game");
             else System.out.println("invalid command");
         }
+        if (!isGameOver) {
+            //TODO: run cardTransferMenu
+            gameMenu();
+        }
     }
 
     private String getOneMonsterNumber() {
@@ -608,34 +652,6 @@ public class View {
                 return inputCommand;
             } else System.out.println("invalid command.\nTry again.");
         }
-    }
-
-    private boolean isTheGameOver() {
-        //Making message JSONObject and passing to sendControl function:
-        JSONObject value = new JSONObject();
-        value.put("Token", token);
-        JSONObject messageToSendToControl = new JSONObject();
-        messageToSendToControl.put("Type", "Is the game over");
-        messageToSendToControl.put("Value", value);
-        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
-
-        //Survey control JSON message
-        String answerType = (String) controlAnswer.get("Type");
-        String answerValue = (String) controlAnswer.get("Value"); //Value will be "Yes" or "No"
-        if (answerType.equals("Error")) {
-            System.out.println(answerValue);
-            return false;
-        } else {
-            if (answerValue.equals("No")) return false;
-            else {
-                showGameResult(answerValue);
-                return true;
-            }
-        }
-    }
-
-    private void showGameResult(String controlMessage) {
-        System.out.println(controlMessage);
     }
 
     private int doesInputMatchWithSelectCardCommand(String inputCommand) {
@@ -1151,6 +1167,33 @@ public class View {
     }
     //endregion
 
+    //region Control Requests
+    private String roundIsOver(JSONObject valueObject) {
+        printMessage(valueObject);
+        isRoundOver = true;
+        return "Do not need request answer";
+    }
+
+    private String gameIsOver(JSONObject valueObject) {
+        printMessage(valueObject);
+        isGameOver = true;
+        return "Do not need request answer";
+    }
+
+    private String printMessage(JSONObject valueObject) {
+        String message = valueObject.getString("Value");
+        System.out.println(message);
+        return "Do not need request answer";
+    }
+
+    private String error() {
+        JSONObject answerObject = new JSONObject();
+        answerObject.put("Type", "Error");
+        answerObject.put("Value", "Invalid Request Type!!!");
+        return answerObject.toString();
+    }
+    //endregion
+
     /**
      * This method will use in deck, duel, game and shop menu
      * who Call Function String will be some of this:
@@ -1192,13 +1235,6 @@ public class View {
             }
         }
         return false;
-    }
-
-    private String error() {
-        JSONObject answerObject = new JSONObject();
-        answerObject.put("Type", "Error");
-        answerObject.put("Value", "Invalid Request Type!!!");
-        return answerObject.toString();
     }
 
     private void getRegexMatcher(String command, String regex, boolean findMatches) {

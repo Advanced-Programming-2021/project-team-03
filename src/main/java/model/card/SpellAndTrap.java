@@ -52,4 +52,14 @@ public class SpellAndTrap extends Card {
     public static HashMap<String, SpellAndTrap> getAllSpellAndTraps() {
         return allSpellAndTraps;
     }
+
+    public SpellAndTrapIcon getIcon() {
+        return icon;
+    }
+
+    public SpellAndTrap cloneForDeck() {
+        SpellAndTrap clone = new SpellAndTrap(cardName, attribute, description, price, cardID, icon);
+        clone.isActive = this.isActive;
+        return clone;
+    }
 }

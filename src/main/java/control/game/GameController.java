@@ -1,6 +1,7 @@
 package control.game;
 
 import control.MainController;
+import control.databaseController.DatabaseException;
 import model.card.AllMonsterEffects;
 import model.card.Card;
 import model.card.Monster;
@@ -24,6 +25,8 @@ import java.util.Random;
 import static control.game.GamePhases.*;
 import static control.game.TypeOfSelectedCard.*;
 import static control.game.UpdateEnum.*;
+import static model.enums.FaceUpSituation.*;
+import static model.enums.SpellAndTrapIcon.RITUAL;
 import static model.game.PlayerTurn.PLAYER1;
 import static model.game.PlayerTurn.PLAYER2;
 
@@ -178,7 +181,9 @@ public class GameController {
 
     public boolean isCardFieldZoneFull() {
         Player player = getPlayerByTurn();
-        return player.getBoard().getMonstersInField().size() >= 5;
+        if (selectedCard instanceof Monster) {
+            return player.getBoard().getMonstersInField().size() >= 5;
+        } else return player.getBoard().getSpellAndTrapsInField().size() >= 5;
     }
 
     public boolean canPlayerSummonOrSetAnotherCard() {
@@ -201,6 +206,9 @@ public class GameController {
         if (monster.getLevel() < 5) {
             board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
             gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
+            if (selectedCard.getCardName().equals("Mirage Dragon")) {
+                AllMonsterEffects.getInstance().mirageDragonEffect(gameUpdates, turn, game);
+            }
             return "summoned successfully";
         }
         JSONObject value = new JSONObject();
@@ -260,8 +268,12 @@ public class GameController {
 
     public String setCard() {
         Board board = getPlayerByTurn().getBoard();
-        board.setOrSummonMonsterFromHandToFiled(selectedCard, "Set");
-        gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
+        if (selectedCard instanceof Monster) {
+            board.setOrSummonMonsterFromHandToFiled(selectedCard, "Set");
+            gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
+        } else {
+            board.setSpellAndTrapsInField((SpellAndTrap) selectedCard);
+        }
         return "set successfully";
     }
 
@@ -299,7 +311,7 @@ public class GameController {
     public boolean canFlipSummon(String username) {
         if (game.getPlayerByName(username).getBoard().getMonstersInField().containsValue((Monster) selectedCard)) {
             Monster monster = (Monster) selectedCard;
-            return monster.getFaceUpSituation().equals(FaceUpSituation.FACE_DOWN);
+            return monster.getFaceUpSituation().equals(FACE_DOWN);
         }
         return false;
     }
@@ -350,13 +362,19 @@ public class GameController {
         int attackingDef = attackingMonster.getAttackingPower() - opponentMonster.getAttackingPower();
         int defendingDef = attackingMonster.getAttackingPower() - opponentMonster.getDefensivePower();
         StringBuilder answerString = new StringBuilder();
-        if (opponentMonster.getCardName().equals("Suijin") && !isSuijinActivatedBefore()) {
+        if (opponentMonster.getCardName().equals("Suijin") && !AllMonsterEffects.getInstance().isSuijinActivatedBefore(gameUpdates)) {
             answerString.append(AllMonsterEffects.getInstance().suijinEffect(game, gameUpdates, attackingPlayerUsername,
                     attackingPlayerBoard, attackingMonster, opponentMonster, opponentMonsterFormat, opponentMonsterFaceUpSit));
             return answerString.toString();
         }
+        if (opponentMonster.getCardName().equals("Texchanger") && !AllMonsterEffects.getInstance().isTexChangerActivatedBefore(gameUpdates)) {
+            gameUpdates.getAllUpdates().put(TEXCHANGER_ACTIVATED, opponentMonster);
+            answerString.append("Texchanger Monster Activated!!!");
+            return answerString.toString();
+        }
         if (opponentMonster.getCardName().equals("Marshmallon")) {
-            answerString.append(AllMonsterEffects.getInstance().marshmallonEffect());
+            answerString.append(AllMonsterEffects.getInstance().marshmallonEffect(game, opponentMonster, opponentMonsterFaceUpSit, game.getPlayerByTurn(turn), opponentMonsterFormat
+                    , attackingMonster, attackingPlayerBoard, opponentBoard, attackingDef, defendingDef, gameUpdates, turn));
             return answerString.toString();
         }
         switch (opponentMonsterFormat) {
@@ -385,7 +403,7 @@ public class GameController {
                 return answerString.toString();
             }
             case DEFENDING -> {
-                if (opponentMonsterFaceUpSit == FaceUpSituation.FACE_DOWN) {
+                if (opponentMonsterFaceUpSit == FACE_DOWN) {
                     opponentMonster.setFaceUpSituation(FaceUpSituation.FACE_UP);
                     gameUpdates.flipCard(opponentMonster);
                     answerString.append("opponent’s monster card was ").append(opponentMonster.getCardName());
@@ -407,22 +425,12 @@ public class GameController {
         return "Unknown Error";
     }
 
-    private boolean isSuijinActivatedBefore() {
-        for (UpdateEnum updateEnum : gameUpdates.getAllUpdates().keySet()) {
-            if (updateEnum.equals(SUIJIN_ACTIVATED)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public boolean canAttackDirectly() {
         return game.getPlayerOpponentByTurn(turn).getBoard().getMonstersInField().size() == 0;
     }
 
     public int attackDirectlyToTheOpponent() {
         /*return the opponents receiving damage*/
-
         Monster attackingMonster = (Monster) selectedCard;
         int attackingPower = attackingMonster.getAttackingPower();
         game.getPlayerOpponentByTurn(turn).decreaseHealthByAmount(attackingPower);
@@ -433,22 +441,59 @@ public class GameController {
         return (selectedCard instanceof SpellAndTrap && selectedCard.getAttribute() == CardAttributes.SPELL);
     }
 
+    public boolean isCardInField() {
+        Board board = getPlayerByTurn().getBoard();
+        return board.getSpellAndTrapsInField().containsValue((SpellAndTrap) selectedCard);
+    }
+
     public boolean cardAlreadyActivated() {
-        //TODO
-        return false;
+        SpellAndTrap spell = (SpellAndTrap) selectedCard;
+        return spell.isActive();
     }
 
     public boolean doesFieldHaveSpaceForThisCard() {
-        //TODO
+        Board board = getPlayerByTurn().getBoard();
+        if (board.getSpellAndTrapsInField().size() <= 4) return true;
         return false;
     }
 
     public boolean canCardActivate() {
+        SpellAndTrap spellAndTrap = (SpellAndTrap) selectedCard;
+        Board board = getPlayerByTurn().getBoard();
+        HashMap<Integer, Monster> monstersInField = board.getMonstersInField();
+        ArrayList<Card> inHandCards = board.getInHandCards();
+        if (spellAndTrap.getIcon() == RITUAL) {
+            ArrayList<Monster> ritualMonstersInHand = new ArrayList<>();
+            for (Card card : inHandCards) {
+                if ((card instanceof Monster)) {
+                    Monster monster = (Monster) card;
+                    if (monster.getType() == MonsterTypes.RITUAL) {
+                        ritualMonstersInHand.add(monster);
+                    }
+                }
+            }
+            int monstersLevelSum = 0;
+            for (Map.Entry<Integer, Monster> entry : monstersInField.entrySet()) {
+                Monster monster = entry.getValue();
+                monstersLevelSum += monster.getLevel();
+            }
+            if (ritualMonstersInHand.size() != 0) {
+                for (Monster monster : ritualMonstersInHand) {
+                    if (monster.getLevel() <= monstersLevelSum) {
+                        return true;
+                    }
+                }
+            }
+            MainController.getInstance().sendPrintRequestToView("there is no way you could ritual summon a monster");
+            return false;
+        }
         //TODO
-        return false;
+        return true;
     }
 
     public void activateSpellCard() {
+        SpellAndTrap spell = (SpellAndTrap) selectedCard;
+        spell.setActive(true);
         //TODO
     }
 
@@ -468,17 +513,14 @@ public class GameController {
             return false;
         if (selectedCard instanceof Monster &&
                 game.getPlayerOpponentByTurn(turn).getBoard().getMonstersInField().containsValue((Monster) selectedCard) &&
-                ((Monster) selectedCard).getFaceUpSituation().equals(FaceUpSituation.FACE_DOWN))
+                ((Monster) selectedCard).getFaceUpSituation().equals(FACE_DOWN))
             return false;
         return !(selectedCard instanceof SpellAndTrap) ||
                 !game.getPlayerOpponentByTurn(turn).getBoard().getSpellAndTrapsInField().containsValue((SpellAndTrap) selectedCard) ||
                 ((SpellAndTrap) selectedCard).isActive();
     }
 
-    //TODO game status
-    //TODO get winner in 3 round games
-
-    public String surrender(String username) {
+    public String surrender() {
         /*return the surrender message*/
         currentRound += 1;
         game.surrender(turn);
@@ -501,7 +543,7 @@ public class GameController {
         return game.getPlayer2();
     }
 
-    public String endPhase(String username) {
+    public String endPhase() {
         StringBuilder answerAnswer = new StringBuilder();
         switch (currentPhase) {
             case DRAW -> {
@@ -524,6 +566,7 @@ public class GameController {
             case SECOND_MAIN -> {
                 answerAnswer.append("phase: End Phase\n");
                 changeTurn();
+                gameUpdates.reset();
                 if (turn == PLAYER1)
                     answerAnswer.append("its ").append(game.getPlayer1().getUser().getNickname()).append("’s turn\n");
                 else
@@ -552,7 +595,7 @@ public class GameController {
 
     public void roundIsOver() {
         currentRound += 1;
-        game.checkRoundResults();
+        game.checkRoundResults(gameUpdates);
         String results = game.getWinner().getUser().getUsername() + " won the game and the score is: 1000 - 0";
         JSONObject answerObject = new JSONObject();
         if (IsGameOver()) {
@@ -566,10 +609,23 @@ public class GameController {
     }
 
     private boolean IsGameOver() {
-        return false;
+        if (currentRound > game.getNumberOfRounds())
+            return true;
+        else return gameUpdates.isGameOver();
     }
 
     private String checkGameStatus() {
-        return null;
+        Player gameWinner = gameUpdates.getWinner();
+        int winnerNumberOfWins = gameUpdates.getWins(gameWinner);
+        Player looser = gameUpdates.getLooser(gameWinner);
+        int looserNumberOfWins = gameUpdates.getWins(looser);
+        try {
+            gameWinner.getUser().increaseBalance((winnerNumberOfWins * 1000) + 3 * gameWinner.getHealth());
+            looser.getUser().increaseBalance((looserNumberOfWins * 1000));
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        return gameWinner.getUser().getUsername() + " won the whole match with score: " + winnerNumberOfWins * 1000 + "-" + looserNumberOfWins * 1000;
     }
+
 }
