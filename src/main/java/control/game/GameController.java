@@ -6,7 +6,10 @@ import model.card.AllMonsterEffects;
 import model.card.Card;
 import model.card.Monster;
 import model.card.SpellAndTrap;
-import model.enums.*;
+import model.enums.AttackingFormat;
+import model.enums.CardAttributes;
+import model.enums.FaceUpSituation;
+import model.enums.MonsterTypes;
 import model.game.Board;
 import model.game.Game;
 import model.game.Player;
@@ -22,6 +25,7 @@ import java.util.Random;
 import static control.game.GamePhases.*;
 import static control.game.TypeOfSelectedCard.*;
 import static control.game.UpdateEnum.*;
+import static model.enums.FaceUpSituation.*;
 import static model.enums.SpellAndTrapIcon.RITUAL;
 import static model.game.PlayerTurn.PLAYER1;
 import static model.game.PlayerTurn.PLAYER2;
@@ -304,7 +308,7 @@ public class GameController {
     public boolean canFlipSummon(String username) {
         if (game.getPlayerByName(username).getBoard().getMonstersInField().containsValue((Monster) selectedCard)) {
             Monster monster = (Monster) selectedCard;
-            return monster.getFaceUpSituation().equals(FaceUpSituation.FACE_DOWN);
+            return monster.getFaceUpSituation().equals(FACE_DOWN);
         }
         return false;
     }
@@ -510,7 +514,7 @@ public class GameController {
             return false;
         if (selectedCard instanceof Monster &&
                 game.getPlayerOpponentByTurn(turn).getBoard().getMonstersInField().containsValue((Monster) selectedCard) &&
-                ((Monster) selectedCard).getFaceUpSituation().equals(FaceUpSituation.FACE_DOWN))
+                ((Monster) selectedCard).getFaceUpSituation().equals(FACE_DOWN))
             return false;
         return !(selectedCard instanceof SpellAndTrap) ||
                 !game.getPlayerOpponentByTurn(turn).getBoard().getSpellAndTrapsInField().containsValue((SpellAndTrap) selectedCard) ||
