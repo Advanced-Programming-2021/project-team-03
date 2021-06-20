@@ -4,6 +4,7 @@ import control.MainController;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -183,8 +184,46 @@ public class View {
             case "Print message" -> printMessage(valueObject);
             case "Game is over" -> gameIsOver(valueObject);
             case "Round is over" -> roundIsOver(valueObject);
+            case "Ritual summon" -> ritualSummon();
             default -> error();
         };
+    }
+
+    private String ritualSummon() {
+        System.out.println("Write your ritual monster card number to summon");
+        JSONObject answerObject = new JSONObject();
+        int ritualMonsterNumber = -1;
+        while (true) {
+            String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if (inputCommand.matches("Cancel")) {
+                answerObject.put("Type", "Cancel");
+                return answerObject.toString();
+            } else if (inputCommand.matches("\\d+")) {
+                ritualMonsterNumber = Integer.parseInt(inputCommand);
+                break;
+            } else System.out.println("invalid command!\n" +
+                    "you should special summon right now");
+        }
+        System.out.println("Write tribute monster cards number\n" +
+                "Write Finish when its finished.");
+        JSONObject messageValue = new JSONObject();
+        messageValue.put("Ritual monster number",String.valueOf(ritualMonsterNumber));
+        ArrayList<Integer> tributeCardNumbers = new ArrayList<>();
+        while (true) {
+            String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if (inputCommand.matches("Cancel")) {
+                answerObject.put("Type", "Cancel");
+                messageValue.put("Tribute card numbers",tributeCardNumbers);
+                answerObject.put("Value",messageValue);
+                return answerObject.toString();
+            } else if (inputCommand.matches("Finish")) {
+                answerObject.put("Type", "Successful");
+                return answerObject.toString();
+            } else if (inputCommand.matches("\\d+")) {
+                tributeCardNumbers.add(Integer.parseInt(inputCommand));
+            } else System.out.println("invalid command!\n" +
+                    "you should special summon right now");
+        }
     }
 
     //region register menu methods

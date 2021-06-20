@@ -132,4 +132,11 @@ public class Monster extends Card {
     public ArrayList<Integer> getDefensiveSupplies() {
         return defensiveSupplies;
     }
+
+    public Monster cloneForDeck() {
+        Monster clone = new Monster(cardName, level, attribute, model, type, baseAttack, baseDefence, description, price, cardID);
+        clone.attackingFormat = this.attackingFormat;
+        clone.faceUpSituation = this.faceUpSituation;
+        return clone;
+    }
 }
