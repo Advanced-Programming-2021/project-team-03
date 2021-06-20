@@ -440,13 +440,19 @@ public class GameController {
         return (selectedCard instanceof SpellAndTrap && selectedCard.getAttribute() == CardAttributes.SPELL);
     }
 
+    public boolean isCardInField() {
+        Board board = getPlayerByTurn().getBoard();
+        return board.getSpellAndTrapsInField().containsValue((SpellAndTrap) selectedCard);
+    }
+
     public boolean cardAlreadyActivated() {
-        //TODO
-        return false;
+        SpellAndTrap spell = (SpellAndTrap) selectedCard;
+        return spell.isActive();
     }
 
     public boolean doesFieldHaveSpaceForThisCard() {
-        //TODO
+        Board board = getPlayerByTurn().getBoard();
+        if (board.getSpellAndTrapsInField().size() <= 4) return true;
         return false;
     }
 
@@ -456,6 +462,8 @@ public class GameController {
     }
 
     public void activateSpellCard() {
+        SpellAndTrap spell = (SpellAndTrap) selectedCard;
+        spell.setActive(true);
         //TODO
     }
 
@@ -482,10 +490,7 @@ public class GameController {
                 ((SpellAndTrap) selectedCard).isActive();
     }
 
-    //TODO game status
-    //TODO get winner in 3 round games
-
-    public String surrender(String username) {
+    public String surrender() {
         /*return the surrender message*/
         currentRound += 1;
         game.surrender(turn);
@@ -508,7 +513,7 @@ public class GameController {
         return game.getPlayer2();
     }
 
-    public String endPhase(String username) {
+    public String endPhase() {
         StringBuilder answerAnswer = new StringBuilder();
         switch (currentPhase) {
             case DRAW -> {
@@ -531,6 +536,7 @@ public class GameController {
             case SECOND_MAIN -> {
                 answerAnswer.append("phase: End Phase\n");
                 changeTurn();
+                gameUpdates.reset();
                 if (turn == PLAYER1)
                     answerAnswer.append("its ").append(game.getPlayer1().getUser().getNickname()).append("’s turn\n");
                 else
@@ -591,4 +597,5 @@ public class GameController {
         }
         return gameWinner.getUser().getUsername() + " won the whole match with score: " + winnerNumberOfWins * 1000 + "-" + looserNumberOfWins * 1000;
     }
+
 }

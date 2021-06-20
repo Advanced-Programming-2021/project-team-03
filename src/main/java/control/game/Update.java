@@ -14,9 +14,9 @@ import static control.game.UpdateEnum.*;
 
 public class Update {
     private final Game game;
-    private final ArrayList<Monster> alreadyAttackedMonsters;
-    private boolean haveBeenSetOrSummonACardInPhase; //TODO make this filed false for each turn
-    private ArrayList<Monster> alreadyChangedPositionMonsters; //TODO initialize this filed for each turn
+    private ArrayList<Monster> alreadyAttackedMonsters;
+    private boolean haveBeenSetOrSummonACardInPhase;
+    private ArrayList<Monster> alreadyChangedPositionMonsters;
     private final HashMap<UpdateEnum, Object> allUpdates;
     private boolean haveRitualSpellBeenActivated = false; //TODO: make this field true if ritual spell activated.
     private final ArrayList<Player> roundWinners;
@@ -32,7 +32,7 @@ public class Update {
     }
 
     public void addMonstersToAttackedMonsters(Monster monster) {
-        alreadyAttackedMonsters.add(monster); //TODO reset after each round
+        alreadyAttackedMonsters.add(monster);
         allUpdates.put(ATTACKING_CARD, monster);
     }
 
@@ -135,5 +135,11 @@ public class Update {
                 return looser;
         }
         return null;
+    }
+
+    public void reset() {
+        haveBeenSetOrSummonACardInPhase = false;
+        alreadyAttackedMonsters = new ArrayList<>();
+        alreadyChangedPositionMonsters = new ArrayList<>();
     }
 }
