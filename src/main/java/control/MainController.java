@@ -707,7 +707,7 @@ public class MainController {
         } else if (DeckController.getInstance().isDeckFull(deckName, DeckType.valueOf(deckType.toUpperCase()))) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", deckType + " deck is full");
-        } else if (!DeckController.getInstance().canUserAddCardToDeck(deckName, DeckType.valueOf(deckType.toUpperCase()), cardName)) {
+        } else if (!DeckController.getInstance().canUserAddCardToDeck(deckName, cardName)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "There are already three cards with name " + cardName + " in deck " + deckName);
         } else {
