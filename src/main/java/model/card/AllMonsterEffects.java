@@ -77,6 +77,7 @@ public class AllMonsterEffects {
                                FaceUpSituation opponentMonsterFaceUpSit) {
         StringBuilder answerString = new StringBuilder();
         gameUpdates.getAllUpdates().put(UpdateEnum.SUIJIN_ACTIVATED, opponentMonster);
+        answerString.append("\nSuijin activated\n");
         switch (opponentMonsterFormat) {
             case ATTACKING -> {
                 attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
@@ -186,11 +187,12 @@ public class AllMonsterEffects {
 
     public int theCalculatorAtkPower(Board attackingPlayerBoard) {
         return 300 * attackingPlayerBoard.getInHandCards().stream().filter(card ->
-             ((card instanceof Monster) && ((Monster) card).getFaceUpSituation() == FACE_UP))
+                ((card instanceof Monster) && ((Monster) card).getFaceUpSituation() == FACE_UP))
                 .mapToInt(card -> ((Monster) card).getAttackingPower()).sum();
     }
 
     public void mirageDragonEffect(Update gameUpdates, PlayerTurn turn, Game game) {
         gameUpdates.getCanPlayerActiveATrap().put(game.getPlayerOpponentByTurn(turn), false);
     }
+
 }
