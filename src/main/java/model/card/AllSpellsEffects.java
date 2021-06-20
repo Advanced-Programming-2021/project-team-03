@@ -42,7 +42,8 @@ public class AllSpellsEffects {
     }
 
     private void potOfGreedEffect(Game game, PlayerTurn turn) {
-
+        game.getPlayerByTurn(turn).getBoard().addCardFromRemainingToInHandCards();
+        game.getPlayerByTurn(turn).getBoard().addCardFromRemainingToInHandCards();
     }
 
     private void terraformingEffect(Game game, PlayerTurn turn) {
