@@ -185,7 +185,7 @@ public class AllMonsterEffects {
     }
 
     public int theCalculatorAtkPower(Board attackingPlayerBoard) {
-        return attackingPlayerBoard.getInHandCards().stream().filter(card ->
+        return 300 * attackingPlayerBoard.getInHandCards().stream().filter(card ->
              ((card instanceof Monster) && ((Monster) card).getFaceUpSituation() == FACE_UP))
                 .mapToInt(card -> ((Monster) card).getAttackingPower()).sum();
     }
@@ -193,5 +193,4 @@ public class AllMonsterEffects {
     public void mirageDragonEffect(Update gameUpdates, PlayerTurn turn, Game game) {
         gameUpdates.getCanPlayerActiveATrap().put(game.getPlayerOpponentByTurn(turn), false);
     }
-
 }
