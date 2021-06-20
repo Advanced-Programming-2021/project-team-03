@@ -186,13 +186,12 @@ public class AllMonsterEffects {
     }
 
     public int theCalculatorAtkPower(Board attackingPlayerBoard) {
-        return 300 * attackingPlayerBoard.getInHandCards().stream().filter(card ->
-                ((card instanceof Monster) && ((Monster) card).getFaceUpSituation() == FACE_UP))
-                .mapToInt(card -> ((Monster) card).getAttackingPower()).sum();
+        return 300 * attackingPlayerBoard.getMonstersInField().values().stream()
+                .filter(monster -> monster.getFaceUpSituation() == FACE_UP)
+                .mapToInt(Monster::getAttackingPower).sum();
     }
 
     public void mirageDragonEffect(Update gameUpdates, PlayerTurn turn, Game game) {
         gameUpdates.getCanPlayerActiveATrap().put(game.getPlayerOpponentByTurn(turn), false);
     }
-
 }
