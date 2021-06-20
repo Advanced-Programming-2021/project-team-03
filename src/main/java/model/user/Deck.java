@@ -103,7 +103,7 @@ public class Deck {
     }
 
     public void addCard(Card card, DeckType deckType) throws DatabaseException {
-        decks.get(deckType).add(card);
+        decks.get(deckType).add(card.cloneForDeck());
         updateInDatabase();
     }
 
