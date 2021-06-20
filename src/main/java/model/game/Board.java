@@ -5,6 +5,7 @@ import model.card.Monster;
 import model.card.SpellAndTrap;
 import model.enums.AttackingFormat;
 import model.enums.FaceUpSituation;
+import model.enums.SpellAndTrapIcon;
 import model.user.Deck;
 import model.user.DeckType;
 import model.user.User;
@@ -265,5 +266,18 @@ public class Board {
 
     public Card getInHandCardByPosition(int cardPosition) {
         return inHandCards.get(cardPosition);
+    }
+
+    public void addFieldSpellToHand() {
+        for (Card card : remainingCards) {
+            if (card instanceof SpellAndTrap) {
+                SpellAndTrap spell = (SpellAndTrap) card;
+                if (spell.getIcon().equals(SpellAndTrapIcon.FIELD)) {
+                    addCardToHand(spell);
+                    remainingCards.remove(card);
+                    return;
+                }
+            }
+        }
     }
 }

@@ -19,7 +19,7 @@ public class AllSpellsEffects {
     public void cardActivator(SpellAndTrap spell, Game game, Update gameUpdates, PlayerTurn turn) {
         switch (spell.cardName) {
             case "Terraforming":
-                terraformingEffect(game, gameUpdates, turn);
+                terraformingEffect(game, turn);
                 break;
             case "Pot of Greed":
                 potOfGreedEffect(game, turn);
@@ -45,7 +45,7 @@ public class AllSpellsEffects {
 
     }
 
-    private void terraformingEffect(Game game, Update gameUpdates, PlayerTurn turn) {
-
+    private void terraformingEffect(Game game, PlayerTurn turn) {
+        game.getPlayerByTurn(turn).getBoard().addFieldSpellToHand();
     }
 }
