@@ -9,6 +9,8 @@
 database/users/
 database/decks/
 
+.idea/*.xml
+
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
