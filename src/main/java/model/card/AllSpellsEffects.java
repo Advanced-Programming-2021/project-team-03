@@ -1,8 +1,12 @@
 package model.card;
 
 import control.game.Update;
+import model.game.Board;
 import model.game.Game;
 import model.game.PlayerTurn;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class AllSpellsEffects {
     private static AllSpellsEffects allSpellsEffects;
@@ -38,7 +42,13 @@ public class AllSpellsEffects {
     }
 
     private void raigekiEffect(Game game, Update gameUpdates, PlayerTurn turn) {
-
+        Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
+        ArrayList<Monster> allOpponentsMonsters = new ArrayList<>(opponentBoard.getMonstersInField().values());
+        for (Monster opponentMonster : allOpponentsMonsters) {
+            opponentBoard.removeCardFromField(opponentBoard.getMonsterPosition(opponentMonster), true);
+            opponentBoard.addCardToGraveyard(opponentMonster);
+            gameUpdates.addMonsterToGraveyard(opponentMonster);
+        }
     }
 
     private void potOfGreedEffect(Game game, PlayerTurn turn) {
