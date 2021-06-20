@@ -56,4 +56,10 @@ public class SpellAndTrap extends Card {
     public SpellAndTrapIcon getIcon() {
         return icon;
     }
+
+    public SpellAndTrap cloneForDeck() {
+        SpellAndTrap clone = new SpellAndTrap(cardName, attribute, description, price, cardID, icon);
+        clone.isActive = this.isActive;
+        return clone;
+    }
 }
