@@ -22,12 +22,27 @@ public class AllSpellsEffects {
                 terraformingEffect(game, gameUpdates, turn);
                 break;
             case "Pot of Greed":
+                potOfGreedEffect(game, turn);
                 break;
             case "Raigeki":
+                raigekiEffect(game, gameUpdates, turn);
                 break;
             case "Harpie's Feather Duster":
+                harpiesFeatherDusterEffect(game, gameUpdates, turn);
                 break;
         }
+    }
+
+    private void harpiesFeatherDusterEffect(Game game, Update gameUpdates, PlayerTurn turn) {
+
+    }
+
+    private void raigekiEffect(Game game, Update gameUpdates, PlayerTurn turn) {
+
+    }
+
+    private void potOfGreedEffect(Game game, PlayerTurn turn) {
+
     }
 
     private void terraformingEffect(Game game, Update gameUpdates, PlayerTurn turn) {
