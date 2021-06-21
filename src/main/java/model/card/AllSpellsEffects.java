@@ -25,6 +25,18 @@ public class AllSpellsEffects {
             case "Pot of Greed" -> potOfGreedEffect(game, turn);
             case "Raigeki" -> raigekiEffect(game, gameUpdates, turn);
             case "Harpie's Feather Duster" -> harpiesFeatherDusterEffect(game, gameUpdates, turn);
+            case "Dark Hole" -> darkHoleEffect(game, gameUpdates, turn);
+        }
+    }
+
+    private void darkHoleEffect(Game game, Update gameUpdates, PlayerTurn turn) {
+        raigekiEffect(game, gameUpdates, turn);
+        Board attackingPlayerBoard = game.getPlayerByTurn(turn).getBoard();
+        ArrayList<Monster> allPlayersMonsters = new ArrayList<>(attackingPlayerBoard.getMonstersInField().values());
+        for (Monster playerMonster : allPlayersMonsters) {
+            attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(playerMonster), true);
+            attackingPlayerBoard.addCardToGraveyard(playerMonster);
+            gameUpdates.addMonsterToGraveyard(playerMonster);
         }
     }
 
