@@ -21,7 +21,6 @@ public class AllSpellsEffects {
 
     public void cardActivator(SpellAndTrap spell, Game game, Update gameUpdates, PlayerTurn turn) {
         spell.setActive(true);
-        spell.setActive(true);
 
         // Spell Absorption effect
         SpellAndTrap spellAbsorption = game.getPlayerByTurn(turn).getBoard().getSpellInField("Spell Absorption");
