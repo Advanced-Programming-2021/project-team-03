@@ -1,11 +1,14 @@
 package model.card;
 
+import control.MainController;
 import control.game.Update;
 import model.game.Board;
 import model.game.Game;
 import model.game.PlayerTurn;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class AllSpellsEffects {
     private static AllSpellsEffects allSpellsEffects;
@@ -23,10 +26,10 @@ public class AllSpellsEffects {
         spell.setActive(true);
 
         // Spell Absorption effect
-        for (PlayerTurn player : PlayerTurn.values()) {
-            SpellAndTrap spellAbsorption = game.getPlayerByTurn(player).getBoard().getSpellInField("Spell Absorption");
+        for (PlayerTurn playerTurn : PlayerTurn.values()) {
+            SpellAndTrap spellAbsorption = game.getPlayerByTurn(playerTurn).getBoard().getSpellInField("Spell Absorption");
             if (spellAbsorption != null && spellAbsorption.isActive()) {
-                game.getPlayerByTurn(player).decreaseHealthByAmount(-500);
+                game.getPlayerByTurn(playerTurn).decreaseHealthByAmount(-500);
             }
         }
 
@@ -37,7 +40,20 @@ public class AllSpellsEffects {
             case "Harpie's Feather Duster" -> harpiesFeatherDusterEffect(game, gameUpdates, turn);
             case "Dark Hole" -> darkHoleEffect(game, gameUpdates, turn);
             case "Supply Squad" -> supplySquadEffect(game, gameUpdates, turn);
+            case "Twin Twisters" -> twinTwisterEffect(game, gameUpdates, turn);
         }
+    }
+
+    private void twinTwisterEffect(Game game, Update gameUpdates, PlayerTurn turn) {
+        Board attackingPlayerBoard = game.getPlayerByTurn(turn).getBoard();
+        Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
+        Random random = new Random();
+        int randomIndex = random.nextInt(attackingPlayerBoard.getInHandCards().size());
+        Card sacrificedCard = attackingPlayerBoard.getInHandCards().get(randomIndex);
+        attackingPlayerBoard.removeCardFromHand(sacrificedCard);
+        attackingPlayerBoard.addCardToGraveyard(sacrificedCard);
+        gameUpdates.addMonsterToGraveyard(sacrificedCard);
+
     }
 
     private void supplySquadEffect(Game game, Update gameUpdates, PlayerTurn turn) {
