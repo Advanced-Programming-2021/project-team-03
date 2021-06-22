@@ -66,14 +66,14 @@ public class AllSpellsEffects {
 
     private void twinTwisterEffect(Game game, Update gameUpdates, PlayerTurn turn) {
         Board attackingPlayerBoard = game.getPlayerByTurn(turn).getBoard();
-        Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
         Random random = new Random();
         int randomIndex = random.nextInt(attackingPlayerBoard.getInHandCards().size());
         Card sacrificedCard = attackingPlayerBoard.getInHandCards().get(randomIndex);
         attackingPlayerBoard.removeCardFromHand(sacrificedCard);
         attackingPlayerBoard.addCardToGraveyard(sacrificedCard);
-        gameUpdates.addMonsterToGraveyard(sacrificedCard);
-
+        gameUpdates.addCardToGraveyard(sacrificedCard);
+        mysticalSpaceTyphoonEffect(game, turn, gameUpdates);
+        mysticalSpaceTyphoonEffect(game, turn, gameUpdates);
     }
 
     private void supplySquadEffect(Game game, Update gameUpdates, PlayerTurn turn) {
