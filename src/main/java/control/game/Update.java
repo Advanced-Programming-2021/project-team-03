@@ -83,7 +83,7 @@ public class Update {
             AllMonsterEffects.getInstance().mirageDragonEffect(this, GameController.getInstance().getTurn(), game);
     }
 
-    public void addMonsterToGraveyard(Card card) {
+    public void addCardToGraveyard(Card card) {
         allUpdates.put(CARD_DESTROYED, card);
         if (card.getCardName().equals("Yomi Ship"))
             AllMonsterEffects.getInstance().yomiShipEffect(game, GameController.getInstance().getTurn(), GameController.getInstance().getSelectedCard(), this);
