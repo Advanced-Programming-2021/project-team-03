@@ -66,7 +66,7 @@ public class AllMonsterEffects {
     public void yomiShipEffect(Game game, PlayerTurn turn, Card selectedCard, Update gameUpdates) {
         game.getPlayerByTurn(turn).getBoard().removeCardFromField(game.getPlayerByTurn(turn).getBoard().getMonsterPosition((Monster) selectedCard), true);
         game.getPlayerByTurn(turn).getBoard().addCardToGraveyard(selectedCard);
-        gameUpdates.addMonsterToGraveyard(selectedCard);
+        gameUpdates.addCardToGraveyard(selectedCard);
 
         //TODO System.out.println(); in the view
     }
@@ -82,7 +82,7 @@ public class AllMonsterEffects {
             case ATTACKING -> {
                 attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
                 attackingPlayerBoard.addCardToGraveyard(attackingMonster);
-                gameUpdates.addMonsterToGraveyard(attackingMonster);
+                gameUpdates.addCardToGraveyard(attackingMonster);
                 game.getPlayerByName(attackingPlayerUsername).decreaseHealthByAmount(opponentMonster.getAttackingPower());
                 answerString.append("Your monster card is destroyed and you received ").append(opponentMonster.getAttackingPower()).append(" battle damage");
                 return answerString.toString();
@@ -119,7 +119,7 @@ public class AllMonsterEffects {
         else {
             defendingPlayer.getBoard().removeCardFromField(defendingPlayer.getBoard().getMonsterPosition(opponentMonster), true);
             defendingPlayer.getBoard().addCardToGraveyard(opponentMonster);
-            update.addMonsterToGraveyard(opponentMonster);
+            update.addCardToGraveyard(opponentMonster);
             answerString.append(opponentMonster.getCardName()).append("destroyed!");
         }
         MainController.getInstance().sendPrintRequestToView(answerString.toString());
@@ -136,7 +136,7 @@ public class AllMonsterEffects {
                 if (attackingDef == 0) {
                     attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
                     attackingPlayerBoard.addCardToGraveyard(attackingMonster);
-                    gameUpdates.addMonsterToGraveyard(attackingMonster);
+                    gameUpdates.addCardToGraveyard(attackingMonster);
                     answerString.append("your monster card is destroyed!\n");
                 } else if (attackingDef > 0) {
                     game.getPlayerOpponentByTurn(turn).decreaseHealthByAmount(attackingDef);
@@ -144,7 +144,7 @@ public class AllMonsterEffects {
                 } else {
                     attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
                     attackingPlayerBoard.addCardToGraveyard(attackingMonster);
-                    gameUpdates.addMonsterToGraveyard(attackingMonster);
+                    gameUpdates.addCardToGraveyard(attackingMonster);
                     attackingPlayer.decreaseHealthByAmount(attackingDef);
                     answerString.append("Your monster card is destroyed and you received ").append(attackingDef).append(" battle damage\n");
                 }

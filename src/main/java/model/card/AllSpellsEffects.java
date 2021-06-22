@@ -6,6 +6,8 @@ import model.game.Game;
 import model.game.PlayerTurn;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Optional;
 
 public class AllSpellsEffects {
     private static AllSpellsEffects allSpellsEffects;
@@ -36,6 +38,24 @@ public class AllSpellsEffects {
             case "Raigeki" -> raigekiEffect(game, gameUpdates, turn);
             case "Harpie's Feather Duster" -> harpiesFeatherDusterEffect(game, gameUpdates, turn);
             case "Dark Hole" -> darkHoleEffect(game, gameUpdates, turn);
+            case "Mystical space typhoon" -> mysticalSpaceTyphoonEffect(game, turn, gameUpdates);
+        }
+    }
+
+    private void mysticalSpaceTyphoonEffect(Game game, PlayerTurn turn, Update gameUpdates) {
+        Board opponentsBoard = game.getPlayerOpponentByTurn(turn).getBoard();
+        HashMap<Integer, SpellAndTrap> spells = opponentsBoard.getSpellAndTrapsInField();
+
+        Optional<Integer> randomPosition = spells.keySet().stream().findAny();
+        if (randomPosition.isPresent()) {
+            int position = randomPosition.get();
+            SpellAndTrap spell = spells.get(position);
+
+            if (spell != null) {
+                opponentsBoard.removeCardFromField(position, false);
+                opponentsBoard.addCardToGraveyard(spell);
+                gameUpdates.addCardToGraveyard(spell);
+            }
         }
     }
 
@@ -46,7 +66,7 @@ public class AllSpellsEffects {
         for (Monster playerMonster : allPlayersMonsters) {
             attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(playerMonster), true);
             attackingPlayerBoard.addCardToGraveyard(playerMonster);
-            gameUpdates.addMonsterToGraveyard(playerMonster);
+            gameUpdates.addCardToGraveyard(playerMonster);
         }
     }
 
@@ -56,7 +76,7 @@ public class AllSpellsEffects {
         for (SpellAndTrap opponentSpell : allOpponentsSpellsAndTraps) {
             opponentBoard.removeCardFromField(opponentBoard.getSpellPosition(opponentSpell), true);
             opponentBoard.addCardToGraveyard(opponentSpell);
-            gameUpdates.addMonsterToGraveyard(opponentSpell);
+            gameUpdates.addCardToGraveyard(opponentSpell);
         }
     }
 
@@ -66,7 +86,7 @@ public class AllSpellsEffects {
         for (Monster opponentMonster : allOpponentsMonsters) {
             opponentBoard.removeCardFromField(opponentBoard.getMonsterPosition(opponentMonster), true);
             opponentBoard.addCardToGraveyard(opponentMonster);
-            gameUpdates.addMonsterToGraveyard(opponentMonster);
+            gameUpdates.addCardToGraveyard(opponentMonster);
         }
     }
 

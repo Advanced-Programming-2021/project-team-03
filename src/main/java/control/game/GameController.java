@@ -389,20 +389,20 @@ public class GameController {
                 if (attackingDef == 0) {
                     attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
                     attackingPlayerBoard.addCardToGraveyard(attackingMonster);
-                    gameUpdates.addMonsterToGraveyard(attackingMonster);
+                    gameUpdates.addCardToGraveyard(attackingMonster);
                     opponentBoard.removeCardFromField(opponentBoard.getMonsterPosition(opponentMonster), true);
                     opponentBoard.addCardToGraveyard(opponentMonster);
-                    gameUpdates.addMonsterToGraveyard(opponentMonster);
+                    gameUpdates.addCardToGraveyard(opponentMonster);
                     answerString.append("both you and your opponent monster cards are destroyed and no one receives damage");
                 } else if (attackingDef > 0) {
                     opponentBoard.removeCardFromField(opponentBoard.getMonsterPosition(opponentMonster), true);
                     opponentBoard.addCardToGraveyard(opponentMonster);
-                    gameUpdates.addMonsterToGraveyard(opponentMonster);
+                    gameUpdates.addCardToGraveyard(opponentMonster);
                     if (opponentMonster.getCardName().equals("Exploder Dragon")) {
                         answerString.append("\nExploder Dragon activated!!!\n");
                         attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
                         attackingPlayerBoard.addCardToGraveyard(attackingMonster);
-                        gameUpdates.addMonsterToGraveyard(attackingMonster);
+                        gameUpdates.addCardToGraveyard(attackingMonster);
                     } else {
                         game.getPlayerOpponentByTurn(turn).decreaseHealthByAmount(attackingDef);
                         answerString.append("your opponent’s monster is destroyed and your opponent receives ").append(attackingDef).append(" battle damage");
@@ -410,12 +410,12 @@ public class GameController {
                 } else {
                     attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
                     attackingPlayerBoard.addCardToGraveyard(attackingMonster);
-                    gameUpdates.addMonsterToGraveyard(attackingMonster);
+                    gameUpdates.addCardToGraveyard(attackingMonster);
                     if (attackingMonster.getCardName().equals("Exploder Dragon")) {
                         answerString.append("\nExploder Dragon activated!!!\n");
                         opponentBoard.removeCardFromField(opponentBoard.getMonsterPosition(opponentMonster), true);
                         opponentBoard.addCardToGraveyard(opponentMonster);
-                        gameUpdates.addMonsterToGraveyard(opponentMonster);
+                        gameUpdates.addCardToGraveyard(opponentMonster);
                     } else {
                         game.getPlayerByName(attackingPlayerUsername).decreaseHealthByAmount(attackingDef);
                         answerString.append("Your monster card is destroyed and you received ").append(attackingDef).append(" battle damage");
@@ -434,13 +434,13 @@ public class GameController {
                 } else if (defendingDef > 0) {
                     opponentBoard.removeCardFromField(opponentBoard.getMonsterPosition(opponentMonster), true);
                     opponentBoard.addCardToGraveyard(opponentMonster);
-                    gameUpdates.addMonsterToGraveyard(opponentMonster);
+                    gameUpdates.addCardToGraveyard(opponentMonster);
                     answerString.append("the defense position monster is destroyed!");
                     if (opponentMonster.getCardName().equals("Exploder Dragon")) {
                         answerString.append("\nExploder Dragon activated!!!\n");
                         attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
                         attackingPlayerBoard.addCardToGraveyard(attackingMonster);
-                        gameUpdates.addMonsterToGraveyard(attackingMonster);
+                        gameUpdates.addCardToGraveyard(attackingMonster);
                     }
                 } else {
                     game.getPlayerByName(attackingPlayerUsername).decreaseHealthByAmount(defendingDef);
