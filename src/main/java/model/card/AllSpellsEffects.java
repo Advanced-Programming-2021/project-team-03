@@ -20,6 +20,14 @@ public class AllSpellsEffects {
     }
 
     public void cardActivator(SpellAndTrap spell, Game game, Update gameUpdates, PlayerTurn turn) {
+        spell.setActive(true);
+
+        // Spell Absorption effect
+        SpellAndTrap spellAbsorption = game.getPlayerByTurn(turn).getBoard().getSpellInField("Spell Absorption");
+        if (spellAbsorption != null && spellAbsorption.isActive()) {
+            game.getPlayerByTurn(turn).decreaseHealthByAmount(-500);
+        }
+
         switch (spell.cardName) {
             case "Terraforming" -> terraformingEffect(game, turn);
             case "Pot of Greed" -> potOfGreedEffect(game, turn);
