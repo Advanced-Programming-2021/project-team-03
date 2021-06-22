@@ -10,10 +10,7 @@ import model.user.Deck;
 import model.user.DeckType;
 import model.user.User;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static model.enums.AttackingFormat.ATTACKING;
 import static model.enums.AttackingFormat.DEFENDING;
@@ -287,5 +284,11 @@ public class Board {
                 return i;
         }
         return 0;
+    }
+
+    public SpellAndTrap getSpellInField(String cardName) {
+        Optional<SpellAndTrap> spellAndTrap = spellAndTrapsInField.values().stream()
+                .filter(spellAndTrap2 -> spellAndTrap2.getCardName().equals(cardName)).findFirst();
+        return spellAndTrap.orElse(null);
     }
 }
