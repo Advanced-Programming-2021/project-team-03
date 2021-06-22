@@ -23,10 +23,14 @@ public class AllSpellsEffects {
         spell.setActive(true);
 
         // Spell Absorption effect
-        SpellAndTrap spellAbsorption = game.getPlayerByTurn(turn).getBoard().getSpellInField("Spell Absorption");
-        if (spellAbsorption != null && spellAbsorption.isActive()) {
-            game.getPlayerByTurn(turn).decreaseHealthByAmount(-500);
+        for (PlayerTurn player : PlayerTurn.values()) {
+            SpellAndTrap spellAbsorption = game.getPlayerByTurn(player).getBoard().getSpellInField("Spell Absorption");
+            if (spellAbsorption != null && spellAbsorption.isActive()) {
+                game.getPlayerByTurn(player).decreaseHealthByAmount(-500);
+            }
+
         }
+
 
         switch (spell.cardName) {
             case "Terraforming" -> terraformingEffect(game, turn);
