@@ -192,7 +192,7 @@ public class AllMonsterEffects {
     }
 
     public void mirageDragonEffect(Update gameUpdates, PlayerTurn turn, Game game) {
-        gameUpdates.getCanPlayerActiveATrap().put(game.getPlayerOpponentByTurn(turn), false);
+        gameUpdates.getCanPlayerActiveATrap().replace(game.getPlayerOpponentByTurn(turn), false);
     }
 
 }

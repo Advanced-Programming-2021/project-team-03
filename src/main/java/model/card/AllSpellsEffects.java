@@ -20,13 +20,19 @@ public class AllSpellsEffects {
     }
 
     public void cardActivator(SpellAndTrap spell, Game game, Update gameUpdates, PlayerTurn turn) {
+        spell.setActive(true);
         switch (spell.cardName) {
             case "Terraforming" -> terraformingEffect(game, turn);
             case "Pot of Greed" -> potOfGreedEffect(game, turn);
             case "Raigeki" -> raigekiEffect(game, gameUpdates, turn);
             case "Harpie's Feather Duster" -> harpiesFeatherDusterEffect(game, gameUpdates, turn);
             case "Dark Hole" -> darkHoleEffect(game, gameUpdates, turn);
+            case "Supply Squad" -> supplySquadEffect(game, gameUpdates, turn);
         }
+    }
+
+    private void supplySquadEffect(Game game, Update gameUpdates, PlayerTurn turn) {
+        gameUpdates.setSupplySquadForPlayer(game.getPlayerByTurn(turn));
     }
 
     private void darkHoleEffect(Game game, Update gameUpdates, PlayerTurn turn) {
