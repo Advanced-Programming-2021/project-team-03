@@ -28,9 +28,7 @@ public class AllSpellsEffects {
             if (spellAbsorption != null && spellAbsorption.isActive()) {
                 game.getPlayerByTurn(player).decreaseHealthByAmount(-500);
             }
-
         }
-
 
         switch (spell.cardName) {
             case "Terraforming" -> terraformingEffect(game, turn);
