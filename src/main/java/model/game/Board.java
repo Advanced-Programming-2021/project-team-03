@@ -297,4 +297,18 @@ public class Board {
                 .filter(spellAndTrap2 -> spellAndTrap2.getCardName().equals(cardName)).findFirst();
         return spellAndTrap.orElse(null);
     }
+
+    public void removeFieldCard(Game game, PlayerTurn turn) {
+        if (this.fieldCard.isActive()) {
+            Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
+            SpellAndTrap opponentFieldCard = (SpellAndTrap) opponentBoard.getFieldCard();
+            if (opponentFieldCard.isActive()) {
+                game.setActivatedFieldCard(opponentFieldCard);
+            } else {
+                game.setActivatedFieldCard(null);
+                game.setFiledActivated(false);
+            }
+        }
+        this.fieldCard = null;
+    }
 }
