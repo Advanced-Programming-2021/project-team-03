@@ -654,6 +654,7 @@ public class GameController {
                 answerAnswer.append("phase: End Phase\n");
                 changeTurn();
                 gameUpdates.reset();
+                resetMonstersSuppliers();
                 if (turn == PLAYER1)
                     answerAnswer.append("its ").append(game.getPlayer1().getUser().getNickname()).append("’s turn\n");
                 else
@@ -668,6 +669,20 @@ public class GameController {
         return answerAnswer.toString();
     }
 
+    private void resetMonstersSuppliers() {
+        Board board = game.getPlayerByTurn(turn).getBoard();
+        Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
+
+        for (Monster monster : board.getMonstersInField().values()) {
+            monster.setAttackSupplier(new ArrayList<>());
+            monster.setDefensiveSupplies(new ArrayList<>());
+        }
+        for (Monster monster : opponentBoard.getMonstersInField().values()) {
+            monster.setAttackSupplier(new ArrayList<>());
+            monster.setDefensiveSupplies(new ArrayList<>());
+        }
+    }
+
     private String drawPhase() {
         StringBuilder answer = new StringBuilder("new card added to the hand : ");
         game.getPlayerByTurn(turn).getBoard().addCardFromRemainingToInHandCards();
@@ -678,7 +693,6 @@ public class GameController {
     private void standbyPhase() {
         //checking for effects of cards
         checkCommandKnight();
-        //TODO reset commandKnight effect
         //TODO
     }
 

@@ -2,6 +2,7 @@ package model.card;
 
 import control.databaseController.Database;
 import model.enums.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,8 +18,8 @@ public class Monster extends Card {
     private AttackingFormat attackingFormat;
     private FaceUpSituation faceUpSituation;
 
-    private final ArrayList<Integer> attackSupplier; // contains all game effects which determine the attacking power of the monster
-    private final ArrayList<Integer> defensiveSupplies;
+    private ArrayList<Integer> attackSupplier; // contains all game effects which determine the attacking power of the monster
+    private ArrayList<Integer> defensiveSupplies;
 
     private static HashMap<String, Monster> allMonsters;
 
@@ -111,8 +112,20 @@ public class Monster extends Card {
         return type;
     }
 
+    public ArrayList<Integer> getAttackSupplier() {
+        return attackSupplier;
+    }
+
+    public void setAttackSupplier(ArrayList<Integer> attackSupplier) {
+        this.attackSupplier = attackSupplier;
+    }
+
     public ArrayList<Integer> getDefensiveSupplies() {
         return defensiveSupplies;
+    }
+
+    public void setDefensiveSupplies(ArrayList<Integer> defensiveSupplies) {
+        this.defensiveSupplies = defensiveSupplies;
     }
 
     public Monster cloneForDeck() {
