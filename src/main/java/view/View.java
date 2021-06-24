@@ -189,8 +189,30 @@ public class View {
             case "Get tribute cards for ritual summon" -> getTributeForRitualSummon();
             case "Gate Guardian" -> getTributeForGateGuardian();
             case "Terratiger, the Empowered Warrior" -> terratigerTheEmpoweredWarriorEffect();
+            case "The Tricky" -> theTrickyEffect();
             default -> error();
         };
+    }
+
+    private String theTrickyEffect() {
+        System.out.println("You can use special summon for The Tricky card.\n" +
+                "if you want to use special summon you should write position of one card from your hand to remove it.\n" +
+                "And if you do not want to do it you can Write Cancel for normal Summon.");
+        JSONObject answerObject = new JSONObject();
+        while (true) {
+            String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if (inputCommand.matches("Cancel")) {
+                answerObject.put("Type", "Cancel");
+                System.out.println("Special summon canceled.");
+                break;
+            } else if (inputCommand.matches("\\d+")) {
+                answerObject.put("Type", "Successful");
+                answerObject.put("Position", inputCommand);
+                break;
+            } else System.out.println("invalid command!\n" +
+                    "you should special summon right now");
+        }
+        return answerObject.toString();
     }
 
     private String terratigerTheEmpoweredWarriorEffect() {
