@@ -682,7 +682,7 @@ public class GameController {
         for (Map.Entry<Integer, Monster> monsterEntry : monstersInField.entrySet()) {
             Monster monster = monsterEntry.getValue();
             if (monster.getCardName().equals("Command Knight") && AllMonsterEffects.getInstance().canCommandKnightActivate(monster)) {
-                AllMonsterEffects.getInstance().commandKnightEffect(game, turn, selectedCard, gameUpdates);
+                AllMonsterEffects.getInstance().commandKnightEffect(game, turn);
             }
         }
     }

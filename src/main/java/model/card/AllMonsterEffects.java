@@ -5,20 +5,17 @@ import control.game.Update;
 import control.game.UpdateEnum;
 import model.enums.AttackingFormat;
 import model.enums.FaceUpSituation;
-import model.enums.MonsterEffectTypes;
 import model.game.Board;
 import model.game.Game;
 import model.game.Player;
 import model.game.PlayerTurn;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import static control.game.UpdateEnum.*;
 import static model.enums.FaceUpSituation.*;
-import static model.enums.MonsterEffectTypes.*;
 
 public class AllMonsterEffects {
     private static AllMonsterEffects allMonsterEffects;
@@ -32,9 +29,9 @@ public class AllMonsterEffects {
         return allMonsterEffects;
     }
 
-    public void commandKnightEffect(Game game, PlayerTurn turn, Card selectedCard, Update gameUpdates){
-        HashMap<Integer,Monster> monstersInField = game.getPlayerByTurn(turn).getBoard().getMonstersInField();
-        for(Map.Entry<Integer, Monster> monsterEntry : monstersInField.entrySet()) {
+    public void commandKnightEffect(Game game, PlayerTurn turn) {
+        HashMap<Integer, Monster> monstersInField = game.getPlayerByTurn(turn).getBoard().getMonstersInField();
+        for (Map.Entry<Integer, Monster> monsterEntry : monstersInField.entrySet()) {
             Monster monster = monsterEntry.getValue();
             monster.addToAttackSupplier(400);
         }
@@ -146,7 +143,7 @@ public class AllMonsterEffects {
         return answerString.toString();
     }
 
-    public boolean canCommandKnightActivate(Monster monster){
+    public boolean canCommandKnightActivate(Monster monster) {
         return monster.getFaceUpSituation().equals(FACE_UP);
     }
 
