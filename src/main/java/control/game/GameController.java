@@ -171,10 +171,6 @@ public class GameController {
         if (monster.getType() == MonsterTypes.EFFECT || monster.getType() == MonsterTypes.NORMAL) {
             return true;
         }
-//        if (monster.getType() == MonsterTypes.RITUAL || gameUpdates.haveRitualSpellBeenActivated()) {
-//            gameUpdates.setHaveRitualSpellBeenActivated(false);
-//            return true;
-//        }
         return false;
     }
 
@@ -190,9 +186,11 @@ public class GameController {
     }
 
     public boolean canPlayerSummonOrSetAnotherCard() {
-        if (selectedCard instanceof Monster)
+        if (selectedCard instanceof Monster) {
+            Monster monster = (Monster) selectedCard;
+            if (monster.getCardName().equals("Gate Guardian")) return true;
             return !gameUpdates.haveBeenSetOrSummonACard();
-        else return true;
+        } else return true;
     }
 
     public boolean isThereEnoughCardToTribute() {
@@ -208,6 +206,12 @@ public class GameController {
     public String summonCard() {
         Monster monster = (Monster) selectedCard;
         Board board = getPlayerByTurn().getBoard();
+        if (monster.getCardName().equals("Gate Guardian")) {
+            JSONObject messageToSendToView = new JSONObject();
+            messageToSendToView.put("Type", "Gate Guardian");
+            String viewAnswer = MainController.getInstance().sendRequestToView(messageToSendToView);
+            return tributeCards(viewAnswer, board);
+        }
         if (monster.getLevel() < 5) {
             board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
             gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
@@ -235,7 +239,7 @@ public class GameController {
         String requestType = inputObject.getString("Type");
         if (requestType.equals("Cancel")) return "The victimization operation was canceled";
         JSONObject valueObject = inputObject.getJSONObject("Value");
-        if (requestType.equals("One Card")) {
+        if (requestType.equals("One card")) {
             int position = Integer.parseInt(valueObject.getString("Position"));
             Monster monster = board.getMonsterInFieldByPosition(position);
             if (monster == null) {
@@ -244,8 +248,9 @@ public class GameController {
             board.addCardToGraveyard(monster);
             board.removeCardFromField(position, true);
             gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
+            board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
             return "summoned successfully";
-        } else {
+        } else if (requestType.equals("Two card")) {
             int firstPosition = Integer.parseInt(valueObject.getString("First position"));
             Monster firstMonster = board.getMonsterInFieldByPosition(firstPosition);
             int secondPosition = Integer.parseInt(valueObject.getString("Second position"));
@@ -258,12 +263,35 @@ public class GameController {
             board.removeCardFromField(firstPosition, true);
             board.removeCardFromField(secondPosition, true);
             gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
+            board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
+            return "summoned successfully";
+        } else {
+            int firstPosition = Integer.parseInt(valueObject.getString("First position"));
+            Monster firstMonster = board.getMonsterInFieldByPosition(firstPosition);
+            int secondPosition = Integer.parseInt(valueObject.getString("Second position"));
+            Monster secondMonster = board.getMonsterInFieldByPosition(secondPosition);
+            int thirdPosition = Integer.parseInt(valueObject.getString("Third position"));
+            Monster thirdMonster = board.getMonsterInFieldByPosition(thirdPosition);
+            if (firstMonster == null || secondMonster == null || thirdMonster == null) {
+                return "there no monsters one this address";
+            }
+            board.addCardToGraveyard(firstMonster);
+            board.addCardToGraveyard(secondMonster);
+            board.addCardToGraveyard(thirdMonster);
+            board.removeCardFromField(firstPosition, true);
+            board.removeCardFromField(secondPosition, true);
+            board.removeCardFromField(thirdPosition, true);
+            board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
             return "summoned successfully";
         }
     }
 
     public boolean canSetSelectedCard() {
         if (game.getCardsOwner(selectedCard) != turn) return false;
+        if (selectedCard instanceof Monster) {
+            Monster monster = (Monster) selectedCard;
+            if (monster.getCardName().equals("Gate Guardian")) return false;
+        }
         ArrayList<Card> inHandCards = game.getCardsInBoard(selectedCard).getInHandCards();
         for (Card card : inHandCards) {
             if (card.getCardIdInTheGame() == selectedCard.getCardIdInTheGame()) return true;

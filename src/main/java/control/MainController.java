@@ -197,7 +197,6 @@ public class MainController {
     }
 
     private String activeEffect(JSONObject valueObject) {
-        //TODO field spell card
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
