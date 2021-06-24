@@ -190,8 +190,36 @@ public class View {
             case "Gate Guardian" -> getTributeForGateGuardian();
             case "Terratiger, the Empowered Warrior" -> terratigerTheEmpoweredWarriorEffect();
             case "The Tricky" -> theTrickyEffect();
+            case "Beast King Barbaros" -> beastKingBarbarosEffect();
             default -> error();
         };
+    }
+
+    private String beastKingBarbarosEffect() {
+        System.out.println("You can summon this card without sacrificing two other monsters but reduce its attack power\n" +
+                "Or you can sacrifice three monsters and use special summon.");
+        System.out.println("Write Cancel to normal summon\n" +
+                "Write Special to special summon");
+        JSONObject answerObject = new JSONObject();
+        while (true) {
+            String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if (inputCommand.matches("Cancel")) {
+                answerObject.put("Type", "Cancel");
+                System.out.println("Special summon canceled.");
+                break;
+            } else if (inputCommand.matches("Special")) {
+                answerObject.put("Type", "Successful");
+                System.out.println("Special summon activated.");
+                System.out.println("Write three monster position.");
+                JSONObject value = new JSONObject();
+                value.put("First position", getOneMonsterNumber());
+                value.put("Second position", getOneMonsterNumber());
+                value.put("Third position", getOneMonsterNumber());
+                answerObject.put("Value", value);
+                break;
+            } else System.out.println("invalid command!");
+        }
+        return answerObject.toString();
     }
 
     private String theTrickyEffect() {
