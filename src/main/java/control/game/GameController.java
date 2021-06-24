@@ -189,6 +189,7 @@ public class GameController {
         if (selectedCard instanceof Monster) {
             Monster monster = (Monster) selectedCard;
             if (monster.getCardName().equals("Gate Guardian")) return true;
+            if (monster.getCardName().equals("The Tricky")) return true;
             return !gameUpdates.haveBeenSetOrSummonACard();
         } else return true;
     }
@@ -234,6 +235,28 @@ public class GameController {
                 }
                 return "summoned successfully\n" +
                         "But you can not use selected card from hand for Special summon";
+            }
+        }
+        if (monster.getCardName().equals("The Tricky")) {
+            JSONObject messageToSendToView = new JSONObject();
+            messageToSendToView.put("Type", "The Tricky");
+            String viewAnswer = MainController.getInstance().sendRequestToView(messageToSendToView);
+            JSONObject inputObject = new JSONObject(viewAnswer);
+            String requestType = inputObject.getString("Type");
+            if (requestType.equals("Successful")) {
+                String positionString = inputObject.getString("Position");
+                int position = Integer.parseInt(positionString);
+                Card card = board.getInHandCardByPosition(position);
+                if (card.equals(selectedCard) || card == null) {
+                    MainController.getInstance().sendPrintRequestToView("Selected card to remove from hand is invalid\n" +
+                            "Special summon stopped And normal summon will continued.");
+                } else {
+                    board.addCardToGraveyard(card);
+                    board.removeCardFromHand(card);
+                    board.setOrSummonMonsterFromHandToFiled(monster, "Summon");
+                    return "summoned successfully\n" +
+                            "And Special summon done successfully.";
+                }
             }
         }
         if (monster.getCardName().equals("Gate Guardian")) {
