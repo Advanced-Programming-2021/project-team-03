@@ -36,8 +36,8 @@ public class AllSpellsEffects {
         switch (spell.cardName) {
             case "Terraforming" -> terraformingEffect(game, turn, spell, gameUpdates);
             case "Pot of Greed" -> potOfGreedEffect(game, turn, spell, gameUpdates);
-            case "Raigeki" -> raigekiEffect(game, gameUpdates, turn, spell, gameUpdates);
-            case "Harpie's Feather Duster" -> harpiesFeatherDusterEffect(game, gameUpdates, turn, spell, gameUpdates);
+            case "Raigeki" -> raigekiEffect(game, gameUpdates, turn, spell);
+            case "Harpie's Feather Duster" -> harpiesFeatherDusterEffect(game, gameUpdates, turn, spell);
             case "Dark Hole" -> darkHoleEffect(game, gameUpdates, turn);
             case "Supply Squad" -> supplySquadEffect(game, gameUpdates, turn);
             case "Twin Twisters" -> twinTwisterEffect(game, gameUpdates, turn);
@@ -100,23 +100,23 @@ public class AllSpellsEffects {
         }
     }
 
-    private void harpiesFeatherDusterEffect(Game game, Update gameUpdates, PlayerTurn turn, SpellAndTrap spell, Update updates) {
+    private void harpiesFeatherDusterEffect(Game game, Update gameUpdates, PlayerTurn turn, SpellAndTrap spell) {
         Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
         ArrayList<SpellAndTrap> allOpponentsSpellsAndTraps = new ArrayList<>(opponentBoard.getSpellAndTrapsInField().values());
         for (SpellAndTrap opponentSpell : allOpponentsSpellsAndTraps) {
-            opponentBoard.removeCardFromField(opponentBoard.getSpellPosition(opponentSpell), true);
+            opponentBoard.removeCardFromField(opponentBoard.getSpellPosition(opponentSpell), false);
             opponentBoard.addCardToGraveyard(opponentSpell);
             gameUpdates.addCardToGraveyard(opponentSpell);
         }
 
         //remove the card from the board
         Board playerBoard = game.getPlayerByTurn(turn).getBoard();
-        playerBoard.removeCardFromField(playerBoard.getSpellPosition(spell), true);
+        playerBoard.removeCardFromField(playerBoard.getSpellPosition(spell), false);
         playerBoard.addCardToGraveyard(spell);
         gameUpdates.addCardToGraveyard(spell);
     }
 
-    private void raigekiEffect(Game game, Update gameUpdates, PlayerTurn turn, SpellAndTrap spell, Update updates) {
+    private void raigekiEffect(Game game, Update gameUpdates, PlayerTurn turn, SpellAndTrap spell) {
         Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
         ArrayList<Monster> allOpponentsMonsters = new ArrayList<>(opponentBoard.getMonstersInField().values());
         for (Monster opponentMonster : allOpponentsMonsters) {
@@ -127,7 +127,7 @@ public class AllSpellsEffects {
 
         //remove the card from the board
         Board playerBoard = game.getPlayerByTurn(turn).getBoard();
-        playerBoard.removeCardFromField(playerBoard.getSpellPosition(spell), true);
+        playerBoard.removeCardFromField(playerBoard.getSpellPosition(spell), false);
         playerBoard.addCardToGraveyard(spell);
         gameUpdates.addCardToGraveyard(spell);
     }
@@ -138,7 +138,7 @@ public class AllSpellsEffects {
 
         //remove the card from the board
         Board playerBoard = game.getPlayerByTurn(turn).getBoard();
-        playerBoard.removeCardFromField(playerBoard.getSpellPosition(spell), true);
+        playerBoard.removeCardFromField(playerBoard.getSpellPosition(spell), false);
         playerBoard.addCardToGraveyard(spell);
         gameUpdates.addCardToGraveyard(spell);
     }
@@ -148,7 +148,7 @@ public class AllSpellsEffects {
 
         //remove the card from the board
         Board playerBoard = game.getPlayerByTurn(turn).getBoard();
-        playerBoard.removeCardFromField(playerBoard.getSpellPosition(spell), true);
+        playerBoard.removeCardFromField(playerBoard.getSpellPosition(spell), false);
         playerBoard.addCardToGraveyard(spell);
         gameUpdates.addCardToGraveyard(spell);
     }
