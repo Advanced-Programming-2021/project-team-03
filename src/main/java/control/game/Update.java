@@ -92,6 +92,8 @@ public class Update {
 
     public void addCardToGraveyard(Card card) {
         allUpdates.put(CARD_DESTROYED, card);
+        if (card instanceof Monster)
+            GameController.getInstance().removeEquipment((Monster) card);
         if (card.getCardName().equals("Yomi Ship"))
             AllMonsterEffects.getInstance().yomiShipEffect(game, GameController.getInstance().getTurn(), GameController.getInstance().getSelectedCard(), this);
         if (card.getCardName().equals("Mirage Dragon"))

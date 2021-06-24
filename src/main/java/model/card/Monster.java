@@ -21,6 +21,9 @@ public class Monster extends Card {
     private ArrayList<Integer> attackSupplier; // contains all game effects which determine the attacking power of the monster
     private ArrayList<Integer> defensiveSupplies;
 
+    //equip card
+    private SpellAndTrap equipment;
+
     private static HashMap<String, Monster> allMonsters;
 
     public static void initialize() {
@@ -133,5 +136,13 @@ public class Monster extends Card {
         clone.attackingFormat = this.attackingFormat;
         clone.faceUpSituation = this.faceUpSituation;
         return clone;
+    }
+
+    public SpellAndTrap getEquipment() {
+        return equipment;
+    }
+
+    public void setEquipment(SpellAndTrap equipment) {
+        this.equipment = equipment;
     }
 }

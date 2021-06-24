@@ -24,8 +24,7 @@ import static control.game.GamePhases.*;
 import static control.game.TypeOfSelectedCard.*;
 import static control.game.UpdateEnum.*;
 import static model.enums.FaceUpSituation.*;
-import static model.enums.SpellAndTrapIcon.FIELD;
-import static model.enums.SpellAndTrapIcon.RITUAL;
+import static model.enums.SpellAndTrapIcon.*;
 import static model.game.PlayerTurn.PLAYER1;
 import static model.game.PlayerTurn.PLAYER2;
 
@@ -160,7 +159,7 @@ public class GameController {
         ArrayList<Card> inHandCards = game.getCardsInBoard(selectedCard).getInHandCards();
         boolean isCardInHand = false;
         for (Card card : inHandCards) {
-            if (card.getCardIdInTheGame() == selectedCard.getCardIdInTheGame()) {
+            if (card.equals(selectedCard)) {
                 isCardInHand = true;
                 break;
             }
@@ -266,7 +265,7 @@ public class GameController {
         if (game.getCardsOwner(selectedCard) != turn) return false;
         ArrayList<Card> inHandCards = game.getCardsInBoard(selectedCard).getInHandCards();
         for (Card card : inHandCards) {
-            if (card.getCardIdInTheGame() == selectedCard.getCardIdInTheGame()) return true;
+            if (card.equals(selectedCard)) return true;
         }
         return false;
     }
@@ -306,7 +305,8 @@ public class GameController {
         HashMap<Integer, Monster> monstersInField = getPlayerByTurn().getBoard().getMonstersInField();
         for (Map.Entry<Integer, Monster> entry : monstersInField.entrySet()) {
             Monster monster = entry.getValue();
-            if (selectedCard.getCardIdInTheGame() == monster.getCardIdInTheGame()) return true;
+            if (selectedCard.equals(selectedCard))
+                return true;
         }
         return false;
     }
@@ -719,8 +719,19 @@ public class GameController {
         checkCommandKnight();
         if (game.isFiledActivated())
             checkFieldCard();
+        checkForEquipments(game.getPlayerByTurn(turn).getBoard());
+        checkForEquipments(game.getPlayerOpponentByTurn(turn).getBoard());
         //TODO
     }
+
+    private void checkForEquipments(Board board) {
+        for (SpellAndTrap spellAndTrap : board.getSpellAndTrapsInField().values()) {
+            if (spellAndTrap.getIcon().equals(EQUIP) && spellAndTrap.isActive()) {
+                AllSpellsEffects.getInstance().cardActivator(spellAndTrap, game, gameUpdates, turn);
+            }
+        }
+    }
+
 
     private void checkFieldCard() {
         SpellAndTrap fieldCard = game.getActivatedFieldCard();
@@ -779,4 +790,11 @@ public class GameController {
         return gameWinner.getUser().getUsername() + " won the whole match with score: " + winnerNumberOfWins * 1000 + "-" + looserNumberOfWins * 1000;
     }
 
+    public void removeEquipment(Monster monster) {
+        SpellAndTrap equipment = monster.getEquipment();
+
+        /*opponentBoard.removeCardFromField(opponentBoard.getSpellPosition(equipment), false);
+        opponentBoard.addCardToGraveyard(equipment);
+        gameUpdates.addCardToGraveyard(equipment);*/
+    }
 }

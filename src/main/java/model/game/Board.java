@@ -76,7 +76,7 @@ public class Board {
     }
 
     public void setFieldCard(SpellAndTrap fieldCard) {
-        if (this.fieldCard != null){
+        if (this.fieldCard != null) {
             addCardToGraveyard(fieldCard);
         }
         this.fieldCard = fieldCard;
@@ -248,17 +248,17 @@ public class Board {
         }
     }
 
-    public boolean doesContainCard(int cardGameId) {
+    public boolean doesContainCard(Card card) {
         for (Monster monster : monstersInField.values()) {
-            if (monster.getCardIdInTheGame() == cardGameId)
+            if (monster.equals(card))
                 return true;
         }
         for (SpellAndTrap spellAndTrap : spellAndTrapsInField.values()) {
-            if (spellAndTrap.getCardIdInTheGame() == cardGameId)
+            if (spellAndTrap.equals(card))
                 return true;
         }
-        for (Card card : inHandCards) {
-            if (card.getCardIdInTheGame() == cardGameId)
+        for (Card inHandCard : inHandCards) {
+            if (inHandCard.equals(card))
                 return true;
         }
         return false;
