@@ -278,9 +278,9 @@ public class GameController {
             gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
         } else {
             SpellAndTrap spellAndTrap = (SpellAndTrap) selectedCard;
-            if (spellAndTrap.getIcon() == FIELD){
+            if (spellAndTrap.getIcon() == FIELD) {
                 board.setFieldCard(spellAndTrap);
-            }else {
+            } else {
                 board.setSpellAndTrapsInField(spellAndTrap);
             }
         }

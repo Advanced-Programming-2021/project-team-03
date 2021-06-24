@@ -4,6 +4,7 @@ import control.databaseController.DatabaseException;
 import control.game.GameController;
 import control.game.Update;
 import model.card.Card;
+import model.card.SpellAndTrap;
 import model.user.User;
 
 import static model.game.PlayerTurn.PLAYER1;
@@ -12,13 +13,15 @@ import static model.game.PlayerTurn.PLAYER2;
 public class Game {
     private Player player1;
     private Player player2;
-
     private int numberOfRounds;
+    private boolean filedActivated;
+    private SpellAndTrap activatedFieldCard;
 
     public Game(User user1, User user2, int numberOfRounds) {
         this.player1 = new Player(8000, new Board(user1.getActiveDeck(), user1), user1);
         this.player2 = new Player(8000, new Board(user2.getActiveDeck(), user2), user2);
         this.numberOfRounds = numberOfRounds;
+        filedActivated = false;
     }
 
     public Game(User user1, int numberOfRounds) {
@@ -121,5 +124,13 @@ public class Game {
         } catch (DatabaseException e) {
             System.out.println(e);
         }
+    }
+
+    public boolean isFiledActivated() {
+        return filedActivated;
+    }
+
+    public void setFiledActivated(boolean filedActivated) {
+        this.filedActivated = filedActivated;
     }
 }
