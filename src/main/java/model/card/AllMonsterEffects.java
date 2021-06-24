@@ -24,7 +24,6 @@ public class AllMonsterEffects {
     private static AllMonsterEffects allMonsterEffects;
 
     private AllMonsterEffects() {
-        initialize();
     }
 
     public static AllMonsterEffects getInstance() {
@@ -33,36 +32,6 @@ public class AllMonsterEffects {
         return allMonsterEffects;
     }
 
-    private HashMap<String, IMonsterEffect> effectID;
-
-    public IMonsterEffect getEffectByID(String id) {
-        return effectID.get(id);
-    }
-
-    private void initialize() { // define each monster effect and add it to the hashmap
-//        effectID = new HashMap<>();
-//
-//        /* effect of the command knight card in the game */
-//        IMonsterEffect commandKnightEffect = new IMonsterEffect() {
-//            @Override
-//            public void activateMonsterEffect(Monster self, Update update) {
-//                for (Monster monster : update.getGame().getCardsInBoard(self).getMonstersInField().values()) { // getting all monsters in friendly board
-//                    monster.addToAttackSupplier(monster1 -> 400);
-//                }
-//            }
-//
-//            @Override
-//            public boolean canActivate(Monster self, Update update) {
-//                return self.getFaceUpSituation().equals(FACE_UP);
-//            }
-//
-//            @Override
-//            public MonsterEffectTypes getMonsterEffectType() {
-//                return CONTINUOUS;
-//            }
-//        };
-//        effectID.put("41", commandKnightEffect);
-    }
     public void commandKnightEffect(Game game, PlayerTurn turn, Card selectedCard, Update gameUpdates){
         HashMap<Integer,Monster> monstersInField = game.getPlayerByTurn(turn).getBoard().getMonstersInField();
         for(Map.Entry<Integer, Monster> monsterEntry : monstersInField.entrySet()) {

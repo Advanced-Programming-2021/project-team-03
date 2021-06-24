@@ -664,13 +664,17 @@ public class GameController {
     }
 
     private void standbyPhase() {
+        //checking for effects of cards
+        checkCommandKnight();
+        //TODO reset commandKnight effect
+        //TODO
+    }
+
+    private void checkCommandKnight() {
         Board board = game.getPlayerByTurn(turn).getBoard();
         Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
         activeCommandKnightEffect(board);
         activeCommandKnightEffect(opponentBoard);
-        //TODO reset commandKnight effect
-        //TODO
-        //checking for effects of cards
     }
 
     private void activeCommandKnightEffect(Board board) {

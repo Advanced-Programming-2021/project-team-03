@@ -2,20 +2,15 @@ package model.card;
 
 import control.databaseController.Database;
 import model.enums.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.function.Function;
-
-import static model.enums.MonsterTypes.EFFECT;
 
 public class Monster extends Card {
     private final int level;
     private final int baseAttack;
     private final int baseDefence;
     private final MonsterModels model; // monster model is the model of the card for example warrior or spell caster or ..
-    private IMonsterEffect monsterEffect; // this interface contains the special monster effect if exists
     private final MonsterTypes type;
 
     /* two enums below contains the position of the monster card in the game board */
@@ -45,9 +40,6 @@ public class Monster extends Card {
         this.baseDefence = baseDefence;
         this.model = model;
         this.type = monsterType;
-        // monster type is the effect type of the card which could be normal, effect or ritual
-        if (monsterType.equals(EFFECT))
-            monsterEffect = AllMonsterEffects.getInstance().getEffectByID(cardID);
         attackSupplier = new ArrayList<>();
         defensiveSupplies = new ArrayList<>();
     }
@@ -61,10 +53,6 @@ public class Monster extends Card {
                 "ATK: " + this.baseAttack + "\n" +
                 "DEF: " + this.baseDefence + "\n" +
                 "Description: " + this.description + "\n";
-    }
-
-    public IMonsterEffect getMonsterEffect() {
-        return monsterEffect;
     }
 
     public AttackingFormat getAttackingFormat() {
