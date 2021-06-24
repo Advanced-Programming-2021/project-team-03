@@ -53,26 +53,35 @@ public class AllSpellsEffects {
         fieldCard.setActive(true);
 
         switch (fieldCard.cardName) {
-            case "Yami" -> yamiEffect(fieldCard, game, gameUpdates, turn);
-            case "Closed Forest" -> closedForestEffect(fieldCard, game, gameUpdates, turn);
-            case "Forest" -> forestEffect(fieldCard, game, gameUpdates, turn);
-            case "Umiiruka" -> umiirukaEffect(fieldCard, game, gameUpdates, turn);
+            case "Yami" -> yamiEffect(game, gameUpdates, turn);
+            case "Closed Forest" -> closedForestEffect(game, gameUpdates, turn);
+            case "Forest" -> forestEffect(game, gameUpdates, turn);
+            case "Umiiruka" -> umiirukaEffect(game, gameUpdates, turn);
         }
     }
 
-    private void umiirukaEffect(SpellAndTrap fieldCard, Game game, Update gameUpdates, PlayerTurn turn) {
+    private void umiirukaEffect(Game game, Update gameUpdates, PlayerTurn turn) {
 
     }
 
-    private void forestEffect(SpellAndTrap fieldCard, Game game, Update gameUpdates, PlayerTurn turn) {
+    private void forestEffect(Game game, Update gameUpdates, PlayerTurn turn) {
+        Board opponentsBoard = game.getPlayerOpponentByTurn(turn).getBoard();
+        Board playerBoard = game.getPlayerByTurn(turn).getBoard();
+
+        addFieldEffectsToMonsters(opponentsBoard, INSECT, 200, 200);
+        addFieldEffectsToMonsters(opponentsBoard, BEAST, 200, 200);
+        addFieldEffectsToMonsters(opponentsBoard, BEAST_WARRIOR, 200, 200);
+
+        addFieldEffectsToMonsters(playerBoard, INSECT, 200, 200);
+        addFieldEffectsToMonsters(playerBoard, BEAST, 200, 200);
+        addFieldEffectsToMonsters(playerBoard, BEAST_WARRIOR, 200, 200);
+    }
+
+    private void closedForestEffect(Game game, Update gameUpdates, PlayerTurn turn) {
 
     }
 
-    private void closedForestEffect(SpellAndTrap fieldCard, Game game, Update gameUpdates, PlayerTurn turn) {
-
-    }
-
-    private void yamiEffect(SpellAndTrap fieldCard, Game game, Update gameUpdates, PlayerTurn turn) {
+    private void yamiEffect(Game game, Update gameUpdates, PlayerTurn turn) {
         Board opponentsBoard = game.getPlayerOpponentByTurn(turn).getBoard();
         Board playerBoard = game.getPlayerByTurn(turn).getBoard();
 
