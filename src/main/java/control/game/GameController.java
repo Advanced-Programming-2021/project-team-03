@@ -292,8 +292,7 @@ public class GameController {
                         game.setActivatedFieldCard(null);
                     }
                     board.setFieldCard(spellAndTrap);
-                }
-                else {
+                } else {
                     board.setFieldCard(spellAndTrap);
                 }
             } else {
@@ -709,7 +708,14 @@ public class GameController {
     private void standbyPhase() {
         //checking for effects of cards
         checkCommandKnight();
+        if (game.isFiledActivated())
+            checkFieldCard();
         //TODO
+    }
+
+    private void checkFieldCard() {
+        SpellAndTrap fieldCard = game.getActivatedFieldCard();
+        AllSpellsEffects.getInstance().fieldCardActivator(fieldCard, game, gameUpdates, turn);
     }
 
     private void checkCommandKnight() {

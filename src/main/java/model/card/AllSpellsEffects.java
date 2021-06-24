@@ -1,6 +1,7 @@
 package model.card;
 
 import control.game.Update;
+import model.enums.MonsterModels;
 import model.game.Board;
 import model.game.Game;
 import model.game.PlayerTurn;
@@ -9,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.HashMap;
 import java.util.Optional;
+
+import static model.enums.MonsterModels.*;
 
 public class AllSpellsEffects {
     private static AllSpellsEffects allSpellsEffects;
@@ -43,6 +46,44 @@ public class AllSpellsEffects {
             case "Twin Twisters" -> twinTwisterEffect(game, gameUpdates, turn);
             case "Mystical space typhoon" -> mysticalSpaceTyphoonEffect(game, turn, gameUpdates);
             case "Ring of defense" -> ringOfDefenseEffect(game, turn, gameUpdates);
+        }
+    }
+
+    public void fieldCardActivator(SpellAndTrap fieldCard, Game game, Update gameUpdates, PlayerTurn turn) {
+        fieldCard.setActive(true);
+
+        switch (fieldCard.cardName) {
+            case "Yami" -> yamiEffect(fieldCard, game, gameUpdates, turn);
+            case "Closed Forest" -> closedForestEffect(fieldCard, game, gameUpdates, turn);
+            case "Forest" -> forestEffect(fieldCard, game, gameUpdates, turn);
+            case "Umiiruka" -> umiirukaEffect(fieldCard, game, gameUpdates, turn);
+        }
+    }
+
+    private void umiirukaEffect(SpellAndTrap fieldCard, Game game, Update gameUpdates, PlayerTurn turn) {
+
+    }
+
+    private void forestEffect(SpellAndTrap fieldCard, Game game, Update gameUpdates, PlayerTurn turn) {
+
+    }
+
+    private void closedForestEffect(SpellAndTrap fieldCard, Game game, Update gameUpdates, PlayerTurn turn) {
+
+    }
+
+    private void yamiEffect(SpellAndTrap fieldCard, Game game, Update gameUpdates, PlayerTurn turn) {
+        Board opponentsBoard = game.getPlayerOpponentByTurn(turn).getBoard();
+        Board playerBoard = game.getPlayerByTurn(turn).getBoard();
+
+        for (Monster monster : playerBoard.getMonstersInField().values()) {
+            if (monster.getModel() == FIEND || monster.getModel() == SPELL_CASTER) {
+                monster.addToAttackSupplier(200);
+                monster.addToDefensiveSupply(200);
+            } else if (monster.getModel() == FAIRY) {
+                monster.addToAttackSupplier(-200);
+                monster.addToDefensiveSupply(-200);
+            }
         }
     }
 

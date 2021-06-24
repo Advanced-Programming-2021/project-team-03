@@ -76,6 +76,10 @@ public class Monster extends Card {
         attackSupplier.add(power);
     }
 
+    public void addToDefensiveSupply(int power) {
+        defensiveSupplies.add(power);
+    }
+
     public int getBaseAttack() {
         return baseAttack;
     }
@@ -112,20 +116,16 @@ public class Monster extends Card {
         return type;
     }
 
-    public ArrayList<Integer> getAttackSupplier() {
-        return attackSupplier;
-    }
-
     public void setAttackSupplier(ArrayList<Integer> attackSupplier) {
         this.attackSupplier = attackSupplier;
     }
 
-    public ArrayList<Integer> getDefensiveSupplies() {
-        return defensiveSupplies;
-    }
-
     public void setDefensiveSupplies(ArrayList<Integer> defensiveSupplies) {
         this.defensiveSupplies = defensiveSupplies;
+    }
+
+    public MonsterModels getModel() {
+        return model;
     }
 
     public Monster cloneForDeck() {
