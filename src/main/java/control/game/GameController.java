@@ -916,4 +916,8 @@ public class GameController {
             }
         }
     }
+
+    public String getMap(){
+        return game.showGameBoards();
+    }
 }
