@@ -19,7 +19,9 @@ public class Update {
     private final HashMap<UpdateEnum, Object> allUpdates;
     private boolean haveRitualSpellBeenActivated = false; //TODO: make this field true if ritual spell activated.
     private final ArrayList<Player> roundWinners;
-    private final HashMap<Player, Boolean> canPlayerActiveATrap;
+    private final HashMap<Player, Boolean> canPlayerActivateATrap;
+    private final HashMap<Player, Boolean> playerRingOfDefenseActivator;
+    private final HashMap<Player, Integer> isSupplySquadActivated;
 
     public Update(Game game) {
         this.game = game;
@@ -28,9 +30,19 @@ public class Update {
         alreadyChangedPositionMonsters = new ArrayList<>();
         allUpdates = new HashMap<>();
         roundWinners = new ArrayList<>();
-        canPlayerActiveATrap = new HashMap<>();
-        canPlayerActiveATrap.put(game.getPlayer1(), true);
-        canPlayerActiveATrap.put(game.getPlayer2(), true);
+        canPlayerActivateATrap = new HashMap<>();
+        canPlayerActivateATrap.put(game.getPlayer1(), true);
+        canPlayerActivateATrap.put(game.getPlayer2(), true);
+        isSupplySquadActivated = new HashMap<>();
+        isSupplySquadActivated.put(game.getPlayer1(), 1);
+        isSupplySquadActivated.put(game.getPlayer2(), 1);
+        playerRingOfDefenseActivator = new HashMap<>();
+        playerRingOfDefenseActivator.put(game.getPlayer1(), false);
+        playerRingOfDefenseActivator.put(game.getPlayer2(), false);
+    }
+
+    public HashMap<Player, Boolean> getPlayerRingOfDefenseActivator() {
+        return playerRingOfDefenseActivator;
     }
 
     public void addMonstersToAttackedMonsters(Monster monster) {
@@ -38,8 +50,8 @@ public class Update {
         allUpdates.put(ATTACKING_CARD, monster);
     }
 
-    public HashMap<Player, Boolean> getCanPlayerActiveATrap() {
-        return canPlayerActiveATrap;
+    public HashMap<Player, Boolean> getCanPlayerActivateATrap() {
+        return canPlayerActivateATrap;
     }
 
     public boolean didMonsterAttack(Monster monster) {
@@ -78,12 +90,26 @@ public class Update {
             AllMonsterEffects.getInstance().mirageDragonEffect(this, GameController.getInstance().getTurn(), game);
     }
 
-    public void addMonsterToGraveyard(Card card) {
+    public void addCardToGraveyard(Card card) {
         allUpdates.put(CARD_DESTROYED, card);
         if (card.getCardName().equals("Yomi Ship"))
             AllMonsterEffects.getInstance().yomiShipEffect(game, GameController.getInstance().getTurn(), GameController.getInstance().getSelectedCard(), this);
         if (card.getCardName().equals("Mirage Dragon"))
-            canPlayerActiveATrap.put(game.getPlayerOpponentByTurn(GameController.getInstance().getTurn()), true);
+            canPlayerActivateATrap.put(game.getPlayerOpponentByTurn(GameController.getInstance().getTurn()), true);
+        if (card.getCardName().equals("Supply Squad") && isSupplySquadActivated.get(game.getPlayer1()) != 1)
+            isSupplySquadActivated.replace(game.getPlayer1(), 1);
+        if (card.getCardName().equals("Supply Squad") && isSupplySquadActivated.get(game.getPlayer2()) != 1)
+            isSupplySquadActivated.replace(game.getPlayer2(), 1);
+        if (isSupplySquadActivated.get(game.getPlayer1()) == 2) {
+            isSupplySquadActivated.replace(game.getPlayer1(), 3);
+            game.getPlayer1().getBoard().addCardFromRemainingToInHandCards();
+        }
+        if (isSupplySquadActivated.get(game.getPlayer2()) == 2) {
+            isSupplySquadActivated.replace(game.getPlayer2(), 3);
+            game.getPlayer2().getBoard().addCardFromRemainingToInHandCards();
+        }
+        if (card.getCardName().equals("Ring of defense"))
+            playerRingOfDefenseActivator.put(game.getPlayerByTurn(GameController.getInstance().getTurn()), false);
     }
 
     public boolean haveRitualSpellBeenActivated() {
@@ -151,5 +177,19 @@ public class Update {
         haveBeenSetOrSummonACardInPhase = false;
         alreadyAttackedMonsters = new ArrayList<>();
         alreadyChangedPositionMonsters = new ArrayList<>();
+        if (isSupplySquadActivated.get(game.getPlayer1()) == 3) {
+            isSupplySquadActivated.replace(game.getPlayer1(), 2);
+        }
+        if (isSupplySquadActivated.get(game.getPlayer2()) == 3) {
+            isSupplySquadActivated.replace(game.getPlayer2(), 2);
+        }
+    }
+
+    public void setSupplySquadForPlayer(Player playerByTurn) {
+        isSupplySquadActivated.replace(playerByTurn, 2);
+    }
+
+    public HashMap<Player, Integer> getIsSupplySquadActivated() {
+        return isSupplySquadActivated;
     }
 }

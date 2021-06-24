@@ -5,7 +5,6 @@ import control.game.Update;
 import control.game.UpdateEnum;
 import model.enums.AttackingFormat;
 import model.enums.FaceUpSituation;
-import model.enums.MonsterEffectTypes;
 import model.game.Board;
 import model.game.Game;
 import model.game.Player;
@@ -13,16 +12,15 @@ import model.game.PlayerTurn;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static control.game.UpdateEnum.*;
 import static model.enums.FaceUpSituation.*;
-import static model.enums.MonsterEffectTypes.*;
 
 public class AllMonsterEffects {
     private static AllMonsterEffects allMonsterEffects;
 
     private AllMonsterEffects() {
-        initialize();
     }
 
     public static AllMonsterEffects getInstance() {
@@ -31,42 +29,20 @@ public class AllMonsterEffects {
         return allMonsterEffects;
     }
 
-    private HashMap<String, IMonsterEffect> effectID;
-
-    public IMonsterEffect getEffectByID(String id) {
-        return effectID.get(id);
+    public void commandKnightEffect(Game game, PlayerTurn turn) {
+        HashMap<Integer, Monster> monstersInField = game.getPlayerByTurn(turn).getBoard().getMonstersInField();
+        for (Map.Entry<Integer, Monster> monsterEntry : monstersInField.entrySet()) {
+            Monster monster = monsterEntry.getValue();
+            monster.addToAttackSupplier(400);
+        }
     }
 
-    private void initialize() { // define each monster effect and add it to the hashmap
-        effectID = new HashMap<>();
-
-        /* effect of the command knight card in the game */
-        IMonsterEffect commandKnightEffect = new IMonsterEffect() {
-            @Override
-            public void activateMonsterEffect(Monster self, Update update) {
-                for (Monster monster : update.getGame().getCardsInBoard(self).getMonstersInField().values()) { // getting all monsters in friendly board
-                    monster.addToAttackSupplier(monster1 -> 400);
-                }
-            }
-
-            @Override
-            public boolean canActivate(Monster self, Update update) {
-                return self.getFaceUpSituation().equals(FACE_UP);
-            }
-
-            @Override
-            public MonsterEffectTypes getMonsterEffectType() {
-                return CONTINUOUS;
-            }
-        };
-        effectID.put("41", commandKnightEffect);
-    }
 
     //Yomi Ship effect
     public void yomiShipEffect(Game game, PlayerTurn turn, Card selectedCard, Update gameUpdates) {
         game.getPlayerByTurn(turn).getBoard().removeCardFromField(game.getPlayerByTurn(turn).getBoard().getMonsterPosition((Monster) selectedCard), true);
         game.getPlayerByTurn(turn).getBoard().addCardToGraveyard(selectedCard);
-        gameUpdates.addMonsterToGraveyard(selectedCard);
+        gameUpdates.addCardToGraveyard(selectedCard);
 
         //TODO System.out.println(); in the view
     }
@@ -82,7 +58,7 @@ public class AllMonsterEffects {
             case ATTACKING -> {
                 attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
                 attackingPlayerBoard.addCardToGraveyard(attackingMonster);
-                gameUpdates.addMonsterToGraveyard(attackingMonster);
+                gameUpdates.addCardToGraveyard(attackingMonster);
                 game.getPlayerByName(attackingPlayerUsername).decreaseHealthByAmount(opponentMonster.getAttackingPower());
                 answerString.append("Your monster card is destroyed and you received ").append(opponentMonster.getAttackingPower()).append(" battle damage");
                 return answerString.toString();
@@ -112,14 +88,14 @@ public class AllMonsterEffects {
             return;
         }
         Player defendingPlayer = game.getPlayerOpponentByTurn(turn);
-        Monster opponentMonster = defendingPlayer.getBoard().getMonsterByPosition(position);
+        Monster opponentMonster = defendingPlayer.getBoard().getMonsterInFieldByPosition(position);
         StringBuilder answerString = new StringBuilder();
         if (opponentMonster == null)
             answerString.append("No card destroyed.");
         else {
             defendingPlayer.getBoard().removeCardFromField(defendingPlayer.getBoard().getMonsterPosition(opponentMonster), true);
             defendingPlayer.getBoard().addCardToGraveyard(opponentMonster);
-            update.addMonsterToGraveyard(opponentMonster);
+            update.addCardToGraveyard(opponentMonster);
             answerString.append(opponentMonster.getCardName()).append("destroyed!");
         }
         MainController.getInstance().sendPrintRequestToView(answerString.toString());
@@ -136,7 +112,7 @@ public class AllMonsterEffects {
                 if (attackingDef == 0) {
                     attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
                     attackingPlayerBoard.addCardToGraveyard(attackingMonster);
-                    gameUpdates.addMonsterToGraveyard(attackingMonster);
+                    gameUpdates.addCardToGraveyard(attackingMonster);
                     answerString.append("your monster card is destroyed!\n");
                 } else if (attackingDef > 0) {
                     game.getPlayerOpponentByTurn(turn).decreaseHealthByAmount(attackingDef);
@@ -144,7 +120,7 @@ public class AllMonsterEffects {
                 } else {
                     attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
                     attackingPlayerBoard.addCardToGraveyard(attackingMonster);
-                    gameUpdates.addMonsterToGraveyard(attackingMonster);
+                    gameUpdates.addCardToGraveyard(attackingMonster);
                     attackingPlayer.decreaseHealthByAmount(attackingDef);
                     answerString.append("Your monster card is destroyed and you received ").append(attackingDef).append(" battle damage\n");
                 }
@@ -165,6 +141,10 @@ public class AllMonsterEffects {
             }
         }
         return answerString.toString();
+    }
+
+    public boolean canCommandKnightActivate(Monster monster) {
+        return monster.getFaceUpSituation().equals(FACE_UP);
     }
 
     public boolean isSuijinActivatedBefore(Update gameUpdates) {
@@ -192,6 +172,7 @@ public class AllMonsterEffects {
     }
 
     public void mirageDragonEffect(Update gameUpdates, PlayerTurn turn, Game game) {
-        gameUpdates.getCanPlayerActiveATrap().put(game.getPlayerOpponentByTurn(turn), false);
+        gameUpdates.getCanPlayerActivateATrap().replace(game.getPlayerOpponentByTurn(turn), false);
     }
+
 }

@@ -60,8 +60,8 @@ public class DeckController {
         return Deck.getByDeckName(deckName).isDeckFull(deckType);
     }
 
-    public boolean canUserAddCardToDeck(String deckName, DeckType deckType, String cardName) {
-        return !Deck.getByDeckName(deckName).isCardMaxedOut(Card.getCardByName(cardName), deckType);
+    public boolean canUserAddCardToDeck(String deckName, String cardName) {
+        return !Deck.getByDeckName(deckName).isCardMaxedOut(Card.getCardByName(cardName));
     }
 
     public void addCardToDeck(String deckName, DeckType deckType, String cardName) {

@@ -6,24 +6,20 @@ import model.enums.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.function.Function;
-
-import static model.enums.MonsterTypes.EFFECT;
 
 public class Monster extends Card {
     private final int level;
     private final int baseAttack;
     private final int baseDefence;
     private final MonsterModels model; // monster model is the model of the card for example warrior or spell caster or ..
-    private IMonsterEffect monsterEffect; // this interface contains the special monster effect if exists
     private final MonsterTypes type;
 
     /* two enums below contains the position of the monster card in the game board */
     private AttackingFormat attackingFormat;
     private FaceUpSituation faceUpSituation;
 
-    private final ArrayList<Function<Monster, Integer>> attackSupplier; // contains all game effects which determine the attacking power of the monster
-    private final ArrayList<Integer> defensiveSupplies;
+    private ArrayList<Integer> attackSupplier; // contains all game effects which determine the attacking power of the monster
+    private ArrayList<Integer> defensiveSupplies;
 
     private static HashMap<String, Monster> allMonsters;
 
@@ -45,9 +41,6 @@ public class Monster extends Card {
         this.baseDefence = baseDefence;
         this.model = model;
         this.type = monsterType;
-        // monster type is the effect type of the card which could be normal, effect or ritual
-        if (monsterType.equals(EFFECT))
-            monsterEffect = AllMonsterEffects.getInstance().getEffectByID(cardID);
         attackSupplier = new ArrayList<>();
         defensiveSupplies = new ArrayList<>();
     }
@@ -61,10 +54,6 @@ public class Monster extends Card {
                 "ATK: " + this.baseAttack + "\n" +
                 "DEF: " + this.baseDefence + "\n" +
                 "Description: " + this.description + "\n";
-    }
-
-    public IMonsterEffect getMonsterEffect() {
-        return monsterEffect;
     }
 
     public AttackingFormat getAttackingFormat() {
@@ -83,12 +72,12 @@ public class Monster extends Card {
         this.faceUpSituation = faceUpSituation;
     }
 
-    public ArrayList<Function<Monster, Integer>> getAttackSupplier() {
-        return attackSupplier;
+    public void addToAttackSupplier(int power) {
+        attackSupplier.add(power);
     }
 
-    public void addToAttackSupplier(Function<Monster, Integer> function) {
-        attackSupplier.add(function);
+    public void addToDefensiveSupply(int power) {
+        defensiveSupplies.add(power);
     }
 
     public int getBaseAttack() {
@@ -100,11 +89,9 @@ public class Monster extends Card {
     }
 
     public int getAttackingPower() {
-        int AttackingPower = this.baseAttack;
-        for (Function<Monster, Integer> function : attackSupplier) {
-            AttackingPower += function.apply(this);
-        }
-        return AttackingPower;
+        int power = baseAttack;
+        power += attackSupplier.stream().mapToInt(p -> p).sum();
+        return power;
     }
 
     public int getDefensivePower() {
@@ -129,8 +116,16 @@ public class Monster extends Card {
         return type;
     }
 
-    public ArrayList<Integer> getDefensiveSupplies() {
-        return defensiveSupplies;
+    public void setAttackSupplier(ArrayList<Integer> attackSupplier) {
+        this.attackSupplier = attackSupplier;
+    }
+
+    public void setDefensiveSupplies(ArrayList<Integer> defensiveSupplies) {
+        this.defensiveSupplies = defensiveSupplies;
+    }
+
+    public MonsterModels getModel() {
+        return model;
     }
 
     public Monster cloneForDeck() {

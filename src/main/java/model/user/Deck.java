@@ -54,11 +54,10 @@ public class Deck {
                 || decks.get(DeckType.MAIN).size() < DeckType.MAIN.minCards
                 || decks.get(DeckType.SIDE).size() > DeckType.SIDE.maxCards) return false;
 
-        ArrayList<Card> allCards = new ArrayList<>(decks.get(DeckType.MAIN));
-        allCards.addAll(decks.get(DeckType.SIDE));
+        ArrayList<String> allCards = new ArrayList<>(decksCardNames.get(DeckType.MAIN));
+        allCards.addAll(decksCardNames.get(DeckType.SIDE));
 
-        return allCards.stream().map(Card::getCardName)
-                .map(cardName -> Collections.frequency(allCards, cardName))
+        return allCards.size() == 0 || allCards.stream().map(cardName -> Collections.frequency(allCards, cardName))
                 .max(Integer::compare).get() <= 3;
     }
 
@@ -126,8 +125,11 @@ public class Deck {
         return decks.get(deckType).size() >= deckType.maxCards;
     }
 
-    public boolean isCardMaxedOut(Card card, DeckType deckType) {
-        return Collections.frequency(decksCardNames.get(deckType), card.getCardName()) >= 3;
+    public boolean isCardMaxedOut(Card card) {
+        ArrayList<String> allCards = new ArrayList<>(decksCardNames.get(DeckType.MAIN));
+        allCards.addAll(decksCardNames.get(DeckType.SIDE));
+
+        return Collections.frequency(allCards, card.getCardName()) >= 3;
     }
 
     public ArrayList<String> getCardNames(DeckType deckType) {

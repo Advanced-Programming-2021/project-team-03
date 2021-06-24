@@ -222,9 +222,14 @@ public class MainController {
                 answerObject.put("Type", "Error");
                 answerObject.put("Value", "preparations of this spell are not done yet!");
             } else {
-                GameController.getInstance().activateSpellCard();
-                answerObject.put("Type", "Successful");
-                answerObject.put("Value", "spell activated!");
+                boolean success = GameController.getInstance().activateSpellCard();
+                if (success) {
+                    answerObject.put("Type", "Successful");
+                    answerObject.put("Value", "spell activated!");
+                } else {
+                    answerObject.put("Type", "Cancel");
+                    answerObject.put("Value", "Command canceled.");
+                }
             }
         } else {
             if (!GameController.getInstance().canSetSelectedCard()) {
@@ -238,9 +243,14 @@ public class MainController {
                 answerObject.put("Value", "preparations of this spell are not done yet!");
             } else {
                 GameController.getInstance().setCard();
-                GameController.getInstance().activateSpellCard();
-                answerObject.put("Type", "Successful");
-                answerObject.put("Value", "spell activated!");
+                boolean success = GameController.getInstance().activateSpellCard();
+                if (success) {
+                    answerObject.put("Type", "Successful");
+                    answerObject.put("Value", "spell activated!");
+                } else {
+                    answerObject.put("Type", "Cancel");
+                    answerObject.put("Value", "Command canceled.");
+                }
             }
         }
         return answerObject.toString();
@@ -371,7 +381,6 @@ public class MainController {
     }
 
     private String setACard(JSONObject valueObject) {
-        //TODO field spell card
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
@@ -399,7 +408,6 @@ public class MainController {
             answerObject.put("Type", "Successful");
             answerObject.put("Value", result);
         }
-
         return answerObject.toString();
     }
 
@@ -707,7 +715,7 @@ public class MainController {
         } else if (DeckController.getInstance().isDeckFull(deckName, DeckType.valueOf(deckType.toUpperCase()))) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", deckType + " deck is full");
-        } else if (!DeckController.getInstance().canUserAddCardToDeck(deckName, DeckType.valueOf(deckType.toUpperCase()), cardName)) {
+        } else if (!DeckController.getInstance().canUserAddCardToDeck(deckName, cardName)) {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "There are already three cards with name " + cardName + " in deck " + deckName);
         } else {
@@ -975,9 +983,5 @@ public class MainController {
         }
 
         return answerObject.toString();
-    }
-
-    public HashMap<String, String> getOnlineUsers() {
-        return onlineUsers;
     }
 }
