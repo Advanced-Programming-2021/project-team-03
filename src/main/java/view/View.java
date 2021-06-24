@@ -187,8 +187,72 @@ public class View {
             case "Round is over" -> roundIsOver(valueObject);
             case "Ritual summon" -> ritualSummon();
             case "Get tribute cards for ritual summon" -> getTributeForRitualSummon();
+            case "Gate Guardian" -> getTributeForGateGuardian();
+            case "Terratiger, the Empowered Warrior" -> terratigerTheEmpoweredWarriorEffect();
+            case "The Tricky" -> theTrickyEffect();
             default -> error();
         };
+    }
+
+    private String theTrickyEffect() {
+        System.out.println("You can use special summon for The Tricky card.\n" +
+                "if you want to use special summon you should write position of one card from your hand to remove it.\n" +
+                "And if you do not want to do it you can Write Cancel for normal Summon.");
+        JSONObject answerObject = new JSONObject();
+        while (true) {
+            String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if (inputCommand.matches("Cancel")) {
+                answerObject.put("Type", "Cancel");
+                System.out.println("Special summon canceled.");
+                break;
+            } else if (inputCommand.matches("\\d+")) {
+                answerObject.put("Type", "Successful");
+                answerObject.put("Position", inputCommand);
+                break;
+            } else System.out.println("invalid command!\n" +
+                    "you should special summon right now");
+        }
+        return answerObject.toString();
+    }
+
+    private String terratigerTheEmpoweredWarriorEffect() {
+        System.out.println("You can summon another monster card from your hand.\n" +
+                "The level of the selected monster must be a maximum of 4.\n" +
+                "Write your monster position number from your hand or write Cancel to cancel.");
+        JSONObject answerObject = new JSONObject();
+        while (true) {
+            String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if (inputCommand.matches("Cancel")) {
+                answerObject.put("Type", "Cancel");
+                break;
+            } else if (inputCommand.matches("\\d+")) {
+                answerObject.put("Type", "Successful");
+                answerObject.put("Position", inputCommand);
+                break;
+            } else System.out.println("invalid command!");
+        }
+        return answerObject.toString();
+    }
+
+    private String getTributeForGateGuardian() {
+        ArrayList<String> positions = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            String position = getOneMonsterNumber();
+            if (position.equals("Cancel")) break;
+            positions.add(position);
+        }
+        JSONObject answerObject = new JSONObject();
+        if (positions.size() != 3) {
+            answerObject.put("Type", "Cancel");
+            return answerObject.toString();
+        }
+        answerObject.put("Type", "Three card");
+        JSONObject value = new JSONObject();
+        value.put("First position", positions.get(0));
+        value.put("Second position", positions.get(1));
+        value.put("Third position", positions.get(2));
+        answerObject.put("Value", value);
+        return answerObject.toString();
     }
 
     private String ritualSummon() {

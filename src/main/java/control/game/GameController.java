@@ -170,10 +170,6 @@ public class GameController {
         if (monster.getType() == MonsterTypes.EFFECT || monster.getType() == MonsterTypes.NORMAL) {
             return true;
         }
-//        if (monster.getType() == MonsterTypes.RITUAL || gameUpdates.haveRitualSpellBeenActivated()) {
-//            gameUpdates.setHaveRitualSpellBeenActivated(false);
-//            return true;
-//        }
         return false;
     }
 
@@ -189,9 +185,12 @@ public class GameController {
     }
 
     public boolean canPlayerSummonOrSetAnotherCard() {
-        if (selectedCard instanceof Monster)
+        if (selectedCard instanceof Monster) {
+            Monster monster = (Monster) selectedCard;
+            if (monster.getCardName().equals("Gate Guardian")) return true;
+            if (monster.getCardName().equals("The Tricky")) return true;
             return !gameUpdates.haveBeenSetOrSummonACard();
-        else return true;
+        } else return true;
     }
 
     public boolean isThereEnoughCardToTribute() {
@@ -207,6 +206,68 @@ public class GameController {
     public String summonCard() {
         Monster monster = (Monster) selectedCard;
         Board board = getPlayerByTurn().getBoard();
+        if (monster.getCardName().equals("Terratiger, the Empowered Warrior")) {
+            board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
+            gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
+            JSONObject messageToSendToView = new JSONObject();
+            messageToSendToView.put("Type", "Terratiger, the Empowered Warrior");
+            String viewAnswer = MainController.getInstance().sendRequestToView(messageToSendToView);
+            JSONObject inputObject = new JSONObject(viewAnswer);
+            String requestType = inputObject.getString("Type");
+            if (requestType.equals("Cancel")) {
+                return "summoned successfully\n" +
+                        "And Special summon for Terratiger, the Empowered Warrior did not used.";
+            } else {
+                String positionString = inputObject.getString("Position");
+                int position = Integer.parseInt(positionString);
+                Card card = board.getInHandCardByPosition(position);
+                if (card != null && card instanceof Monster) {
+                    Monster secondMonster = (Monster) card;
+                    if (secondMonster.getLevel() < 4 &&
+                            board.getMonstersInField().size() < 5 &&
+                            secondMonster.getType() == MonsterTypes.NORMAL) {
+                        board.setOrSummonMonsterFromHandToFiled(secondMonster, "Summon");
+                        secondMonster.setAttackingFormat(AttackingFormat.DEFENDING);
+                        return "summoned successfully\n" +
+                                "And Special summon done successfully.";
+                    }
+                }
+                return "summoned successfully\n" +
+                        "But you can not use selected card from hand for Special summon";
+            }
+        }
+        if (monster.getCardName().equals("The Tricky")) {
+            JSONObject messageToSendToView = new JSONObject();
+            messageToSendToView.put("Type", "The Tricky");
+            String viewAnswer = MainController.getInstance().sendRequestToView(messageToSendToView);
+            JSONObject inputObject = new JSONObject(viewAnswer);
+            String requestType = inputObject.getString("Type");
+            if (requestType.equals("Successful")) {
+                String positionString = inputObject.getString("Position");
+                int position = Integer.parseInt(positionString);
+                Card card = board.getInHandCardByPosition(position);
+                if (card.equals(selectedCard) || card == null) {
+                    MainController.getInstance().sendPrintRequestToView("Selected card to remove from hand is invalid\n" +
+                            "Special summon stopped And normal summon will continued.");
+                } else {
+                    board.addCardToGraveyard(card);
+                    board.removeCardFromHand(card);
+                    board.setOrSummonMonsterFromHandToFiled(monster, "Summon");
+                    return "summoned successfully\n" +
+                            "And Special summon done successfully.";
+                }
+            }
+        }
+        if (monster.getCardName().equals("Beast King Barbaros")) {
+
+            //TODO
+        }
+        if (monster.getCardName().equals("Gate Guardian")) {
+            JSONObject messageToSendToView = new JSONObject();
+            messageToSendToView.put("Type", "Gate Guardian");
+            String viewAnswer = MainController.getInstance().sendRequestToView(messageToSendToView);
+            return tributeCards(viewAnswer, board);
+        }
         if (monster.getLevel() < 5) {
             board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
             gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
@@ -234,17 +295,19 @@ public class GameController {
         String requestType = inputObject.getString("Type");
         if (requestType.equals("Cancel")) return "The victimization operation was canceled";
         JSONObject valueObject = inputObject.getJSONObject("Value");
-        if (requestType.equals("One Card")) {
+        if (requestType.equals("One card")) {
             int position = Integer.parseInt(valueObject.getString("Position"));
             Monster monster = board.getMonsterInFieldByPosition(position);
             if (monster == null) {
                 return "there no monsters one this address";
             }
             board.addCardToGraveyard(monster);
+            if (monster.getFaceUpSituation() == FACE_UP) gameUpdates.addCardToGraveyard(monster);
             board.removeCardFromField(position, true);
             gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
+            board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
             return "summoned successfully";
-        } else {
+        } else if (requestType.equals("Two card")) {
             int firstPosition = Integer.parseInt(valueObject.getString("First position"));
             Monster firstMonster = board.getMonsterInFieldByPosition(firstPosition);
             int secondPosition = Integer.parseInt(valueObject.getString("Second position"));
@@ -253,16 +316,44 @@ public class GameController {
                 return "there no monsters one this address";
             }
             board.addCardToGraveyard(firstMonster);
+            if (firstMonster.getFaceUpSituation() == FACE_UP) gameUpdates.addCardToGraveyard(firstMonster);
             board.addCardToGraveyard(secondMonster);
+            if (secondMonster.getFaceUpSituation() == FACE_UP) gameUpdates.addCardToGraveyard(secondMonster);
             board.removeCardFromField(firstPosition, true);
             board.removeCardFromField(secondPosition, true);
             gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
+            board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
+            return "summoned successfully";
+        } else {
+            int firstPosition = Integer.parseInt(valueObject.getString("First position"));
+            Monster firstMonster = board.getMonsterInFieldByPosition(firstPosition);
+            int secondPosition = Integer.parseInt(valueObject.getString("Second position"));
+            Monster secondMonster = board.getMonsterInFieldByPosition(secondPosition);
+            int thirdPosition = Integer.parseInt(valueObject.getString("Third position"));
+            Monster thirdMonster = board.getMonsterInFieldByPosition(thirdPosition);
+            if (firstMonster == null || secondMonster == null || thirdMonster == null) {
+                return "there no monsters one this address";
+            }
+            board.addCardToGraveyard(firstMonster);
+            if (firstMonster.getFaceUpSituation() == FACE_UP) gameUpdates.addCardToGraveyard(firstMonster);
+            board.addCardToGraveyard(secondMonster);
+            if (secondMonster.getFaceUpSituation() == FACE_UP) gameUpdates.addCardToGraveyard(secondMonster);
+            board.addCardToGraveyard(thirdMonster);
+            if (thirdMonster.getFaceUpSituation() == FACE_UP) gameUpdates.addCardToGraveyard(thirdMonster);
+            board.removeCardFromField(firstPosition, true);
+            board.removeCardFromField(secondPosition, true);
+            board.removeCardFromField(thirdPosition, true);
+            board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
             return "summoned successfully";
         }
     }
 
     public boolean canSetSelectedCard() {
         if (game.getCardsOwner(selectedCard) != turn) return false;
+        if (selectedCard instanceof Monster) {
+            Monster monster = (Monster) selectedCard;
+            if (monster.getCardName().equals("Gate Guardian")) return false;
+        }
         ArrayList<Card> inHandCards = game.getCardsInBoard(selectedCard).getInHandCards();
         for (Card card : inHandCards) {
             if (card.equals(selectedCard)) return true;
@@ -280,7 +371,7 @@ public class GameController {
             SpellAndTrap spellAndTrap = (SpellAndTrap) selectedCard;
             if (spellAndTrap.getIcon() == FIELD) {
                 if (!game.isFiledActivated()) {
-                    board.setFieldCard(spellAndTrap);
+                    board.setFieldCard(gameUpdates, spellAndTrap);
                 } else if (board.getFieldCard() == game.getActivatedFieldCard()) {
                     SpellAndTrap opponentFieldCard = (SpellAndTrap) opponentBoard.getFieldCard();
                     if (opponentFieldCard != null && opponentFieldCard.isActive()) {
@@ -290,9 +381,9 @@ public class GameController {
                         game.setFiledActivated(false);
                         game.setActivatedFieldCard(null);
                     }
-                    board.setFieldCard(spellAndTrap);
+                    board.setFieldCard(gameUpdates, spellAndTrap);
                 } else {
-                    board.setFieldCard(spellAndTrap);
+                    board.setFieldCard(gameUpdates, spellAndTrap);
                 }
             } else {
                 board.setSpellAndTrapsInField(spellAndTrap);
@@ -591,7 +682,10 @@ public class GameController {
                         return false;
                     }
                     for (Integer position : cardsPositions) {
-                        board.addCardToGraveyard(board.getMonsterInFieldByPosition(position));
+                        Monster monsterTORemove = board.getMonsterInFieldByPosition(position);
+                        board.addCardToGraveyard(monsterTORemove);
+                        if (monsterTORemove.getFaceUpSituation() == FACE_UP)
+                            gameUpdates.addCardToGraveyard(monsterTORemove);
                         board.removeCardFromField(position, true);
                     }
                     board.setOrSummonMonsterFromHandToFiled(ritualMonster, "Summon");
