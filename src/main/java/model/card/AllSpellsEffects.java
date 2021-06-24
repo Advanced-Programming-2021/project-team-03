@@ -44,7 +44,12 @@ public class AllSpellsEffects {
             case "Supply Squad" -> supplySquadEffect(game, gameUpdates, turn);
             case "Twin Twisters" -> twinTwisterEffect(game, gameUpdates, turn);
             case "Mystical space typhoon" -> mysticalSpaceTyphoonEffect(game, turn, gameUpdates);
+            case "Ring of defense" -> ringOfDefenceEffect(game, turn, gameUpdates);
         }
+    }
+
+    private void ringOfDefenceEffect(Game game, PlayerTurn turn, Update gameUpdates) {
+        gameUpdates.getPlayerRingOfDefenceActivator().replace(game.getPlayerByTurn(turn), true);
     }
 
     private void mysticalSpaceTyphoonEffect(Game game, PlayerTurn turn, Update gameUpdates) {

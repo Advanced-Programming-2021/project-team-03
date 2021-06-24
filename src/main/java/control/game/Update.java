@@ -19,8 +19,8 @@ public class Update {
     private final HashMap<UpdateEnum, Object> allUpdates;
     private boolean haveRitualSpellBeenActivated = false; //TODO: make this field true if ritual spell activated.
     private final ArrayList<Player> roundWinners;
-    private final HashMap<Player, Boolean> canPlayerActiveATrap;
-
+    private final HashMap<Player, Boolean> canPlayerActivateATrap;
+    private final HashMap<Player, Boolean> playerRingOfDefenceActivator;
     private final HashMap<Player, Integer> isSupplySquadActivated;
 
     public Update(Game game) {
@@ -30,12 +30,19 @@ public class Update {
         alreadyChangedPositionMonsters = new ArrayList<>();
         allUpdates = new HashMap<>();
         roundWinners = new ArrayList<>();
-        canPlayerActiveATrap = new HashMap<>();
-        canPlayerActiveATrap.put(game.getPlayer1(), true);
-        canPlayerActiveATrap.put(game.getPlayer2(), true);
+        canPlayerActivateATrap = new HashMap<>();
+        canPlayerActivateATrap.put(game.getPlayer1(), true);
+        canPlayerActivateATrap.put(game.getPlayer2(), true);
         isSupplySquadActivated = new HashMap<>();
         isSupplySquadActivated.put(game.getPlayer1(), 1);
         isSupplySquadActivated.put(game.getPlayer2(), 1);
+        playerRingOfDefenceActivator = new HashMap<>();
+        playerRingOfDefenceActivator.put(game.getPlayer1(), false);
+        playerRingOfDefenceActivator.put(game.getPlayer2(), false);
+    }
+
+    public HashMap<Player, Boolean> getPlayerRingOfDefenceActivator() {
+        return playerRingOfDefenceActivator;
     }
 
     public void addMonstersToAttackedMonsters(Monster monster) {
@@ -43,8 +50,8 @@ public class Update {
         allUpdates.put(ATTACKING_CARD, monster);
     }
 
-    public HashMap<Player, Boolean> getCanPlayerActiveATrap() {
-        return canPlayerActiveATrap;
+    public HashMap<Player, Boolean> getCanPlayerActivateATrap() {
+        return canPlayerActivateATrap;
     }
 
     public boolean didMonsterAttack(Monster monster) {
@@ -88,7 +95,7 @@ public class Update {
         if (card.getCardName().equals("Yomi Ship"))
             AllMonsterEffects.getInstance().yomiShipEffect(game, GameController.getInstance().getTurn(), GameController.getInstance().getSelectedCard(), this);
         if (card.getCardName().equals("Mirage Dragon"))
-            canPlayerActiveATrap.put(game.getPlayerOpponentByTurn(GameController.getInstance().getTurn()), true);
+            canPlayerActivateATrap.put(game.getPlayerOpponentByTurn(GameController.getInstance().getTurn()), true);
         if (card.getCardName().equals("Supply Squad") && isSupplySquadActivated.get(game.getPlayer1()) != 1)
             isSupplySquadActivated.replace(game.getPlayer1(), 1);
         if (card.getCardName().equals("Supply Squad") && isSupplySquadActivated.get(game.getPlayer2()) != 1)
@@ -101,6 +108,8 @@ public class Update {
             isSupplySquadActivated.replace(game.getPlayer2(), 3);
             game.getPlayer2().getBoard().addCardFromRemainingToInHandCards();
         }
+        if (card.getCardName().equals("Ring of defense"))
+            playerRingOfDefenceActivator.put(game.getPlayerByTurn(GameController.getInstance().getTurn()), false);
     }
 
     public boolean haveRitualSpellBeenActivated() {
