@@ -259,6 +259,10 @@ public class GameController {
                 }
             }
         }
+        if (monster.getCardName().equals("Beast King Barbaros")) {
+
+            //TODO
+        }
         if (monster.getCardName().equals("Gate Guardian")) {
             JSONObject messageToSendToView = new JSONObject();
             messageToSendToView.put("Type", "Gate Guardian");
@@ -299,6 +303,7 @@ public class GameController {
                 return "there no monsters one this address";
             }
             board.addCardToGraveyard(monster);
+            if (monster.getFaceUpSituation() == FACE_UP) gameUpdates.addCardToGraveyard(monster);
             board.removeCardFromField(position, true);
             gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
             board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
@@ -312,7 +317,9 @@ public class GameController {
                 return "there no monsters one this address";
             }
             board.addCardToGraveyard(firstMonster);
+            if (firstMonster.getFaceUpSituation() == FACE_UP) gameUpdates.addCardToGraveyard(firstMonster);
             board.addCardToGraveyard(secondMonster);
+            if (secondMonster.getFaceUpSituation() == FACE_UP) gameUpdates.addCardToGraveyard(secondMonster);
             board.removeCardFromField(firstPosition, true);
             board.removeCardFromField(secondPosition, true);
             gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
@@ -329,8 +336,11 @@ public class GameController {
                 return "there no monsters one this address";
             }
             board.addCardToGraveyard(firstMonster);
+            if (firstMonster.getFaceUpSituation() == FACE_UP) gameUpdates.addCardToGraveyard(firstMonster);
             board.addCardToGraveyard(secondMonster);
+            if (secondMonster.getFaceUpSituation() == FACE_UP) gameUpdates.addCardToGraveyard(secondMonster);
             board.addCardToGraveyard(thirdMonster);
+            if (thirdMonster.getFaceUpSituation() == FACE_UP) gameUpdates.addCardToGraveyard(thirdMonster);
             board.removeCardFromField(firstPosition, true);
             board.removeCardFromField(secondPosition, true);
             board.removeCardFromField(thirdPosition, true);
@@ -362,7 +372,7 @@ public class GameController {
             SpellAndTrap spellAndTrap = (SpellAndTrap) selectedCard;
             if (spellAndTrap.getIcon() == FIELD) {
                 if (!game.isFiledActivated()) {
-                    board.setFieldCard(spellAndTrap);
+                    board.setFieldCard(gameUpdates, spellAndTrap);
                 } else if (board.getFieldCard() == game.getActivatedFieldCard()) {
                     SpellAndTrap opponentFieldCard = (SpellAndTrap) opponentBoard.getFieldCard();
                     if (opponentFieldCard != null && opponentFieldCard.isActive()) {
@@ -372,9 +382,9 @@ public class GameController {
                         game.setFiledActivated(false);
                         game.setActivatedFieldCard(null);
                     }
-                    board.setFieldCard(spellAndTrap);
+                    board.setFieldCard(gameUpdates, spellAndTrap);
                 } else {
-                    board.setFieldCard(spellAndTrap);
+                    board.setFieldCard(gameUpdates, spellAndTrap);
                 }
             } else {
                 board.setSpellAndTrapsInField(spellAndTrap);
@@ -672,7 +682,10 @@ public class GameController {
                         return false;
                     }
                     for (Integer position : cardsPositions) {
-                        board.addCardToGraveyard(board.getMonsterInFieldByPosition(position));
+                        Monster monsterTORemove = board.getMonsterInFieldByPosition(position);
+                        board.addCardToGraveyard(monsterTORemove);
+                        if (monsterTORemove.getFaceUpSituation() == FACE_UP)
+                            gameUpdates.addCardToGraveyard(monsterTORemove);
                         board.removeCardFromField(position, true);
                     }
                     board.setOrSummonMonsterFromHandToFiled(ritualMonster, "Summon");

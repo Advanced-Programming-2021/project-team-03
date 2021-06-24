@@ -1,5 +1,6 @@
 package model.game;
 
+import control.game.Update;
 import model.card.Card;
 import model.card.Monster;
 import model.card.SpellAndTrap;
@@ -75,9 +76,11 @@ public class Board {
         return fieldCard;
     }
 
-    public void setFieldCard(SpellAndTrap fieldCard) {
-        if (this.fieldCard != null){
+    public void setFieldCard(Update gameUpdate, SpellAndTrap fieldCard) {
+        if (this.fieldCard != null) {
             addCardToGraveyard(fieldCard);
+            if (this.fieldCard.isActive())
+                gameUpdate.addCardToGraveyard(this.fieldCard);
         }
         this.fieldCard = fieldCard;
     }
