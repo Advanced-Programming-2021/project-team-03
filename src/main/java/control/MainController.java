@@ -45,6 +45,10 @@ public class MainController {
 
     private final HashMap<String, String> onlineUsers;
 
+    public HashMap<String, String> getOnlineUsers() {
+        return onlineUsers;
+    }
+
     public String getRequest(String input) { //this method receives a input string and return a string as an answer
         /* note that this strings are in Json format */
         // TODO parsing analysing and answering the request of view menu for some more requests
