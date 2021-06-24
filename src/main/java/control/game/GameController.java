@@ -664,8 +664,23 @@ public class GameController {
     }
 
     private void standbyPhase() {
+        Board board = game.getPlayerByTurn(turn).getBoard();
+        Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
+        activeCommandKnightEffect(board);
+        activeCommandKnightEffect(opponentBoard);
+        //TODO reset commandKnight effect
         //TODO
         //checking for effects of cards
+    }
+
+    private void activeCommandKnightEffect(Board board) {
+        HashMap<Integer, Monster> monstersInField = board.getMonstersInField();
+        for (Map.Entry<Integer, Monster> monsterEntry : monstersInField.entrySet()) {
+            Monster monster = monsterEntry.getValue();
+            if (monster.getCardName().equals("Command Knight") && AllMonsterEffects.getInstance().canCommandKnightActivate(monster)) {
+                AllMonsterEffects.getInstance().commandKnightEffect(game, turn, selectedCard, gameUpdates);
+            }
+        }
     }
 
     public void roundIsOver() {

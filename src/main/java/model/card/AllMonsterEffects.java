@@ -12,7 +12,9 @@ import model.game.Player;
 import model.game.PlayerTurn;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import static control.game.UpdateEnum.*;
 import static model.enums.FaceUpSituation.*;
@@ -38,29 +40,37 @@ public class AllMonsterEffects {
     }
 
     private void initialize() { // define each monster effect and add it to the hashmap
-        effectID = new HashMap<>();
-
-        /* effect of the command knight card in the game */
-        IMonsterEffect commandKnightEffect = new IMonsterEffect() {
-            @Override
-            public void activateMonsterEffect(Monster self, Update update) {
-                for (Monster monster : update.getGame().getCardsInBoard(self).getMonstersInField().values()) { // getting all monsters in friendly board
-                    monster.addToAttackSupplier(monster1 -> 400);
-                }
-            }
-
-            @Override
-            public boolean canActivate(Monster self, Update update) {
-                return self.getFaceUpSituation().equals(FACE_UP);
-            }
-
-            @Override
-            public MonsterEffectTypes getMonsterEffectType() {
-                return CONTINUOUS;
-            }
-        };
-        effectID.put("41", commandKnightEffect);
+//        effectID = new HashMap<>();
+//
+//        /* effect of the command knight card in the game */
+//        IMonsterEffect commandKnightEffect = new IMonsterEffect() {
+//            @Override
+//            public void activateMonsterEffect(Monster self, Update update) {
+//                for (Monster monster : update.getGame().getCardsInBoard(self).getMonstersInField().values()) { // getting all monsters in friendly board
+//                    monster.addToAttackSupplier(monster1 -> 400);
+//                }
+//            }
+//
+//            @Override
+//            public boolean canActivate(Monster self, Update update) {
+//                return self.getFaceUpSituation().equals(FACE_UP);
+//            }
+//
+//            @Override
+//            public MonsterEffectTypes getMonsterEffectType() {
+//                return CONTINUOUS;
+//            }
+//        };
+//        effectID.put("41", commandKnightEffect);
     }
+    public void commandKnightEffect(Game game, PlayerTurn turn, Card selectedCard, Update gameUpdates){
+        HashMap<Integer,Monster> monstersInField = game.getPlayerByTurn(turn).getBoard().getMonstersInField();
+        for(Map.Entry<Integer, Monster> monsterEntry : monstersInField.entrySet()) {
+            Monster monster = monsterEntry.getValue();
+            monster.addToAttackSupplier(400);
+        }
+    }
+
 
     //Yomi Ship effect
     public void yomiShipEffect(Game game, PlayerTurn turn, Card selectedCard, Update gameUpdates) {
@@ -165,6 +175,10 @@ public class AllMonsterEffects {
             }
         }
         return answerString.toString();
+    }
+
+    public boolean canCommandKnightActivate(Monster monster){
+        return monster.getFaceUpSituation().equals(FACE_UP);
     }
 
     public boolean isSuijinActivatedBefore(Update gameUpdates) {

@@ -22,7 +22,7 @@ public class Monster extends Card {
     private AttackingFormat attackingFormat;
     private FaceUpSituation faceUpSituation;
 
-    private final ArrayList<Function<Monster, Integer>> attackSupplier; // contains all game effects which determine the attacking power of the monster
+    private final ArrayList<Integer> attackSupplier; // contains all game effects which determine the attacking power of the monster
     private final ArrayList<Integer> defensiveSupplies;
 
     private static HashMap<String, Monster> allMonsters;
@@ -83,12 +83,8 @@ public class Monster extends Card {
         this.faceUpSituation = faceUpSituation;
     }
 
-    public ArrayList<Function<Monster, Integer>> getAttackSupplier() {
-        return attackSupplier;
-    }
-
-    public void addToAttackSupplier(Function<Monster, Integer> function) {
-        attackSupplier.add(function);
+    public void addToAttackSupplier(int power) {
+        attackSupplier.add(power);
     }
 
     public int getBaseAttack() {
@@ -100,11 +96,9 @@ public class Monster extends Card {
     }
 
     public int getAttackingPower() {
-        int AttackingPower = this.baseAttack;
-        for (Function<Monster, Integer> function : attackSupplier) {
-            AttackingPower += function.apply(this);
-        }
-        return AttackingPower;
+        int power = baseAttack;
+        power += attackSupplier.stream().mapToInt(p -> p).sum();
+        return power;
     }
 
     public int getDefensivePower() {
