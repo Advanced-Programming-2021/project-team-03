@@ -49,22 +49,27 @@ public class AllSpellsEffects {
         }
     }
 
-    public void fieldCardActivator(SpellAndTrap fieldCard, Game game, Update gameUpdates, PlayerTurn turn) {
+    public void fieldCardActivator(SpellAndTrap fieldCard, Game game, PlayerTurn turn) {
         fieldCard.setActive(true);
 
         switch (fieldCard.cardName) {
-            case "Yami" -> yamiEffect(game, gameUpdates, turn);
-            case "Closed Forest" -> closedForestEffect(game, gameUpdates, turn);
-            case "Forest" -> forestEffect(game, gameUpdates, turn);
-            case "Umiiruka" -> umiirukaEffect(game, gameUpdates, turn);
+            case "Yami" -> yamiEffect(game, turn);
+            case "Closed Forest" -> closedForestEffect(game, turn);
+            case "Forest" -> forestEffect(game, turn);
+            case "Umiiruka" -> umiirukaEffect(game, turn);
         }
     }
 
-    private void umiirukaEffect(Game game, Update gameUpdates, PlayerTurn turn) {
+    private void umiirukaEffect(Game game, PlayerTurn turn) {
+        Board opponentsBoard = game.getPlayerOpponentByTurn(turn).getBoard();
+        Board playerBoard = game.getPlayerByTurn(turn).getBoard();
 
+        addFieldEffectsToMonsters(opponentsBoard, AQUA, 500, -400);
+
+        addFieldEffectsToMonsters(playerBoard, AQUA, 500, -400);
     }
 
-    private void forestEffect(Game game, Update gameUpdates, PlayerTurn turn) {
+    private void forestEffect(Game game, PlayerTurn turn) {
         Board opponentsBoard = game.getPlayerOpponentByTurn(turn).getBoard();
         Board playerBoard = game.getPlayerByTurn(turn).getBoard();
 
@@ -77,11 +82,11 @@ public class AllSpellsEffects {
         addFieldEffectsToMonsters(playerBoard, BEAST_WARRIOR, 200, 200);
     }
 
-    private void closedForestEffect(Game game, Update gameUpdates, PlayerTurn turn) {
+    private void closedForestEffect(Game game, PlayerTurn turn) {
 
     }
 
-    private void yamiEffect(Game game, Update gameUpdates, PlayerTurn turn) {
+    private void yamiEffect(Game game, PlayerTurn turn) {
         Board opponentsBoard = game.getPlayerOpponentByTurn(turn).getBoard();
         Board playerBoard = game.getPlayerByTurn(turn).getBoard();
 

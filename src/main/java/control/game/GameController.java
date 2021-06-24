@@ -715,7 +715,7 @@ public class GameController {
 
     private void checkFieldCard() {
         SpellAndTrap fieldCard = game.getActivatedFieldCard();
-        AllSpellsEffects.getInstance().fieldCardActivator(fieldCard, game, gameUpdates, turn);
+        AllSpellsEffects.getInstance().fieldCardActivator(fieldCard, game, turn);
     }
 
     private void checkCommandKnight() {
