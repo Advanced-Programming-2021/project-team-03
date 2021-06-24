@@ -57,7 +57,7 @@ public class Deck {
         ArrayList<String> allCards = new ArrayList<>(decksCardNames.get(DeckType.MAIN));
         allCards.addAll(decksCardNames.get(DeckType.SIDE));
 
-        return allCards.stream().map(cardName -> Collections.frequency(allCards, cardName))
+        return allCards.size() == 0 || allCards.stream().map(cardName -> Collections.frequency(allCards, cardName))
                 .max(Integer::compare).get() <= 3;
     }
 
