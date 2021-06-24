@@ -20,7 +20,7 @@ public class Update {
     private boolean haveRitualSpellBeenActivated = false; //TODO: make this field true if ritual spell activated.
     private final ArrayList<Player> roundWinners;
     private final HashMap<Player, Boolean> canPlayerActivateATrap;
-    private final HashMap<Player, Boolean> playerRingOfDefenceActivator;
+    private final HashMap<Player, Boolean> playerRingOfDefenseActivator;
     private final HashMap<Player, Integer> isSupplySquadActivated;
 
     public Update(Game game) {
@@ -36,13 +36,13 @@ public class Update {
         isSupplySquadActivated = new HashMap<>();
         isSupplySquadActivated.put(game.getPlayer1(), 1);
         isSupplySquadActivated.put(game.getPlayer2(), 1);
-        playerRingOfDefenceActivator = new HashMap<>();
-        playerRingOfDefenceActivator.put(game.getPlayer1(), false);
-        playerRingOfDefenceActivator.put(game.getPlayer2(), false);
+        playerRingOfDefenseActivator = new HashMap<>();
+        playerRingOfDefenseActivator.put(game.getPlayer1(), false);
+        playerRingOfDefenseActivator.put(game.getPlayer2(), false);
     }
 
-    public HashMap<Player, Boolean> getPlayerRingOfDefenceActivator() {
-        return playerRingOfDefenceActivator;
+    public HashMap<Player, Boolean> getPlayerRingOfDefenseActivator() {
+        return playerRingOfDefenseActivator;
     }
 
     public void addMonstersToAttackedMonsters(Monster monster) {
@@ -109,7 +109,7 @@ public class Update {
             game.getPlayer2().getBoard().addCardFromRemainingToInHandCards();
         }
         if (card.getCardName().equals("Ring of defense"))
-            playerRingOfDefenceActivator.put(game.getPlayerByTurn(GameController.getInstance().getTurn()), false);
+            playerRingOfDefenseActivator.put(game.getPlayerByTurn(GameController.getInstance().getTurn()), false);
     }
 
     public boolean haveRitualSpellBeenActivated() {
