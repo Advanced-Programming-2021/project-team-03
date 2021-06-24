@@ -24,6 +24,7 @@ import static control.game.GamePhases.*;
 import static control.game.TypeOfSelectedCard.*;
 import static control.game.UpdateEnum.*;
 import static model.enums.FaceUpSituation.*;
+import static model.enums.SpellAndTrapIcon.FIELD;
 import static model.enums.SpellAndTrapIcon.RITUAL;
 import static model.game.PlayerTurn.PLAYER1;
 import static model.game.PlayerTurn.PLAYER2;
@@ -181,11 +182,17 @@ public class GameController {
         Player player = getPlayerByTurn();
         if (selectedCard instanceof Monster) {
             return player.getBoard().getMonstersInField().size() >= 5;
-        } else return player.getBoard().getSpellAndTrapsInField().size() >= 5;
+        } else {
+            SpellAndTrap spell = (SpellAndTrap) selectedCard;
+            if (spell.getIcon() == FIELD) return false;
+            else return player.getBoard().getSpellAndTrapsInField().size() >= 5;
+        }
     }
 
     public boolean canPlayerSummonOrSetAnotherCard() {
-        return !gameUpdates.haveBeenSetOrSummonACard();
+        if (selectedCard instanceof Monster)
+            return !gameUpdates.haveBeenSetOrSummonACard();
+        else return true;
     }
 
     public boolean isThereEnoughCardToTribute() {
@@ -270,7 +277,12 @@ public class GameController {
             board.setOrSummonMonsterFromHandToFiled(selectedCard, "Set");
             gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
         } else {
-            board.setSpellAndTrapsInField((SpellAndTrap) selectedCard);
+            SpellAndTrap spellAndTrap = (SpellAndTrap) selectedCard;
+            if (spellAndTrap.getIcon() == FIELD){
+                board.setFieldCard(spellAndTrap);
+            }else {
+                board.setSpellAndTrapsInField(spellAndTrap);
+            }
         }
         return "set successfully";
     }

@@ -381,7 +381,6 @@ public class MainController {
     }
 
     private String setACard(JSONObject valueObject) {
-        //TODO field spell card
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
@@ -409,7 +408,6 @@ public class MainController {
             answerObject.put("Type", "Successful");
             answerObject.put("Value", result);
         }
-
         return answerObject.toString();
     }
 
