@@ -187,8 +187,30 @@ public class View {
             case "Round is over" -> roundIsOver(valueObject);
             case "Ritual summon" -> ritualSummon();
             case "Get tribute cards for ritual summon" -> getTributeForRitualSummon();
+            case "Gate Guardian" -> getTributeForGateGuardian();
             default -> error();
         };
+    }
+
+    private String getTributeForGateGuardian() {
+        ArrayList<String> positions = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            String position = getOneMonsterNumber();
+            if (position.equals("Cancel")) break;
+            positions.add(position);
+        }
+        JSONObject answerObject = new JSONObject();
+        if (positions.size() != 3) {
+            answerObject.put("Type", "Cancel");
+            return answerObject.toString();
+        }
+        answerObject.put("Type", "Three card");
+        JSONObject value = new JSONObject();
+        value.put("First position", positions.get(0));
+        value.put("Second position", positions.get(1));
+        value.put("Third position", positions.get(2));
+        answerObject.put("Value", value);
+        return answerObject.toString();
     }
 
     private String ritualSummon() {
