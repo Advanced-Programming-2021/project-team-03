@@ -1,6 +1,7 @@
 package model.card;
 
 import control.game.Update;
+import model.enums.FaceUpSituation;
 import model.enums.MonsterModels;
 import model.game.Board;
 import model.game.Game;
@@ -68,18 +69,23 @@ public class AllSpellsEffects {
             switch (equipmentCard.cardName) {
                 case "Sword of dark destruction" -> swordOfDarkEffect(equippedMonster);
                 case "Black Pendant" -> blackPendantEffect(equippedMonster);
-                case "United We Stand" -> unitedWeStandEffect(board, equippedMonster, equipmentCard, game, gameUpdates, turn);
-                case "Magnum Shield" -> magnumShieldEffect(board, equippedMonster, equipmentCard, game, gameUpdates, turn);
+                case "United We Stand" -> unitedWeStandEffect(board, equippedMonster);
+                case "Magnum Shield" -> magnumShieldEffect(board, equippedMonster);
             }
         }
     }
 
-    private void magnumShieldEffect(Board board, Monster equippedMonster, SpellAndTrap spell, Game game, Update gameUpdates, PlayerTurn turn) {
+    private void magnumShieldEffect(Board board, Monster equippedMonster) {
 
     }
 
-    private void unitedWeStandEffect(Board board, Monster equippedMonster, SpellAndTrap spell, Game game, Update gameUpdates, PlayerTurn turn) {
-
+    private void unitedWeStandEffect(Board board, Monster equippedMonster) {
+        for (Monster monster : board.getMonstersInField().values()) {
+            if (monster.getFaceUpSituation() == FaceUpSituation.FACE_UP) {
+                equippedMonster.addToAttackSupplier(800);
+                equippedMonster.addToDefensiveSupply(800);
+            }
+        }
     }
 
     private void blackPendantEffect(Monster equippedMonster) {
