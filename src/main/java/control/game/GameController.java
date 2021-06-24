@@ -273,13 +273,29 @@ public class GameController {
 
     public String setCard() {
         Board board = getPlayerByTurn().getBoard();
+        Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
         if (selectedCard instanceof Monster) {
             board.setOrSummonMonsterFromHandToFiled(selectedCard, "Set");
             gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
         } else {
             SpellAndTrap spellAndTrap = (SpellAndTrap) selectedCard;
             if (spellAndTrap.getIcon() == FIELD) {
-                board.setFieldCard(spellAndTrap);
+                if (game.getActivatedFieldCard() == null) {
+                    board.setFieldCard(spellAndTrap);
+                } else if (board.getFieldCard() == game.getActivatedFieldCard()) {
+                    SpellAndTrap opponentFieldCard = (SpellAndTrap) opponentBoard.getFieldCard();
+                    if (opponentFieldCard != null && opponentFieldCard.isActive()) {
+                        game.setActivatedFieldCard(opponentFieldCard);
+                        game.setFiledActivated(true);
+                    } else {
+                        game.setFiledActivated(false);
+                        game.setActivatedFieldCard(null);
+                    }
+                    board.setFieldCard(spellAndTrap);
+                }
+                else {
+                    board.setFieldCard(spellAndTrap);
+                }
             } else {
                 board.setSpellAndTrapsInField(spellAndTrap);
             }

@@ -28,6 +28,14 @@ public class Game {
         /*duel with AI*/
     }
 
+    public SpellAndTrap getActivatedFieldCard() {
+        return activatedFieldCard;
+    }
+
+    public void setActivatedFieldCard(SpellAndTrap activatedFieldCard) {
+        this.activatedFieldCard = activatedFieldCard;
+    }
+
     public Player getPlayerByName(String username) {
         if (player1.getUser().getUsername().equals(username))
             return player1;
