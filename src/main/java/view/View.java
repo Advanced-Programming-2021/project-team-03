@@ -406,7 +406,7 @@ public class View {
      * 2- Delete deck
      * 3- Set activate deck
      */
-    private void preparatoryDeckWorks(String inputCommand, String commandType, int commandRegexIndex) {
+    void preparatoryDeckWorks(String inputCommand, String commandType, int commandRegexIndex) {
         getRegexMatcher(inputCommand, DECK_MENU_COMMANDS[commandRegexIndex], true);
 
         String deckName = regexMatcher.group(1);
@@ -1104,7 +1104,7 @@ public class View {
         }
     }
 
-    private void changeNickname(String inputCommand) {
+    void changeNickname(String inputCommand) {
         getRegexMatcher(inputCommand, PROFILE_MENU_COMMANDS[3], true);
 
         String nickname = regexMatcher.group(2);
@@ -1123,7 +1123,7 @@ public class View {
         System.out.println(answerValue);
     }
 
-    private void changePassword(String inputCommand, int regexIndex) {
+    void changePassword(String inputCommand, int regexIndex) {
         getRegexMatcher(inputCommand, PROFILE_MENU_COMMANDS[regexIndex], true);
 
         String currentPassword = "";

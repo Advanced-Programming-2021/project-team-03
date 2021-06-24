@@ -2,6 +2,9 @@ package view;
 
 import control.MainController;
 import control.UserController;
+import control.databaseController.DatabaseException;
+import model.user.User;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class UserTest {
@@ -40,6 +43,7 @@ class UserTest {
         View.testing = false;
 
         assert mainController.getOnlineUsers().containsValue("ali10login");
+        view.logoutUser();
     }
 
     @Test
@@ -60,11 +64,13 @@ class UserTest {
         view.loginUser("user login -u ali2login -p ali2loginPass");
         assert mainController.getOnlineUsers().containsValue("ali2login");
 
+        view.logoutUser();
         View.testing = false;
     }
 
     @Test
     void duplicateSignUp() {
+        MainController.getInstance();
         View view = View.getInstance();
         View.testing = true;
         view.createNewUser("user create -u ali2login -p ali2loginPass -n ali2nick");
@@ -87,6 +93,31 @@ class UserTest {
 
         assert view.logoutUser();
         assert !mainController.getOnlineUsers().containsValue("ali4logout");
+
+        View.testing = false;
+    }
+
+    @Test
+    void databaseDuplicate() {
+        MainController mainController = MainController.getInstance();
+        View view = View.getInstance();
+
+        View.testing = true;
+        view.createNewUser("user create -u databaseDuplicate -p pass -n databaseDuplicate");
+        view.createNewUser("user create -u databaseDuplicate2 -p pass -n databaseDuplicate2");
+
+
+        boolean expectedException = false;
+        try {
+            User.getByUsername("databaseDuplicate2").setNickname("databaseDuplicate");
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+            expectedException = true;
+        }
+        assert expectedException;
+
+        Assertions.assertThrows(DatabaseException.class, () ->
+                User.getByUsername("databaseDuplicate2").setNickname("databaseDuplicate"));
 
         View.testing = false;
     }
