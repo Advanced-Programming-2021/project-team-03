@@ -10,7 +10,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class View {
-    //TODO show map for each command
     private static View instance;
 
     private final Scanner SCANNER = new Scanner(System.in);
@@ -710,6 +709,7 @@ public class View {
     private void gameMenu() {
         isGameOver = false;
         isRoundOver = false;
+        boolean mapShowFlag = true;
         int regexIndex;
         while (true) {
             if (isRoundOver || isGameOver) {
@@ -737,12 +737,31 @@ public class View {
             else if (inputCommand.matches(GAME_MENU_COMMANDS[22])) activeCheat(inputCommand, 22);
             else if (inputCommand.matches(GAME_MENU_COMMANDS[23])) activeCheat(inputCommand, 23);
             else if (inputCommand.matches(CARD_SHOW_REGEX)) showCard(inputCommand, "Game");
-            else System.out.println("invalid command");
+            else {
+                System.out.println("invalid command");
+                mapShowFlag = false;
+            }
+            if (mapShowFlag){
+                showMap();
+            }
         }
         if (!isGameOver) {
             //TODO: run cardTransferMenu
             gameMenu();
         }
+    }
+
+    private void showMap() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Show map");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        String answerValue = (String) controlAnswer.get("Value");
+        System.out.println(answerValue);
     }
 
     private String getOneMonsterNumber() {

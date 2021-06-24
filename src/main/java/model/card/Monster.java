@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class Monster extends Card {
     private final int level;
-    private final int baseAttack;
+    private int baseAttack;
     private final int baseDefence;
     private final MonsterModels model; // monster model is the model of the card for example warrior or spell caster or ..
     private final MonsterTypes type;
@@ -144,5 +144,9 @@ public class Monster extends Card {
 
     public void setEquipment(SpellAndTrap equipment) {
         this.equipment = equipment;
+    }
+
+    public void setBaseAttack(int baseAttack) {
+        this.baseAttack = baseAttack;
     }
 }
