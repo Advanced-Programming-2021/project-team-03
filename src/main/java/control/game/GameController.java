@@ -206,6 +206,36 @@ public class GameController {
     public String summonCard() {
         Monster monster = (Monster) selectedCard;
         Board board = getPlayerByTurn().getBoard();
+        if (monster.getCardName().equals("Terratiger, the Empowered Warrior")) {
+            board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
+            gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
+            JSONObject messageToSendToView = new JSONObject();
+            messageToSendToView.put("Type", "Terratiger, the Empowered Warrior");
+            String viewAnswer = MainController.getInstance().sendRequestToView(messageToSendToView);
+            JSONObject inputObject = new JSONObject(viewAnswer);
+            String requestType = inputObject.getString("Type");
+            if (requestType.equals("Cancel")) {
+                return "summoned successfully\n" +
+                        "And Special summon for Terratiger, the Empowered Warrior did not used.";
+            } else {
+                String positionString = inputObject.getString("Position");
+                int position = Integer.parseInt(positionString);
+                Card card = board.getInHandCardByPosition(position);
+                if (card != null && card instanceof Monster) {
+                    Monster secondMonster = (Monster) card;
+                    if (secondMonster.getLevel() < 4 &&
+                            board.getMonstersInField().size() < 5 &&
+                            secondMonster.getType() == MonsterTypes.NORMAL) {
+                        board.setOrSummonMonsterFromHandToFiled(secondMonster, "Summon");
+                        secondMonster.setAttackingFormat(AttackingFormat.DEFENDING);
+                        return "summoned successfully\n" +
+                                "And Special summon done successfully.";
+                    }
+                }
+                return "summoned successfully\n" +
+                        "But you can not use selected card from hand for Special summon";
+            }
+        }
         if (monster.getCardName().equals("Gate Guardian")) {
             JSONObject messageToSendToView = new JSONObject();
             messageToSendToView.put("Type", "Gate Guardian");
