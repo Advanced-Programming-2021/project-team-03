@@ -1,6 +1,7 @@
 package model.card;
 
 import control.game.Update;
+import model.enums.AttackingFormat;
 import model.enums.FaceUpSituation;
 import model.enums.MonsterModels;
 import model.game.Board;
@@ -70,13 +71,19 @@ public class AllSpellsEffects {
                 case "Sword of dark destruction" -> swordOfDarkEffect(equippedMonster);
                 case "Black Pendant" -> blackPendantEffect(equippedMonster);
                 case "United We Stand" -> unitedWeStandEffect(board, equippedMonster);
-                case "Magnum Shield" -> magnumShieldEffect(board, equippedMonster);
+                case "Magnum Shield" -> magnumShieldEffect(equippedMonster);
             }
         }
     }
 
-    private void magnumShieldEffect(Board board, Monster equippedMonster) {
-
+    private void magnumShieldEffect(Monster equippedMonster) {
+        if (equippedMonster.getModel() == WARRIOR) {
+            if (equippedMonster.getAttackingFormat() == AttackingFormat.ATTACKING) {
+                equippedMonster.addToAttackSupplier(equippedMonster.getBaseDefence());
+            } else if (equippedMonster.getAttackingFormat() == AttackingFormat.DEFENDING) {
+                equippedMonster.addToDefensiveSupply(equippedMonster.getBaseAttack());
+            }
+        }
     }
 
     private void unitedWeStandEffect(Board board, Monster equippedMonster) {
