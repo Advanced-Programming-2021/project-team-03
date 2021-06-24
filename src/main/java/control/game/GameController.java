@@ -171,10 +171,10 @@ public class GameController {
         if (monster.getType() == MonsterTypes.EFFECT || monster.getType() == MonsterTypes.NORMAL) {
             return true;
         }
-        if (monster.getType() == MonsterTypes.RITUAL || gameUpdates.haveRitualSpellBeenActivated()) {
-            gameUpdates.setHaveRitualSpellBeenActivated(false);
-            return true;
-        }
+//        if (monster.getType() == MonsterTypes.RITUAL || gameUpdates.haveRitualSpellBeenActivated()) {
+//            gameUpdates.setHaveRitualSpellBeenActivated(false);
+//            return true;
+//        }
         return false;
     }
 

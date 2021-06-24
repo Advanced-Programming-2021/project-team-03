@@ -76,6 +76,9 @@ public class Board {
     }
 
     public void setFieldCard(SpellAndTrap fieldCard) {
+        if (this.fieldCard != null){
+            addCardToGraveyard(fieldCard);
+        }
         this.fieldCard = fieldCard;
     }
 
