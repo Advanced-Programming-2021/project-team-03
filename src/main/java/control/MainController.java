@@ -102,14 +102,10 @@ public class MainController {
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else {
-            answerObject.put("Type", "Success");
-            answerObject.put("Value", GameController.getInstance().endPhase());
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else {
+            answerObject.put("Type", "Success").put("Value", GameController.getInstance().endPhase());
         }
-
         return answerObject.toString();
     }
 
@@ -121,12 +117,8 @@ public class MainController {
     }
 
     public void sendPrintRequestToView(String message) {
-        JSONObject messageToSendToView = new JSONObject();
-        messageToSendToView.put("Type", "Print message");
-        JSONObject value = new JSONObject();
-        value.put("Message", message);
-        messageToSendToView.put("Value", value);
-        sendRequestToView(messageToSendToView);
+        sendRequestToView((new JSONObject()).put("Type", "Print message")
+                .put("Value", (new JSONObject()).put("Message", message)));
     }
 
     private String cheatCodes(JSONObject valueObject) {
@@ -140,12 +132,9 @@ public class MainController {
         String cardName = valueObject.getString("Card name");
 
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else {
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", Card.getCardByName(cardName).toString());
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else {
+            answerObject.put("Type", "Successful").put("Value", Card.getCardByName(cardName).toString());
         }
 
         return answerObject.toString();
@@ -155,12 +144,9 @@ public class MainController {
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else {
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", GameController.getInstance().surrender());
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else {
+            answerObject.put("Type", "Successful").put("Value", GameController.getInstance().surrender());
         }
 
         return answerObject.toString();
@@ -170,18 +156,14 @@ public class MainController {
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (GameController.getInstance().getSelectedCard() == null) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "no card is selected yet!");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (GameController.getInstance().getSelectedCard() == null) {
+            answerObject.put("Type", "Error").put("Value", "no card is selected yet!");
         } else if (!GameController.getInstance().canShowSelectedCardToPlayer()) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "card is not visible!");
+            answerObject.put("Type", "Error").put("Value", "card is not visible!");
         } else {
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", GameController.getInstance().getSelectedCard().toString());
+            answerObject.put("Type", "Successful")
+                    .put("Value", GameController.getInstance().getSelectedCard().toString());
         }
         return answerObject.toString();
     }
@@ -190,12 +172,10 @@ public class MainController {
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else {
-            answerObject.put("Type", "Graveyard");
-            answerObject.put("Value", GameController.getInstance().getGraveyard(onlineUsers.get(token)));
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else {
+            answerObject.put("Type", "Graveyard")
+                    .put("Value", GameController.getInstance().getGraveyard(onlineUsers.get(token)));
         }
         return answerObject.toString();
     }
@@ -205,55 +185,42 @@ public class MainController {
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (GameController.getInstance().getSelectedCard() == null) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "no card is selected yet!");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (GameController.getInstance().getSelectedCard() == null) {
+            answerObject.put("Type", "Error").put("Value", "no card is selected yet!");
         } else if (!GameController.getInstance().isSpellCard()) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "activate effect is only for spell cards!");
+            answerObject.put("Type", "Error").put("Value", "activate effect is only for spell cards!");
         } else if (GameController.getInstance().getCurrentPhase() != FIRST_MAIN &&
                 GameController.getInstance().getCurrentPhase() != SECOND_MAIN) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "you can’t activate an effect on this turn!");
+            answerObject.put("Type", "Error").put("Value", "you can’t activate an effect on this turn!");
         } else if (GameController.getInstance().isCardInField()) {
             if (GameController.getInstance().cardAlreadyActivated()) {
-                answerObject.put("Type", "Error");
-                answerObject.put("Value", "you have already activated this card!");
+                answerObject.put("Type", "Error").put("Value", "you have already activated this card!");
             } else if (!GameController.getInstance().canCardActivate()) {
-                answerObject.put("Type", "Error");
-                answerObject.put("Value", "preparations of this spell are not done yet!");
+                answerObject.put("Type", "Error").put("Value", "preparations of this spell are not done yet!");
             } else {
                 boolean success = GameController.getInstance().activateSpellCard();
                 if (success) {
-                    answerObject.put("Type", "Successful");
-                    answerObject.put("Value", "spell activated!");
+                    answerObject.put("Type", "Successful").put("Value", "spell activated!");
                 } else {
-                    answerObject.put("Type", "Cancel");
-                    answerObject.put("Value", "Command canceled.");
+                    answerObject.put("Type", "Cancel").put("Value", "Command canceled.");
                 }
             }
         } else {
             if (!GameController.getInstance().canSetSelectedCard()) {
-                answerObject.put("Type", "Error");
-                answerObject.put("Value", "selected card is not in your filed And you can not set and activate it.");
+                answerObject.put("Type", "Error")
+                        .put("Value", "selected card is not in your filed And you can not set and activate it.");
             } else if (!GameController.getInstance().doesFieldHaveSpaceForThisCard()) {
-                answerObject.put("Type", "Error");
-                answerObject.put("Value", "spell card zone is full!");
+                answerObject.put("Type", "Error").put("Value", "spell card zone is full!");
             } else if (!GameController.getInstance().canCardActivate()) {
-                answerObject.put("Type", "Error");
-                answerObject.put("Value", "preparations of this spell are not done yet!");
+                answerObject.put("Type", "Error").put("Value", "preparations of this spell are not done yet!");
             } else {
                 GameController.getInstance().setCard();
                 boolean success = GameController.getInstance().activateSpellCard();
                 if (success) {
-                    answerObject.put("Type", "Successful");
-                    answerObject.put("Value", "spell activated!");
+                    answerObject.put("Type", "Successful").put("Value", "spell activated!");
                 } else {
-                    answerObject.put("Type", "Cancel");
-                    answerObject.put("Value", "Command canceled.");
+                    answerObject.put("Type", "Cancel").put("Value", "Command canceled.");
                 }
             }
         }
@@ -264,28 +231,21 @@ public class MainController {
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (GameController.getInstance().getSelectedCard() == null) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "no card is selected yet!");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (GameController.getInstance().getSelectedCard() == null) {
+            answerObject.put("Type", "Error").put("Value", "no card is selected yet!");
         } else if (GameController.getInstance().getCurrentPhase() != BATTLE) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "can't direct attack phase!");
+            answerObject.put("Type", "Error").put("Value", "can't direct attack phase!");
         } else if (!GameController.getInstance().canAttackWithThisCard(onlineUsers.get(token))) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "you can’t attack with this card!");
+            answerObject.put("Type", "Error").put("Value", "you can’t attack with this card!");
         } else if (!GameController.getInstance().cardAlreadyAttacked()) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "this card already attacked!");
+            answerObject.put("Type", "Error").put("Value", "this card already attacked!");
         } else if (!GameController.getInstance().canAttackDirectly()) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "you can’t attack the opponent directly!");
+            answerObject.put("Type", "Error").put("Value", "you can’t attack the opponent directly!");
         } else {
             int damage = GameController.getInstance().attackDirectlyToTheOpponent();
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", "you opponent receives " + damage + " battle damage");
+            answerObject.put("Type", "Successful")
+                    .put("Value", "you opponent receives " + damage + " battle damage");
         }
 
         return answerObject.toString();
@@ -296,28 +256,20 @@ public class MainController {
         String position = valueObject.getString("Position");
 
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (GameController.getInstance().getSelectedCard() == null) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "no card is selected yet!");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (GameController.getInstance().getSelectedCard() == null) {
+            answerObject.put("Type", "Error").put("Value", "no card is selected yet!");
         } else if (GameController.getInstance().getCurrentPhase() != BATTLE) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "can't attack in this phase!");
+            answerObject.put("Type", "Error").put("Value", "can't attack in this phase!");
         } else if (!GameController.getInstance().canAttackWithThisCard(onlineUsers.get(token))) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "you can’t attack with this card!");
+            answerObject.put("Type", "Error").put("Value", "you can’t attack with this card!");
         } else if (!GameController.getInstance().cardAlreadyAttacked()) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "this card already attacked!");
+            answerObject.put("Type", "Error").put("Value", "this card already attacked!");
         } else if (!GameController.getInstance().canAttackThisPosition(position)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "there is no card to attack here!");
+            answerObject.put("Type", "Error").put("Value", "there is no card to attack here!");
         } else {
             String result = GameController.getInstance().attack(onlineUsers.get(token), Integer.parseInt(position));
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", result);
+            answerObject.put("Type", "Successful").put("Value", result);
         }
 
         return answerObject.toString();
@@ -327,26 +279,19 @@ public class MainController {
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (GameController.getInstance().getSelectedCard() == null) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "no card is selected yet!");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (GameController.getInstance().getSelectedCard() == null) {
+            answerObject.put("Type", "Error").put("Value", "no card is selected yet!");
         } else if (GameController.getInstance().getCurrentPhase() != FIRST_MAIN &&
                 GameController.getInstance().getCurrentPhase() != SECOND_MAIN) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "can't flip summon in this phase!");
+            answerObject.put("Type", "Error").put("Value", "can't flip summon in this phase!");
         } else if (!GameController.getInstance().canChangeCardPosition()) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "you can’t change this card position!");
+            answerObject.put("Type", "Error").put("Value", "you can’t change this card position!");
         } else if (!GameController.getInstance().canFlipSummon(onlineUsers.get(token))) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "you can’t flip summon this card!");
+            answerObject.put("Type", "Error").put("Value", "you can’t flip summon this card!");
         } else {
             GameController.getInstance().flipSummon();
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", "flip summoned successfully!");
+            answerObject.put("Type", "Successful").put("Value", "flip summoned successfully!");
         }
         return answerObject.toString();
     }
@@ -356,29 +301,21 @@ public class MainController {
         String position = valueObject.getString("Mode");
 
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (GameController.getInstance().getSelectedCard() == null) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "no card is selected yet!");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (GameController.getInstance().getSelectedCard() == null) {
+            answerObject.put("Type", "Error").put("Value", "no card is selected yet!");
         } else if (!GameController.getInstance().canChangeCardPosition()) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "you can’t change this card position!");
+            answerObject.put("Type", "Error").put("Value", "you can’t change this card position!");
         } else if (GameController.getInstance().getCurrentPhase() != FIRST_MAIN &&
                 GameController.getInstance().getCurrentPhase() != SECOND_MAIN) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "can't change position in this phase!");
+            answerObject.put("Type", "Error").put("Value", "can't change position in this phase!");
         } else if (GameController.getInstance().isCardAlreadyInThisPosition(position)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "this card is already in the wanted position!");
+            answerObject.put("Type", "Error").put("Value", "this card is already in the wanted position!");
         } else if (GameController.getInstance().isCardPositionChangedAlready()) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "you already changed this card position in this turn!");
+            answerObject.put("Type", "Error").put("Value", "you already changed this card position in this turn!");
         } else {
             GameController.getInstance().changeCardPosition(position);
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", "monster card position changed successfully!");
+            answerObject.put("Type", "Successful").put("Value", "monster card position changed successfully!");
         }
 
         return answerObject.toString();
@@ -388,29 +325,21 @@ public class MainController {
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (GameController.getInstance().getSelectedCard() == null) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "no card is selected yet!");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (GameController.getInstance().getSelectedCard() == null) {
+            answerObject.put("Type", "Error").put("Value", "no card is selected yet!");
         } else if (!GameController.getInstance().canSetSelectedCard()) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "you can’t set this card!");
+            answerObject.put("Type", "Error").put("Value", "you can’t set this card!");
         } else if (GameController.getInstance().getCurrentPhase() != FIRST_MAIN &&
                 GameController.getInstance().getCurrentPhase() != SECOND_MAIN) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "action not allowed in this phase!");
+            answerObject.put("Type", "Error").put("Value", "action not allowed in this phase!");
         } else if (GameController.getInstance().isCardFieldZoneFull()) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "card zone is full!");
+            answerObject.put("Type", "Error").put("Value", "card zone is full!");
         } else if (!GameController.getInstance().canPlayerSummonOrSetAnotherCard()) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "you already summoned/set on this turn!");
+            answerObject.put("Type", "Error").put("Value", "you already summoned/set on this turn!");
         } else {
             String result = GameController.getInstance().setCard();
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", result);
+            answerObject.put("Type", "Successful").put("Value", result);
         }
         return answerObject.toString();
     }
@@ -419,32 +348,23 @@ public class MainController {
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (GameController.getInstance().getSelectedCard() == null) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "no card is selected yet!");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (GameController.getInstance().getSelectedCard() == null) {
+            answerObject.put("Type", "Error").put("Value", "no card is selected yet!");
         } else if (!GameController.getInstance().canSummonSelectedCard()) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "you can’t summon this card!");
+            answerObject.put("Type", "Error").put("Value", "you can’t summon this card!");
         } else if (GameController.getInstance().getCurrentPhase() != FIRST_MAIN &&
                 GameController.getInstance().getCurrentPhase() != SECOND_MAIN) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "action not allowed in this phase!");
+            answerObject.put("Type", "Error").put("Value", "action not allowed in this phase!");
         } else if (GameController.getInstance().isCardFieldZoneFull()) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "monster card zone is full!");
+            answerObject.put("Type", "Error").put("Value", "monster card zone is full!");
         } else if (!GameController.getInstance().canPlayerSummonOrSetAnotherCard()) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "you already summoned/set on this turn!");
+            answerObject.put("Type", "Error").put("Value", "you already summoned/set on this turn!");
         } else if (!GameController.getInstance().isThereEnoughCardToTribute()) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "there are not enough cards for tribute!");
+            answerObject.put("Type", "Error").put("Value", "there are not enough cards for tribute!");
         } else {
             String result = GameController.getInstance().summonCard();
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", result);
+            answerObject.put("Type", "Successful").put("Value", result);
         }
 
         return answerObject.toString();
@@ -455,16 +375,12 @@ public class MainController {
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (GameController.getInstance().getSelectedCard() == null) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "no card is selected yet!");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (GameController.getInstance().getSelectedCard() == null) {
+            answerObject.put("Type", "Error").put("Value", "no card is selected yet!");
         } else {
             GameController.getInstance().deselectCard();
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", "card deselected");
+            answerObject.put("Type", "Successful").put("Value", "card deselected");
         }
 
         return answerObject.toString();
@@ -477,19 +393,14 @@ public class MainController {
         boolean isOpponentCard = valueObject.getString("Owner").equals("Opponent");
 
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (!GameController.getInstance().isCardAddressValid(cardPosition)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid selection!");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (!GameController.getInstance().isCardAddressValid(cardPosition)) {
+            answerObject.put("Type", "Error").put("Value", "invalid selection!");
         } else if (!GameController.getInstance().isThereACardInGivenPosition(cardType, cardPosition, isOpponentCard)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "no card found in the given position!");
+            answerObject.put("Type", "Error").put("Value", "no card found in the given position!");
         } else {
             GameController.getInstance().selectCard(cardType, cardPosition, isOpponentCard);
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", "card selected");
+            answerObject.put("Type", "Successful").put("Value", "card selected");
         }
 
         return answerObject.toString();
@@ -500,22 +411,17 @@ public class MainController {
         int numberOfRound = Integer.parseInt(valueObject.getString("Rounds number"));
 
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (numberOfRound != 1 && numberOfRound != 3) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "number of rounds is not supported!");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (numberOfRound != 1 && numberOfRound != 3) {
+            answerObject.put("Type", "Error").put("Value", "number of rounds is not supported!");
         } else if (!UserController.getInstance().doesPlayerHaveActiveDeck(onlineUsers.get(token))) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", onlineUsers.get(token) + " has no active deck");
+            answerObject.put("Type", "Error").put("Value", onlineUsers.get(token) + " has no active deck");
         } else if (!UserController.getInstance().isUserActiveDeckValid(onlineUsers.get(token))) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", onlineUsers.get(token) + "’s deck is invalid");
+            answerObject.put("Type", "Error").put("Value", onlineUsers.get(token) + "’s deck is invalid");
         } else {
             GameController.getInstance().newDuelWithAI(onlineUsers.get(token), numberOfRound);
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", "Duel starts between " + onlineUsers.get(token) + " & AI");
+            answerObject.put("Type", "Successful")
+                    .put("Value", "Duel starts between " + onlineUsers.get(token) + " & AI");
         }
 
         return answerObject.toString();
@@ -527,31 +433,23 @@ public class MainController {
         int numberOfRound = Integer.parseInt(valueObject.getString("Rounds number"));
 
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (!UserController.getInstance().doesUsernameExist(rivalName)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "there is no player with this username!");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (!UserController.getInstance().doesUsernameExist(rivalName)) {
+            answerObject.put("Type", "Error").put("Value", "there is no player with this username!");
         } else if (numberOfRound != 1 && numberOfRound != 3) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "number of rounds is not supported!");
+            answerObject.put("Type", "Error").put("Value", "number of rounds is not supported!");
         } else if (!UserController.getInstance().doesPlayerHaveActiveDeck(onlineUsers.get(token))) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", onlineUsers.get(token) + " has no active deck");
+            answerObject.put("Type", "Error").put("Value", onlineUsers.get(token) + " has no active deck");
         } else if (!UserController.getInstance().doesPlayerHaveActiveDeck(rivalName)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", rivalName + " has no active deck");
+            answerObject.put("Type", "Error").put("Value", rivalName + " has no active deck");
         } else if (!UserController.getInstance().isUserActiveDeckValid(onlineUsers.get(token))) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", onlineUsers.get(token) + "’s deck is invalid");
+            answerObject.put("Type", "Error").put("Value", onlineUsers.get(token) + "’s deck is invalid");
         } else if (!UserController.getInstance().isUserActiveDeckValid(rivalName)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", rivalName + "’s deck is invalid");
+            answerObject.put("Type", "Error").put("Value", rivalName + "’s deck is invalid");
         } else {
             GameController.getInstance().newDuel(onlineUsers.get(token), rivalName, numberOfRound);
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", "Duel starts between " + onlineUsers.get(token) + " & " + rivalName);
+            answerObject.put("Type", "Successful")
+                    .put("Value", "Duel starts between " + onlineUsers.get(token) + " & " + rivalName);
         }
 
         return answerObject.toString();
@@ -564,10 +462,8 @@ public class MainController {
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else {
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else {
             answerObject.put("Type", "Successful");
 
             JSONArray cardsArray = new JSONArray();
@@ -588,19 +484,17 @@ public class MainController {
         String cardName = valueObject.getString("Card name");
 
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (!ShopController.getInstance().doesCardExist(cardName)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "there is no card with this name in the shop!");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (!ShopController.getInstance().doesCardExist(cardName)) {
+            answerObject.put("Type", "Error")
+                    .put("Value", "there is no card with this name in the shop!");
         } else if (ShopController.getInstance().doesPlayerHaveEnoughMoney(onlineUsers.get(token), cardName)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "You don't have enough money to buy this card");
+            answerObject.put("Type", "Error")
+                    .put("Value", "You don't have enough money to buy this card");
         } else {
             ShopController.getInstance().buyCard(onlineUsers.get(token), cardName);
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", cardName + " successfully purchased and added to your inventory");
+            answerObject.put("Type", "Successful")
+                    .put("Value", cardName + " successfully purchased and added to your inventory");
         }
 
         return answerObject.toString();
@@ -611,10 +505,8 @@ public class MainController {
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else {
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else {
             answerObject.put("Type", "Successful");
             ArrayList<Card> allUsersCards = DeckController.getInstance().getAllUsersCards(onlineUsers.get(token));
             JSONArray cardsArray = new JSONArray();
@@ -637,17 +529,14 @@ public class MainController {
         String deckType = valueObject.getString("Deck type");
 
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (!DeckController.getInstance().doesDeckAlreadyExist(deckName)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "deck with name " + deckName + " does not exist");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (!DeckController.getInstance().doesDeckAlreadyExist(deckName)) {
+            answerObject.put("Type", "Error")
+                    .put("Value", "deck with name " + deckName + " does not exist");
         } else {
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", DeckController.getInstance().getDeck(deckName).showDeck(DeckType.valueOf(deckType.toUpperCase())));
+            answerObject.put("Type", "Successful")
+                    .put("Value", DeckController.getInstance().getDeck(deckName).showDeck(DeckType.valueOf(deckType.toUpperCase())));
         }
-
         return answerObject.toString();
     }
 
@@ -657,12 +546,10 @@ public class MainController {
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else {
-            answerObject.put("Type", "Successful");
-            answerObject.put("Active deck", DeckController.getInstance().getUserActiveDeck(onlineUsers.get(token)));
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else {
+            answerObject.put("Type", "Successful")
+                    .put("Active deck", DeckController.getInstance().getUserActiveDeck(onlineUsers.get(token)));
             List<String> otherDecks = DeckController.getInstance().getAllUserDecks(onlineUsers.get(token)).stream().map(Deck::generalOverview).collect(Collectors.toList());
             answerObject.put("Other deck", otherDecks);
         }
@@ -678,21 +565,17 @@ public class MainController {
 
         // answer Json object
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (!DeckController.getInstance().doesDeckAlreadyExist(deckName)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "deck with name " + deckName + " does not exist");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (!DeckController.getInstance().doesDeckAlreadyExist(deckName)) {
+            answerObject.put("Type", "Error")
+                    .put("Value", "deck with name " + deckName + " does not exist");
         } else if (!DeckController.getInstance().doesDeckContainThisCard(deckName, DeckType.valueOf(deckType.toUpperCase()), cardName)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "card with name " + cardName + " does not exist in " + deckName + " deck");
+            answerObject.put("Type", "Error")
+                    .put("Value", "card with name " + cardName + " does not exist in " + deckName + " deck");
         } else {
             DeckController.getInstance().removeCardFromDeck(deckName, DeckType.valueOf(deckType.toUpperCase()), cardName);
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", cardName + " removed form deck successfully!");
+            answerObject.put("Type", "Successful").put("Value", cardName + " removed form deck successfully!");
         }
-
         return answerObject.toString();
     }
 
@@ -704,28 +587,22 @@ public class MainController {
 
         // answer Json object
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (!DeckController.getInstance().doesDeckAlreadyExist(deckName)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "deck with name " + deckName + " does not exist");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (!DeckController.getInstance().doesDeckAlreadyExist(deckName)) {
+            answerObject.put("Type", "Error").put("Value", "deck with name " + deckName + " does not exist");
         } else if (!DeckController.getInstance().doesCardExist(cardName)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "card with name " + cardName + " does not exist");
+            answerObject.put("Type", "Error").put("Value", "card with name " + cardName + " does not exist");
         } else if (!DeckController.getInstance().doesUserHaveAnymoreCard(onlineUsers.get(token), cardName, deckName)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "you don't have anymore " + cardName);
+            answerObject.put("Type", "Error").put("Value", "you don't have anymore " + cardName);
         } else if (DeckController.getInstance().isDeckFull(deckName, DeckType.valueOf(deckType.toUpperCase()))) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", deckType + " deck is full");
+            answerObject.put("Type", "Error").put("Value", deckType + " deck is full");
         } else if (!DeckController.getInstance().canUserAddCardToDeck(deckName, cardName)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "There are already three cards with name " + cardName + " in deck " + deckName);
+            answerObject.put("Type", "Error")
+                    .put("Value", "There are already three cards with name " + cardName + " in deck " + deckName);
         } else {
             DeckController.getInstance().addCardToDeck(deckName, DeckType.valueOf(deckType.toUpperCase()), cardName);
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", "card added to " + deckType + " deck successfully!");
+            answerObject.put("Type", "Successful")
+                    .put("Value", "card added to " + deckType + " deck successfully!");
         }
 
         return answerObject.toString();
@@ -737,16 +614,13 @@ public class MainController {
 
         // answer Json object
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (!DeckController.getInstance().doesDeckAlreadyExist(deckName)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "deck with name " + deckName + " does not exist");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (!DeckController.getInstance().doesDeckAlreadyExist(deckName)) {
+            answerObject.put("Type", "Error")
+                    .put("Value", "deck with name " + deckName + " does not exist");
         } else {
             DeckController.getInstance().setActiveDeck(onlineUsers.get(token), deckName);
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", "deck activated successfully!");
+            answerObject.put("Type", "Successful").put("Value", "deck activated successfully!");
         }
 
         return answerObject.toString();
@@ -758,16 +632,13 @@ public class MainController {
 
         // answer Json object
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (!DeckController.getInstance().doesDeckAlreadyExist(deckName)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "deck with name " + deckName + " does not exist");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (!DeckController.getInstance().doesDeckAlreadyExist(deckName)) {
+            answerObject.put("Type", "Error")
+                    .put("Value", "deck with name " + deckName + " does not exist");
         } else {
             DeckController.getInstance().deleteDeck(onlineUsers.get(token), deckName);
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", "deck deleted successfully!");
+            answerObject.put("Type", "Successful").put("Value", "deck deleted successfully!");
         }
 
         return answerObject.toString();
@@ -779,16 +650,13 @@ public class MainController {
 
         // answer Json object
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (DeckController.getInstance().doesDeckAlreadyExist(deckName)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "deck with name " + deckName + " already exists");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (DeckController.getInstance().doesDeckAlreadyExist(deckName)) {
+            answerObject.put("Type", "Error").put("Value", "deck with name " + deckName + " already exists");
         } else {
             DeckController.getInstance().createNewDeck(onlineUsers.get(token), deckName);
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", "deck created successfully!");
+            answerObject.put("Type", "Successful")
+                    .put("Value", "deck created successfully!");
         }
 
         return answerObject.toString();
@@ -797,10 +665,7 @@ public class MainController {
     // Invalid Deck Error
     private String error() {
         JSONObject answerObject = new JSONObject();
-
-        answerObject.put("Type", "Error");
-        answerObject.put("Value", "Invalid Request Type!!!");
-
+        answerObject.put("Type", "Error").put("Value", "Invalid Request Type!!!");
         return answerObject.toString();
     }
 
@@ -822,19 +687,16 @@ public class MainController {
 
         // creating the json response object
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (!UserController.getInstance().doesUsernameAndPasswordMatch(onlineUsers.get(token), currentPassword)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "current password is invalid!");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (!UserController.getInstance().doesUsernameAndPasswordMatch(onlineUsers.get(token), currentPassword)) {
+            answerObject.put("Type", "Error")
+                    .put("Value", "current password is invalid!");
         } else if (newPassword.equals(currentPassword)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "please enter a new password!");
+            answerObject.put("Type", "Error").put("Value", "please enter a new password!");
         } else {
             UserController.getInstance().changePassword(onlineUsers.get(token), newPassword);
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", "password changed successfully!");
+            answerObject.put("Type", "Successful")
+                    .put("Value", "password changed successfully!");
         }
         return answerObject.toString();
     }
@@ -846,18 +708,15 @@ public class MainController {
         JSONObject answerObject = new JSONObject();
 
         // check possible errors
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (UserController.getInstance().doesNicknameExist(newNickname)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "user with nickname " + newNickname + " already exists");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (UserController.getInstance().doesNicknameExist(newNickname)) {
+            answerObject.put("Type", "Error")
+                    .put("Value", "user with nickname " + newNickname + " already exists");
         } else {
             UserController.getInstance().changeNickname(onlineUsers.get(token), newNickname);
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", "nickname changed successfully!");
+            answerObject.put("Type", "Successful")
+                    .put("Value", "nickname changed successfully!");
         }
-
         return answerObject.toString();
     }
 
@@ -868,16 +727,12 @@ public class MainController {
         // creating the json response object
         JSONObject answerObject = new JSONObject();
 
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (!ImportExportController.getInstance().canExportThisCard(cardName)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "can't export this card!");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (!ImportExportController.getInstance().canExportThisCard(cardName)) {
+            answerObject.put("Type", "Error").put("Value", "can't export this card!");
         } else {
             ImportExportController.getInstance().exportCard(cardName);
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", "card exports successfully!");
+            answerObject.put("Type", "Successful").put("Value", "card exports successfully!");
         }
 
         return answerObject.toString();
@@ -890,16 +745,12 @@ public class MainController {
         // creating the json response object
         JSONObject answerObject = new JSONObject();
 
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else if (!ImportExportController.getInstance().canImportThisCard(cardName)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "can't import this card!");
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (!ImportExportController.getInstance().canImportThisCard(cardName)) {
+            answerObject.put("Type", "Error").put("Value", "can't import this card!");
         } else {
             ImportExportController.getInstance().importCard(cardName);
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", "card imports successfully!");
+            answerObject.put("Type", "Successful").put("Value", "card imports successfully!");
         }
         return answerObject.toString();
     }
@@ -909,13 +760,10 @@ public class MainController {
 
         // creating the json response object
         JSONObject answerObject = new JSONObject();
-        if (isTokenInvalid(token)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "invalid token!");
-        } else {
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else {
             logout(token);
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", "user logged out successfully!");
+            answerObject.put("Type", "Successful").put("Value", "user logged out successfully!");
         }
 
         return answerObject.toString();
@@ -935,12 +783,11 @@ public class MainController {
         // check possible errors
         if (!UserController.getInstance().doesUsernameExist(username) ||
                 !UserController.getInstance().doesUsernameAndPasswordMatch(username, password)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "Username or password is wrong!");
+            answerObject.put("Type", "Error")
+                    .put("Value", "Username or password is wrong!");
         } else {
             String token = login(username);
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", token);
+            answerObject.put("Type", "Successful").put("Value", token);
         }
 
         return answerObject.toString();
@@ -975,17 +822,21 @@ public class MainController {
 
         // check possible errors
         if (UserController.getInstance().doesUsernameExist(username)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "user with username " + username + " already exists");
+            answerObject.put("Type", "Error")
+                    .put("Value", "user with username " + username + " already exists");
         } else if (UserController.getInstance().doesNicknameExist(nickname)) {
-            answerObject.put("Type", "Error");
-            answerObject.put("Value", "user with nickname " + nickname + " already exists");
+            answerObject.put("Type", "Error")
+                    .put("Value", "user with nickname " + nickname + " already exists");
         } else {
             UserController.getInstance().registerUsername(username, password, nickname);
-            answerObject.put("Type", "Successful");
-            answerObject.put("Value", "user created successfully!");
+            answerObject.put("Type", "Successful")
+                    .put("Value", "user created successfully!");
         }
 
         return answerObject.toString();
+    }
+
+    private void putTokenError(JSONObject answerObject) {
+        answerObject.put("Type", "Error").put("Value", "invalid token!");
     }
 }

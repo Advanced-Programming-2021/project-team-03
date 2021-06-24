@@ -425,7 +425,7 @@ public class View {
         System.out.println(answerValue);
     }
 
-    private void addOrDeleteCardFromDeck(String inputCommand, String commandType, int commandRegexIndex) {
+    void addOrDeleteCardFromDeck(String inputCommand, String commandType, int commandRegexIndex) {
         getRegexMatcher(inputCommand, DECK_MENU_COMMANDS[commandRegexIndex], true);
 
         String deckName = "";
