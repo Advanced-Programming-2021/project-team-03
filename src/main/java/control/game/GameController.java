@@ -280,7 +280,7 @@ public class GameController {
         } else {
             SpellAndTrap spellAndTrap = (SpellAndTrap) selectedCard;
             if (spellAndTrap.getIcon() == FIELD) {
-                if (game.getActivatedFieldCard() == null) {
+                if (!game.isFiledActivated()) {
                     board.setFieldCard(spellAndTrap);
                 } else if (board.getFieldCard() == game.getActivatedFieldCard()) {
                     SpellAndTrap opponentFieldCard = (SpellAndTrap) opponentBoard.getFieldCard();
@@ -590,9 +590,18 @@ public class GameController {
                         MainController.getInstance().sendPrintRequestToView("selected monsters levels don’t match with ritual monster");
                         return false;
                     }
-                    //TODO Summon card
+                    for (Integer position : cardsPositions) {
+                        board.addCardToGraveyard(board.getMonsterInFieldByPosition(position));
+                        board.removeCardFromField(position, true);
+                    }
+                    board.setOrSummonMonsterFromHandToFiled(ritualMonster, "Summon");
+                    return true;
                 } else return false;
             } else return false;
+        } else if (spell.getIcon() == FIELD) {
+            spell.setActive(true);
+            game.setActivatedFieldCard(spell);
+            game.setFiledActivated(true);
         } else {
             AllSpellsEffects.getInstance().cardActivator(spell, game, gameUpdates, turn);
         }
