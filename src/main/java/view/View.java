@@ -716,6 +716,7 @@ public class View {
                 break;
             }
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            mapShowFlag = true;
             if (inputCommand.matches(GAME_MENU_COMMANDS[20])) activeCheat(inputCommand, 20);
             else if (inputCommand.matches(GAME_MENU_COMMANDS[21])) activeCheat(inputCommand, 21);
             else if ((regexIndex = doesInputMatchWithSelectCardCommand(inputCommand)) != 0)
