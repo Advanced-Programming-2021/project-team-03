@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class View {
+    //TODO show map for each command
     private static View instance;
 
     private final Scanner SCANNER = new Scanner(System.in);
@@ -185,12 +186,13 @@ public class View {
             case "Game is over" -> gameIsOver(valueObject);
             case "Round is over" -> roundIsOver(valueObject);
             case "Ritual summon" -> ritualSummon();
+            case "Get tribute cards for ritual summon" -> getTributeForRitualSummon();
             default -> error();
         };
     }
 
     private String ritualSummon() {
-        System.out.println("Write your ritual monster card number to summon");
+        System.out.println("Write your ritual monster card position in hand to summon");
         JSONObject answerObject = new JSONObject();
         int ritualMonsterNumber = -1;
         while (true) {
@@ -198,26 +200,37 @@ public class View {
             if (inputCommand.matches("Cancel")) {
                 answerObject.put("Type", "Cancel");
                 return answerObject.toString();
-            } else if (inputCommand.matches("\\d+")) {
+            } else if (inputCommand.matches("\\d+") && Integer.parseInt(inputCommand) != 0 && ritualMonsterNumber == -1) {
                 ritualMonsterNumber = Integer.parseInt(inputCommand);
-                break;
+            } else if (inputCommand.matches("summon") && ritualMonsterNumber != -1) {
+                answerObject.put("Type", "Successful");
+                JSONObject messageValue = new JSONObject();
+                messageValue.put("Ritual monster number", String.valueOf(ritualMonsterNumber));
+                return answerObject.toString();
             } else System.out.println("invalid command!\n" +
                     "you should special summon right now");
         }
-        System.out.println("Write tribute monster cards number\n" +
+    }
+
+    private String getTributeForRitualSummon() {
+        JSONObject answerObject = new JSONObject();
+        System.out.println("Write tribute monster cards positions\n" +
                 "Write Finish when its finished.");
         JSONObject messageValue = new JSONObject();
-        messageValue.put("Ritual monster number",String.valueOf(ritualMonsterNumber));
         ArrayList<Integer> tributeCardNumbers = new ArrayList<>();
         while (true) {
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
             if (inputCommand.matches("Cancel")) {
                 answerObject.put("Type", "Cancel");
-                messageValue.put("Tribute card numbers",tributeCardNumbers);
-                answerObject.put("Value",messageValue);
                 return answerObject.toString();
             } else if (inputCommand.matches("Finish")) {
                 answerObject.put("Type", "Successful");
+                JSONArray tributeArray = new JSONArray();
+                for (Integer number : tributeCardNumbers) {
+                    tributeArray.put(number);
+                }
+                messageValue.put("Tribute card numbers", tributeArray);
+                answerObject.put("Value", messageValue);
                 return answerObject.toString();
             } else if (inputCommand.matches("\\d+")) {
                 tributeCardNumbers.add(Integer.parseInt(inputCommand));

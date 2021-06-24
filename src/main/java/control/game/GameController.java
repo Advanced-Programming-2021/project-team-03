@@ -12,6 +12,7 @@ import model.game.Game;
 import model.game.Player;
 import model.game.PlayerTurn;
 import model.user.User;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -122,7 +123,7 @@ public class GameController {
         }
         switch (cardType) {
             case "Monster" -> {
-                selectedCard = board.getMonsterByPosition(cardPosition);
+                selectedCard = board.getMonsterInFieldByPosition(cardPosition);
                 typeOfSelectedCard = MONSTER;
             }
             case "Spell" -> {
@@ -229,7 +230,7 @@ public class GameController {
         JSONObject valueObject = inputObject.getJSONObject("Value");
         if (requestType.equals("One Card")) {
             int position = Integer.parseInt(valueObject.getString("Position"));
-            Monster monster = board.getMonsterByPosition(position);
+            Monster monster = board.getMonsterInFieldByPosition(position);
             if (monster == null) {
                 return "there no monsters one this address";
             }
@@ -239,9 +240,9 @@ public class GameController {
             return "summoned successfully";
         } else {
             int firstPosition = Integer.parseInt(valueObject.getString("First position"));
-            Monster firstMonster = board.getMonsterByPosition(firstPosition);
+            Monster firstMonster = board.getMonsterInFieldByPosition(firstPosition);
             int secondPosition = Integer.parseInt(valueObject.getString("Second position"));
-            Monster secondMonster = board.getMonsterByPosition(secondPosition);
+            Monster secondMonster = board.getMonsterInFieldByPosition(secondPosition);
             if (firstMonster == null || secondMonster == null) {
                 return "there no monsters one this address";
             }
@@ -352,17 +353,21 @@ public class GameController {
         Board attackingPlayerBoard = game.getPlayerByName(attackingPlayerUsername).getBoard();
         Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
         Monster attackingMonster = (Monster) selectedCard;
-        Monster opponentMonster = game.getPlayerOpponentByTurn(turn).getBoard().getMonsterByPosition(position);
-        AttackingFormat opponentMonsterFormat = game.getPlayerOpponentByTurn(turn).getBoard().getMonsterByPosition(position).getAttackingFormat();
-        FaceUpSituation opponentMonsterFaceUpSit = game.getPlayerOpponentByTurn(turn).getBoard().getMonsterByPosition(position).getFaceUpSituation();
+        Monster opponentMonster = game.getPlayerOpponentByTurn(turn).getBoard().getMonsterInFieldByPosition(position);
+        AttackingFormat opponentMonsterFormat = game.getPlayerOpponentByTurn(turn).getBoard().getMonsterInFieldByPosition(position).getAttackingFormat();
+        FaceUpSituation opponentMonsterFaceUpSit = game.getPlayerOpponentByTurn(turn).getBoard().getMonsterInFieldByPosition(position).getFaceUpSituation();
         gameUpdates.addMonstersToAttackedMonsters(attackingMonster);
         int attackingDef = attackingMonster.getAttackingPower() - opponentMonster.getAttackingPower();
         int defendingDef = attackingMonster.getAttackingPower() - opponentMonster.getDefensivePower();
-
-        if (opponentMonster.getCardName().equals("The Calculator"))
-            attackingDef += AllMonsterEffects.getInstance().theCalculatorAtkPower(attackingPlayerBoard);
-
         StringBuilder answerString = new StringBuilder();
+
+        if (opponentMonster.getCardName().equals("The Calculator")) {
+            int attack = AllMonsterEffects.getInstance().theCalculatorAtkPower(attackingPlayerBoard);
+            attackingDef += attack;
+            answerString.append("\nThe Calculator Monster activated, giving you ")
+                    .append(attack).append(" attack power!!!\n");
+        }
+
         if (opponentMonster.getCardName().equals("Suijin") && !AllMonsterEffects.getInstance().isSuijinActivatedBefore(gameUpdates)) {
             answerString.append(AllMonsterEffects.getInstance().suijinEffect(game, gameUpdates, attackingPlayerUsername,
                     attackingPlayerBoard, attackingMonster, opponentMonster, opponentMonsterFormat, opponentMonsterFaceUpSit));
@@ -513,10 +518,58 @@ public class GameController {
         return true;
     }
 
-    public void activateSpellCard() {
+    public boolean activateSpellCard() {
         SpellAndTrap spell = (SpellAndTrap) selectedCard;
-        spell.setActive(true);
-        AllSpellsEffects.getInstance().cardActivator(spell, game, gameUpdates, turn);
+        Board board = getPlayerByTurn().getBoard();
+        if (spell.getIcon() == RITUAL) {
+            JSONObject messageToSendToView = new JSONObject();
+            messageToSendToView.put("Type", "Ritual summon");
+            JSONObject viewAnswer = new JSONObject(MainController.getInstance().sendRequestToView(messageToSendToView));
+            String type = viewAnswer.getString("Type");
+            if (type.equals("Successful")) {
+                JSONObject value = viewAnswer.getJSONObject("Value");
+                int ritualMonsterPosition = value.getInt("Ritual monster number");
+                Card selectedRitualCard = board.getCardInHandByPosition(ritualMonsterPosition);
+                if (selectedRitualCard == null || (selectedRitualCard instanceof SpellAndTrap)) {
+                    MainController.getInstance().sendPrintRequestToView("Invalid position for ritual monster.");
+                    return false;
+                }
+                Monster ritualMonster = (Monster) selectedRitualCard;
+                if (ritualMonster.getType() != MonsterTypes.RITUAL) {
+                    MainController.getInstance().sendPrintRequestToView("Invalid position for ritual monster.");
+                    return false;
+                }
+                messageToSendToView = new JSONObject();
+                messageToSendToView.put("Type", "Get tribute cards for ritual summon");
+                JSONObject viewTributeAnswer = new JSONObject(MainController.getInstance().sendRequestToView(messageToSendToView));
+                type = viewTributeAnswer.getString("Type");
+                if (type.equals("Successful")) {
+                    JSONArray tributeCards = viewTributeAnswer.getJSONArray("Tribute card numbers");
+                    ArrayList<Integer> cardsPositions = new ArrayList<>();
+                    for (int i = 0; i < tributeCards.length(); i++) {
+                        cardsPositions.add(tributeCards.getInt(i)); //TODO: test this function
+                    }
+                    int monstersLevelSum = 0;
+                    for (Integer position : cardsPositions) {
+                        Monster monster = board.getMonsterInFieldByPosition(position);
+                        if (monster != null) {
+                            monstersLevelSum += monster.getLevel();
+                        } else {
+                            MainController.getInstance().sendPrintRequestToView("selected monsters levels don’t match with ritual monster");
+                            return false;
+                        }
+                    }
+                    if (ritualMonster.getLevel() > monstersLevelSum) {
+                        MainController.getInstance().sendPrintRequestToView("selected monsters levels don’t match with ritual monster");
+                        return false;
+                    }
+                    //TODO Summon card
+                } else return false;
+            } else return false;
+        } else {
+            AllSpellsEffects.getInstance().cardActivator(spell, game, gameUpdates, turn);
+        }
+        return true;
     }
 
     public String getGraveyard(String username) {
