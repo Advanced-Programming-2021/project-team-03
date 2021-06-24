@@ -83,7 +83,7 @@ public class AllSpellsEffects {
     }
 
     private void blackPendantEffect(Monster equippedMonster) {
-
+        equippedMonster.addToAttackSupplier(500);
     }
 
     private void swordOfDarkEffect(Monster equippedMonster) {
