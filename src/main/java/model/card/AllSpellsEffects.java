@@ -83,7 +83,18 @@ public class AllSpellsEffects {
     }
 
     private void closedForestEffect(Game game, PlayerTurn turn) {
+        Board opponentsBoard = game.getPlayerOpponentByTurn(turn).getBoard();
+        Board playerBoard = game.getPlayerByTurn(turn).getBoard();
 
+        for (int i = 0; i < opponentsBoard.getGraveyard().size(); i++) {
+            addFieldEffectsToMonsters(opponentsBoard, BEAST, 100, 0);
+            addFieldEffectsToMonsters(opponentsBoard, BEAST_WARRIOR, 100, 0);
+        }
+
+        for (int i = 0; i < playerBoard.getGraveyard().size(); i++) {
+            addFieldEffectsToMonsters(playerBoard, BEAST, 100, 0);
+            addFieldEffectsToMonsters(playerBoard, BEAST_WARRIOR, 100, 0);
+        }
     }
 
     private void yamiEffect(Game game, PlayerTurn turn) {
