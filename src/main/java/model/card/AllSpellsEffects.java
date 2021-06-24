@@ -76,13 +76,20 @@ public class AllSpellsEffects {
         Board opponentsBoard = game.getPlayerOpponentByTurn(turn).getBoard();
         Board playerBoard = game.getPlayerByTurn(turn).getBoard();
 
-        for (Monster monster : playerBoard.getMonstersInField().values()) {
-            if (monster.getModel() == FIEND || monster.getModel() == SPELL_CASTER) {
-                monster.addToAttackSupplier(200);
-                monster.addToDefensiveSupply(200);
-            } else if (monster.getModel() == FAIRY) {
-                monster.addToAttackSupplier(-200);
-                monster.addToDefensiveSupply(-200);
+        addFieldEffectsToMonsters(opponentsBoard, FIEND, 200, 200);
+        addFieldEffectsToMonsters(opponentsBoard, SPELL_CASTER, 200, 200);
+        addFieldEffectsToMonsters(opponentsBoard, FAIRY, -200, -200);
+
+        addFieldEffectsToMonsters(playerBoard, FIEND, 200, 200);
+        addFieldEffectsToMonsters(playerBoard, SPELL_CASTER, 200, 200);
+        addFieldEffectsToMonsters(playerBoard, FAIRY, -200, -200);
+    }
+
+    private void addFieldEffectsToMonsters(Board board, MonsterModels monsterModels, int attackingSupplier, int defensiveSupplier) {
+        for (Monster monster : board.getMonstersInField().values()) {
+            if (monster.getModel() == monsterModels) {
+                monster.addToAttackSupplier(attackingSupplier);
+                monster.addToDefensiveSupply(defensiveSupplier);
             }
         }
     }
