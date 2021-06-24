@@ -60,6 +60,39 @@ public class AllSpellsEffects {
         }
     }
 
+    public void equipmentActivator(Board board, SpellAndTrap equipmentCard, Game game, Update gameUpdates, PlayerTurn turn) {
+        equipmentCard.setActive(true);
+
+        Monster equippedMonster = board.getMonsterInFieldByPosition(board.getSpellPosition(equipmentCard));
+        if (equippedMonster != null) {
+            switch (equipmentCard.cardName) {
+                case "Sword of dark destruction" -> swordOfDarkEffect(equippedMonster);
+                case "Black Pendant" -> blackPendantEffect(equippedMonster);
+                case "United We Stand" -> unitedWeStandEffect(board, equippedMonster, equipmentCard, game, gameUpdates, turn);
+                case "Magnum Shield" -> magnumShieldEffect(board, equippedMonster, equipmentCard, game, gameUpdates, turn);
+            }
+        }
+    }
+
+    private void magnumShieldEffect(Board board, Monster equippedMonster, SpellAndTrap spell, Game game, Update gameUpdates, PlayerTurn turn) {
+
+    }
+
+    private void unitedWeStandEffect(Board board, Monster equippedMonster, SpellAndTrap spell, Game game, Update gameUpdates, PlayerTurn turn) {
+
+    }
+
+    private void blackPendantEffect(Monster equippedMonster) {
+
+    }
+
+    private void swordOfDarkEffect(Monster equippedMonster) {
+        if (equippedMonster.getModel() == FIEND || equippedMonster.getModel() == SPELL_CASTER) {
+            equippedMonster.addToAttackSupplier(400);
+            equippedMonster.addToDefensiveSupply(-200);
+        }
+    }
+
     private void umiirukaEffect(Game game, PlayerTurn turn) {
         Board opponentsBoard = game.getPlayerOpponentByTurn(turn).getBoard();
         Board playerBoard = game.getPlayerByTurn(turn).getBoard();

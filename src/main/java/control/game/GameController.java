@@ -602,7 +602,9 @@ public class GameController {
             spell.setActive(true);
             game.setActivatedFieldCard(spell);
             game.setFiledActivated(true);
-        } else {
+        } else if (spell.getIcon() == EQUIP)
+            AllSpellsEffects.getInstance().equipmentActivator(board, spell, game, gameUpdates, turn);
+        else {
             AllSpellsEffects.getInstance().cardActivator(spell, game, gameUpdates, turn);
         }
         return true;
@@ -727,7 +729,7 @@ public class GameController {
     private void checkForEquipments(Board board) {
         for (SpellAndTrap spellAndTrap : board.getSpellAndTrapsInField().values()) {
             if (spellAndTrap.getIcon().equals(EQUIP) && spellAndTrap.isActive()) {
-                AllSpellsEffects.getInstance().cardActivator(spellAndTrap, game, gameUpdates, turn);
+                AllSpellsEffects.getInstance().equipmentActivator(board, spellAndTrap, game, gameUpdates, turn);
             }
         }
     }
@@ -792,9 +794,16 @@ public class GameController {
 
     public void removeEquipment(Monster monster) {
         SpellAndTrap equipment = monster.getEquipment();
-
-        /*opponentBoard.removeCardFromField(opponentBoard.getSpellPosition(equipment), false);
-        opponentBoard.addCardToGraveyard(equipment);
-        gameUpdates.addCardToGraveyard(equipment);*/
+        if (equipment != null) {
+            if (game.getPlayerByTurn(turn).getBoard().doesContainCard(equipment)) {
+                game.getPlayerByTurn(turn).getBoard().removeCardFromField(game.getPlayerByTurn(turn).getBoard().getSpellPosition(equipment), false);
+                game.getPlayerByTurn(turn).getBoard().addCardToGraveyard(equipment);
+                gameUpdates.addCardToGraveyard(equipment);
+            } else if (game.getPlayerOpponentByTurn(turn).getBoard().doesContainCard(equipment)) {
+                game.getPlayerOpponentByTurn(turn).getBoard().removeCardFromField(game.getPlayerOpponentByTurn(turn).getBoard().getSpellPosition(equipment), false);
+                game.getPlayerOpponentByTurn(turn).getBoard().addCardToGraveyard(equipment);
+                gameUpdates.addCardToGraveyard(equipment);
+            }
+        }
     }
 }
