@@ -195,6 +195,7 @@ public class GameController {
 
     public boolean isThereEnoughCardToTribute() {
         Monster monster = (Monster) selectedCard;
+        if (monster.getCardName().equals("Beast King Barbaros")) return true;
         Board board = getPlayerByTurn().getBoard();
         if (monster.getLevel() <= 4) return true;
         if (monster.getLevel() <= 6) {
@@ -259,8 +260,18 @@ public class GameController {
             }
         }
         if (monster.getCardName().equals("Beast King Barbaros")) {
-
-            //TODO
+            JSONObject messageToSendToView = new JSONObject();
+            messageToSendToView.put("Type", "Beast King Barbaros");
+            String viewAnswer = MainController.getInstance().sendRequestToView(messageToSendToView);
+            JSONObject inputObject = new JSONObject(viewAnswer);
+            String requestType = inputObject.getString("Type");
+            if (requestType.equals("Cancel")) {
+                board.setOrSummonMonsterFromHandToFiled(monster, "Summon");
+                monster.setBaseAttack(1900);
+                return "summoned successfully";
+            }else{
+                return tributeCards(viewAnswer, board);
+            }
         }
         if (monster.getCardName().equals("Gate Guardian")) {
             JSONObject messageToSendToView = new JSONObject();
@@ -344,6 +355,11 @@ public class GameController {
             board.removeCardFromField(secondPosition, true);
             board.removeCardFromField(thirdPosition, true);
             board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
+            Monster monster = (Monster) selectedCard;
+            if (monster.getCardName().equals("Beast King Barbaros")){
+                gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
+                AllMonsterEffects.getInstance().beastKingBarbarosEffect(gameUpdates,turn,game);
+            }
             return "summoned successfully";
         }
     }
