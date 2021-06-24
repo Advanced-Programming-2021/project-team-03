@@ -984,8 +984,4 @@ public class MainController {
 
         return answerObject.toString();
     }
-
-    public HashMap<String, String> getOnlineUsers() {
-        return onlineUsers;
-    }
 }

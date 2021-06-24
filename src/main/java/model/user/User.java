@@ -29,6 +29,7 @@ public class User {
         Database.updateAllUsers();
     }
 
+    // Overrides the previous username if already exists
     public User(String username, String password, String nickname) throws DatabaseException {
         this.username = username;
         this.passwordHash = hashString(password);

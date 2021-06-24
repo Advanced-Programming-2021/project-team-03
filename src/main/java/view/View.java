@@ -256,7 +256,7 @@ public class View {
         }
     }
 
-    private void createNewUser(String inputCommand) {
+    void createNewUser(String inputCommand) {
         getRegexMatcher(inputCommand, REGISTER_MENU_COMMANDS[3], true);
 
         String username = null;
@@ -287,7 +287,7 @@ public class View {
         System.out.println(answerValue);
     }
 
-    private void loginUser(String inputCommand) {
+    void loginUser(String inputCommand) {
         getRegexMatcher(inputCommand, REGISTER_MENU_COMMANDS[4], true);
 
         String username = "";
