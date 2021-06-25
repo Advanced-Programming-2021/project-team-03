@@ -931,6 +931,17 @@ public class GameController {
 
     private void hesoyamSafaaaa(String username) {
         //be yad bache hay Groove Street
+        MainController.getInstance().sendPrintRequestToView("HESOYAM!!!\n");
+        game.getPlayerByName(username).getBoard().addCardFromRemainingToInHandCards();
+        MainController.getInstance().sendPrintRequestToView("you have a new card in your hand now!\n");
+        game.getPlayerByName(username).decreaseHealthByAmount(5000);
+        MainController.getInstance().sendPrintRequestToView("your LP increased by 5000\n");
+        try {
+            game.getPlayerByName(username).getUser().increaseBalance(10000);
+            MainController.getInstance().sendPrintRequestToView("your balance increased by 10000\n");
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
     }
 
     private void increaseMoney(String username, JSONObject valueObject) {
