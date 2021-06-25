@@ -1012,7 +1012,7 @@ public class View {
         }
     }
 
-    private void buyCard(String inputCommand) {
+    void buyCard(String inputCommand) {
         getRegexMatcher(inputCommand, SHOP_MENU_COMMANDS[3], true);
 
         String cardName = regexMatcher.group(1);
@@ -1031,7 +1031,7 @@ public class View {
         System.out.println(answerValue);
     }
 
-    private void showAllCards() {
+    void showAllCards() {
         //Making message JSONObject and passing to sendControl function:
         JSONObject value = new JSONObject();
         value.put("Token", token);
@@ -1166,7 +1166,7 @@ public class View {
         }
     }
 
-    private void showScoreboard() {
+    void showScoreboard() {
         //Making message JSONObject and passing to sendControl function:
         JSONObject value = new JSONObject();
         value.put("Token", token);

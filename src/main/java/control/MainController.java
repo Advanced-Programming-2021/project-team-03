@@ -468,10 +468,10 @@ public class MainController {
 
             JSONArray cardsArray = new JSONArray();
             for (Card card : Monster.getAllMonsters().values()) {
-                cardsArray.put(card.getCardName() + ": " + card.getPrice());
+                cardsArray.put(card.getPrice() + ": " +  card.getCardName());
             }
             for (Card card : SpellAndTrap.getAllSpellAndTraps().values()) {
-                cardsArray.put(card.getCardName() + ": " + card.getPrice());
+                cardsArray.put(card.getPrice() + ": " + card.getCardName());
             }
             answerObject.put("Value", cardsArray);
         }
@@ -488,7 +488,7 @@ public class MainController {
         else if (!ShopController.getInstance().doesCardExist(cardName)) {
             answerObject.put("Type", "Error")
                     .put("Value", "there is no card with this name in the shop!");
-        } else if (ShopController.getInstance().doesPlayerHaveEnoughMoney(onlineUsers.get(token), cardName)) {
+        } else if (!ShopController.getInstance().doesPlayerHaveEnoughMoney(onlineUsers.get(token), cardName)) {
             answerObject.put("Type", "Error")
                     .put("Value", "You don't have enough money to buy this card");
         } else {
