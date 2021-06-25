@@ -269,7 +269,7 @@ public class GameController {
                 board.setOrSummonMonsterFromHandToFiled(monster, "Summon");
                 monster.setBaseAttack(1900);
                 return "summoned successfully";
-            }else{
+            } else {
                 return tributeCards(viewAnswer, board);
             }
         }
@@ -356,9 +356,9 @@ public class GameController {
             board.removeCardFromField(thirdPosition, true);
             board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
             Monster monster = (Monster) selectedCard;
-            if (monster.getCardName().equals("Beast King Barbaros")){
+            if (monster.getCardName().equals("Beast King Barbaros")) {
                 gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
-                AllMonsterEffects.getInstance().beastKingBarbarosEffect(gameUpdates,turn,game);
+                AllMonsterEffects.getInstance().beastKingBarbarosEffect(gameUpdates, turn, game);
             }
             return "summoned successfully";
         }
@@ -751,10 +751,8 @@ public class GameController {
     }
 
     public void changeTurn() {
-        if (turn == PLAYER1)
-            turn = PLAYER2;
-        else
-            turn = PLAYER1;
+        if (turn == PLAYER1) turn = PLAYER2;
+        else turn = PLAYER1;
     }
 
     public PlayerTurn getTurn() {
@@ -917,7 +915,68 @@ public class GameController {
         }
     }
 
-    public String getMap(){
+    public String getMap() {
         return game.showGameBoards();
+    }
+
+    public void cheatCode(String type, String username, JSONObject valueObject) {
+        switch (type) {
+            case "Force increase" -> addCardToHand(username);
+            case "Increase LP" -> increaseHealth(username, valueObject);
+            case "Set winner" -> setWinner(username);
+            case "Increase money" -> increaseMoney(username, valueObject);
+            case "Hesoyam" -> hesoyamSafaaaa(username);
+        }
+    }
+
+    private void hesoyamSafaaaa(String username) {
+        //be yad bache hay Groove Street
+        MainController.getInstance().sendPrintRequestToView("HESOYAM!!!\n");
+        game.getPlayerByName(username).getBoard().addCardFromRemainingToInHandCards();
+        MainController.getInstance().sendPrintRequestToView("you have a new card in your hand now!\n");
+        game.getPlayerByName(username).decreaseHealthByAmount(5000);
+        MainController.getInstance().sendPrintRequestToView("your LP increased by 5000\n");
+        try {
+            game.getPlayerByName(username).getUser().increaseBalance(10000);
+            MainController.getInstance().sendPrintRequestToView("your balance increased by 10000\n");
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void increaseMoney(String username, JSONObject valueObject) {
+        String amount = valueObject.getString("Amount");
+        try {
+            int balance = Integer.parseInt(amount);
+            game.getPlayerByName(username).getUser().increaseBalance(balance);
+            MainController.getInstance().sendPrintRequestToView("Cheat Code Activated!\nyour balance increased by " + balance + "\n");
+        } catch (Exception ignored) {
+            MainController.getInstance().sendPrintRequestToView("Cheat Code does not activated!!\n");
+        }
+    }
+
+    private void setWinner(String username) {
+        if (game.getPlayer1() == game.getPlayerByName(username)) {
+            game.getPlayer2().decreaseHealthByAmount(game.getPlayer2().getHealth());
+        } else {
+            game.getPlayer1().decreaseHealthByAmount(game.getPlayer1().getHealth());
+        }
+        MainController.getInstance().sendPrintRequestToView("Cheat Code Activated!\nyour opponent's LP is 0 now\nYou win the game!\n");
+    }
+
+    private void increaseHealth(String username, JSONObject valueObject) {
+        String amount = valueObject.getString("Amount");
+        try {
+            int LP = Integer.parseInt(amount);
+            game.getPlayerByName(username).decreaseHealthByAmount(-LP);
+            MainController.getInstance().sendPrintRequestToView("Cheat Code Activated!\nyour LP increased by " + LP + "\n");
+        } catch (Exception ignored) {
+            MainController.getInstance().sendPrintRequestToView("Cheat Code does not activated!!\n");
+        }
+    }
+
+    private void addCardToHand(String username) {
+        game.getPlayerByName(username).getBoard().addCardFromRemainingToInHandCards();
+        MainController.getInstance().sendPrintRequestToView("Cheat Code Activated!\nyou have a new card in your hand now!\n");
     }
 }

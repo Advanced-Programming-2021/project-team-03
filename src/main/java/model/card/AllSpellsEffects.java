@@ -1,5 +1,6 @@
 package model.card;
 
+import control.MainController;
 import control.game.Update;
 import model.enums.AttackingFormat;
 import model.enums.FaceUpSituation;
@@ -84,6 +85,7 @@ public class AllSpellsEffects {
                 equippedMonster.addToDefensiveSupply(equippedMonster.getBaseAttack());
             }
         }
+        MainController.getInstance().sendPrintRequestToView("Magnum Shield effect activated!\n");
     }
 
     private void unitedWeStandEffect(Board board, Monster equippedMonster) {
@@ -93,6 +95,7 @@ public class AllSpellsEffects {
                 equippedMonster.addToDefensiveSupply(800);
             }
         }
+        MainController.getInstance().sendPrintRequestToView("United We Stand effect activated!\n");
     }
 
     private void blackPendantEffect(Monster equippedMonster) {
@@ -104,6 +107,7 @@ public class AllSpellsEffects {
             equippedMonster.addToAttackSupplier(400);
             equippedMonster.addToDefensiveSupply(-200);
         }
+        MainController.getInstance().sendPrintRequestToView("Sword Of Dark effect activated!\n");
     }
 
     private void umiirukaEffect(Game game, PlayerTurn turn) {
@@ -113,6 +117,8 @@ public class AllSpellsEffects {
         addFieldEffectsToMonsters(opponentsBoard, AQUA, 500, -400);
 
         addFieldEffectsToMonsters(playerBoard, AQUA, 500, -400);
+
+        MainController.getInstance().sendPrintRequestToView("Umiiruka effect activated!\n");
     }
 
     private void forestEffect(Game game, PlayerTurn turn) {
@@ -126,6 +132,8 @@ public class AllSpellsEffects {
         addFieldEffectsToMonsters(playerBoard, INSECT, 200, 200);
         addFieldEffectsToMonsters(playerBoard, BEAST, 200, 200);
         addFieldEffectsToMonsters(playerBoard, BEAST_WARRIOR, 200, 200);
+
+        MainController.getInstance().sendPrintRequestToView("Forest effect activated!\n");
     }
 
     private void closedForestEffect(Game game, PlayerTurn turn) {
@@ -141,6 +149,8 @@ public class AllSpellsEffects {
             addFieldEffectsToMonsters(playerBoard, BEAST, 100, 0);
             addFieldEffectsToMonsters(playerBoard, BEAST_WARRIOR, 100, 0);
         }
+
+        MainController.getInstance().sendPrintRequestToView("Closed Forest effect activated!\n");
     }
 
     private void yamiEffect(Game game, PlayerTurn turn) {
@@ -154,6 +164,8 @@ public class AllSpellsEffects {
         addFieldEffectsToMonsters(playerBoard, FIEND, 200, 200);
         addFieldEffectsToMonsters(playerBoard, SPELL_CASTER, 200, 200);
         addFieldEffectsToMonsters(playerBoard, FAIRY, -200, -200);
+
+        MainController.getInstance().sendPrintRequestToView("Yami effect activated!\n");
     }
 
     private void addFieldEffectsToMonsters(Board board, MonsterModels monsterModels, int attackingSupplier, int defensiveSupplier) {
@@ -167,13 +179,15 @@ public class AllSpellsEffects {
 
     private void ringOfDefenseEffect(Game game, PlayerTurn turn, Update gameUpdates) {
         gameUpdates.getPlayerRingOfDefenseActivator().replace(game.getPlayerByTurn(turn), true);
+        MainController.getInstance().sendPrintRequestToView("Ring Of Defense effect activated!\n");
     }
 
     private void mysticalSpaceTyphoonEffect(Game game, PlayerTurn turn, Update gameUpdates) {
         Board opponentsBoard = game.getPlayerOpponentByTurn(turn).getBoard();
         HashMap<Integer, SpellAndTrap> spells = opponentsBoard.getSpellAndTrapsInField();
-
         Optional<Integer> randomPosition = spells.keySet().stream().findAny();
+
+        MainController.getInstance().sendPrintRequestToView("Mystical Typhoon effect activated!\n");
         if (randomPosition.isPresent()) {
             int position = randomPosition.get();
             SpellAndTrap spell = spells.get(position);
@@ -182,33 +196,39 @@ public class AllSpellsEffects {
                 opponentsBoard.removeCardFromField(position, false);
                 opponentsBoard.addCardToGraveyard(spell);
                 gameUpdates.addCardToGraveyard(spell);
+                MainController.getInstance().sendPrintRequestToView(spell.getCardName() + " destroyed and moved to graveyard!\n");
             }
         }
     }
 
     private void twinTwisterEffect(Game game, Update gameUpdates, PlayerTurn turn) {
         Board attackingPlayerBoard = game.getPlayerByTurn(turn).getBoard();
+        MainController.getInstance().sendPrintRequestToView("Mystical Typhoon effect activated!\n");
         Random random = new Random();
         int randomIndex = random.nextInt(attackingPlayerBoard.getInHandCards().size());
         Card sacrificedCard = attackingPlayerBoard.getInHandCards().get(randomIndex);
         attackingPlayerBoard.removeCardFromHand(sacrificedCard);
         attackingPlayerBoard.addCardToGraveyard(sacrificedCard);
         gameUpdates.addCardToGraveyard(sacrificedCard);
+        MainController.getInstance().sendPrintRequestToView(sacrificedCard.getCardName() + " destroyed and moved to graveyard!\n");
         mysticalSpaceTyphoonEffect(game, turn, gameUpdates);
         mysticalSpaceTyphoonEffect(game, turn, gameUpdates);
     }
 
     private void supplySquadEffect(Game game, Update gameUpdates, PlayerTurn turn) {
         gameUpdates.setSupplySquadForPlayer(game.getPlayerByTurn(turn));
+        MainController.getInstance().sendPrintRequestToView("Supply Squad effect activated!\n");
     }
 
     private void darkHoleEffect(Game game, Update gameUpdates, PlayerTurn turn) {
+        MainController.getInstance().sendPrintRequestToView("Dark Hole effect activated!\n");
         Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
         ArrayList<Monster> allOpponentsMonsters = new ArrayList<>(opponentBoard.getMonstersInField().values());
         for (Monster opponentMonster : allOpponentsMonsters) {
             opponentBoard.removeCardFromField(opponentBoard.getMonsterPosition(opponentMonster), true);
             opponentBoard.addCardToGraveyard(opponentMonster);
             gameUpdates.addCardToGraveyard(opponentMonster);
+            MainController.getInstance().sendPrintRequestToView(opponentMonster.getCardName() + " destroyed and moved to graveyard!\n");
         }
         Board attackingPlayerBoard = game.getPlayerByTurn(turn).getBoard();
         ArrayList<Monster> allPlayersMonsters = new ArrayList<>(attackingPlayerBoard.getMonstersInField().values());
@@ -216,16 +236,19 @@ public class AllSpellsEffects {
             attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(playerMonster), true);
             attackingPlayerBoard.addCardToGraveyard(playerMonster);
             gameUpdates.addCardToGraveyard(playerMonster);
+            MainController.getInstance().sendPrintRequestToView(playerMonster.getCardName() + " destroyed and moved to graveyard!\n");
         }
     }
 
     private void harpiesFeatherDusterEffect(Game game, Update gameUpdates, PlayerTurn turn, SpellAndTrap spell) {
+        MainController.getInstance().sendPrintRequestToView("Swords of Revealing Light effect activated!\n");
         Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
         ArrayList<SpellAndTrap> allOpponentsSpellsAndTraps = new ArrayList<>(opponentBoard.getSpellAndTrapsInField().values());
         for (SpellAndTrap opponentSpell : allOpponentsSpellsAndTraps) {
             opponentBoard.removeCardFromField(opponentBoard.getSpellPosition(opponentSpell), false);
             opponentBoard.addCardToGraveyard(opponentSpell);
             gameUpdates.addCardToGraveyard(opponentSpell);
+            MainController.getInstance().sendPrintRequestToView(opponentSpell.getCardName() + " destroyed and moved to graveyard!\n");
         }
 
         //remove the card from the board
@@ -233,15 +256,18 @@ public class AllSpellsEffects {
         playerBoard.removeCardFromField(playerBoard.getSpellPosition(spell), false);
         playerBoard.addCardToGraveyard(spell);
         gameUpdates.addCardToGraveyard(spell);
+        MainController.getInstance().sendPrintRequestToView(spell.getCardName() + " destroyed and moved to graveyard!\n");
     }
 
     private void raigekiEffect(Game game, Update gameUpdates, PlayerTurn turn, SpellAndTrap spell) {
+        MainController.getInstance().sendPrintRequestToView("Raigeki effect activated!\n");
         Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
         ArrayList<Monster> allOpponentsMonsters = new ArrayList<>(opponentBoard.getMonstersInField().values());
         for (Monster opponentMonster : allOpponentsMonsters) {
             opponentBoard.removeCardFromField(opponentBoard.getMonsterPosition(opponentMonster), true);
             opponentBoard.addCardToGraveyard(opponentMonster);
             gameUpdates.addCardToGraveyard(opponentMonster);
+            MainController.getInstance().sendPrintRequestToView(opponentMonster.getCardName() + " destroyed and moved to graveyard!\n");
         }
 
         //remove the card from the board
@@ -249,26 +275,31 @@ public class AllSpellsEffects {
         playerBoard.removeCardFromField(playerBoard.getSpellPosition(spell), false);
         playerBoard.addCardToGraveyard(spell);
         gameUpdates.addCardToGraveyard(spell);
+        MainController.getInstance().sendPrintRequestToView(spell.getCardName() + " destroyed and moved to graveyard!\n");
     }
 
     private void potOfGreedEffect(Game game, PlayerTurn turn, SpellAndTrap spell, Update gameUpdates) {
         game.getPlayerByTurn(turn).getBoard().addCardFromRemainingToInHandCards();
         game.getPlayerByTurn(turn).getBoard().addCardFromRemainingToInHandCards();
+        MainController.getInstance().sendPrintRequestToView("Pot of Greed effect activated!\n");
 
         //remove the card from the board
         Board playerBoard = game.getPlayerByTurn(turn).getBoard();
         playerBoard.removeCardFromField(playerBoard.getSpellPosition(spell), false);
         playerBoard.addCardToGraveyard(spell);
         gameUpdates.addCardToGraveyard(spell);
+        MainController.getInstance().sendPrintRequestToView(spell.getCardName() + " destroyed and moved to graveyard!\n");
     }
 
     private void terraformingEffect(Game game, PlayerTurn turn, SpellAndTrap spell, Update gameUpdates) {
         game.getPlayerByTurn(turn).getBoard().addFieldSpellToHand();
+        MainController.getInstance().sendPrintRequestToView("Terraforming effect activated!\n");
 
         //remove the card from the board
         Board playerBoard = game.getPlayerByTurn(turn).getBoard();
         playerBoard.removeCardFromField(playerBoard.getSpellPosition(spell), false);
         playerBoard.addCardToGraveyard(spell);
         gameUpdates.addCardToGraveyard(spell);
+        MainController.getInstance().sendPrintRequestToView(spell.getCardName() + " destroyed and moved to graveyard!\n");
     }
 }
