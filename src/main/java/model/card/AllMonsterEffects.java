@@ -182,6 +182,7 @@ public class AllMonsterEffects {
         HashMap<Integer, Monster> monstersInField = opponentBoard.getMonstersInField();
         HashMap<Integer, SpellAndTrap> spellAndTrapsInField = opponentBoard.getSpellAndTrapsInField();
         SpellAndTrap fieldCard = (SpellAndTrap) opponentBoard.getFieldCard();
+        MainController.getInstance().sendPrintRequestToView("Beast Barbaros effect activated!\n");
         for (Map.Entry<Integer, Monster> entry : monstersInField.entrySet()) {
             Monster monster = entry.getValue();
             int position = entry.getKey();
@@ -202,7 +203,6 @@ public class AllMonsterEffects {
         opponentBoard.removeFieldCard(game, turn);
         MainController.getInstance().sendPrintRequestToView(fieldCard.getCardName() + " Destroyed and moved to graveyard!\n");
         if (fieldCard.isActive()) gameUpdates.addCardToGraveyard(fieldCard);
-        MainController.getInstance().sendPrintRequestToView("Beast Barbaros effect activated!\n");
     }
 
 }
