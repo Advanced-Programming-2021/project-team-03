@@ -178,7 +178,11 @@ public class View {
         // parsing the json string request with JSONObject library
         JSONObject inputObject = new JSONObject(input);
         String requestType = inputObject.getString("Type");
-        JSONObject valueObject = inputObject.getJSONObject("Value");
+        JSONObject valueObject = new JSONObject();
+        try {
+            valueObject = inputObject.getJSONObject("Value");
+        } catch (Exception ignored) {
+        }
 
         return switch (requestType) {
             case "Get tribute cards" -> getTributeCards(valueObject);
@@ -192,8 +196,35 @@ public class View {
             case "Terratiger, the Empowered Warrior" -> terratigerTheEmpoweredWarriorEffect();
             case "The Tricky" -> theTrickyEffect();
             case "Beast King Barbaros" -> beastKingBarbarosEffect();
+            case "Trap activate request" -> trapActivateRequest(valueObject);
             default -> error();
         };
+    }
+
+    private String trapActivateRequest(JSONObject valueObject) {
+        String firstMessage = valueObject.getString("First message");
+        String secondMessage = valueObject.getString("Second message");
+        System.out.println(firstMessage);
+        System.out.println("Write Yes to activate or Write No to cancel trap.");
+        JSONObject answerObject = new JSONObject();
+        boolean trapActivate = false;
+        while (true) {
+            String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if (inputCommand.matches("No")) {
+                answerObject.put("Type", "No");
+                break;
+            } else if (inputCommand.matches("Yes")) {
+                answerObject.put("Type", "Yes");
+                trapActivate = true;
+                break;
+            } else System.out.println("invalid command!");
+        }
+        if (trapActivate) {
+            System.out.println("Trap activated");
+        } else {
+            System.out.println(secondMessage);
+        }
+        return answerObject.toString();
     }
 
     private String beastKingBarbarosEffect() {
@@ -709,6 +740,7 @@ public class View {
 
     //region game menu methods
     private void gameMenu() {
+        showMap();
         isGameOver = false;
         isRoundOver = false;
         boolean mapShowFlag = true;
@@ -721,7 +753,7 @@ public class View {
             mapShowFlag = true;
             if (inputCommand.matches(GAME_MENU_COMMANDS[20])) activeCheat(inputCommand, 20);
             else if (inputCommand.matches(GAME_MENU_COMMANDS[21])) activeCheat(inputCommand, 21);
-            else if ((regexIndex = doesInputMatchWithSelectCardCommand(inputCommand)) != 0)
+            else if ((regexIndex = doesInputMatchWithSelectCardCommand(inputCommand)) != -1)
                 selectCard(inputCommand, regexIndex);
             else if (inputCommand.matches(GAME_MENU_COMMANDS[7])) cancelCardSelection();
             else if (inputCommand.matches(GAME_MENU_COMMANDS[8])) System.out.println("invalid selection");
@@ -788,7 +820,7 @@ public class View {
                 else if (!doesInputCommandHaveRepeatedField(inputCommand, GAME_MENU_COMMANDS[i], 2)) return i;
             }
         }
-        return 0;
+        return -1;
     }
 
     private void selectCard(String inputCommand, int commandRegexIndex) {
@@ -1309,7 +1341,7 @@ public class View {
     }
 
     private String printMessage(JSONObject valueObject) {
-        String message = valueObject.getString("Value");
+        String message = valueObject.getString("Message");
         System.out.println(message);
         return "Do not need request answer";
     }
