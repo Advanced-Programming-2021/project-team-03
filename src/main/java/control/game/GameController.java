@@ -942,7 +942,14 @@ public class GameController {
     }
 
     private void increaseHealth(String username, JSONObject valueObject) {
-
+        String amount = valueObject.getString("Amount");
+        try {
+            int LP = Integer.parseInt(amount);
+            game.getPlayerByName(username).decreaseHealthByAmount(-LP);
+            MainController.getInstance().sendPrintRequestToView("Cheat Code Activated!\nyour LP increased by " + LP + "\n");
+        } catch (Exception ignored) {
+            MainController.getInstance().sendPrintRequestToView("Cheat Code does not activated!!\n");
+        }
     }
 
     private void addCardToHand(String username) {

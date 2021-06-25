@@ -1101,7 +1101,6 @@ public class View {
             }
             case 25 -> {
                 value.put("Type", "Hesoyam");
-                value.put("Amount", regexMatcher.group(1));
             }
         }
 
