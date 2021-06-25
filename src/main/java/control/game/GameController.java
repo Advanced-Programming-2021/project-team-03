@@ -662,6 +662,11 @@ public class GameController {
     }
 
     public boolean activateSpellCard() {
+        boolean trapActivate = activeTraps(TrapNames.MAGIC_JAMAMER);
+        if (trapActivate){
+            MainController.getInstance().sendPrintRequestToView("Your spell card was destroyed by opponent trap.");
+            return false;
+        }
         SpellAndTrap spell = (SpellAndTrap) selectedCard;
         Board board = getPlayerByTurn().getBoard();
         if (spell.getIcon() == RITUAL) {
@@ -1026,6 +1031,13 @@ public class GameController {
             case NEGATE_ATTACK -> {
                 if (allTrapsEffects.canNegateAttackActivate(game, turn, trapName)) {
                     allTrapsEffects.negateAttackEffect(game, gameUpdates, turn);
+                    return true;
+                }
+                return false;
+            }
+            case MAGIC_JAMAMER -> {
+                if (allTrapsEffects.canMagicJammerActivate(game, turn, trapName)) {
+                    allTrapsEffects.magicJammerEffect(selectedCard,game, gameUpdates, turn);
                     return true;
                 }
                 return false;

@@ -12,6 +12,7 @@ import model.game.PlayerTurn;
 import org.json.JSONObject;
 import view.View;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -149,6 +150,45 @@ public class AllTrapsEffects {
     public void negateAttackEffect(Game game, Update gameUpdates, PlayerTurn turn) {
         MainController.getInstance().sendPrintRequestToView("Negate Attack trap activated and battle phase will be finish");
         View.getInstance().goToTheNextPhase();
+    }
+
+    public boolean canTimeSealActivate(Game game, PlayerTurn playerTurn, TrapNames trapName) {
+        //TODO
+        return false;
+    }
+
+    public void timeSealEffect(Game game, Update gameUpdates, PlayerTurn turn) {
+        //TODO
+    }
+
+    public boolean canMagicJammerActivate(Game game, PlayerTurn playerTurn, TrapNames trapName) {
+        Board board = game.getPlayerOpponentByTurn(playerTurn).getBoard();
+        if (board.getInHandCards().size() < 1) return false;
+        return doesTheOpponentHaveTheDesiredTrap(game, playerTurn, trapName)
+                && doesTheUserWantToEnableTheTrap(game, playerTurn, trapName);
+    }
+
+    public void magicJammerEffect(Card selectedSpell, Game game, Update gameUpdates, PlayerTurn turn) {
+        //remove spell card
+        Board board = game.getPlayerByTurn(turn).getBoard();
+        SpellAndTrap activatedSpell = (SpellAndTrap) selectedSpell;
+        board.addCardToGraveyard(activatedSpell);
+        gameUpdates.addCardToGraveyard(activatedSpell);
+        board.removeCardFromField(board.getSpellPosition(activatedSpell), false);
+
+        //remove card from hand
+        Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
+        ArrayList<Card> inHandCards = opponentBoard.getInHandCards();
+        Card card = inHandCards.get(0);
+        opponentBoard.addCardToGraveyard(card);
+        opponentBoard.removeCardFromHand(card);
+
+        //remove trap
+        SpellAndTrap trap = getTheDesiredTrapFormBoard(opponentBoard, TrapNames.MAGIC_JAMAMER);
+        trap.setActive(true);
+        opponentBoard.addCardToGraveyard(trap);
+        gameUpdates.addCardToGraveyard(trap);
+        opponentBoard.removeCardFromField(opponentBoard.getSpellPosition(trap), false);
     }
 
     public boolean doesTheUserWantToEnableTheTrap(Game game, PlayerTurn turn, TrapNames trapName) {
