@@ -11,6 +11,7 @@ import model.game.Player;
 import model.game.PlayerTurn;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -173,6 +174,30 @@ public class AllMonsterEffects {
 
     public void mirageDragonEffect(Update gameUpdates, PlayerTurn turn, Game game) {
         gameUpdates.getCanPlayerActivateATrap().replace(game.getPlayerOpponentByTurn(turn), false);
+    }
+
+    public void beastKingBarbarosEffect(Update gameUpdates, PlayerTurn turn, Game game) {
+        Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
+        HashMap<Integer, Monster> monstersInField = opponentBoard.getMonstersInField();
+        HashMap<Integer, SpellAndTrap> spellAndTrapsInField = opponentBoard.getSpellAndTrapsInField();
+        SpellAndTrap fieldCard = (SpellAndTrap) opponentBoard.getFieldCard();
+        for (Map.Entry<Integer, Monster> entry : monstersInField.entrySet()) {
+            Monster monster = entry.getValue();
+            int position = entry.getKey();
+            opponentBoard.addCardToGraveyard(monster);
+            opponentBoard.removeCardFromField(position, true);
+            if (monster.getFaceUpSituation() == FACE_UP) gameUpdates.addCardToGraveyard(monster);
+        }
+        for (Map.Entry<Integer, SpellAndTrap> entry : spellAndTrapsInField.entrySet()) {
+            SpellAndTrap spellAndTrap = entry.getValue();
+            int position = entry.getKey();
+            opponentBoard.addCardToGraveyard(spellAndTrap);
+            opponentBoard.removeCardFromField(position, false);
+            if (spellAndTrap.isActive()) gameUpdates.addCardToGraveyard(spellAndTrap);
+        }
+        opponentBoard.addCardToGraveyard(fieldCard);
+        opponentBoard.removeFieldCard(game,turn);
+        if (fieldCard.isActive()) gameUpdates.addCardToGraveyard(fieldCard);
     }
 
 }

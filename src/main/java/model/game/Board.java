@@ -1,5 +1,6 @@
 package model.game;
 
+import control.game.Update;
 import model.card.Card;
 import model.card.Monster;
 import model.card.SpellAndTrap;
@@ -75,9 +76,11 @@ public class Board {
         return fieldCard;
     }
 
-    public void setFieldCard(SpellAndTrap fieldCard) {
-        if (this.fieldCard != null){
+    public void setFieldCard(Update gameUpdate, SpellAndTrap fieldCard) {
+        if (this.fieldCard != null) {
             addCardToGraveyard(fieldCard);
+            if (this.fieldCard.isActive())
+                gameUpdate.addCardToGraveyard(this.fieldCard);
         }
         this.fieldCard = fieldCard;
     }
@@ -248,17 +251,17 @@ public class Board {
         }
     }
 
-    public boolean doesContainCard(int cardGameId) {
+    public boolean doesContainCard(Card card) {
         for (Monster monster : monstersInField.values()) {
-            if (monster.getCardIdInTheGame() == cardGameId)
+            if (monster.equals(card))
                 return true;
         }
         for (SpellAndTrap spellAndTrap : spellAndTrapsInField.values()) {
-            if (spellAndTrap.getCardIdInTheGame() == cardGameId)
+            if (spellAndTrap.equals(card))
                 return true;
         }
-        for (Card card : inHandCards) {
-            if (card.getCardIdInTheGame() == cardGameId)
+        for (Card inHandCard : inHandCards) {
+            if (inHandCard.equals(card))
                 return true;
         }
         return false;
@@ -293,5 +296,19 @@ public class Board {
         Optional<SpellAndTrap> spellAndTrap = spellAndTrapsInField.values().stream()
                 .filter(spellAndTrap2 -> spellAndTrap2.getCardName().equals(cardName)).findFirst();
         return spellAndTrap.orElse(null);
+    }
+
+    public void removeFieldCard(Game game, PlayerTurn turn) {
+        if (this.fieldCard.isActive()) {
+            Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
+            SpellAndTrap opponentFieldCard = (SpellAndTrap) opponentBoard.getFieldCard();
+            if (opponentFieldCard.isActive()) {
+                game.setActivatedFieldCard(opponentFieldCard);
+            } else {
+                game.setActivatedFieldCard(null);
+                game.setFiledActivated(false);
+            }
+        }
+        this.fieldCard = null;
     }
 }

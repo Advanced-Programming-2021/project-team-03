@@ -10,8 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class View {
-    //TODO show map for each command
     private static View instance;
+    static boolean testing;
 
     private final Scanner SCANNER = new Scanner(System.in);
     private Matcher regexMatcher;
@@ -187,8 +187,100 @@ public class View {
             case "Round is over" -> roundIsOver(valueObject);
             case "Ritual summon" -> ritualSummon();
             case "Get tribute cards for ritual summon" -> getTributeForRitualSummon();
+            case "Gate Guardian" -> getTributeForGateGuardian();
+            case "Terratiger, the Empowered Warrior" -> terratigerTheEmpoweredWarriorEffect();
+            case "The Tricky" -> theTrickyEffect();
+            case "Beast King Barbaros" -> beastKingBarbarosEffect();
             default -> error();
         };
+    }
+
+    private String beastKingBarbarosEffect() {
+        System.out.println("You can summon this card without sacrificing two other monsters but reduce its attack power\n" +
+                "Or you can sacrifice three monsters and use special summon.");
+        System.out.println("Write Cancel to normal summon\n" +
+                "Write Special to special summon");
+        JSONObject answerObject = new JSONObject();
+        while (true) {
+            String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if (inputCommand.matches("Cancel")) {
+                answerObject.put("Type", "Cancel");
+                System.out.println("Special summon canceled.");
+                break;
+            } else if (inputCommand.matches("Special")) {
+                answerObject.put("Type", "Successful");
+                System.out.println("Special summon activated.");
+                System.out.println("Write three monster position.");
+                JSONObject value = new JSONObject();
+                value.put("First position", getOneMonsterNumber());
+                value.put("Second position", getOneMonsterNumber());
+                value.put("Third position", getOneMonsterNumber());
+                answerObject.put("Value", value);
+                break;
+            } else System.out.println("invalid command!");
+        }
+        return answerObject.toString();
+    }
+
+    private String theTrickyEffect() {
+        System.out.println("You can use special summon for The Tricky card.\n" +
+                "if you want to use special summon you should write position of one card from your hand to remove it.\n" +
+                "And if you do not want to do it you can Write Cancel for normal Summon.");
+        JSONObject answerObject = new JSONObject();
+        while (true) {
+            String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if (inputCommand.matches("Cancel")) {
+                answerObject.put("Type", "Cancel");
+                System.out.println("Special summon canceled.");
+                break;
+            } else if (inputCommand.matches("\\d+")) {
+                answerObject.put("Type", "Successful");
+                answerObject.put("Position", inputCommand);
+                break;
+            } else System.out.println("invalid command!\n" +
+                    "you should special summon right now");
+        }
+        return answerObject.toString();
+    }
+
+    private String terratigerTheEmpoweredWarriorEffect() {
+        System.out.println("You can summon another monster card from your hand.\n" +
+                "The level of the selected monster must be a maximum of 4.\n" +
+                "Write your monster position number from your hand or write Cancel to cancel.");
+        JSONObject answerObject = new JSONObject();
+        while (true) {
+            String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if (inputCommand.matches("Cancel")) {
+                answerObject.put("Type", "Cancel");
+                break;
+            } else if (inputCommand.matches("\\d+")) {
+                answerObject.put("Type", "Successful");
+                answerObject.put("Position", inputCommand);
+                break;
+            } else System.out.println("invalid command!");
+        }
+        return answerObject.toString();
+    }
+
+    private String getTributeForGateGuardian() {
+        ArrayList<String> positions = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            String position = getOneMonsterNumber();
+            if (position.equals("Cancel")) break;
+            positions.add(position);
+        }
+        JSONObject answerObject = new JSONObject();
+        if (positions.size() != 3) {
+            answerObject.put("Type", "Cancel");
+            return answerObject.toString();
+        }
+        answerObject.put("Type", "Three card");
+        JSONObject value = new JSONObject();
+        value.put("First position", positions.get(0));
+        value.put("Second position", positions.get(1));
+        value.put("Third position", positions.get(2));
+        answerObject.put("Value", value);
+        return answerObject.toString();
     }
 
     private String ritualSummon() {
@@ -316,7 +408,7 @@ public class View {
         if (answerType.equals("Successful")) {
             System.out.println("user logged in successfully!");
             token = answerValue;
-            mainMenu(); //This line means user have logged in successfully and should go to the main menu.
+            if (!testing) mainMenu(); //This line means user have logged in successfully and should go to the main menu.
         } else System.out.println(answerValue);
     }
     //endregion
@@ -338,7 +430,7 @@ public class View {
         }
     }
 
-    private boolean logoutUser() {
+    boolean logoutUser() {
         JSONObject messageToSendToControl = new JSONObject();
         JSONObject value = new JSONObject();
         value.put("Token", token);
@@ -405,7 +497,7 @@ public class View {
      * 2- Delete deck
      * 3- Set activate deck
      */
-    private void preparatoryDeckWorks(String inputCommand, String commandType, int commandRegexIndex) {
+    void preparatoryDeckWorks(String inputCommand, String commandType, int commandRegexIndex) {
         getRegexMatcher(inputCommand, DECK_MENU_COMMANDS[commandRegexIndex], true);
 
         String deckName = regexMatcher.group(1);
@@ -424,7 +516,7 @@ public class View {
         System.out.println(answerValue);
     }
 
-    private void addOrDeleteCardFromDeck(String inputCommand, String commandType, int commandRegexIndex) {
+    void addOrDeleteCardFromDeck(String inputCommand, String commandType, int commandRegexIndex) {
         getRegexMatcher(inputCommand, DECK_MENU_COMMANDS[commandRegexIndex], true);
 
         String deckName = "";
@@ -477,7 +569,7 @@ public class View {
         otherDecks.forEach(System.out::println);
     }
 
-    private void showAllUserCards() {
+    void showAllUserCards() {
         //Making message JSONObject and passing to sendControl function:
         JSONObject value = new JSONObject();
         value.put("Token", token);
@@ -487,11 +579,11 @@ public class View {
         JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
 
         //Survey control JSON message
-        String answerValue = (String) controlAnswer.get("Value");
-        System.out.println(answerValue);
+        JSONArray answerValue = (JSONArray) controlAnswer.get("Value");
+        answerValue.forEach(System.out::println);
     }
 
-    private void showDeck(String inputCommand, int commandRegexIndex) {
+    void showDeck(String inputCommand, int commandRegexIndex) {
         getRegexMatcher(inputCommand, DECK_MENU_COMMANDS[commandRegexIndex], true);
 
         String deckName = regexMatcher.group(2);
@@ -618,12 +710,14 @@ public class View {
     private void gameMenu() {
         isGameOver = false;
         isRoundOver = false;
+        boolean mapShowFlag = true;
         int regexIndex;
         while (true) {
             if (isRoundOver || isGameOver) {
                 break;
             }
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            mapShowFlag = true;
             if (inputCommand.matches(GAME_MENU_COMMANDS[20])) activeCheat(inputCommand, 20);
             else if (inputCommand.matches(GAME_MENU_COMMANDS[21])) activeCheat(inputCommand, 21);
             else if ((regexIndex = doesInputMatchWithSelectCardCommand(inputCommand)) != 0)
@@ -645,12 +739,31 @@ public class View {
             else if (inputCommand.matches(GAME_MENU_COMMANDS[22])) activeCheat(inputCommand, 22);
             else if (inputCommand.matches(GAME_MENU_COMMANDS[23])) activeCheat(inputCommand, 23);
             else if (inputCommand.matches(CARD_SHOW_REGEX)) showCard(inputCommand, "Game");
-            else System.out.println("invalid command");
+            else {
+                System.out.println("invalid command");
+                mapShowFlag = false;
+            }
+            if (mapShowFlag){
+                showMap();
+            }
         }
         if (!isGameOver) {
             //TODO: run cardTransferMenu
             gameMenu();
         }
+    }
+
+    private void showMap() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Show map");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        String answerValue = (String) controlAnswer.get("Value");
+        System.out.println(answerValue);
     }
 
     private String getOneMonsterNumber() {
@@ -1011,7 +1124,7 @@ public class View {
         }
     }
 
-    private void buyCard(String inputCommand) {
+    void buyCard(String inputCommand) {
         getRegexMatcher(inputCommand, SHOP_MENU_COMMANDS[3], true);
 
         String cardName = regexMatcher.group(1);
@@ -1030,7 +1143,7 @@ public class View {
         System.out.println(answerValue);
     }
 
-    private void showAllCards() {
+    void showAllCards() {
         //Making message JSONObject and passing to sendControl function:
         JSONObject value = new JSONObject();
         value.put("Token", token);
@@ -1103,7 +1216,7 @@ public class View {
         }
     }
 
-    private void changeNickname(String inputCommand) {
+    void changeNickname(String inputCommand) {
         getRegexMatcher(inputCommand, PROFILE_MENU_COMMANDS[3], true);
 
         String nickname = regexMatcher.group(2);
@@ -1122,7 +1235,7 @@ public class View {
         System.out.println(answerValue);
     }
 
-    private void changePassword(String inputCommand, int regexIndex) {
+    void changePassword(String inputCommand, int regexIndex) {
         getRegexMatcher(inputCommand, PROFILE_MENU_COMMANDS[regexIndex], true);
 
         String currentPassword = "";
@@ -1165,7 +1278,7 @@ public class View {
         }
     }
 
-    private void showScoreboard() {
+    void showScoreboard() {
         //Making message JSONObject and passing to sendControl function:
         JSONObject value = new JSONObject();
         value.put("Token", token);
@@ -1252,8 +1365,7 @@ public class View {
 
     private void getRegexMatcher(String command, String regex, boolean findMatches) {
         regexMatcher = Pattern.compile(regex).matcher(command);
-        if (findMatches)
-            regexMatcher.find();
+        if (findMatches) regexMatcher.find();
     }
 }
 

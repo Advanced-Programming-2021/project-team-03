@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 public class Deck {
     private static final HashMap<String, Deck> allDecks = new HashMap<>();
-    private String deckName;
+    private final String deckName;
     private final HashMap<DeckType, ArrayList<Card>> decks = new HashMap<>();
     private final HashMap<DeckType, ArrayList<String>> decksCardNames = new HashMap<>();
 
@@ -30,14 +30,6 @@ public class Deck {
         decksCardNames.put(DeckType.SIDE, new ArrayList<>());
 
         allDecks.put(deckName, this);
-        updateInDatabase();
-    }
-
-    public void rename(String newName) throws DatabaseException {
-        allDecks.remove(this.deckName);
-        Database.remove(this);
-        allDecks.put(newName, this);
-        this.deckName = newName;
         updateInDatabase();
     }
 

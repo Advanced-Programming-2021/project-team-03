@@ -7,12 +7,12 @@ import model.user.User;
 import java.util.ArrayList;
 
 public class UserJson {
-    private String username;
-    private String nickname;
-    private String passwordHash;
-    private int score;
-    private int balance;
-    private int level;
+    private final String username;
+    private final String nickname;
+    private final String passwordHash;
+    private final int score;
+    private final int balance;
+    private final int level;
     private String activeDeck;
     private final ArrayList<String> decks;
     private final ArrayList<String> cards;

@@ -76,19 +76,19 @@ public class Game {
     }
 
     public Board getCardsInBoard(Card card) { /* monster effect */
-        if (player1.getBoard().doesContainCard(card.getCardIdInTheGame()))
+        if (player1.getBoard().doesContainCard(card))
             return player1.getBoard();
 
-        if (player2.getBoard().doesContainCard(card.getCardIdInTheGame()))
+        if (player2.getBoard().doesContainCard(card))
             return player2.getBoard();
 
         return null;
     }
 
     public PlayerTurn getCardsOwner(Card card) { /* monster effect */
-        if (player1.getBoard().doesContainCard(card.getCardIdInTheGame()))
+        if (player1.getBoard().doesContainCard(card))
             return PLAYER1;
-        if (player2.getBoard().doesContainCard(card.getCardIdInTheGame()))
+        if (player2.getBoard().doesContainCard(card))
             return PLAYER2;
         return null;
     }
