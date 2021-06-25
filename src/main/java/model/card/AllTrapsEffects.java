@@ -231,6 +231,39 @@ public class AllTrapsEffects {
         board.removeCardFromField(board.getSpellPosition(trap), false);
     }
 
+    public boolean canSolemnWarningActivate(Game game, PlayerTurn playerTurn, TrapNames trapName) {
+        return doesTheOpponentHaveTheDesiredTrap(game, playerTurn, trapName)
+                && game.getPlayerByTurn(playerTurn).getHealth() > 2000
+                && doesTheUserWantToEnableTheTrap(game, playerTurn, trapName);
+    }
+
+    public void solemnWarningEffect(Card selectedMonster, Game game, Update gameUpdates, PlayerTurn turn) {
+        Player opponentPlayer = game.getPlayerOpponentByTurn(turn);
+        Monster monster = (Monster) selectedMonster;
+        opponentPlayer.decreaseHealthByAmount(2000);
+
+        Board board = game.getPlayerByTurn(turn).getBoard();
+        board.addCardToGraveyard(monster);
+        if (monster.getFaceUpSituation() == FaceUpSituation.FACE_UP) gameUpdates.addCardToGraveyard(monster);
+        board.removeCardFromField(board.getMonsterPosition(monster), true);
+
+        Board opponentBoard = opponentPlayer.getBoard();
+        SpellAndTrap trap = getTheDesiredTrapFormBoard(opponentBoard, TrapNames.SOLEMN_WARNING);
+        trap.setActive(true);
+        opponentBoard.addCardToGraveyard(trap);
+        gameUpdates.addCardToGraveyard(trap);
+        opponentBoard.removeCardFromField(opponentBoard.getSpellPosition(trap), false);
+    }
+
+    public boolean canMindCrushActivate(Game game, PlayerTurn playerTurn, TrapNames trapName) {
+        //TODO
+        return false;
+    }
+
+    public void mindCrushEffect(Game game, Update gameUpdates, PlayerTurn turn) {
+        //TODO
+    }
+
     public boolean doesTheUserWantToEnableTheTrap(Game game, PlayerTurn turn, TrapNames trapName) {
         JSONObject messageToSendToView = new JSONObject();
         messageToSendToView.put("Type", "Trap activate request");

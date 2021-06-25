@@ -201,6 +201,10 @@ public class GameController {
     }
 
     public String summonCard() {
+        boolean activeTrap = activeTraps(TrapNames.SOLEMN_WARNING);
+        if (activeTrap) {
+            return "summon Canceled and Your card has been destroyed Because the opponent activated the Solemn Warning trap";
+        }
         Monster monster = (Monster) selectedCard;
         Board board = getPlayerByTurn().getBoard();
         if (monster.getCardName().equals("Terratiger, the Empowered Warrior")) {
@@ -444,11 +448,16 @@ public class GameController {
         return false;
     }
 
-    public void flipSummon() {
+    public String flipSummon() {
+        boolean activeTrap = activeTraps(TrapNames.SOLEMN_WARNING);
+        if (activeTrap) {
+            return "filip summon Canceled and Your card has been destroyed Because the opponent activated the Solemn Warning trap";
+        }
         Monster monster = (Monster) selectedCard;
         monster.setAttackingFormat(AttackingFormat.ATTACKING);
         monster.setFaceUpSituation(FaceUpSituation.FACE_UP);
         gameUpdates.flipCard(monster);
+        return "flip summoned successfully!";
     }
 
     public boolean canAttackWithThisCard(String username) {
@@ -1060,6 +1069,20 @@ public class GameController {
             case CALL_OF_THE_HAUNTED -> {
                 if (allTrapsEffects.canCallOfTheHauntedActivate(currentPhase, game, turn, trapName)) {
                     allTrapsEffects.callOfTheHauntedEffect(game, gameUpdates, turn);
+                    return true;
+                }
+                return false;
+            }
+            case SOLEMN_WARNING -> {
+                if (allTrapsEffects.canSolemnWarningActivate(game, turn, trapName)) {
+                    allTrapsEffects.solemnWarningEffect(selectedCard, game, gameUpdates, turn);
+                    return true;
+                }
+                return false;
+            }
+            case MIND_CRUSH -> {
+                if (allTrapsEffects.canMindCrushActivate(game, turn, trapName)) {
+                    allTrapsEffects.mindCrushEffect(game, gameUpdates, turn);
                     return true;
                 }
                 return false;

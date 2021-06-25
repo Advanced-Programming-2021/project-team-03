@@ -319,9 +319,11 @@ public class MainController {
         } else if (!GameController.getInstance().canFlipSummon(onlineUsers.get(token))) {
             answerObject.put("Type", "Error").put("Value", "you can’t flip summon this card!");
         } else {
-            GameController.getInstance().flipSummon();
-            answerObject.put("Type", "Successful").put("Value", "flip summoned successfully!");
-            GameController.getInstance().activeTraps(TrapNames.TRAP_HOLE);
+            String result = GameController.getInstance().flipSummon();
+            answerObject.put("Type", "Successful").put("Value", result);
+            if (result.equals("flip summoned successfully!")) {
+                GameController.getInstance().activeTraps(TrapNames.TRAP_HOLE);
+            }
         }
         return answerObject.toString();
     }
