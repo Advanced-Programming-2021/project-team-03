@@ -107,7 +107,6 @@ public class Game {
 
         if (player2.getBoard().doesContainCard(card))
             return player2.getBoard();
-
         return null;
     }
 
