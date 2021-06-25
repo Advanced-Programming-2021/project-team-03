@@ -106,8 +106,7 @@ public class GameController {
                     return true;
             }
             case "Hand" -> {
-                if (board.getInHandCards().size() <= cardPosition)
-                    return true;
+                return board.getInHandCards().size() > cardPosition;
             }
         }
         return false;
