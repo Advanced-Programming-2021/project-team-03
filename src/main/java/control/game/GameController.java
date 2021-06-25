@@ -987,6 +987,11 @@ public class GameController {
                     allTrapsEffects.trapHoleEffect(selectedCard, game, gameUpdates, turn);
                 }
             }
+            case TORRENTIAL_TRIBUTE -> {
+                if (allTrapsEffects.canTorrentialTributeActivate(game, turn, trapName)) {
+                    allTrapsEffects.torrentialTributeEffect(game, gameUpdates, turn);
+                }
+            }
         }
     }
 }
