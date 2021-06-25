@@ -178,10 +178,7 @@ public class GameController {
         if (!isCardInHand) return false;
         if (!(selectedCard instanceof Monster)) return false;
         Monster monster = (Monster) selectedCard;
-        if (monster.getType() == MonsterTypes.EFFECT || monster.getType() == MonsterTypes.NORMAL) {
-            return true;
-        }
-        return false;
+        return monster.getType() == MonsterTypes.EFFECT || monster.getType() == MonsterTypes.NORMAL;
     }
 
     public boolean isCardFieldZoneFull() {
@@ -233,7 +230,7 @@ public class GameController {
                 String positionString = inputObject.getString("Position");
                 int position = Integer.parseInt(positionString);
                 Card card = board.getInHandCardByPosition(position);
-                if (card != null && card instanceof Monster) {
+                if (card instanceof Monster) {
                     Monster secondMonster = (Monster) card;
                     if (secondMonster.getLevel() < 4 &&
                             board.getMonstersInField().size() < 5 &&
@@ -258,7 +255,7 @@ public class GameController {
                 String positionString = inputObject.getString("Position");
                 int position = Integer.parseInt(positionString);
                 Card card = board.getInHandCardByPosition(position);
-                if (card.equals(selectedCard) || card == null) {
+                if (card == null || card.equals(selectedCard)) {
                     MainController.getInstance().sendPrintRequestToView("Selected card to remove from hand is invalid\n" +
                             "Special summon stopped And normal summon will continued.");
                 } else {
@@ -422,8 +419,7 @@ public class GameController {
     public boolean canChangeCardPosition() {
         HashMap<Integer, Monster> monstersInField = getPlayerByTurn().getBoard().getMonstersInField();
         for (Map.Entry<Integer, Monster> entry : monstersInField.entrySet()) {
-            Monster monster = entry.getValue();
-            if (monster.equals(selectedCard))
+            if (entry.getValue().equals(selectedCard))
                 return true;
         }
         return false;
