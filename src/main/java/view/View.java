@@ -197,8 +197,22 @@ public class View {
             case "The Tricky" -> theTrickyEffect();
             case "Beast King Barbaros" -> beastKingBarbarosEffect();
             case "Trap activate request" -> trapActivateRequest(valueObject);
+            case "Get one card name" -> getOneCardNameFromUser();
             default -> error();
         };
+    }
+
+    private String getOneCardNameFromUser() {
+        System.out.println("You must write a card name");
+        JSONObject answerObject = new JSONObject();
+        String inputCommand = "";
+        while (true) {
+            inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if (inputCommand.length() == 0) System.out.println("Invalid command!");
+            else break;
+        }
+        answerObject.put("Name", inputCommand);
+        return answerObject.toString();
     }
 
     private String trapActivateRequest(JSONObject valueObject) {

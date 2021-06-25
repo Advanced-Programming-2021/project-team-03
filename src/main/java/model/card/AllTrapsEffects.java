@@ -255,13 +255,54 @@ public class AllTrapsEffects {
         opponentBoard.removeCardFromField(opponentBoard.getSpellPosition(trap), false);
     }
 
-    public boolean canMindCrushActivate(Game game, PlayerTurn playerTurn, TrapNames trapName) {
-        //TODO
-        return false;
+    public boolean canMindCrushActivate(GamePhases currentPhase, Game game, PlayerTurn playerTurn, TrapNames trapName) {
+        return doesThePlayerHaveTheDesiredTrap(game, playerTurn, trapName)
+                && (currentPhase == GamePhases.FIRST_MAIN || currentPhase == GamePhases.SECOND_MAIN)
+                && game.getPlayerByTurn(playerTurn).getBoard().getInHandCards().size() > 0
+                && doesTheUserWantToEnableTheTrapInOwnTurn(game, playerTurn, trapName);
     }
 
     public void mindCrushEffect(Game game, Update gameUpdates, PlayerTurn turn) {
-        //TODO
+        JSONObject messageToSendToView = new JSONObject();
+        messageToSendToView.put("Type", "Get one card name");
+        JSONObject value = new JSONObject();
+        messageToSendToView.put("Value", value);
+        JSONObject answer = new JSONObject(MainController.getInstance().sendRequestToView(messageToSendToView));
+        String cardName = answer.getString("Name");
+
+        Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
+        ArrayList<Card> opponentInHandCards = opponentBoard.getInHandCards();
+        int numberOfRemovedCards = 0;
+        for (int i = 0; i < opponentInHandCards.size(); i++) {
+            Card card = opponentInHandCards.get(0);
+            if (card.getCardName().equals(cardName)) {
+                opponentBoard.addCardToGraveyard(card);
+                opponentInHandCards.remove(card);
+                numberOfRemovedCards++;
+                i--;
+            }
+        }
+
+        Board board = game.getPlayerByTurn(turn).getBoard();
+        ArrayList<Card> inHandCards = board.getInHandCards();
+        if (numberOfRemovedCards == 0) {
+            int randomIndex = (int) Math.floor(Math.random() * (inHandCards.size()));
+            try {
+                Card removeCard = inHandCards.get(randomIndex);
+                board.addCardToGraveyard(removeCard);
+                inHandCards.remove(removeCard);
+                MainController.getInstance().sendPrintRequestToView("1 of your in hand cards was removed");
+            } catch (Exception ignored) {
+            }
+        } else {
+            MainController.getInstance().sendPrintRequestToView(String.valueOf(numberOfRemovedCards) + " of your in hand cards was removed");
+        }
+
+        SpellAndTrap trap = getTheDesiredTrapFormBoard(board, TrapNames.MIND_CRUSH);
+        trap.setActive(true);
+        board.addCardToGraveyard(trap);
+        gameUpdates.addCardToGraveyard(trap);
+        board.removeCardFromField(board.getSpellPosition(trap), false);
     }
 
     public boolean doesTheUserWantToEnableTheTrap(Game game, PlayerTurn turn, TrapNames trapName) {

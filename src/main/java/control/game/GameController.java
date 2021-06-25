@@ -799,6 +799,7 @@ public class GameController {
                 answerAnswer.append("phase: First Main Phase");
                 currentPhase = FIRST_MAIN;
                 activeTraps(TrapNames.CALL_OF_THE_HAUNTED);
+                activeTraps(TrapNames.MIND_CRUSH);
             }
             case FIRST_MAIN -> {
                 answerAnswer.append("phase: Battle Phase");
@@ -808,6 +809,7 @@ public class GameController {
                 answerAnswer.append("phase: Second Phase");
                 currentPhase = SECOND_MAIN;
                 activeTraps(TrapNames.CALL_OF_THE_HAUNTED);
+                activeTraps(TrapNames.MIND_CRUSH);
             }
             case SECOND_MAIN -> {
                 answerAnswer.append("phase: End Phase\n");
@@ -1081,7 +1083,7 @@ public class GameController {
                 return false;
             }
             case MIND_CRUSH -> {
-                if (allTrapsEffects.canMindCrushActivate(game, turn, trapName)) {
+                if (allTrapsEffects.canMindCrushActivate(currentPhase, game, turn, trapName)) {
                     allTrapsEffects.mindCrushEffect(game, gameUpdates, turn);
                     return true;
                 }
