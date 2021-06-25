@@ -945,7 +945,12 @@ public class GameController {
     }
 
     private void setWinner(String username) {
-
+        if (game.getPlayer1() == game.getPlayerByName(username)) {
+            game.getPlayer2().decreaseHealthByAmount(game.getPlayer2().getHealth());
+        } else {
+            game.getPlayer1().decreaseHealthByAmount(game.getPlayer1().getHealth());
+        }
+        MainController.getInstance().sendPrintRequestToView("Cheat Code Activated!\nyour opponent's LP is 0 now\nYou win the game!\n");
     }
 
     private void increaseHealth(String username, JSONObject valueObject) {
