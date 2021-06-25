@@ -85,11 +85,38 @@ public class AIController {
     }
 
     private void setSpell() {
-
+        Board board = bot.getBoard();
+        Board opponentBoard = opponent.getBoard();
+        Card card = bot.getBoard().getInHandCards().get(selectedHandIndex);
+        if (card instanceof SpellAndTrap) {
+            SpellAndTrap spellAndTrap = (SpellAndTrap) card;
+            if (spellAndTrap.getIcon() == FIELD) {
+                if (!game.isFiledActivated()) {
+                    board.setFieldCard(gameUpdate, spellAndTrap);
+                } else if (board.getFieldCard() == game.getActivatedFieldCard()) {
+                    SpellAndTrap opponentFieldCard = (SpellAndTrap) opponentBoard.getFieldCard();
+                    if (opponentFieldCard != null && opponentFieldCard.isActive()) {
+                        game.setActivatedFieldCard(opponentFieldCard);
+                        game.setFiledActivated(true);
+                    } else {
+                        game.setFiledActivated(false);
+                        game.setActivatedFieldCard(null);
+                    }
+                    board.setFieldCard(gameUpdate, spellAndTrap);
+                } else {
+                    board.setFieldCard(gameUpdate, spellAndTrap);
+                }
+            } else {
+                board.setSpellAndTrapsInField(spellAndTrap);
+            }
+        }
     }
 
     private boolean canSetSpellsInHand() {
-
+        for (Card card : bot.getBoard().getInHandCards()) {
+            if (card instanceof SpellAndTrap)
+                return true;
+        }
         return false;
     }
 
@@ -124,7 +151,6 @@ public class AIController {
 
     private void set() {
         Board board = bot.getBoard();
-        Board opponentBoard = opponent.getBoard();
         Card card = bot.getBoard().getInHandCards().get(selectedHandIndex);
         Random random = new Random();
         if (card instanceof Monster) {
@@ -155,27 +181,6 @@ public class AIController {
                 board.removeCardFromField(firstPosition, true);
                 board.removeCardFromField(secondPosition, true);
                 board.setOrSummonMonsterFromHandToFiled(monster, "Summon");
-            }
-        } else {
-            SpellAndTrap spellAndTrap = (SpellAndTrap) card;
-            if (spellAndTrap.getIcon() == FIELD) {
-                if (!game.isFiledActivated()) {
-                    board.setFieldCard(gameUpdate, spellAndTrap);
-                } else if (board.getFieldCard() == game.getActivatedFieldCard()) {
-                    SpellAndTrap opponentFieldCard = (SpellAndTrap) opponentBoard.getFieldCard();
-                    if (opponentFieldCard != null && opponentFieldCard.isActive()) {
-                        game.setActivatedFieldCard(opponentFieldCard);
-                        game.setFiledActivated(true);
-                    } else {
-                        game.setFiledActivated(false);
-                        game.setActivatedFieldCard(null);
-                    }
-                    board.setFieldCard(gameUpdate, spellAndTrap);
-                } else {
-                    board.setFieldCard(gameUpdate, spellAndTrap);
-                }
-            } else {
-                board.setSpellAndTrapsInField(spellAndTrap);
             }
         }
     }
