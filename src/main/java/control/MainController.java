@@ -323,9 +323,11 @@ public class MainController {
         } else if (!GameController.getInstance().canFlipSummon()) {
             answerObject.put("Type", "Error").put("Value", "you can’t flip summon this card!");
         } else {
-            GameController.getInstance().flipSummon();
-            answerObject.put("Type", "Successful").put("Value", "flip summoned successfully!");
-            GameController.getInstance().activeTraps(TrapNames.TRAP_HOLE);
+            String result = GameController.getInstance().flipSummon();
+            answerObject.put("Type", "Successful").put("Value", result);
+            if (result.equals("flip summoned successfully!")) {
+                GameController.getInstance().activeTraps(TrapNames.TRAP_HOLE);
+            }
         }
         return answerObject.toString();
     }
@@ -371,6 +373,8 @@ public class MainController {
             answerObject.put("Type", "Error").put("Value", "card zone is full!");
         } else if (!GameController.getInstance().canPlayerSummonOrSetAnotherCard()) {
             answerObject.put("Type", "Error").put("Value", "you already summoned/set on this turn!");
+        } else if (GameController.getInstance().isSelectedCardAMonster() && !GameController.getInstance().isThereEnoughCardToTribute()) {
+            answerObject.put("Type", "Error").put("Value", "there are not enough cards for tribute!");
         } else {
             String result = GameController.getInstance().setCard();
             answerObject.put("Type", "Successful").put("Value", result);
