@@ -2,6 +2,7 @@ package model.card;
 
 import control.MainController;
 import control.game.Update;
+import model.enums.AttackingFormat;
 import model.enums.FaceUpSituation;
 import model.enums.TrapNames;
 import model.game.Board;
@@ -126,7 +127,17 @@ public class AllTrapsEffects {
     }
 
     public void mirrorForceEffect(Game game, Update gameUpdates, PlayerTurn turn) {
-
+        Board board = game.getPlayerByTurn(turn).getBoard();
+        HashMap<Integer, Monster> monstersInField = board.getMonstersInField();
+        for (Map.Entry<Integer, Monster> entry : monstersInField.entrySet()) {
+            int position = entry.getKey();
+            Monster monster = entry.getValue();
+            if (monster.getAttackingFormat() == AttackingFormat.ATTACKING) {
+                board.addCardToGraveyard(monster);
+                if (monster.getFaceUpSituation() == FaceUpSituation.FACE_UP) gameUpdates.addCardToGraveyard(monster);
+                board.removeCardFromField(position, true);
+            }
+        }
     }
 
     public boolean doesTheUserWantToEnableTheTrap(Game game, PlayerTurn turn, TrapNames trapName) {
