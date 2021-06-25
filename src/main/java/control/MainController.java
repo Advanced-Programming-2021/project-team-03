@@ -4,6 +4,7 @@ import control.game.GameController;
 import model.card.Card;
 import model.card.Monster;
 import model.card.SpellAndTrap;
+import model.enums.TrapNames;
 import model.user.Deck;
 import model.user.DeckType;
 import model.user.User;
@@ -122,6 +123,7 @@ public class MainController {
         else {
             answerObject.put("Type", "Success").put("Value", GameController.getInstance().endPhase());
         }
+
         return answerObject.toString();
     }
 
@@ -133,8 +135,12 @@ public class MainController {
     }
 
     public void sendPrintRequestToView(String message) {
-        sendRequestToView((new JSONObject()).put("Type", "Print message")
-                .put("Value", (new JSONObject()).put("Message", message)));
+        JSONObject messageToSendToView = new JSONObject();
+        messageToSendToView.put("Type", "Print message");
+        JSONObject value = new JSONObject();
+        value.put("Message", message);
+        messageToSendToView.put("Value", value);
+        sendRequestToView(messageToSendToView);
     }
 
     private String cheatCodes(JSONObject valueObject) {
@@ -315,6 +321,7 @@ public class MainController {
         } else {
             GameController.getInstance().flipSummon();
             answerObject.put("Type", "Successful").put("Value", "flip summoned successfully!");
+            GameController.getInstance().activeTraps(TrapNames.TRAP_HOLE);
         }
         return answerObject.toString();
     }
@@ -386,7 +393,12 @@ public class MainController {
         } else if (!GameController.getInstance().isThereEnoughCardToTribute()) {
             answerObject.put("Type", "Error").put("Value", "there are not enough cards for tribute!");
         } else {
-            answerObject.put("Type", "Successful").put("Value", GameController.getInstance().summonCard());
+            String result = GameController.getInstance().summonCard();
+            answerObject.put("Type", "Successful");
+            answerObject.put("Value", result);
+            if (result.startsWith("summoned successfully")) {
+                GameController.getInstance().activeTraps(TrapNames.TRAP_HOLE);
+            }
         }
 
         return answerObject.toString();
@@ -559,6 +571,7 @@ public class MainController {
             answerObject.put("Type", "Successful")
                     .put("Value", DeckController.getInstance().getDeck(deckName).showDeck(DeckType.valueOf(deckType.toUpperCase())));
         }
+
         return answerObject.toString();
     }
 
@@ -598,6 +611,7 @@ public class MainController {
             DeckController.getInstance().removeCardFromDeck(deckName, DeckType.valueOf(deckType.toUpperCase()), cardName);
             answerObject.put("Type", "Successful").put("Value", cardName + " removed form deck successfully!");
         }
+
         return answerObject.toString();
     }
 
@@ -626,6 +640,7 @@ public class MainController {
             answerObject.put("Type", "Successful")
                     .put("Value", "card added to " + deckType.name() + " deck successfully!");
         }
+
         return answerObject.toString();
     }
 
@@ -738,6 +753,7 @@ public class MainController {
             answerObject.put("Type", "Successful")
                     .put("Value", "nickname changed successfully!");
         }
+
         return answerObject.toString();
     }
 

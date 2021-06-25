@@ -3,10 +3,7 @@ package control.game;
 import control.MainController;
 import control.databaseController.DatabaseException;
 import model.card.*;
-import model.enums.AttackingFormat;
-import model.enums.CardAttributes;
-import model.enums.FaceUpSituation;
-import model.enums.MonsterTypes;
+import model.enums.*;
 import model.game.Board;
 import model.game.Game;
 import model.game.Player;
@@ -869,12 +866,15 @@ public class GameController {
         game.checkRoundResults(gameUpdates);
         String results = game.getWinner().getUser().getUsername() + " won the game and the score is: 1000 - 0";
         JSONObject answerObject = new JSONObject();
+        JSONObject value = new JSONObject();
         if (IsGameOver()) {
             answerObject.put("Type", "Game is over");
-            answerObject.put("Value", checkGameStatus());
+            value.put("Message", checkGameStatus());
+            answerObject.put("Value", value);
         } else {
             answerObject.put("Type", "Round is over");
-            answerObject.put("Value", results);
+            value.put("Message", results);
+            answerObject.put("Value", value);
         }
         MainController.getInstance().sendRequestToView(answerObject);
     }
@@ -977,5 +977,16 @@ public class GameController {
     private void addCardToHand(String username) {
         game.getPlayerByName(username).getBoard().addCardFromRemainingToInHandCards();
         MainController.getInstance().sendPrintRequestToView("Cheat Code Activated!\nyou have a new card in your hand now!\n");
+    }
+
+    public void activeTraps(TrapNames trapName) {
+        AllTrapsEffects allTrapsEffects = AllTrapsEffects.getInstance();
+        switch (trapName) {
+            case TRAP_HOLE -> {
+                if (allTrapsEffects.canTrapHoleActivate(selectedCard, game, turn, trapName)) {
+                    allTrapsEffects.trapHoleEffect(selectedCard, game, gameUpdates, turn);
+                }
+            }
+        }
     }
 }
