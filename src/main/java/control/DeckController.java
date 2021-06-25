@@ -21,7 +21,7 @@ public class DeckController {
         return deckController;
     }
 
-    public boolean doesDeckAlreadyExist(String deckName) {
+    public boolean doesDeckExist(String deckName) {
         return Deck.getByDeckName(deckName) != null;
     }
 
@@ -70,10 +70,6 @@ public class DeckController {
         } catch (DatabaseException e) {
             e.printStackTrace();
         }
-    }
-
-    public boolean doesDeckContainThisCard(String deckName, DeckType deckType, String cardName) {
-        return Deck.getByDeckName(deckName).doesContainCard(Card.getCardByName(cardName), deckType);
     }
 
     public void removeCardFromDeck(String deckName, DeckType deckType, String cardName) {

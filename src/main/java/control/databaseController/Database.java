@@ -81,8 +81,7 @@ public class Database {
                         gson.fromJson(reader, DeckJson.class).convert();
                         reader.close();
 
-                    } catch (IOException | DatabaseException ignored) {
-                    }
+                    } catch (IOException | DatabaseException ignored) {}
                 });
     }
 
@@ -151,8 +150,6 @@ public class Database {
             throw new DatabaseException("Couldn't write to the database at path: " + filePath);
         }
     }
-    // TODO: we need a garbage collector for decks to remove decks that users don't have any reference to
-    // TODO: remove upper TODO
 
     public static String toEnumCase(String string) {
         return string.toUpperCase()

@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 
 public class View {
     private static View instance;
+    static boolean testing;
 
     private final Scanner SCANNER = new Scanner(System.in);
     private Matcher regexMatcher;
@@ -407,7 +408,7 @@ public class View {
         if (answerType.equals("Successful")) {
             System.out.println("user logged in successfully!");
             token = answerValue;
-            mainMenu(); //This line means user have logged in successfully and should go to the main menu.
+            if (!testing) mainMenu(); //This line means user have logged in successfully and should go to the main menu.
         } else System.out.println(answerValue);
     }
     //endregion
@@ -429,7 +430,7 @@ public class View {
         }
     }
 
-    private boolean logoutUser() {
+    boolean logoutUser() {
         JSONObject messageToSendToControl = new JSONObject();
         JSONObject value = new JSONObject();
         value.put("Token", token);
@@ -496,7 +497,7 @@ public class View {
      * 2- Delete deck
      * 3- Set activate deck
      */
-    private void preparatoryDeckWorks(String inputCommand, String commandType, int commandRegexIndex) {
+    void preparatoryDeckWorks(String inputCommand, String commandType, int commandRegexIndex) {
         getRegexMatcher(inputCommand, DECK_MENU_COMMANDS[commandRegexIndex], true);
 
         String deckName = regexMatcher.group(1);
@@ -515,7 +516,7 @@ public class View {
         System.out.println(answerValue);
     }
 
-    private void addOrDeleteCardFromDeck(String inputCommand, String commandType, int commandRegexIndex) {
+    void addOrDeleteCardFromDeck(String inputCommand, String commandType, int commandRegexIndex) {
         getRegexMatcher(inputCommand, DECK_MENU_COMMANDS[commandRegexIndex], true);
 
         String deckName = "";
@@ -568,7 +569,7 @@ public class View {
         otherDecks.forEach(System.out::println);
     }
 
-    private void showAllUserCards() {
+    void showAllUserCards() {
         //Making message JSONObject and passing to sendControl function:
         JSONObject value = new JSONObject();
         value.put("Token", token);
@@ -578,11 +579,11 @@ public class View {
         JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
 
         //Survey control JSON message
-        String answerValue = (String) controlAnswer.get("Value");
-        System.out.println(answerValue);
+        JSONArray answerValue = (JSONArray) controlAnswer.get("Value");
+        answerValue.forEach(System.out::println);
     }
 
-    private void showDeck(String inputCommand, int commandRegexIndex) {
+    void showDeck(String inputCommand, int commandRegexIndex) {
         getRegexMatcher(inputCommand, DECK_MENU_COMMANDS[commandRegexIndex], true);
 
         String deckName = regexMatcher.group(2);
@@ -1123,7 +1124,7 @@ public class View {
         }
     }
 
-    private void buyCard(String inputCommand) {
+    void buyCard(String inputCommand) {
         getRegexMatcher(inputCommand, SHOP_MENU_COMMANDS[3], true);
 
         String cardName = regexMatcher.group(1);
@@ -1142,7 +1143,7 @@ public class View {
         System.out.println(answerValue);
     }
 
-    private void showAllCards() {
+    void showAllCards() {
         //Making message JSONObject and passing to sendControl function:
         JSONObject value = new JSONObject();
         value.put("Token", token);
@@ -1215,7 +1216,7 @@ public class View {
         }
     }
 
-    private void changeNickname(String inputCommand) {
+    void changeNickname(String inputCommand) {
         getRegexMatcher(inputCommand, PROFILE_MENU_COMMANDS[3], true);
 
         String nickname = regexMatcher.group(2);
@@ -1234,7 +1235,7 @@ public class View {
         System.out.println(answerValue);
     }
 
-    private void changePassword(String inputCommand, int regexIndex) {
+    void changePassword(String inputCommand, int regexIndex) {
         getRegexMatcher(inputCommand, PROFILE_MENU_COMMANDS[regexIndex], true);
 
         String currentPassword = "";
@@ -1277,7 +1278,7 @@ public class View {
         }
     }
 
-    private void showScoreboard() {
+    void showScoreboard() {
         //Making message JSONObject and passing to sendControl function:
         JSONObject value = new JSONObject();
         value.put("Token", token);
@@ -1364,8 +1365,7 @@ public class View {
 
     private void getRegexMatcher(String command, String regex, boolean findMatches) {
         regexMatcher = Pattern.compile(regex).matcher(command);
-        if (findMatches)
-            regexMatcher.find();
+        if (findMatches) regexMatcher.find();
     }
 }
 

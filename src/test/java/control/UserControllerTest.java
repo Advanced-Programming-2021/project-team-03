@@ -39,4 +39,11 @@ class UserControllerTest {
 
         assert !userController.doesUsernameExist("salam2");
     }
+
+    @Test
+    void duplicateSignUpTest() {
+        duplicateNicknameSignUp();
+        duplicateUsernameSignUp();
+        signUp();
+    }
 }
