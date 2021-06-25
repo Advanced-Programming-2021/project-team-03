@@ -498,11 +498,24 @@ public class GameController {
         Monster opponentMonster = game.getPlayerOpponentByTurn(turn).getBoard().getMonsterInFieldByPosition(position);
         AttackingFormat opponentMonsterFormat = game.getPlayerOpponentByTurn(turn).getBoard().getMonsterInFieldByPosition(position).getAttackingFormat();
         FaceUpSituation opponentMonsterFaceUpSit = game.getPlayerOpponentByTurn(turn).getBoard().getMonsterInFieldByPosition(position).getFaceUpSituation();
-        gameUpdates.addMonstersToAttackedMonsters(attackingMonster);
+
         int attackingDef = attackingMonster.getAttackingPower() - opponentMonster.getAttackingPower();
         int defendingDef = attackingMonster.getAttackingPower() - opponentMonster.getDefensivePower();
         StringBuilder answerString = new StringBuilder();
 
+        if (activeTraps(TrapNames.NEGATE_ATTACK)) {
+            return "The attack was stopped due to the activation of the Negate Attack trap by the opponent.";
+        }
+
+        if (activeTraps(TrapNames.MAGIC_CYLINDER)) {
+            return "The attack was stopped due to the activation of the Magic Cylinder trap by the opponent.";
+        }
+
+        if (activeTraps(TrapNames.MIRROR_FORCE)) {
+            return "The attack was stopped due to the activation of the Mirror Force trap by the opponent.";
+        }
+
+        gameUpdates.addMonstersToAttackedMonsters(attackingMonster);
         if (opponentMonster.getCardName().equals("The Calculator")) {
             int attack = AllMonsterEffects.getInstance().theCalculatorAtkPower(attackingPlayerBoard);
             attackingDef += attack;
@@ -660,6 +673,11 @@ public class GameController {
     }
 
     public boolean activateSpellCard() {
+        boolean trapActivate = activeTraps(TrapNames.MAGIC_JAMAMER);
+        if (trapActivate) {
+            MainController.getInstance().sendPrintRequestToView("Your spell card was destroyed by opponent trap.");
+            return false;
+        }
         SpellAndTrap spell = (SpellAndTrap) selectedCard;
         Board board = getPlayerByTurn().getBoard();
         if (spell.getIcon() == RITUAL) {
@@ -782,6 +800,7 @@ public class GameController {
             case STANDBY -> {
                 answerAnswer.append("phase: First Main Phase");
                 currentPhase = FIRST_MAIN;
+                activeTraps(TrapNames.CALL_OF_THE_HAUNTED);
             }
             case FIRST_MAIN -> {
                 answerAnswer.append("phase: Battle Phase");
@@ -790,6 +809,7 @@ public class GameController {
             case BATTLE -> {
                 answerAnswer.append("phase: Second Phase");
                 currentPhase = SECOND_MAIN;
+                activeTraps(TrapNames.CALL_OF_THE_HAUNTED);
             }
             case SECOND_MAIN -> {
                 answerAnswer.append("phase: End Phase\n");
@@ -825,6 +845,12 @@ public class GameController {
     }
 
     private String drawPhase() {
+        activeTraps(TrapNames.TIME_SEAL);
+        if (!gameUpdates.isCanPlayerDrawACard()) {
+            gameUpdates.setCanPlayerDrawACard(true);
+            StringBuilder answer = new StringBuilder("You can not draw new card Because the opponent has activated Time seal trap");
+            return answer.toString();
+        }
         StringBuilder answer = new StringBuilder("new card added to the hand : ");
         game.getPlayerByTurn(turn).getBoard().addCardFromRemainingToInHandCards();
         answer.append(game.getPlayerByTurn(turn).getBoard().getInHandCards().get(game.getPlayerByTurn(turn).getBoard().getInHandCards().size() - 1).getCardName());
@@ -991,14 +1017,66 @@ public class GameController {
         MainController.getInstance().sendPrintRequestToView("Cheat Code Activated!\nyou have a new card in your hand now!\n");
     }
 
-    public void activeTraps(TrapNames trapName) {
+    public boolean activeTraps(TrapNames trapName) {
         AllTrapsEffects allTrapsEffects = AllTrapsEffects.getInstance();
         switch (trapName) {
             case TRAP_HOLE -> {
                 if (allTrapsEffects.canTrapHoleActivate(selectedCard, game, turn, trapName)) {
                     allTrapsEffects.trapHoleEffect(selectedCard, game, gameUpdates, turn);
+                    return true;
                 }
+                return false;
+            }
+            case TORRENTIAL_TRIBUTE -> {
+                if (allTrapsEffects.canTorrentialTributeActivate(game, turn, trapName)) {
+                    allTrapsEffects.torrentialTributeEffect(game, gameUpdates, turn);
+                    return true;
+                }
+                return false;
+            }
+            case MAGIC_CYLINDER -> {
+                if (allTrapsEffects.canMagicCylinderActivate(game, turn, trapName)) {
+                    allTrapsEffects.magicCylinderEffect(selectedCard, game, gameUpdates, turn);
+                    return true;
+                }
+                return false;
+            }
+            case MIRROR_FORCE -> {
+                if (allTrapsEffects.canMirrorForceActivate(game, turn, trapName)) {
+                    allTrapsEffects.mirrorForceEffect(game, gameUpdates, turn);
+                    return true;
+                }
+                return false;
+            }
+            case NEGATE_ATTACK -> {
+                if (allTrapsEffects.canNegateAttackActivate(game, turn, trapName, currentPhase)) {
+                    allTrapsEffects.negateAttackEffect(game, gameUpdates, turn);
+                    return true;
+                }
+                return false;
+            }
+            case MAGIC_JAMAMER -> {
+                if (allTrapsEffects.canMagicJammerActivate(game, turn, trapName)) {
+                    allTrapsEffects.magicJammerEffect(selectedCard, game, gameUpdates, turn);
+                    return true;
+                }
+                return false;
+            }
+            case TIME_SEAL -> {
+                if (allTrapsEffects.canTimeSealActivate(currentPhase, game, turn, trapName)) {
+                    allTrapsEffects.timeSealEffect(game, gameUpdates, turn);
+                    return true;
+                }
+                return false;
+            }
+            case CALL_OF_THE_HAUNTED -> {
+                if (allTrapsEffects.canCallOfTheHauntedActivate(currentPhase, game, turn, trapName)) {
+                    allTrapsEffects.callOfTheHauntedEffect(game, gameUpdates, turn);
+                    return true;
+                }
+                return false;
             }
         }
+        return false;
     }
 }

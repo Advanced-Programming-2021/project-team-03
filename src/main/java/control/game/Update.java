@@ -22,9 +22,11 @@ public class Update {
     private final HashMap<Player, Boolean> canPlayerActivateATrap;
     private final HashMap<Player, Boolean> playerRingOfDefenseActivator;
     private final HashMap<Player, Integer> isSupplySquadActivated;
+    private boolean canPlayerDrawACard;
 
     public Update(Game game) {
         this.game = game;
+        this.canPlayerDrawACard = true;
         alreadyAttackedMonsters = new ArrayList<>();
         haveBeenSetOrSummonACardInPhase = false;
         alreadyChangedPositionMonsters = new ArrayList<>();
@@ -193,5 +195,13 @@ public class Update {
 
     public HashMap<Player, Integer> getIsSupplySquadActivated() {
         return isSupplySquadActivated;
+    }
+
+    public boolean isCanPlayerDrawACard() {
+        return canPlayerDrawACard;
+    }
+
+    public void setCanPlayerDrawACard(boolean canPlayerDrawACard) {
+        this.canPlayerDrawACard = canPlayerDrawACard;
     }
 }

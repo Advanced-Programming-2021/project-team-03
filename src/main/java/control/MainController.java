@@ -399,6 +399,7 @@ public class MainController {
             answerObject.put("Value", result);
             if (result.startsWith("summoned successfully")) {
                 GameController.getInstance().activeTraps(TrapNames.TRAP_HOLE);
+                GameController.getInstance().activeTraps(TrapNames.TORRENTIAL_TRIBUTE);
             }
         }
 
