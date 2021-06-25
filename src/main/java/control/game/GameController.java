@@ -36,15 +36,6 @@ public class GameController {
     private static GameController gameController;
 
     private GameController() {
-        this.currentPhase = DRAW;
-        this.currentRound = 1;
-
-        // creating a random number to determine the starting player
-        Random random = new Random();
-        if (random.nextInt(2) % 2 == 0)
-            turn = PLAYER1;
-        else
-            turn = PLAYER2;
     }
 
     public static GameController getInstance() {
@@ -62,12 +53,22 @@ public class GameController {
     private int currentRound;
 
     public void newDuel(String firstPlayerName, String secondPlayerName, int numberOfRound) {
+        this.currentPhase = DRAW;
+        this.currentRound = 1;
+
+        // creating a random number to determine the starting player
+        Random random = new Random();
+        if (random.nextInt(2) % 2 == 0)
+            turn = PLAYER1;
+        else
+            turn = PLAYER2;
+
         game = new Game(User.getByUsername(firstPlayerName), User.getByUsername(secondPlayerName), numberOfRound);
         gameUpdates = new Update(game);
 
         StringBuilder answer = new StringBuilder();
 
-        answer.append("Duel starts between").append(firstPlayerName).append(" & ").append(secondPlayerName);
+        answer.append("Duel starts between").append(firstPlayerName).append(" & ").append(secondPlayerName).append('\n');
         if (turn == PLAYER1)
             answer.append("its ").append(game.getPlayer1().getUser().getNickname()).append("’s turn\n");
         else
@@ -117,7 +118,7 @@ public class GameController {
                     return true;
             }
             case "Hand" -> {
-                return board.getInHandCards().size() > cardPosition;
+                return board.getInHandCards().size() >= cardPosition;
             }
         }
         return false;

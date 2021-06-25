@@ -272,7 +272,7 @@ public class Board {
     }
 
     public Card getInHandCardByPosition(int cardPosition) {
-        return inHandCards.get(cardPosition);
+        return inHandCards.get(cardPosition - 1);
     }
 
     public void addFieldSpellToHand() {

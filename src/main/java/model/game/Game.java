@@ -112,7 +112,6 @@ public class Game {
         } catch (DatabaseException e) {
             e.printStackTrace();
         }
-
     }
 
     public Player getWinner() {

@@ -762,7 +762,10 @@ public class View {
             else if (inputCommand.matches(GAME_MENU_COMMANDS[13])) attackToMonster(inputCommand);
             else if (inputCommand.matches(GAME_MENU_COMMANDS[14])) directAttack();
             else if (inputCommand.matches(GAME_MENU_COMMANDS[15])) {
-                if (surrender()) break; // means surrender request accepted and the game is over.
+                if (surrender()){
+                    isGameOver = true;
+                    break; // means surrender request accepted and the game is over.
+                }
             } else if (inputCommand.matches(GAME_MENU_COMMANDS[16])) showSelectedCard();
             else if (inputCommand.matches(GAME_MENU_COMMANDS[17])) showGraveyard();
             else if (inputCommand.matches(GAME_MENU_COMMANDS[18])) goToTheNextPhase();
