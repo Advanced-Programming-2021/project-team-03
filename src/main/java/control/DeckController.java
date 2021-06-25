@@ -72,10 +72,6 @@ public class DeckController {
         }
     }
 
-    public boolean doesDeckContainThisCard(String deckName, DeckType deckType, String cardName) {
-        return Deck.getByDeckName(deckName).doesContainCard(Card.getCardByName(cardName), deckType);
-    }
-
     public void removeCardFromDeck(String deckName, DeckType deckType, String cardName) {
         try {
             Deck.getByDeckName(deckName).removeCard(Card.getCardByName(cardName), deckType);

@@ -568,7 +568,7 @@ public class MainController {
         else if (!DeckController.getInstance().doesDeckExist(deckName)) {
             answerObject.put("Type", "Error")
                     .put("Value", "deck with name " + deckName + " does not exist");
-        } else if (!DeckController.getInstance().doesDeckContainThisCard(deckName, DeckType.valueOf(deckType.toUpperCase()), cardName)) {
+        } else if (!Deck.getByDeckName(deckName).doesContainCard(Card.getCardByName(cardName), DeckType.valueOf(deckType.toUpperCase()))) {
             answerObject.put("Type", "Error")
                     .put("Value", "card with name " + cardName + " does not exist in " + deckName + " deck");
         } else {
@@ -582,7 +582,7 @@ public class MainController {
         String token = valueObject.getString("Token");
         String deckName = valueObject.getString("Deck name");
         String cardName = valueObject.getString("Card name");
-        String deckType = valueObject.getString("Deck type");
+        DeckType deckType = DeckType.valueOf(valueObject.getString("Deck type").toUpperCase());
 
         // answer Json object
         JSONObject answerObject = new JSONObject();
@@ -593,17 +593,16 @@ public class MainController {
             answerObject.put("Type", "Error").put("Value", "card with name " + cardName + " does not exist");
         } else if (!DeckController.getInstance().doesUserHaveAnymoreCard(onlineUsers.get(token), cardName, deckName)) {
             answerObject.put("Type", "Error").put("Value", "you don't have anymore " + cardName);
-        } else if (DeckController.getInstance().isDeckFull(deckName, DeckType.valueOf(deckType.toUpperCase()))) {
-            answerObject.put("Type", "Error").put("Value", deckType + " deck is full");
+        } else if (DeckController.getInstance().isDeckFull(deckName, deckType)) {
+            answerObject.put("Type", "Error").put("Value", deckType.name() + " deck is full");
         } else if (!DeckController.getInstance().canUserAddCardToDeck(deckName, cardName)) {
             answerObject.put("Type", "Error")
                     .put("Value", "There are already three cards with name " + cardName + " in deck " + deckName);
         } else {
-            DeckController.getInstance().addCardToDeck(deckName, DeckType.valueOf(deckType.toUpperCase()), cardName);
+            DeckController.getInstance().addCardToDeck(deckName, deckType, cardName);
             answerObject.put("Type", "Successful")
-                    .put("Value", "card added to " + deckType + " deck successfully!");
+                    .put("Value", "card added to " + deckType.name() + " deck successfully!");
         }
-
         return answerObject.toString();
     }
 
