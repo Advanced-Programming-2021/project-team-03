@@ -11,7 +11,6 @@ import model.game.Player;
 import model.game.PlayerTurn;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +35,7 @@ public class AllMonsterEffects {
             Monster monster = monsterEntry.getValue();
             monster.addToAttackSupplier(400);
         }
+        MainController.getInstance().sendPrintRequestToView("Command Knight effect Activated!");
     }
 
 
@@ -44,8 +44,7 @@ public class AllMonsterEffects {
         game.getPlayerByTurn(turn).getBoard().removeCardFromField(game.getPlayerByTurn(turn).getBoard().getMonsterPosition((Monster) selectedCard), true);
         game.getPlayerByTurn(turn).getBoard().addCardToGraveyard(selectedCard);
         gameUpdates.addCardToGraveyard(selectedCard);
-
-        //TODO System.out.println(); in the view
+        MainController.getInstance().sendPrintRequestToView("Yomi Ship effect activated!\n" + selectedCard.getCardName() + " Destroyed and moved to graveyard!\n");
     }
 
     //Suijin effect
@@ -167,6 +166,7 @@ public class AllMonsterEffects {
     }
 
     public int theCalculatorAtkPower(Board attackingPlayerBoard) {
+        MainController.getInstance().sendPrintRequestToView("Calculator is calculating its attacking power!\n");
         return 300 * attackingPlayerBoard.getMonstersInField().values().stream()
                 .filter(monster -> monster.getFaceUpSituation() == FACE_UP)
                 .mapToInt(Monster::getAttackingPower).sum();
@@ -174,6 +174,7 @@ public class AllMonsterEffects {
 
     public void mirageDragonEffect(Update gameUpdates, PlayerTurn turn, Game game) {
         gameUpdates.getCanPlayerActivateATrap().replace(game.getPlayerOpponentByTurn(turn), false);
+        MainController.getInstance().sendPrintRequestToView("Mirage dragon effect activated!\n");
     }
 
     public void beastKingBarbarosEffect(Update gameUpdates, PlayerTurn turn, Game game) {
@@ -186,6 +187,7 @@ public class AllMonsterEffects {
             int position = entry.getKey();
             opponentBoard.addCardToGraveyard(monster);
             opponentBoard.removeCardFromField(position, true);
+            MainController.getInstance().sendPrintRequestToView(monster.getCardName() + " Destroyed and moved to graveyard!\n");
             if (monster.getFaceUpSituation() == FACE_UP) gameUpdates.addCardToGraveyard(monster);
         }
         for (Map.Entry<Integer, SpellAndTrap> entry : spellAndTrapsInField.entrySet()) {
@@ -193,11 +195,14 @@ public class AllMonsterEffects {
             int position = entry.getKey();
             opponentBoard.addCardToGraveyard(spellAndTrap);
             opponentBoard.removeCardFromField(position, false);
+            MainController.getInstance().sendPrintRequestToView(spellAndTrap.getCardName() + " Destroyed and moved to graveyard!\n");
             if (spellAndTrap.isActive()) gameUpdates.addCardToGraveyard(spellAndTrap);
         }
         opponentBoard.addCardToGraveyard(fieldCard);
-        opponentBoard.removeFieldCard(game,turn);
+        opponentBoard.removeFieldCard(game, turn);
+        MainController.getInstance().sendPrintRequestToView(fieldCard.getCardName() + " Destroyed and moved to graveyard!\n");
         if (fieldCard.isActive()) gameUpdates.addCardToGraveyard(fieldCard);
+        MainController.getInstance().sendPrintRequestToView("Beast Barbaros effect activated!\n");
     }
 
 }

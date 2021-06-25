@@ -126,7 +126,7 @@ public class MainController {
     }
 
     public String sendRequestToView(JSONObject messageToSend) {
-        //TODO: will be completed in future
+        //TODO: will be complete in future
         /*send the statements of the game to view
          * such as phase name, players' turn, ask for card activation and etc*/
         return View.getInstance().getRequest(messageToSend.toString());
