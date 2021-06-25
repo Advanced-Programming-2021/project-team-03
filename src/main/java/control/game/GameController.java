@@ -789,6 +789,7 @@ public class GameController {
             case STANDBY -> {
                 answerAnswer.append("phase: First Main Phase");
                 currentPhase = FIRST_MAIN;
+                activeTraps(TrapNames.CALL_OF_THE_HAUNTED);
             }
             case FIRST_MAIN -> {
                 answerAnswer.append("phase: Battle Phase");
@@ -797,6 +798,7 @@ public class GameController {
             case BATTLE -> {
                 answerAnswer.append("phase: Second Phase");
                 currentPhase = SECOND_MAIN;
+                activeTraps(TrapNames.CALL_OF_THE_HAUNTED);
             }
             case SECOND_MAIN -> {
                 answerAnswer.append("phase: End Phase\n");
@@ -1049,8 +1051,15 @@ public class GameController {
                 return false;
             }
             case TIME_SEAL -> {
-                if (allTrapsEffects.canTimeSealActivate(currentPhase,game, turn, trapName)) {
+                if (allTrapsEffects.canTimeSealActivate(currentPhase, game, turn, trapName)) {
                     allTrapsEffects.timeSealEffect(game, gameUpdates, turn);
+                    return true;
+                }
+                return false;
+            }
+            case CALL_OF_THE_HAUNTED -> {
+                if (allTrapsEffects.canCallOfTheHauntedActivate(currentPhase, game, turn, trapName)) {
+                    allTrapsEffects.callOfTheHauntedEffect(game, gameUpdates, turn);
                     return true;
                 }
                 return false;

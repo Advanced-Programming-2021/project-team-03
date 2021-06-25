@@ -178,6 +178,14 @@ public class Board {
         removeCardFromHand(card);
     }
 
+    public void addMonsterFromGraveYardToFiled(Monster monster) { //action type will be set or summon
+        int index = findPositionToSetOrSummonMonsterCard(monstersInField);
+        monstersInField.put(index, monster);
+        monster.setAttackingFormat(ATTACKING);
+        monster.setFaceUpSituation(FACE_UP);
+        graveyard.remove(monster);
+    }
+
     //representation of the boards in console
     public String showAsEnemyBoard() {
         board.delete(0, board.length());

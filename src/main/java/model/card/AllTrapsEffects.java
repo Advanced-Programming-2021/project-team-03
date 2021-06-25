@@ -145,8 +145,8 @@ public class AllTrapsEffects {
 
     public boolean canNegateAttackActivate(Game game, PlayerTurn playerTurn, TrapNames trapName, GamePhases currentPhase) {
         return doesTheOpponentHaveTheDesiredTrap(game, playerTurn, trapName)
-                && doesTheUserWantToEnableTheTrap(game, playerTurn, trapName)
-                && currentPhase == GamePhases.BATTLE;
+                && currentPhase == GamePhases.BATTLE
+                && doesTheUserWantToEnableTheTrap(game, playerTurn, trapName);
     }
 
     public void negateAttackEffect(Game game, Update gameUpdates, PlayerTurn turn) {
@@ -156,8 +156,8 @@ public class AllTrapsEffects {
 
     public boolean canTimeSealActivate(GamePhases currentPhase, Game game, PlayerTurn playerTurn, TrapNames trapName) {
         return doesTheOpponentHaveTheDesiredTrap(game, playerTurn, trapName)
-                && doesTheUserWantToEnableTheTrap(game, playerTurn, trapName)
-                && currentPhase == GamePhases.DRAW;
+                && currentPhase == GamePhases.DRAW
+                && doesTheUserWantToEnableTheTrap(game, playerTurn, trapName);
     }
 
     public void timeSealEffect(Game game, Update gameUpdates, PlayerTurn turn) {
@@ -194,6 +194,43 @@ public class AllTrapsEffects {
         opponentBoard.removeCardFromField(opponentBoard.getSpellPosition(trap), false);
     }
 
+    public boolean canCallOfTheHauntedActivate(GamePhases currentPhase, Game game, PlayerTurn playerTurn, TrapNames trapName) {
+        return doesThePlayerHaveTheDesiredTrap(game, playerTurn, trapName)
+                && (currentPhase == GamePhases.FIRST_MAIN || currentPhase == GamePhases.SECOND_MAIN)
+                && getThePlayerLastDeletedMonsterInGraveYard(game, playerTurn) != null
+                && game.getPlayerByTurn(playerTurn).getBoard().getMonstersInField().size() < 5
+                && doesTheUserWantToEnableTheTrapInOwnTurn(game, playerTurn, trapName);
+    }
+
+    private boolean doesThePlayerHaveTheDesiredTrap(Game game, PlayerTurn playerTurn, TrapNames trapName) {
+        Board board = game.getPlayerByTurn(playerTurn).getBoard();
+        return getTheDesiredTrapFormBoard(board, trapName) != null;
+    }
+
+    private Monster getThePlayerLastDeletedMonsterInGraveYard(Game game, PlayerTurn playerTurn) {
+        Board board = game.getPlayerByTurn(playerTurn).getBoard();
+        ArrayList<Card> graveyard = board.getGraveyard();
+        for (Card card : graveyard) {
+            if (card instanceof Monster) {
+                Monster monster = (Monster) card;
+                return monster;
+            }
+        }
+        return null;
+    }
+
+    public void callOfTheHauntedEffect(Game game, Update gameUpdates, PlayerTurn turn) {
+        Monster monster = getThePlayerLastDeletedMonsterInGraveYard(game, turn);
+        Board board = game.getPlayerByTurn(turn).getBoard();
+        board.addMonsterFromGraveYardToFiled(monster);
+
+        SpellAndTrap trap = getTheDesiredTrapFormBoard(board, TrapNames.CALL_OF_THE_HAUNTED);
+        trap.setActive(true);
+        board.addCardToGraveyard(trap);
+        gameUpdates.addCardToGraveyard(trap);
+        board.removeCardFromField(board.getSpellPosition(trap), false);
+    }
+
     public boolean doesTheUserWantToEnableTheTrap(Game game, PlayerTurn turn, TrapNames trapName) {
         JSONObject messageToSendToView = new JSONObject();
         messageToSendToView.put("Type", "Trap activate request");
@@ -214,6 +251,22 @@ public class AllTrapsEffects {
                 .append("’s turn\n")
                 .append(game.showGameBoards())
                 .append("\n");
+        value.put("Second message", secondMessage);
+        messageToSendToView.put("Value", value);
+        JSONObject answer = new JSONObject(MainController.getInstance().sendRequestToView(messageToSendToView));
+        String type = answer.getString("Type");
+        return type.equals("Yes");
+    }
+
+    private boolean doesTheUserWantToEnableTheTrapInOwnTurn(Game game, PlayerTurn playerTurn, TrapNames trapName) {
+        JSONObject messageToSendToView = new JSONObject();
+        messageToSendToView.put("Type", "Trap activate request");
+        JSONObject value = new JSONObject();
+        StringBuilder firstMessage = new StringBuilder();
+        firstMessage.append("You can Active your ").append(trapName.getName()).append(" trap in your turn.");
+        value.put("First message", firstMessage);
+        StringBuilder secondMessage = new StringBuilder();
+        secondMessage.append("Trap not activated");
         value.put("Second message", secondMessage);
         messageToSendToView.put("Value", value);
         JSONObject answer = new JSONObject(MainController.getInstance().sendRequestToView(messageToSendToView));
