@@ -21,7 +21,7 @@ public class DeckController {
         return deckController;
     }
 
-    public boolean doesDeckAlreadyExist(String deckName) {
+    public boolean doesDeckExist(String deckName) {
         return Deck.getByDeckName(deckName) != null;
     }
 

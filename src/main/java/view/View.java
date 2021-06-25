@@ -478,7 +478,7 @@ public class View {
         otherDecks.forEach(System.out::println);
     }
 
-    private void showAllUserCards() {
+    void showAllUserCards() {
         //Making message JSONObject and passing to sendControl function:
         JSONObject value = new JSONObject();
         value.put("Token", token);
@@ -488,11 +488,11 @@ public class View {
         JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
 
         //Survey control JSON message
-        String answerValue = (String) controlAnswer.get("Value");
-        System.out.println(answerValue);
+        JSONArray answerValue = (JSONArray) controlAnswer.get("Value");
+        answerValue.forEach(System.out::println);
     }
 
-    private void showDeck(String inputCommand, int commandRegexIndex) {
+    void showDeck(String inputCommand, int commandRegexIndex) {
         getRegexMatcher(inputCommand, DECK_MENU_COMMANDS[commandRegexIndex], true);
 
         String deckName = regexMatcher.group(2);
