@@ -663,7 +663,7 @@ public class GameController {
 
     public boolean activateSpellCard() {
         boolean trapActivate = activeTraps(TrapNames.MAGIC_JAMAMER);
-        if (trapActivate){
+        if (trapActivate) {
             MainController.getInstance().sendPrintRequestToView("Your spell card was destroyed by opponent trap.");
             return false;
         }
@@ -832,6 +832,12 @@ public class GameController {
     }
 
     private String drawPhase() {
+        activeTraps(TrapNames.TIME_SEAL);
+        if (!gameUpdates.isCanPlayerDrawACard()) {
+            gameUpdates.setCanPlayerDrawACard(true);
+            StringBuilder answer = new StringBuilder("You can not draw new card Because the opponent has activated Time seal trap");
+            return answer.toString();
+        }
         StringBuilder answer = new StringBuilder("new card added to the hand : ");
         game.getPlayerByTurn(turn).getBoard().addCardFromRemainingToInHandCards();
         answer.append(game.getPlayerByTurn(turn).getBoard().getInHandCards().get(game.getPlayerByTurn(turn).getBoard().getInHandCards().size() - 1).getCardName());
@@ -1029,7 +1035,7 @@ public class GameController {
                 return false;
             }
             case NEGATE_ATTACK -> {
-                if (allTrapsEffects.canNegateAttackActivate(game, turn, trapName)) {
+                if (allTrapsEffects.canNegateAttackActivate(game, turn, trapName, currentPhase)) {
                     allTrapsEffects.negateAttackEffect(game, gameUpdates, turn);
                     return true;
                 }
@@ -1037,7 +1043,14 @@ public class GameController {
             }
             case MAGIC_JAMAMER -> {
                 if (allTrapsEffects.canMagicJammerActivate(game, turn, trapName)) {
-                    allTrapsEffects.magicJammerEffect(selectedCard,game, gameUpdates, turn);
+                    allTrapsEffects.magicJammerEffect(selectedCard, game, gameUpdates, turn);
+                    return true;
+                }
+                return false;
+            }
+            case TIME_SEAL -> {
+                if (allTrapsEffects.canTimeSealActivate(currentPhase,game, turn, trapName)) {
+                    allTrapsEffects.timeSealEffect(game, gameUpdates, turn);
                     return true;
                 }
                 return false;

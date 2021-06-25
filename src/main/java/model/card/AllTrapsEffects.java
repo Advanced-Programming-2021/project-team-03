@@ -1,6 +1,7 @@
 package model.card;
 
 import control.MainController;
+import control.game.GamePhases;
 import control.game.Update;
 import model.enums.AttackingFormat;
 import model.enums.FaceUpSituation;
@@ -142,9 +143,10 @@ public class AllTrapsEffects {
         }
     }
 
-    public boolean canNegateAttackActivate(Game game, PlayerTurn playerTurn, TrapNames trapName) {
+    public boolean canNegateAttackActivate(Game game, PlayerTurn playerTurn, TrapNames trapName, GamePhases currentPhase) {
         return doesTheOpponentHaveTheDesiredTrap(game, playerTurn, trapName)
-                && doesTheUserWantToEnableTheTrap(game, playerTurn, trapName);
+                && doesTheUserWantToEnableTheTrap(game, playerTurn, trapName)
+                && currentPhase == GamePhases.BATTLE;
     }
 
     public void negateAttackEffect(Game game, Update gameUpdates, PlayerTurn turn) {
@@ -152,13 +154,14 @@ public class AllTrapsEffects {
         View.getInstance().goToTheNextPhase();
     }
 
-    public boolean canTimeSealActivate(Game game, PlayerTurn playerTurn, TrapNames trapName) {
-        //TODO
-        return false;
+    public boolean canTimeSealActivate(GamePhases currentPhase, Game game, PlayerTurn playerTurn, TrapNames trapName) {
+        return doesTheOpponentHaveTheDesiredTrap(game, playerTurn, trapName)
+                && doesTheUserWantToEnableTheTrap(game, playerTurn, trapName)
+                && currentPhase == GamePhases.DRAW;
     }
 
     public void timeSealEffect(Game game, Update gameUpdates, PlayerTurn turn) {
-        //TODO
+        gameUpdates.setCanPlayerDrawACard(false);
     }
 
     public boolean canMagicJammerActivate(Game game, PlayerTurn playerTurn, TrapNames trapName) {
