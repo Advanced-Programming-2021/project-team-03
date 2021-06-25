@@ -4,6 +4,11 @@ import model.enums.CardAttributes;
 
 public abstract class Card {
     protected String cardName;
+
+    public String getCardID() {
+        return cardID;
+    }
+
     protected String cardID;
     protected String description;
     protected int price;

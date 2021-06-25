@@ -149,4 +149,9 @@ public class Monster extends Card {
     public void setBaseAttack(int baseAttack) {
         this.baseAttack = baseAttack;
     }
+
+    public Monster addToAllMonsters() {
+        allMonsters.put(this.getCardName(), this);
+        return this;
+    }
 }

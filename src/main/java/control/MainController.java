@@ -1,5 +1,7 @@
 package control;
 
+import control.databaseController.Database;
+import control.databaseController.DatabaseException;
 import control.game.GameController;
 import model.card.Card;
 import model.card.Monster;
@@ -765,13 +767,17 @@ public class MainController {
         JSONObject answerObject = new JSONObject();
 
         if (isTokenInvalid(token)) putTokenError(answerObject);
-        else if (!ImportExportController.getInstance().canExportThisCard(cardName)) {
-            answerObject.put("Type", "Error").put("Value", "can't export this card!");
+        else if (Card.getCardByName(cardName) == null) {
+            answerObject.put("Type", "Error").put("Value", "no card found with this name in your database!");
         } else {
-            ImportExportController.getInstance().exportCard(cardName);
-            answerObject.put("Type", "Successful").put("Value", "card exports successfully!");
+            try {
+                Database.save(Card.getCardByName(cardName));
+                answerObject.put("Type", "Successful")
+                        .put("Value", "card exported successfully in " + Database.CARDS_EXPORT_PATH);
+            } catch (DatabaseException e) {
+                answerObject.put("Type", "Error").put("Value", "couldn't export this card: " + e.errorMessage);
+            }
         }
-
         return answerObject.toString();
     }
 
@@ -783,11 +789,13 @@ public class MainController {
         JSONObject answerObject = new JSONObject();
 
         if (isTokenInvalid(token)) putTokenError(answerObject);
-        else if (!ImportExportController.getInstance().canImportThisCard(cardName)) {
-            answerObject.put("Type", "Error").put("Value", "can't import this card!");
-        } else {
-            ImportExportController.getInstance().importCard(cardName);
-            answerObject.put("Type", "Successful").put("Value", "card imports successfully!");
+        else {
+            try {
+                Database.importCard(cardName);
+                answerObject.put("Type", "Successful").put("Value", "card imported successfully!");
+            } catch (DatabaseException e) {
+                answerObject.put("Type", "Error").put("Value", "can't import this card:\n" + e.errorMessage);
+            }
         }
         return answerObject.toString();
     }

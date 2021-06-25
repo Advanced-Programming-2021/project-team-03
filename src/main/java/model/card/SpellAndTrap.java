@@ -11,6 +11,7 @@ public class SpellAndTrap extends Card {
     private boolean isActive;
     private static HashMap<String, SpellAndTrap> allSpellAndTraps;
 
+
     public static void initialize() {
         try {
             allSpellAndTraps = Database.updateSpellAndTraps();
@@ -60,5 +61,10 @@ public class SpellAndTrap extends Card {
         SpellAndTrap clone = new SpellAndTrap(cardName, attribute, description, price, cardID, icon);
         clone.isActive = this.isActive;
         return clone;
+    }
+
+    public SpellAndTrap addToAllSpells() {
+        allSpellAndTraps.put(this.getCardName(), this);
+        return this;
     }
 }
