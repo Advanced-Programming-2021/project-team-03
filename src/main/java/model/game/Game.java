@@ -27,7 +27,7 @@ public class Game {
     public Game(User user1, int numberOfRounds) {
         /*duel with AI*/
         this.player1 = new Player(8000, new Board(user1.getActiveDeck(), user1), user1);
-        this.player2 = new AIBot(8000, new Board(User.getByUsername("AIBot").getActiveDeck(), User.getByUsername("AIBot")), User.getByUsername("AIBot"));
+        this.player2 = new Player(8000, new Board(User.getByUsername("AIBot").getActiveDeck(), User.getByUsername("AIBot")), User.getByUsername("AIBot"));
         this.numberOfRounds = numberOfRounds;
         filedActivated = false;
     }
