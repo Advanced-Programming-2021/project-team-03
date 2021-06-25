@@ -49,9 +49,7 @@ public class UserController {
     public void changePassword(String username, String newPassword) {
         try {
             User.getByUsername(username).changePassword(newPassword);
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
+        } catch (DatabaseException e) { e.printStackTrace(); }
     }
 
     public String getAllUsersForUsername() {

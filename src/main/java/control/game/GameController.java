@@ -751,10 +751,8 @@ public class GameController {
     }
 
     public void changeTurn() {
-        if (turn == PLAYER1)
-            turn = PLAYER2;
-        else
-            turn = PLAYER1;
+        if (turn == PLAYER1) turn = PLAYER2;
+        else turn = PLAYER1;
     }
 
     public PlayerTurn getTurn() {
