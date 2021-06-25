@@ -186,7 +186,7 @@ public class Board {
         int GY = graveyard.size();
         int DN = remainingCards.size();
 
-        board.append("\t").append("c\t".repeat(inHandCards.size()));
+        board.append("\t").append("c\t".repeat(inHandCards.size())).append('\n');
         board.append(DN).append("\n");
 
         showSpellAndTrapsOnBoard(cardOrders);
@@ -208,20 +208,21 @@ public class Board {
         int GY = graveyard.size();
         int DN = remainingCards.size();
         if (fieldCard != null)
-            board.append("O\t\t\t\t\t\t").append(GY).append("\n\t");
+            board.append("O\t\t\t\t\t\t").append(GY).append("\n");
         else
-            board.append("E\t\t\t\t\t\t").append(GY).append("\n\t");
+            board.append("E\t\t\t\t\t\t").append(GY).append("\n");
 
         showMonstersOnBoard(cardOrders);
         showSpellAndTrapsOnBoard(cardOrders);
 
-        board.append("\t\t\t\t\t\t").append(DN).append("\n");
+        board.append("\t\t\t\t\t\t").append(DN).append("\n\t");
         board.append("c\t".repeat(inHandCards.size()));
         board.append("\n");
         return board.toString();
     }
 
     private void showSpellAndTrapsOnBoard(int[] cardOrders) {
+        board.append('\t');
         for (int i : cardOrders) {
             if (spellAndTrapsInField.containsKey(i) && spellAndTrapsInField.get(5).isActive())
                 board.append("O \t");
@@ -230,11 +231,13 @@ public class Board {
             else
                 board.append("E \t");
         }
+        board.append('\n');
     }
 
     private void showMonstersOnBoard(int[] cardOrders) {
         AttackingFormat cardAttackingFormat;
         FaceUpSituation cardFaceUpSituation;
+        board.append('\t');
 
         for (int i : cardOrders) {
             if (monstersInField.containsKey(i)) {
@@ -249,6 +252,7 @@ public class Board {
             } else
                 board.append("E \t");
         }
+        board.append('\n');
     }
 
     public boolean doesContainCard(Card card) {

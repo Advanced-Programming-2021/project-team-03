@@ -68,11 +68,11 @@ public class Game {
     }
 
     private void boardBuilder(StringBuilder board, Player firstPlayer, Player secondPlayer) {
-        board.append(firstPlayer.getUser().getNickname()).append(":").append(firstPlayer.getHealth()).append("\n");
+        board.append(firstPlayer.getUser().getNickname()).append(": ").append(firstPlayer.getHealth()).append("\n");
         board.append(firstPlayer.getBoard().showAsEnemyBoard());
-        board.append("\n--------------------------\n\n\n");
+        board.append("\n--------------------------\n\n");
         board.append(secondPlayer.getBoard().toString());
-        board.append(secondPlayer.getUser().getNickname()).append(":").append(secondPlayer.getHealth()).append("\n");
+        board.append(secondPlayer.getUser().getNickname()).append(": ").append(secondPlayer.getHealth()).append("\n");
     }
 
     public Board getCardsInBoard(Card card) { /* monster effect */
@@ -110,7 +110,7 @@ public class Game {
             getPlayerByTurn(turn).getUser().increaseScore(-1000);
             getPlayerOpponentByTurn(turn).getUser().increaseScore(1000);
         } catch (DatabaseException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
 
     }

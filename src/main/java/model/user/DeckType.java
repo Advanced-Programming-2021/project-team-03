@@ -4,7 +4,7 @@ public enum DeckType {
     MAIN("Main deck", 40, 60),
     SIDE("Side deck", 0, 15);
 
-    String name;
+    private String name;
     int minCards;
     int maxCards;
 
@@ -12,5 +12,9 @@ public enum DeckType {
         this.name = name;
         this.minCards = minCards;
         this.maxCards = maxCards;
+    }
+
+    public String getName() {
+        return name;
     }
 }

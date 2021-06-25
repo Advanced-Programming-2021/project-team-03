@@ -177,7 +177,11 @@ public class View {
         // parsing the json string request with JSONObject library
         JSONObject inputObject = new JSONObject(input);
         String requestType = inputObject.getString("Type");
-        JSONObject valueObject = inputObject.getJSONObject("Value");
+        JSONObject valueObject = new JSONObject();
+        try {
+            valueObject = inputObject.getJSONObject("Value");
+        } catch (Exception ignored) {
+        }
 
         return switch (requestType) {
             case "Get tribute cards" -> getTributeCards(valueObject);
@@ -661,12 +665,10 @@ public class View {
 
         //Survey control JSON message
         String answerType = (String) controlAnswer.get("Type");
-        if (answerType.equals("Successful")) {
-            gameMenu(); //Will go to the game menu
-        } else {
-            String answerValue = (String) controlAnswer.get("Value");
-            System.out.println(answerValue);
-        }
+        String answerValue = (String) controlAnswer.get("Value");
+        System.out.println(answerValue);
+
+        if (answerType.equals("Successful")) gameMenu(); //Will go to the game menu
     }
 
     private int doesInputMatchWithStartDuelWithAiCommand(String inputCommand) {
@@ -708,6 +710,7 @@ public class View {
 
     //region game menu methods
     private void gameMenu() {
+        showMap();
         isGameOver = false;
         isRoundOver = false;
         boolean mapShowFlag = true;
@@ -720,7 +723,7 @@ public class View {
             mapShowFlag = true;
             if (inputCommand.matches(GAME_MENU_COMMANDS[20])) activeCheat(inputCommand, 20);
             else if (inputCommand.matches(GAME_MENU_COMMANDS[21])) activeCheat(inputCommand, 21);
-            else if ((regexIndex = doesInputMatchWithSelectCardCommand(inputCommand)) != 0)
+            else if ((regexIndex = doesInputMatchWithSelectCardCommand(inputCommand)) != -1)
                 selectCard(inputCommand, regexIndex);
             else if (inputCommand.matches(GAME_MENU_COMMANDS[7])) cancelCardSelection();
             else if (inputCommand.matches(GAME_MENU_COMMANDS[8])) System.out.println("invalid selection");
@@ -787,7 +790,7 @@ public class View {
                 else if (!doesInputCommandHaveRepeatedField(inputCommand, GAME_MENU_COMMANDS[i], 2)) return i;
             }
         }
-        return 0;
+        return -1;
     }
 
     private void selectCard(String inputCommand, int commandRegexIndex) {
@@ -1307,7 +1310,7 @@ public class View {
     }
 
     private String printMessage(JSONObject valueObject) {
-        String message = valueObject.getString("Value");
+        String message = valueObject.getString("Message");
         System.out.println(message);
         return "Do not need request answer";
     }

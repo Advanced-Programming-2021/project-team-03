@@ -133,8 +133,13 @@ public class MainController {
     }
 
     public void sendPrintRequestToView(String message) {
-        sendRequestToView((new JSONObject()).put("Type", "Print message")
-                .put("Value", (new JSONObject()).put("Message", message)));
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("Type", "Print message");
+
+        JSONObject value = new JSONObject();
+        value.put("Message", message);
+        jsonObject.put("Value", value);
+        sendRequestToView(jsonObject);
     }
 
     private String cheatCodes(JSONObject valueObject) {
@@ -462,8 +467,7 @@ public class MainController {
             answerObject.put("Type", "Error").put("Value", rivalName + "’s deck is invalid");
         } else {
             GameController.getInstance().newDuel(onlineUsers.get(token), rivalName, numberOfRound);
-            answerObject.put("Type", "Successful")
-                    .put("Value", "Duel starts between " + onlineUsers.get(token) + " & " + rivalName);
+            answerObject.put("Type", "Successful").put("Value", "");
         }
 
         return answerObject.toString();
@@ -609,14 +613,14 @@ public class MainController {
         } else if (!DeckController.getInstance().doesUserHaveAnymoreCard(onlineUsers.get(token), cardName, deckName)) {
             answerObject.put("Type", "Error").put("Value", "you don't have anymore " + cardName);
         } else if (DeckController.getInstance().isDeckFull(deckName, deckType)) {
-            answerObject.put("Type", "Error").put("Value", deckType.name() + " deck is full");
+            answerObject.put("Type", "Error").put("Value", deckType.getName() + " is full");
         } else if (!DeckController.getInstance().canUserAddCardToDeck(deckName, cardName)) {
             answerObject.put("Type", "Error")
                     .put("Value", "There are already three cards with name " + cardName + " in deck " + deckName);
         } else {
             DeckController.getInstance().addCardToDeck(deckName, deckType, cardName);
             answerObject.put("Type", "Successful")
-                    .put("Value", "card added to " + deckType.name() + " deck successfully!");
+                    .put("Value", "card added to " + deckType.getName() + " successfully!");
         }
         return answerObject.toString();
     }

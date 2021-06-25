@@ -67,6 +67,20 @@ public class GameController {
     public void newDuel(String firstPlayerName, String secondPlayerName, int numberOfRound) {
         game = new Game(User.getByUsername(firstPlayerName), User.getByUsername(secondPlayerName), numberOfRound);
         gameUpdates = new Update(game);
+
+        StringBuilder answer = new StringBuilder();
+
+        answer.append("Duel starts between").append(firstPlayerName).append(" & ").append(secondPlayerName);
+        if (turn == PLAYER1)
+            answer.append("its ").append(game.getPlayer1().getUser().getNickname()).append("’s turn\n");
+        else
+            answer.append("its ").append(game.getPlayer2().getUser().getNickname()).append("’s turn\n");
+
+        answer.append("phase: Draw Phase\n");
+        currentPhase = DRAW;
+        answer.append(drawPhase());
+
+        MainController.getInstance().sendPrintRequestToView(answer.toString());
     }
 
     public void newDuelWithAI(String username, int numberOfRound) {

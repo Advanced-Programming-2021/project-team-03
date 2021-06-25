@@ -57,7 +57,7 @@ public class Deck {
         StringBuilder showDeck = new StringBuilder();
 
         showDeck.append("Deck: ").append(deckName).append("\n");
-        showDeck.append(deckType.name);
+        showDeck.append(deckType.getName());
         showDeck.append(":\nMonsters: \n");
         decks.get(deckType).stream().filter(card -> card instanceof Monster)
                 .sorted((card1, card2) -> card1.getCardName().compareToIgnoreCase(card2.getCardName()))
