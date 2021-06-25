@@ -27,7 +27,7 @@ public class View {
     private final String[] SHOP_MENU_COMMANDS = new String[5];
     private final String[] DECK_MENU_COMMANDS = new String[19];
     private final String[] DUEL_MENU_COMMANDS = new String[12];
-    private final String[] GAME_MENU_COMMANDS = new String[25];
+    private final String[] GAME_MENU_COMMANDS = new String[26];
 
     private final String CARD_SHOW_REGEX = "^card show (.+)$";
 
@@ -152,6 +152,7 @@ public class View {
         GAME_MENU_COMMANDS[22] = "^increase -(?:l|-LP) (.+)$";
         GAME_MENU_COMMANDS[23] = "^duel set-winner (\\S+)$";
         GAME_MENU_COMMANDS[24] = "^increase --money (\\d+)$";
+        GAME_MENU_COMMANDS[25] = "^Hesoyam$";
     }
     //endregion
 
@@ -1095,6 +1096,10 @@ public class View {
             }
             case 24 -> {
                 value.put("Type", "Increase money");
+                value.put("Amount", regexMatcher.group(1));
+            }
+            case 25 -> {
+                value.put("Type", "Hesoyam");
                 value.put("Amount", regexMatcher.group(1));
             }
         }
