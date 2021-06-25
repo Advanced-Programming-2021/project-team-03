@@ -401,6 +401,7 @@ public class MainController {
             answerObject.put("Value", result);
             if (result.startsWith("summoned successfully")) {
                 GameController.getInstance().activeTraps(TrapNames.TRAP_HOLE);
+                GameController.getInstance().activeTraps(TrapNames.TORRENTIAL_TRIBUTE);
             }
         }
 
@@ -458,7 +459,7 @@ public class MainController {
         } else {
             GameController.getInstance().newDuelWithAI(onlineUsers.get(token), numberOfRound);
             answerObject.put("Type", "Successful")
-                    .put("Value", "Duel starts between " + onlineUsers.get(token) + " & AI");
+                    .put("Value", "");
         }
 
         return answerObject.toString();
