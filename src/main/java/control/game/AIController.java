@@ -4,6 +4,7 @@ import control.MainController;
 import model.card.AllMonsterEffects;
 import model.card.Card;
 import model.card.Monster;
+import model.card.SpellAndTrap;
 import model.enums.AttackingFormat;
 import model.enums.MonsterTypes;
 import model.game.Board;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 import java.util.Random;
 
 import static model.enums.FaceUpSituation.FACE_UP;
+import static model.enums.SpellAndTrapIcon.FIELD;
 
 public class AIController {
     private static AIController AIController;
@@ -121,7 +123,33 @@ public class AIController {
     }
 
     private void set() {
-
+        Board board = bot.getBoard();
+        Board opponentBoard = opponent.getBoard();
+        Card card = bot.getBoard().getInHandCards().get(selectedHandIndex);
+        if (card instanceof Monster) {
+            board.setOrSummonMonsterFromHandToFiled(card, "Set");
+        } else {
+            SpellAndTrap spellAndTrap = (SpellAndTrap) card;
+            if (spellAndTrap.getIcon() == FIELD) {
+                if (!game.isFiledActivated()) {
+                    board.setFieldCard(gameUpdate, spellAndTrap);
+                } else if (board.getFieldCard() == game.getActivatedFieldCard()) {
+                    SpellAndTrap opponentFieldCard = (SpellAndTrap) opponentBoard.getFieldCard();
+                    if (opponentFieldCard != null && opponentFieldCard.isActive()) {
+                        game.setActivatedFieldCard(opponentFieldCard);
+                        game.setFiledActivated(true);
+                    } else {
+                        game.setFiledActivated(false);
+                        game.setActivatedFieldCard(null);
+                    }
+                    board.setFieldCard(gameUpdate, spellAndTrap);
+                } else {
+                    board.setFieldCard(gameUpdate, spellAndTrap);
+                }
+            } else {
+                board.setSpellAndTrapsInField(spellAndTrap);
+            }
+        }
     }
 
     private void summon() {
