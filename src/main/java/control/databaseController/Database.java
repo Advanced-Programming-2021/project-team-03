@@ -140,7 +140,8 @@ public class Database {
                     try {
                         BufferedReader reader = new BufferedReader(
                                 new FileReader(DECKS_PATH + file.getName()));
-                        gson.fromJson(reader, DeckJson.class).convert();
+                        DeckJson deckJson = gson.fromJson(reader, DeckJson.class);
+                        if (deckJson != null) deckJson.convert();
                         reader.close();
 
                     } catch (IOException | DatabaseException ignored) {}
