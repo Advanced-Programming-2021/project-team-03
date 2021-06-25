@@ -154,7 +154,7 @@ public class Game {
             getWinner().getUser().increaseScore(1000);
             gameUpdates.playerWins(getWinner());
         } catch (DatabaseException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
