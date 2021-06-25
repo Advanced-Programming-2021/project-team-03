@@ -139,7 +139,16 @@ public class MainController {
 
     private String cheatCodes(JSONObject valueObject) {
         //TODO
-        return null;
+        String token = valueObject.getString("Token");
+        String type = valueObject.getString("Type");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else {
+            GameController.getInstance().cheatCode(type, onlineUsers.get(token), valueObject);
+            answerObject.put("Type", "Successful").put("Value", "");
+        }
+        return answerObject.toString();
     }
 
     private String showCard(JSONObject valueObject) {
@@ -482,7 +491,7 @@ public class MainController {
 
             JSONArray cardsArray = new JSONArray();
             for (Card card : Monster.getAllMonsters().values()) {
-                cardsArray.put(card.getPrice() + ": " +  card.getCardName());
+                cardsArray.put(card.getPrice() + ": " + card.getCardName());
             }
             for (Card card : SpellAndTrap.getAllSpellAndTraps().values()) {
                 cardsArray.put(card.getPrice() + ": " + card.getCardName());

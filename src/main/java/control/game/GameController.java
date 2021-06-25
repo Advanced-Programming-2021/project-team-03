@@ -269,7 +269,7 @@ public class GameController {
                 board.setOrSummonMonsterFromHandToFiled(monster, "Summon");
                 monster.setBaseAttack(1900);
                 return "summoned successfully";
-            }else{
+            } else {
                 return tributeCards(viewAnswer, board);
             }
         }
@@ -356,9 +356,9 @@ public class GameController {
             board.removeCardFromField(thirdPosition, true);
             board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
             Monster monster = (Monster) selectedCard;
-            if (monster.getCardName().equals("Beast King Barbaros")){
+            if (monster.getCardName().equals("Beast King Barbaros")) {
                 gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
-                AllMonsterEffects.getInstance().beastKingBarbarosEffect(gameUpdates,turn,game);
+                AllMonsterEffects.getInstance().beastKingBarbarosEffect(gameUpdates, turn, game);
             }
             return "summoned successfully";
         }
@@ -915,7 +915,38 @@ public class GameController {
         }
     }
 
-    public String getMap(){
+    public String getMap() {
         return game.showGameBoards();
+    }
+
+    public void cheatCode(String type, String username, JSONObject valueObject) {
+        switch (type) {
+            case "Force increase" -> addCardToHand(username);
+            case "Increase LP" -> increaseHealth(username, valueObject);
+            case "Set winner" -> setWinner(username, valueObject);
+            case "Increase money" -> increaseMoney(username, valueObject);
+            case "Hesoyam" -> hesoyamSafaaaa(username);
+        }
+    }
+
+    private void hesoyamSafaaaa(String username) {
+
+    }
+
+    private void increaseMoney(String username, JSONObject valueObject) {
+
+    }
+
+    private void setWinner(String username, JSONObject valueObject) {
+
+    }
+
+    private void increaseHealth(String username, JSONObject valueObject) {
+
+    }
+
+    private void addCardToHand(String username) {
+        game.getPlayerByName(username).getBoard().addCardFromRemainingToInHandCards();
+        MainController.getInstance().sendPrintRequestToView("Cheat Code Activated!\nyou have a new card in your hand now!\n");
     }
 }
