@@ -3,6 +3,7 @@ package control.game;
 import control.MainController;
 import model.card.*;
 import model.enums.AttackingFormat;
+import model.enums.FaceUpSituation;
 import model.enums.MonsterTypes;
 import model.enums.TrapNames;
 import model.game.Board;
@@ -15,6 +16,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static control.game.GamePhases.BATTLE;
+import static control.game.UpdateEnum.TEXCHANGER_ACTIVATED;
+import static model.enums.FaceUpSituation.FACE_DOWN;
 import static model.enums.FaceUpSituation.FACE_UP;
 import static model.enums.SpellAndTrapIcon.*;
 
@@ -37,7 +41,6 @@ public class AIController {
     private Player opponent;
     private int selectedHandIndex;
     private int selectedMonsterIndex;
-    private int selectedSpellIndex;
     private boolean summon;
 
     public void initialize(Game game, Update gameUpdates) {
@@ -77,10 +80,146 @@ public class AIController {
     }
 
     private void attack() {
+        /*return the result of attack in a string*/
+        String attackingPlayerUsername = game.getPlayerByTurn(PlayerTurn.PLAYER2).getUser().getUsername();
+        Board attackingPlayerBoard = bot.getBoard();
+        Board opponentBoard = opponent.getBoard();
+        int position = getOpponentMonsterPosition();
+        if (position == -1) {
+            checkDirectAttack();
+            return;
+        }
+        Monster attackingMonster = bot.getBoard().getMonsterInFieldByPosition(selectedMonsterIndex);
+        Monster opponentMonster = game.getPlayerOpponentByTurn(PlayerTurn.PLAYER2).getBoard().getMonsterInFieldByPosition(position);
+        AttackingFormat opponentMonsterFormat = game.getPlayerOpponentByTurn(PlayerTurn.PLAYER2).getBoard().getMonsterInFieldByPosition(position).getAttackingFormat();
+        FaceUpSituation opponentMonsterFaceUpSit = game.getPlayerOpponentByTurn(PlayerTurn.PLAYER2).getBoard().getMonsterInFieldByPosition(position).getFaceUpSituation();
+
+        int attackingDef = attackingMonster.getAttackingPower() - opponentMonster.getAttackingPower();
+        int defendingDef = attackingMonster.getAttackingPower() - opponentMonster.getDefensivePower();
+        StringBuilder answerString = new StringBuilder();
+
+        if (GameController.getInstance().activeTraps(TrapNames.NEGATE_ATTACK)) {
+            return;
+        }
+
+        if (GameController.getInstance().activeTraps(TrapNames.MAGIC_CYLINDER)) {
+            return;
+        }
+
+        if (GameController.getInstance().activeTraps(TrapNames.MIRROR_FORCE)) {
+            return;
+        }
+
+        gameUpdate.addMonstersToAttackedMonsters(attackingMonster);
+        if (opponentMonster.getCardName().equals("The Calculator")) {
+            int attack = AllMonsterEffects.getInstance().theCalculatorAtkPower(attackingPlayerBoard);
+            attackingDef += attack;
+            answerString.append("\nThe Calculator Monster activated, giving you ")
+                    .append(attack).append(" attack power!!!\n");
+        }
+
+        if (opponentMonster.getCardName().equals("Suijin") && !AllMonsterEffects.getInstance().isSuijinActivatedBefore(gameUpdate)) {
+            answerString.append(AllMonsterEffects.getInstance().suijinEffect(game, gameUpdate, attackingPlayerUsername,
+                    attackingPlayerBoard, attackingMonster, opponentMonster, opponentMonsterFormat, opponentMonsterFaceUpSit));
+            MainController.getInstance().sendPrintRequestToView(answerString.toString());
+            return;
+        }
+        if (opponentMonster.getCardName().equals("Texchanger") && !AllMonsterEffects.getInstance().isTexChangerActivatedBefore(gameUpdate)) {
+            gameUpdate.getAllUpdates().put(TEXCHANGER_ACTIVATED, opponentMonster);
+            answerString.append("Texchanger Monster Activated!!!");
+            MainController.getInstance().sendPrintRequestToView(answerString.toString());
+            return;
+        }
+        if (opponentMonster.getCardName().equals("Marshmallon")) {
+            answerString.append(AllMonsterEffects.getInstance().marshmallonEffect(game, opponentMonster, opponentMonsterFaceUpSit,
+                    game.getPlayerByTurn(PlayerTurn.PLAYER2), opponentMonsterFormat
+                    , attackingMonster, attackingPlayerBoard, opponentBoard, attackingDef, defendingDef, gameUpdate, PlayerTurn.PLAYER2));
+            MainController.getInstance().sendPrintRequestToView(answerString.toString());
+            return;
+        }
+        switch (opponentMonsterFormat) {
+            case ATTACKING -> {
+                if (attackingDef == 0) {
+                    attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
+                    attackingPlayerBoard.addCardToGraveyard(attackingMonster);
+                    gameUpdate.addCardToGraveyard(attackingMonster);
+                    opponentBoard.removeCardFromField(opponentBoard.getMonsterPosition(opponentMonster), true);
+                    opponentBoard.addCardToGraveyard(opponentMonster);
+                    gameUpdate.addCardToGraveyard(opponentMonster);
+                    answerString.append("both you and your opponent monster cards are destroyed and no one receives damage");
+                } else if (attackingDef > 0) {
+                    opponentBoard.removeCardFromField(opponentBoard.getMonsterPosition(opponentMonster), true);
+                    opponentBoard.addCardToGraveyard(opponentMonster);
+                    gameUpdate.addCardToGraveyard(opponentMonster);
+                    if (opponentMonster.getCardName().equals("Exploder Dragon")) {
+                        answerString.append("\nExploder Dragon activated!!!\n");
+                        attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
+                        attackingPlayerBoard.addCardToGraveyard(attackingMonster);
+                        gameUpdate.addCardToGraveyard(attackingMonster);
+                    } else {
+                        game.getPlayerOpponentByTurn(PlayerTurn.PLAYER2).decreaseHealthByAmount(attackingDef);
+                        answerString.append("your opponent’s monster is destroyed and your opponent receives ").append(attackingDef).append(" battle damage");
+                    }
+                } else {
+                    attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
+                    attackingPlayerBoard.addCardToGraveyard(attackingMonster);
+                    gameUpdate.addCardToGraveyard(attackingMonster);
+                    if (attackingMonster.getCardName().equals("Exploder Dragon")) {
+                        answerString.append("\nExploder Dragon activated!!!\n");
+                        opponentBoard.removeCardFromField(opponentBoard.getMonsterPosition(opponentMonster), true);
+                        opponentBoard.addCardToGraveyard(opponentMonster);
+                        gameUpdate.addCardToGraveyard(opponentMonster);
+                    } else {
+                        game.getPlayerByName(attackingPlayerUsername).decreaseHealthByAmount(attackingDef);
+                        answerString.append("Your monster card is destroyed and you received ").append(attackingDef).append(" battle damage");
+                    }
+                }
+                MainController.getInstance().sendPrintRequestToView(answerString.toString());
+            }
+            case DEFENDING -> {
+                if (opponentMonsterFaceUpSit == FACE_DOWN) {
+                    opponentMonster.setFaceUpSituation(FaceUpSituation.FACE_UP);
+                    gameUpdate.flipCard(opponentMonster);
+                    answerString.append("opponent’s monster card was ").append(opponentMonster.getCardName());
+                }
+                if (defendingDef == 0) {
+                    answerString.append("no card is destroyed!");
+                } else if (defendingDef > 0) {
+                    opponentBoard.removeCardFromField(opponentBoard.getMonsterPosition(opponentMonster), true);
+                    opponentBoard.addCardToGraveyard(opponentMonster);
+                    gameUpdate.addCardToGraveyard(opponentMonster);
+                    answerString.append("the defense position monster is destroyed!");
+                    if (opponentMonster.getCardName().equals("Exploder Dragon")) {
+                        answerString.append("\nExploder Dragon activated!!!\n");
+                        attackingPlayerBoard.removeCardFromField(attackingPlayerBoard.getMonsterPosition(attackingMonster), true);
+                        attackingPlayerBoard.addCardToGraveyard(attackingMonster);
+                        gameUpdate.addCardToGraveyard(attackingMonster);
+                    }
+                } else {
+                    game.getPlayerByName(attackingPlayerUsername).decreaseHealthByAmount(defendingDef);
+                    answerString.append("no card is destroyed and you received ").append(defendingDef).append(" battle damage!");
+                }
+                MainController.getInstance().sendPrintRequestToView(answerString.toString());
+            }
+        }
+    }
+
+    private void checkDirectAttack() {
 
     }
 
+    private int getOpponentMonsterPosition() {
+        for (Integer integer : opponent.getBoard().getMonstersInField().keySet()) {
+            return integer;
+        }
+        return -1;
+    }
+
     private boolean canAttack() {
+
+       /* if (selectedCard instanceof Monster)
+            return gameUpdates.didMonsterAttack((Monster) selectedCard);
+        else return false;*/
 
         return false;
     }
