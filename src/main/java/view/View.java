@@ -758,6 +758,9 @@ public class View {
         String answerType = (String) controlAnswer.get("Type");
         String answerValue = (String) controlAnswer.get("Value");
         System.out.println(answerValue);
+        if (answerType.equals("Successful")) {
+            gameMenu();
+        }
     }
     //endregion
 
