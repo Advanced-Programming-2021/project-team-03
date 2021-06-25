@@ -313,7 +313,12 @@ public class View {
         for (int i = 0; i < 3; i++) {
             String position = getOneMonsterNumber();
             if (position.equals("Cancel")) break;
-            positions.add(position);
+            if (positions.contains(position)) {
+                System.out.println("Error You have entered a duplicate number");
+                i--;
+            } else {
+                positions.add(position);
+            }
         }
         JSONObject answerObject = new JSONObject();
         if (positions.size() != 3) {
@@ -370,8 +375,12 @@ public class View {
                 messageValue.put("Tribute card numbers", tributeArray);
                 answerObject.put("Value", messageValue);
                 return answerObject.toString();
-            } else if (inputCommand.matches("\\d+")) {
-                tributeCardNumbers.add(Integer.parseInt(inputCommand));
+            } else if (inputCommand.matches("\\d+") && Integer.parseInt(inputCommand) < 6 && Integer.parseInt(inputCommand) > 0) {
+                if (tributeCardNumbers.contains(Integer.parseInt(inputCommand))) {
+                    System.out.println("Error You have entered a duplicate number");
+                } else {
+                    tributeCardNumbers.add(Integer.parseInt(inputCommand));
+                }
             } else System.out.println("invalid command!\n" +
                     "you should special summon right now");
         }
@@ -930,15 +939,21 @@ public class View {
     private JSONObject getTributeCardFromUser(int numberOfNeededCards) {
         //Getting needed tribute cards
         int[] tributeCardsPosition = new int[2];
+        tributeCardsPosition[0] = 0;
+        tributeCardsPosition[1] = 0;
         int counter = 0;
         JSONObject value = new JSONObject();
         JSONObject messageToSendToControl = new JSONObject();
         value.put("Token", token);
         while (counter < numberOfNeededCards) {
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
-            if (inputCommand.matches("^\\d+$")) {
-                tributeCardsPosition[counter] = Integer.parseInt(inputCommand);
-                counter++;
+            if (inputCommand.matches("^\\d+$") && Integer.parseInt(inputCommand) < 6 && Integer.parseInt(inputCommand) > 0) {
+                if (tributeCardsPosition[0] == Integer.parseInt(inputCommand) || tributeCardsPosition[1] == Integer.parseInt(inputCommand)) {
+                    System.out.println("Error You have entered a duplicate number");
+                } else {
+                    tributeCardsPosition[counter] = Integer.parseInt(inputCommand);
+                    counter++;
+                }
             } else if (inputCommand.equals("cancel")) {
                 System.out.println("The order was canceled");
                 messageToSendToControl.put("Type", "Cancel");
