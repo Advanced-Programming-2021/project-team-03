@@ -10,7 +10,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class View {
-    //TODO show map for each command
     private static View instance;
     static boolean testing;
 
@@ -188,8 +187,100 @@ public class View {
             case "Round is over" -> roundIsOver(valueObject);
             case "Ritual summon" -> ritualSummon();
             case "Get tribute cards for ritual summon" -> getTributeForRitualSummon();
+            case "Gate Guardian" -> getTributeForGateGuardian();
+            case "Terratiger, the Empowered Warrior" -> terratigerTheEmpoweredWarriorEffect();
+            case "The Tricky" -> theTrickyEffect();
+            case "Beast King Barbaros" -> beastKingBarbarosEffect();
             default -> error();
         };
+    }
+
+    private String beastKingBarbarosEffect() {
+        System.out.println("You can summon this card without sacrificing two other monsters but reduce its attack power\n" +
+                "Or you can sacrifice three monsters and use special summon.");
+        System.out.println("Write Cancel to normal summon\n" +
+                "Write Special to special summon");
+        JSONObject answerObject = new JSONObject();
+        while (true) {
+            String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if (inputCommand.matches("Cancel")) {
+                answerObject.put("Type", "Cancel");
+                System.out.println("Special summon canceled.");
+                break;
+            } else if (inputCommand.matches("Special")) {
+                answerObject.put("Type", "Successful");
+                System.out.println("Special summon activated.");
+                System.out.println("Write three monster position.");
+                JSONObject value = new JSONObject();
+                value.put("First position", getOneMonsterNumber());
+                value.put("Second position", getOneMonsterNumber());
+                value.put("Third position", getOneMonsterNumber());
+                answerObject.put("Value", value);
+                break;
+            } else System.out.println("invalid command!");
+        }
+        return answerObject.toString();
+    }
+
+    private String theTrickyEffect() {
+        System.out.println("You can use special summon for The Tricky card.\n" +
+                "if you want to use special summon you should write position of one card from your hand to remove it.\n" +
+                "And if you do not want to do it you can Write Cancel for normal Summon.");
+        JSONObject answerObject = new JSONObject();
+        while (true) {
+            String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if (inputCommand.matches("Cancel")) {
+                answerObject.put("Type", "Cancel");
+                System.out.println("Special summon canceled.");
+                break;
+            } else if (inputCommand.matches("\\d+")) {
+                answerObject.put("Type", "Successful");
+                answerObject.put("Position", inputCommand);
+                break;
+            } else System.out.println("invalid command!\n" +
+                    "you should special summon right now");
+        }
+        return answerObject.toString();
+    }
+
+    private String terratigerTheEmpoweredWarriorEffect() {
+        System.out.println("You can summon another monster card from your hand.\n" +
+                "The level of the selected monster must be a maximum of 4.\n" +
+                "Write your monster position number from your hand or write Cancel to cancel.");
+        JSONObject answerObject = new JSONObject();
+        while (true) {
+            String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if (inputCommand.matches("Cancel")) {
+                answerObject.put("Type", "Cancel");
+                break;
+            } else if (inputCommand.matches("\\d+")) {
+                answerObject.put("Type", "Successful");
+                answerObject.put("Position", inputCommand);
+                break;
+            } else System.out.println("invalid command!");
+        }
+        return answerObject.toString();
+    }
+
+    private String getTributeForGateGuardian() {
+        ArrayList<String> positions = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            String position = getOneMonsterNumber();
+            if (position.equals("Cancel")) break;
+            positions.add(position);
+        }
+        JSONObject answerObject = new JSONObject();
+        if (positions.size() != 3) {
+            answerObject.put("Type", "Cancel");
+            return answerObject.toString();
+        }
+        answerObject.put("Type", "Three card");
+        JSONObject value = new JSONObject();
+        value.put("First position", positions.get(0));
+        value.put("Second position", positions.get(1));
+        value.put("Third position", positions.get(2));
+        answerObject.put("Value", value);
+        return answerObject.toString();
     }
 
     private String ritualSummon() {
@@ -619,12 +710,14 @@ public class View {
     private void gameMenu() {
         isGameOver = false;
         isRoundOver = false;
+        boolean mapShowFlag = true;
         int regexIndex;
         while (true) {
             if (isRoundOver || isGameOver) {
                 break;
             }
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            mapShowFlag = true;
             if (inputCommand.matches(GAME_MENU_COMMANDS[20])) activeCheat(inputCommand, 20);
             else if (inputCommand.matches(GAME_MENU_COMMANDS[21])) activeCheat(inputCommand, 21);
             else if ((regexIndex = doesInputMatchWithSelectCardCommand(inputCommand)) != 0)
@@ -646,12 +739,31 @@ public class View {
             else if (inputCommand.matches(GAME_MENU_COMMANDS[22])) activeCheat(inputCommand, 22);
             else if (inputCommand.matches(GAME_MENU_COMMANDS[23])) activeCheat(inputCommand, 23);
             else if (inputCommand.matches(CARD_SHOW_REGEX)) showCard(inputCommand, "Game");
-            else System.out.println("invalid command");
+            else {
+                System.out.println("invalid command");
+                mapShowFlag = false;
+            }
+            if (mapShowFlag){
+                showMap();
+            }
         }
         if (!isGameOver) {
             //TODO: run cardTransferMenu
             gameMenu();
         }
+    }
+
+    private void showMap() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Show map");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        String answerValue = (String) controlAnswer.get("Value");
+        System.out.println(answerValue);
     }
 
     private String getOneMonsterNumber() {

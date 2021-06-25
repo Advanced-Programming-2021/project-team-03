@@ -1,6 +1,8 @@
 package model.card;
 
 import control.game.Update;
+import model.enums.AttackingFormat;
+import model.enums.FaceUpSituation;
 import model.enums.MonsterModels;
 import model.game.Board;
 import model.game.Game;
@@ -57,6 +59,50 @@ public class AllSpellsEffects {
             case "Closed Forest" -> closedForestEffect(game, turn);
             case "Forest" -> forestEffect(game, turn);
             case "Umiiruka" -> umiirukaEffect(game, turn);
+        }
+    }
+
+    public void equipmentActivator(Board board, SpellAndTrap equipmentCard, Game game, Update gameUpdates, PlayerTurn turn) {
+        equipmentCard.setActive(true);
+
+        Monster equippedMonster = board.getMonsterInFieldByPosition(board.getSpellPosition(equipmentCard));
+        if (equippedMonster != null) {
+            switch (equipmentCard.cardName) {
+                case "Sword of dark destruction" -> swordOfDarkEffect(equippedMonster);
+                case "Black Pendant" -> blackPendantEffect(equippedMonster);
+                case "United We Stand" -> unitedWeStandEffect(board, equippedMonster);
+                case "Magnum Shield" -> magnumShieldEffect(equippedMonster);
+            }
+        }
+    }
+
+    private void magnumShieldEffect(Monster equippedMonster) {
+        if (equippedMonster.getModel() == WARRIOR) {
+            if (equippedMonster.getAttackingFormat() == AttackingFormat.ATTACKING) {
+                equippedMonster.addToAttackSupplier(equippedMonster.getBaseDefence());
+            } else if (equippedMonster.getAttackingFormat() == AttackingFormat.DEFENDING) {
+                equippedMonster.addToDefensiveSupply(equippedMonster.getBaseAttack());
+            }
+        }
+    }
+
+    private void unitedWeStandEffect(Board board, Monster equippedMonster) {
+        for (Monster monster : board.getMonstersInField().values()) {
+            if (monster.getFaceUpSituation() == FaceUpSituation.FACE_UP) {
+                equippedMonster.addToAttackSupplier(800);
+                equippedMonster.addToDefensiveSupply(800);
+            }
+        }
+    }
+
+    private void blackPendantEffect(Monster equippedMonster) {
+        equippedMonster.addToAttackSupplier(500);
+    }
+
+    private void swordOfDarkEffect(Monster equippedMonster) {
+        if (equippedMonster.getModel() == FIEND || equippedMonster.getModel() == SPELL_CASTER) {
+            equippedMonster.addToAttackSupplier(400);
+            equippedMonster.addToDefensiveSupply(-200);
         }
     }
 

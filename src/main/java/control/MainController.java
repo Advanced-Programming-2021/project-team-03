@@ -94,8 +94,24 @@ public class MainController {
             case "Show selected card" -> showSelectedCard(valueObject);
             case "Surrender" -> surrender(valueObject);
             case "Next phase" -> endPhaseCommand(valueObject);
+            case "Show map" -> showMap(valueObject);
             default -> error();
         };
+    }
+
+    private String showMap(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            answerObject.put("Type", "Success");
+            answerObject.put("Value", GameController.getInstance().getMap());
+        }
+
+        return answerObject.toString();
     }
 
     private String endPhaseCommand(JSONObject valueObject) {
@@ -181,7 +197,6 @@ public class MainController {
     }
 
     private String activeEffect(JSONObject valueObject) {
-        //TODO field spell card
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
