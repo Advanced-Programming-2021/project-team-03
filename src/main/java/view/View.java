@@ -153,7 +153,7 @@ public class View {
         GAME_MENU_COMMANDS[22] = "^increase -(?:l|-LP) (.+)$";
         GAME_MENU_COMMANDS[23] = "^duel set-winner$";
         GAME_MENU_COMMANDS[24] = "^increase --money (\\d+)$";
-        GAME_MENU_COMMANDS[25] = "^Hesoyam$";
+        GAME_MENU_COMMANDS[25] = "^hesoyam$";
     }
     //endregion
 
@@ -772,6 +772,8 @@ public class View {
             else if (inputCommand.matches(GAME_MENU_COMMANDS[19])) activateEffect();
             else if (inputCommand.matches(GAME_MENU_COMMANDS[22])) activeCheat(inputCommand, 22);
             else if (inputCommand.matches(GAME_MENU_COMMANDS[23])) activeCheat(inputCommand, 23);
+            else if (inputCommand.matches(GAME_MENU_COMMANDS[24])) activeCheat(inputCommand, 24);
+            else if (inputCommand.matches(GAME_MENU_COMMANDS[25])) activeCheat(inputCommand, 25);
             else if (inputCommand.matches(CARD_SHOW_REGEX)) showCard(inputCommand, "Game");
             else {
                 System.out.println("invalid command");
@@ -1131,7 +1133,7 @@ public class View {
                 value.put("Amount", regexMatcher.group(1));
             }
             case 25 -> {
-                value.put("Type", "Hesoyam");
+                value.put("Type", "hesoyam");
             }
         }
 

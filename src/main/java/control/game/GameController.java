@@ -423,7 +423,7 @@ public class GameController {
         HashMap<Integer, Monster> monstersInField = getPlayerByTurn().getBoard().getMonstersInField();
         for (Map.Entry<Integer, Monster> entry : monstersInField.entrySet()) {
             Monster monster = entry.getValue();
-            if (selectedCard.equals(selectedCard))
+            if (monster.equals(selectedCard))
                 return true;
         }
         return false;
@@ -626,8 +626,7 @@ public class GameController {
 
     public boolean doesFieldHaveSpaceForThisCard() {
         Board board = getPlayerByTurn().getBoard();
-        if (board.getSpellAndTrapsInField().size() <= 4) return true;
-        return false;
+        return board.getSpellAndTrapsInField().size() <= 4;
     }
 
     public boolean canCardActivate() {
@@ -886,12 +885,11 @@ public class GameController {
         if (IsGameOver()) {
             answerObject.put("Type", "Game is over");
             value.put("Message", checkGameStatus());
-            answerObject.put("Value", value);
         } else {
             answerObject.put("Type", "Round is over");
             value.put("Message", results);
-            answerObject.put("Value", value);
         }
+        answerObject.put("Value", value);
         MainController.getInstance().sendRequestToView(answerObject);
     }
 
@@ -902,17 +900,17 @@ public class GameController {
     }
 
     private String checkGameStatus() {
-        Player gameWinner = gameUpdates.getWinner();
-        int winnerNumberOfWins = gameUpdates.getWins(gameWinner);
-        Player looser = gameUpdates.getLooser(gameWinner);
+        Player winner = gameUpdates.getWinner();
+        int winnerNumberOfWins = gameUpdates.getWins(winner);
+        Player looser = gameUpdates.getLooser(winner);
         int looserNumberOfWins = gameUpdates.getWins(looser);
         try {
-            gameWinner.getUser().increaseBalance((winnerNumberOfWins * 1000) + 3 * gameWinner.getHealth());
+            winner.getUser().increaseBalance((winnerNumberOfWins * 1000) + 3 * winner.getHealth());
             looser.getUser().increaseBalance((looserNumberOfWins * 1000));
         } catch (DatabaseException e) {
             e.printStackTrace();
         }
-        return gameWinner.getUser().getUsername() + " won the whole match with score: " + winnerNumberOfWins * 1000 + "-" + looserNumberOfWins * 1000;
+        return winner.getUser().getUsername() + " won the whole match with score: " + winnerNumberOfWins * 1000 + "-" + looserNumberOfWins * 1000;
     }
 
     public void removeEquipment(Monster monster) {
@@ -942,7 +940,7 @@ public class GameController {
             case "Increase LP" -> increaseHealth(username, valueObject);
             case "Set winner" -> setWinner(username);
             case "Increase money" -> increaseMoney(username, valueObject);
-            case "Hesoyam" -> hesoyamSafaaaa(username);
+            case "hesoyam" -> hesoyamSafaaaa(username);
         }
     }
 
@@ -951,7 +949,7 @@ public class GameController {
         MainController.getInstance().sendPrintRequestToView("HESOYAM!!!\n");
         game.getPlayerByName(username).getBoard().addCardFromRemainingToInHandCards();
         MainController.getInstance().sendPrintRequestToView("you have a new card in your hand now!\n");
-        game.getPlayerByName(username).decreaseHealthByAmount(5000);
+        game.getPlayerByName(username).decreaseHealthByAmount(-5000);
         MainController.getInstance().sendPrintRequestToView("your LP increased by 5000\n");
         try {
             game.getPlayerByName(username).getUser().increaseBalance(10000);

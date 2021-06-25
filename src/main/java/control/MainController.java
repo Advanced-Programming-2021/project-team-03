@@ -265,10 +265,10 @@ public class MainController {
         else if (GameController.getInstance().getSelectedCard() == null) {
             answerObject.put("Type", "Error").put("Value", "no card is selected yet!");
         } else if (GameController.getInstance().getCurrentPhase() != BATTLE) {
-            answerObject.put("Type", "Error").put("Value", "can't direct attack phase!");
+            answerObject.put("Type", "Error").put("Value", "can't direct attack in this phase!");
         } else if (!GameController.getInstance().canAttackWithThisCard()) {
             answerObject.put("Type", "Error").put("Value", "you can’t attack with this card!");
-        } else if (!GameController.getInstance().cardAlreadyAttacked()) {
+        } else if (GameController.getInstance().cardAlreadyAttacked()) {
             answerObject.put("Type", "Error").put("Value", "this card already attacked!");
         } else if (!GameController.getInstance().canAttackDirectly()) {
             answerObject.put("Type", "Error").put("Value", "you can’t attack the opponent directly!");
@@ -293,7 +293,7 @@ public class MainController {
             answerObject.put("Type", "Error").put("Value", "can't attack in this phase!");
         } else if (!GameController.getInstance().canAttackWithThisCard()) {
             answerObject.put("Type", "Error").put("Value", "you can’t attack with this card!");
-        } else if (!GameController.getInstance().cardAlreadyAttacked()) {
+        } else if (GameController.getInstance().cardAlreadyAttacked()) {
             answerObject.put("Type", "Error").put("Value", "this card already attacked!");
         } else if (!GameController.getInstance().canAttackThisPosition(position)) {
             answerObject.put("Type", "Error").put("Value", "there is no card to attack here!");
