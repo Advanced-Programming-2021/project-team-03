@@ -752,7 +752,6 @@ public class View {
         JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
 
         //Survey control JSON message
-        //TODO: go to game menu (maybe i should make new game menu for playing with ai)
         String answerType = (String) controlAnswer.get("Type");
         String answerValue = (String) controlAnswer.get("Value");
         System.out.println(answerValue);
@@ -810,7 +809,6 @@ public class View {
             }
         }
         if (!isGameOver) {
-            //TODO: run cardTransferMenu
             gameMenu();
         }
     }

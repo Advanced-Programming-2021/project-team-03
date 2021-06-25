@@ -705,7 +705,6 @@ public class GameController {
             MainController.getInstance().sendPrintRequestToView("there is no way you could ritual summon a monster");
             return false;
         }
-        //TODO
         return true;
     }
 
@@ -906,7 +905,6 @@ public class GameController {
             checkFieldCard();
         checkForEquipments(game.getPlayerByTurn(turn).getBoard());
         checkForEquipments(game.getPlayerOpponentByTurn(turn).getBoard());
-        //TODO
     }
 
     private void checkForEquipments(Board board) {
