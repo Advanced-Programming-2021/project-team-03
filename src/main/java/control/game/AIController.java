@@ -10,16 +10,11 @@ import model.game.Board;
 import model.game.Game;
 import model.game.Player;
 import model.game.PlayerTurn;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Random;
 
-import static control.game.GamePhases.BATTLE;
 import static control.game.UpdateEnum.TEXCHANGER_ACTIVATED;
 import static model.enums.FaceUpSituation.FACE_DOWN;
-import static model.enums.FaceUpSituation.FACE_UP;
 import static model.enums.SpellAndTrapIcon.*;
 
 public class AIController {
@@ -205,7 +200,20 @@ public class AIController {
     }
 
     private void checkDirectAttack() {
+        if (canAttackDirectly())
+            attackDirectlyToTheOpponent();
+    }
 
+    private boolean canAttackDirectly() {
+        return game.getPlayerOpponentByTurn(PlayerTurn.PLAYER2).getBoard().getMonstersInField().size() == 0;
+    }
+
+    private int attackDirectlyToTheOpponent() {
+        /*return the opponents receiving damage*/
+        Monster attackingMonster = bot.getBoard().getMonsterInFieldByPosition(selectedMonsterIndex);
+        int attackingPower = attackingMonster.getAttackingPower();
+        game.getPlayerOpponentByTurn(PlayerTurn.PLAYER2).decreaseHealthByAmount(attackingPower);
+        return attackingPower;
     }
 
     private int getOpponentMonsterPosition() {
