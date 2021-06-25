@@ -35,6 +35,7 @@ public class MainController {
         initializing = true;
         Monster.initialize();
         SpellAndTrap.initialize();
+        Database.updateImportedCards();
         Deck.initialize();
         User.initialize();
         initializing = false;
@@ -586,9 +587,11 @@ public class MainController {
         JSONObject answerObject = new JSONObject();
         if (isTokenInvalid(token)) putTokenError(answerObject);
         else {
+            Deck activeDeck = User.getByUsername(onlineUsers.get(token)).getActiveDeck();
             answerObject.put("Type", "Successful")
                     .put("Active deck", DeckController.getInstance().getUserActiveDeck(onlineUsers.get(token)));
-            List<String> otherDecks = DeckController.getInstance().getAllUserDecks(onlineUsers.get(token)).stream().map(Deck::generalOverview).collect(Collectors.toList());
+            List<String> otherDecks = DeckController.getInstance().getAllUserDecks(onlineUsers.get(token)).stream()
+                    .filter(deck -> deck != activeDeck).map(Deck::generalOverview).collect(Collectors.toList());
             answerObject.put("Other deck", otherDecks);
         }
 

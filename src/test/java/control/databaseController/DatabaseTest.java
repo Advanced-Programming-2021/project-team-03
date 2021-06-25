@@ -19,4 +19,9 @@ class DatabaseTest {
         MainController.getInstance();
         Assertions.assertEquals("Raigeki", Database.importCard("Raigeki").getCardName());
     }
+
+    @Test
+    void importAllCards() {
+        Database.updateImportedCards();
+    }
 }

@@ -69,6 +69,26 @@ public class Database {
         return spellsByName;
     }
 
+    public static void updateImportedCards() {
+        File parentFile = new File(CARDS_IMPORT_PATH);
+        parentFile.mkdirs();
+
+        File[] listOfFiles = parentFile.listFiles();
+        if (listOfFiles == null) return;
+
+        for (File file : listOfFiles) {
+            if (isJsonFile(file)) {
+                String fileName = file.getName();
+                try {
+                    Card card = importCard(fileName.substring(0, fileName.lastIndexOf('.')));
+                    if (card instanceof Monster) ((Monster) card).addToAllMonsters();
+                    else ((SpellAndTrap) card).addToAllSpells();
+                } catch (DatabaseException ignored) {
+                }
+            }
+        }
+    }
+
     public static Card importCard(String cardName) throws DatabaseException {
         Gson gson = new Gson();
         Gson gson2 = new Gson();
