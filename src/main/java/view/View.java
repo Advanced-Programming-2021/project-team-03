@@ -169,7 +169,7 @@ public class View {
     /**
      * This method will send message string to control and get answer string.
      */
-    private JSONObject sendRequestToControl(JSONObject messageToSend) {
+    public JSONObject sendRequestToControl(JSONObject messageToSend) {
         String controlAnswerString = MainController.getInstance().getRequest(messageToSend.toString());
         return new JSONObject(controlAnswerString);
     }
@@ -1075,7 +1075,7 @@ public class View {
         System.out.println(answerValue);
     }
 
-    private void goToTheNextPhase() {
+    public void goToTheNextPhase() {
         //Making message JSONObject and passing to sendControl function:
         JSONObject value = new JSONObject();
         value.put("Token", token);

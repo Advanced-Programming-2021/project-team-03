@@ -10,6 +10,7 @@ import model.game.Game;
 import model.game.Player;
 import model.game.PlayerTurn;
 import org.json.JSONObject;
+import view.View;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -138,6 +139,16 @@ public class AllTrapsEffects {
                 board.removeCardFromField(position, true);
             }
         }
+    }
+
+    public boolean canNegateAttackActivate(Game game, PlayerTurn playerTurn, TrapNames trapName) {
+        return doesTheOpponentHaveTheDesiredTrap(game, playerTurn, trapName)
+                && doesTheUserWantToEnableTheTrap(game, playerTurn, trapName);
+    }
+
+    public void negateAttackEffect(Game game, Update gameUpdates, PlayerTurn turn) {
+        MainController.getInstance().sendPrintRequestToView("Negate Attack trap activated and battle phase will be finish");
+        View.getInstance().goToTheNextPhase();
     }
 
     public boolean doesTheUserWantToEnableTheTrap(Game game, PlayerTurn turn, TrapNames trapName) {

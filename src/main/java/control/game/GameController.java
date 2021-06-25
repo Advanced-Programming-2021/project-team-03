@@ -491,6 +491,10 @@ public class GameController {
         int defendingDef = attackingMonster.getAttackingPower() - opponentMonster.getDefensivePower();
         StringBuilder answerString = new StringBuilder();
 
+        if (activeTraps(TrapNames.NEGATE_ATTACK)) {
+            return "The attack was stopped due to the activation of the Negate Attack trap by the opponent.";
+        }
+
         if (activeTraps(TrapNames.MAGIC_CYLINDER)) {
             return "The attack was stopped due to the activation of the Magic Cylinder trap by the opponent.";
         }
@@ -1015,6 +1019,13 @@ public class GameController {
             case MIRROR_FORCE -> {
                 if (allTrapsEffects.canMirrorForceActivate(game, turn, trapName)) {
                     allTrapsEffects.mirrorForceEffect(game, gameUpdates, turn);
+                    return true;
+                }
+                return false;
+            }
+            case NEGATE_ATTACK -> {
+                if (allTrapsEffects.canNegateAttackActivate(game, turn, trapName)) {
+                    allTrapsEffects.negateAttackEffect(game, gameUpdates, turn);
                     return true;
                 }
                 return false;
