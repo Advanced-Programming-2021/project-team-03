@@ -28,7 +28,7 @@ public class View {
     private final String[] SHOP_MENU_COMMANDS = new String[5];
     private final String[] DECK_MENU_COMMANDS = new String[19];
     private final String[] DUEL_MENU_COMMANDS = new String[12];
-    private final String[] GAME_MENU_COMMANDS = new String[25];
+    private final String[] GAME_MENU_COMMANDS = new String[26];
 
     private final String CARD_SHOW_REGEX = "^card show (.+)$";
 
@@ -148,11 +148,12 @@ public class View {
         GAME_MENU_COMMANDS[18] = "^next phase$";
         GAME_MENU_COMMANDS[19] = "^activate effect$";
         //Cheat codes in game menu:
-        GAME_MENU_COMMANDS[20] = "^select -(?:h|-hand) (.+) -(?:f|-force)$";
-        GAME_MENU_COMMANDS[21] = "^select -(?:f|-force) -(?:h|-hand) (.+)$";
+        GAME_MENU_COMMANDS[20] = "^select -(?:h|-hand) -(?:f|-force)$";
+        GAME_MENU_COMMANDS[21] = "^select -(?:f|-force) -(?:h|-hand)$";
         GAME_MENU_COMMANDS[22] = "^increase -(?:l|-LP) (.+)$";
-        GAME_MENU_COMMANDS[23] = "^duel set-winner (\\S+)$";
+        GAME_MENU_COMMANDS[23] = "^duel set-winner$";
         GAME_MENU_COMMANDS[24] = "^increase --money (\\d+)$";
+        GAME_MENU_COMMANDS[25] = "^Hesoyam$";
     }
     //endregion
 
@@ -195,8 +196,35 @@ public class View {
             case "Terratiger, the Empowered Warrior" -> terratigerTheEmpoweredWarriorEffect();
             case "The Tricky" -> theTrickyEffect();
             case "Beast King Barbaros" -> beastKingBarbarosEffect();
+            case "Trap activate request" -> trapActivateRequest(valueObject);
             default -> error();
         };
+    }
+
+    private String trapActivateRequest(JSONObject valueObject) {
+        String firstMessage = valueObject.getString("First message");
+        String secondMessage = valueObject.getString("Second message");
+        System.out.println(firstMessage);
+        System.out.println("Write Yes to activate or Write No to cancel trap.");
+        JSONObject answerObject = new JSONObject();
+        boolean trapActivate = false;
+        while (true) {
+            String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
+            if (inputCommand.matches("No")) {
+                answerObject.put("Type", "No");
+                break;
+            } else if (inputCommand.matches("Yes")) {
+                answerObject.put("Type", "Yes");
+                trapActivate = true;
+                break;
+            } else System.out.println("invalid command!");
+        }
+        if (trapActivate) {
+            System.out.println("Trap activated");
+        } else {
+            System.out.println(secondMessage);
+        }
+        return answerObject.toString();
     }
 
     private String beastKingBarbarosEffect() {
@@ -746,7 +774,7 @@ public class View {
                 System.out.println("invalid command");
                 mapShowFlag = false;
             }
-            if (mapShowFlag){
+            if (mapShowFlag) {
                 showMap();
             }
         }
@@ -1087,7 +1115,6 @@ public class View {
         switch (regexCommandIndex) {
             case 20, 21 -> {
                 value.put("Type", "Force increase");
-                value.put("Card name", regexMatcher.group(1));
             }
             case 22 -> {
                 value.put("Type", "Increase LP");
@@ -1095,11 +1122,13 @@ public class View {
             }
             case 23 -> {
                 value.put("Type", "Set winner");
-                value.put("Nickname", regexMatcher.group(1));
             }
             case 24 -> {
                 value.put("Type", "Increase money");
                 value.put("Amount", regexMatcher.group(1));
+            }
+            case 25 -> {
+                value.put("Type", "Hesoyam");
             }
         }
 

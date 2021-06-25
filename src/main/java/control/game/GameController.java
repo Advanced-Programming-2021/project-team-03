@@ -3,10 +3,7 @@ package control.game;
 import control.MainController;
 import control.databaseController.DatabaseException;
 import model.card.*;
-import model.enums.AttackingFormat;
-import model.enums.CardAttributes;
-import model.enums.FaceUpSituation;
-import model.enums.MonsterTypes;
+import model.enums.*;
 import model.game.Board;
 import model.game.Game;
 import model.game.Player;
@@ -120,8 +117,7 @@ public class GameController {
                     return true;
             }
             case "Hand" -> {
-                if (board.getInHandCards().size() <= cardPosition)
-                    return true;
+                return board.getInHandCards().size() > cardPosition;
             }
         }
         return false;
@@ -283,7 +279,7 @@ public class GameController {
                 board.setOrSummonMonsterFromHandToFiled(monster, "Summon");
                 monster.setBaseAttack(1900);
                 return "summoned successfully";
-            }else{
+            } else {
                 return tributeCards(viewAnswer, board);
             }
         }
@@ -370,9 +366,9 @@ public class GameController {
             board.removeCardFromField(thirdPosition, true);
             board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
             Monster monster = (Monster) selectedCard;
-            if (monster.getCardName().equals("Beast King Barbaros")){
+            if (monster.getCardName().equals("Beast King Barbaros")) {
                 gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
-                AllMonsterEffects.getInstance().beastKingBarbarosEffect(gameUpdates,turn,game);
+                AllMonsterEffects.getInstance().beastKingBarbarosEffect(gameUpdates, turn, game);
             }
             return "summoned successfully";
         }
@@ -884,12 +880,15 @@ public class GameController {
         game.checkRoundResults(gameUpdates);
         String results = game.getWinner().getUser().getUsername() + " won the game and the score is: 1000 - 0";
         JSONObject answerObject = new JSONObject();
+        JSONObject value = new JSONObject();
         if (IsGameOver()) {
             answerObject.put("Type", "Game is over");
-            answerObject.put("Value", checkGameStatus());
+            value.put("Message", checkGameStatus());
+            answerObject.put("Value", value);
         } else {
             answerObject.put("Type", "Round is over");
-            answerObject.put("Value", results);
+            value.put("Message", results);
+            answerObject.put("Value", value);
         }
         MainController.getInstance().sendRequestToView(answerObject);
     }
@@ -929,7 +928,79 @@ public class GameController {
         }
     }
 
-    public String getMap(){
+    public String getMap() {
         return game.showGameBoards();
+    }
+
+    public void cheatCode(String type, String username, JSONObject valueObject) {
+        switch (type) {
+            case "Force increase" -> addCardToHand(username);
+            case "Increase LP" -> increaseHealth(username, valueObject);
+            case "Set winner" -> setWinner(username);
+            case "Increase money" -> increaseMoney(username, valueObject);
+            case "Hesoyam" -> hesoyamSafaaaa(username);
+        }
+    }
+
+    private void hesoyamSafaaaa(String username) {
+        //be yad bache hay Groove Street
+        MainController.getInstance().sendPrintRequestToView("HESOYAM!!!\n");
+        game.getPlayerByName(username).getBoard().addCardFromRemainingToInHandCards();
+        MainController.getInstance().sendPrintRequestToView("you have a new card in your hand now!\n");
+        game.getPlayerByName(username).decreaseHealthByAmount(5000);
+        MainController.getInstance().sendPrintRequestToView("your LP increased by 5000\n");
+        try {
+            game.getPlayerByName(username).getUser().increaseBalance(10000);
+            MainController.getInstance().sendPrintRequestToView("your balance increased by 10000\n");
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void increaseMoney(String username, JSONObject valueObject) {
+        String amount = valueObject.getString("Amount");
+        try {
+            int balance = Integer.parseInt(amount);
+            game.getPlayerByName(username).getUser().increaseBalance(balance);
+            MainController.getInstance().sendPrintRequestToView("Cheat Code Activated!\nyour balance increased by " + balance + "\n");
+        } catch (Exception ignored) {
+            MainController.getInstance().sendPrintRequestToView("Cheat Code does not activated!!\n");
+        }
+    }
+
+    private void setWinner(String username) {
+        if (game.getPlayer1() == game.getPlayerByName(username)) {
+            game.getPlayer2().decreaseHealthByAmount(game.getPlayer2().getHealth());
+        } else {
+            game.getPlayer1().decreaseHealthByAmount(game.getPlayer1().getHealth());
+        }
+        MainController.getInstance().sendPrintRequestToView("Cheat Code Activated!\nyour opponent's LP is 0 now\nYou win the game!\n");
+    }
+
+    private void increaseHealth(String username, JSONObject valueObject) {
+        String amount = valueObject.getString("Amount");
+        try {
+            int LP = Integer.parseInt(amount);
+            game.getPlayerByName(username).decreaseHealthByAmount(-LP);
+            MainController.getInstance().sendPrintRequestToView("Cheat Code Activated!\nyour LP increased by " + LP + "\n");
+        } catch (Exception ignored) {
+            MainController.getInstance().sendPrintRequestToView("Cheat Code does not activated!!\n");
+        }
+    }
+
+    private void addCardToHand(String username) {
+        game.getPlayerByName(username).getBoard().addCardFromRemainingToInHandCards();
+        MainController.getInstance().sendPrintRequestToView("Cheat Code Activated!\nyou have a new card in your hand now!\n");
+    }
+
+    public void activeTraps(TrapNames trapName) {
+        AllTrapsEffects allTrapsEffects = AllTrapsEffects.getInstance();
+        switch (trapName) {
+            case TRAP_HOLE -> {
+                if (allTrapsEffects.canTrapHoleActivate(selectedCard, game, turn, trapName)) {
+                    allTrapsEffects.trapHoleEffect(selectedCard, game, gameUpdates, turn);
+                }
+            }
+        }
     }
 }
