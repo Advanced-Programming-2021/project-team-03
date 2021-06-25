@@ -923,21 +923,28 @@ public class GameController {
         switch (type) {
             case "Force increase" -> addCardToHand(username);
             case "Increase LP" -> increaseHealth(username, valueObject);
-            case "Set winner" -> setWinner(username, valueObject);
+            case "Set winner" -> setWinner(username);
             case "Increase money" -> increaseMoney(username, valueObject);
             case "Hesoyam" -> hesoyamSafaaaa(username);
         }
     }
 
     private void hesoyamSafaaaa(String username) {
-
+        //be yad bache hay Groove Street
     }
 
     private void increaseMoney(String username, JSONObject valueObject) {
-
+        String amount = valueObject.getString("Amount");
+        try {
+            int balance = Integer.parseInt(amount);
+            game.getPlayerByName(username).getUser().increaseBalance(balance);
+            MainController.getInstance().sendPrintRequestToView("Cheat Code Activated!\nyour balance increased by " + balance + "\n");
+        } catch (Exception ignored) {
+            MainController.getInstance().sendPrintRequestToView("Cheat Code does not activated!!\n");
+        }
     }
 
-    private void setWinner(String username, JSONObject valueObject) {
+    private void setWinner(String username) {
 
     }
 

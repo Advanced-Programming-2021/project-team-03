@@ -148,10 +148,10 @@ public class View {
         GAME_MENU_COMMANDS[18] = "^next phase$";
         GAME_MENU_COMMANDS[19] = "^activate effect$";
         //Cheat codes in game menu:
-        GAME_MENU_COMMANDS[20] = "^select -(?:h|-hand) (.+) -(?:f|-force)$";
-        GAME_MENU_COMMANDS[21] = "^select -(?:f|-force) -(?:h|-hand) (.+)$";
+        GAME_MENU_COMMANDS[20] = "^select -(?:h|-hand) -(?:f|-force)$";
+        GAME_MENU_COMMANDS[21] = "^select -(?:f|-force) -(?:h|-hand)$";
         GAME_MENU_COMMANDS[22] = "^increase -(?:l|-LP) (.+)$";
-        GAME_MENU_COMMANDS[23] = "^duel set-winner (\\S+)$";
+        GAME_MENU_COMMANDS[23] = "^duel set-winner$";
         GAME_MENU_COMMANDS[24] = "^increase --money (\\d+)$";
         GAME_MENU_COMMANDS[25] = "^Hesoyam$";
     }
@@ -744,7 +744,7 @@ public class View {
                 System.out.println("invalid command");
                 mapShowFlag = false;
             }
-            if (mapShowFlag){
+            if (mapShowFlag) {
                 showMap();
             }
         }
@@ -1085,7 +1085,6 @@ public class View {
         switch (regexCommandIndex) {
             case 20, 21 -> {
                 value.put("Type", "Force increase");
-                value.put("Card name", regexMatcher.group(1));
             }
             case 22 -> {
                 value.put("Type", "Increase LP");
@@ -1093,7 +1092,6 @@ public class View {
             }
             case 23 -> {
                 value.put("Type", "Set winner");
-                value.put("Nickname", regexMatcher.group(1));
             }
             case 24 -> {
                 value.put("Type", "Increase money");
