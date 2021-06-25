@@ -270,14 +270,14 @@ public class GameController {
                 monster.setBaseAttack(1900);
                 return "summoned successfully";
             } else {
-                return tributeCards(viewAnswer, board);
+                return tributeCards("Summon", viewAnswer, board);
             }
         }
         if (monster.getCardName().equals("Gate Guardian")) {
             JSONObject messageToSendToView = new JSONObject();
             messageToSendToView.put("Type", "Gate Guardian");
             String viewAnswer = MainController.getInstance().sendRequestToView(messageToSendToView);
-            return tributeCards(viewAnswer, board);
+            return tributeCards("Summon", viewAnswer, board);
         }
         if (monster.getLevel() < 5) {
             board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
@@ -298,10 +298,10 @@ public class GameController {
             messageToSendToView.put("Value", value);
         }
         String viewAnswer = MainController.getInstance().sendRequestToView(messageToSendToView);
-        return tributeCards(viewAnswer, board);
+        return tributeCards("Summon", viewAnswer, board);
     }
 
-    public String tributeCards(String message, Board board) {
+    public String tributeCards(String action, String message, Board board) {
         JSONObject inputObject = new JSONObject(message);
         String requestType = inputObject.getString("Type");
         if (requestType.equals("Cancel")) return "The victimization operation was canceled";
@@ -316,8 +316,8 @@ public class GameController {
             if (monster.getFaceUpSituation() == FACE_UP) gameUpdates.addCardToGraveyard(monster);
             board.removeCardFromField(position, true);
             gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
-            board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
-            return "summoned successfully";
+            board.setOrSummonMonsterFromHandToFiled(selectedCard, action);
+            return action + "ed successfully";
         } else if (requestType.equals("Two card")) {
             int firstPosition = Integer.parseInt(valueObject.getString("First position"));
             Monster firstMonster = board.getMonsterInFieldByPosition(firstPosition);
@@ -333,8 +333,8 @@ public class GameController {
             board.removeCardFromField(firstPosition, true);
             board.removeCardFromField(secondPosition, true);
             gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
-            board.setOrSummonMonsterFromHandToFiled(selectedCard, "Summon");
-            return "summoned successfully";
+            board.setOrSummonMonsterFromHandToFiled(selectedCard, action);
+            return action + "ed successfully";
         } else {
             int firstPosition = Integer.parseInt(valueObject.getString("First position"));
             Monster firstMonster = board.getMonsterInFieldByPosition(firstPosition);
@@ -381,8 +381,24 @@ public class GameController {
         Board board = getPlayerByTurn().getBoard();
         Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
         if (selectedCard instanceof Monster) {
-            board.setOrSummonMonsterFromHandToFiled(selectedCard, "Set");
-            gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
+            Monster monster = (Monster) selectedCard;
+            if (monster.getLevel() < 5) {
+                board.setOrSummonMonsterFromHandToFiled(selectedCard, "Set");
+                gameUpdates.setHaveBeenSetOrSummonACardInPhase(true);
+                return "set successfully";
+            }
+            JSONObject value = new JSONObject();
+            JSONObject messageToSendToView = new JSONObject();
+            messageToSendToView.put("Type", "Get tribute cards");
+            if (monster.getLevel() == 5 || monster.getLevel() == 6) {
+                value.put("Number of required cards", String.valueOf(1));
+                messageToSendToView.put("Value", value);
+            } else if (monster.getLevel() == 7 || monster.getLevel() == 8) {
+                value.put("Number of required cards", String.valueOf(2));
+                messageToSendToView.put("Value", value);
+            }
+            String viewAnswer = MainController.getInstance().sendRequestToView(messageToSendToView);
+            return tributeCards("Set", viewAnswer, board);
         } else {
             SpellAndTrap spellAndTrap = (SpellAndTrap) selectedCard;
             if (spellAndTrap.getIcon() == FIELD) {
@@ -1091,5 +1107,9 @@ public class GameController {
             }
         }
         return false;
+    }
+
+    public boolean isSelectedCardAMonster() {
+        return selectedCard instanceof Monster;
     }
 }
