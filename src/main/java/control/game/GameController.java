@@ -486,11 +486,20 @@ public class GameController {
         Monster opponentMonster = game.getPlayerOpponentByTurn(turn).getBoard().getMonsterInFieldByPosition(position);
         AttackingFormat opponentMonsterFormat = game.getPlayerOpponentByTurn(turn).getBoard().getMonsterInFieldByPosition(position).getAttackingFormat();
         FaceUpSituation opponentMonsterFaceUpSit = game.getPlayerOpponentByTurn(turn).getBoard().getMonsterInFieldByPosition(position).getFaceUpSituation();
-        gameUpdates.addMonstersToAttackedMonsters(attackingMonster);
+
         int attackingDef = attackingMonster.getAttackingPower() - opponentMonster.getAttackingPower();
         int defendingDef = attackingMonster.getAttackingPower() - opponentMonster.getDefensivePower();
         StringBuilder answerString = new StringBuilder();
 
+        if (activeTraps(TrapNames.MAGIC_CYLINDER)) {
+            return "The attack was stopped due to the activation of the Magic Cylinder trap by the opponent.";
+        }
+
+        if (activeTraps(TrapNames.MIRROR_FORCE)) {
+            return "The attack was stopped due to the activation of the Mirror Force trap by the opponent.";
+        }
+
+        gameUpdates.addMonstersToAttackedMonsters(attackingMonster);
         if (opponentMonster.getCardName().equals("The Calculator")) {
             int attack = AllMonsterEffects.getInstance().theCalculatorAtkPower(attackingPlayerBoard);
             attackingDef += attack;
@@ -979,19 +988,38 @@ public class GameController {
         MainController.getInstance().sendPrintRequestToView("Cheat Code Activated!\nyou have a new card in your hand now!\n");
     }
 
-    public void activeTraps(TrapNames trapName) {
+    public boolean activeTraps(TrapNames trapName) {
         AllTrapsEffects allTrapsEffects = AllTrapsEffects.getInstance();
         switch (trapName) {
             case TRAP_HOLE -> {
                 if (allTrapsEffects.canTrapHoleActivate(selectedCard, game, turn, trapName)) {
                     allTrapsEffects.trapHoleEffect(selectedCard, game, gameUpdates, turn);
+                    return true;
                 }
+                return false;
             }
             case TORRENTIAL_TRIBUTE -> {
                 if (allTrapsEffects.canTorrentialTributeActivate(game, turn, trapName)) {
                     allTrapsEffects.torrentialTributeEffect(game, gameUpdates, turn);
+                    return true;
                 }
+                return false;
+            }
+            case MAGIC_CYLINDER -> {
+                if (allTrapsEffects.canMagicCylinderActivate(game, turn, trapName)) {
+                    allTrapsEffects.magicCylinderEffect(selectedCard, game, gameUpdates, turn);
+                    return true;
+                }
+                return false;
+            }
+            case MIRROR_FORCE -> {
+                if (allTrapsEffects.canMirrorForceActivate(game, turn, trapName)) {
+                    allTrapsEffects.mirrorForceEffect(game, gameUpdates, turn);
+                    return true;
+                }
+                return false;
             }
         }
+        return false;
     }
 }

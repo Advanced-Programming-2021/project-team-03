@@ -6,6 +6,7 @@ import model.enums.FaceUpSituation;
 import model.enums.TrapNames;
 import model.game.Board;
 import model.game.Game;
+import model.game.Player;
 import model.game.PlayerTurn;
 import org.json.JSONObject;
 
@@ -57,6 +58,7 @@ public class AllTrapsEffects {
         board.removeCardFromField(board.getMonsterPosition(monster), true);
         Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
         SpellAndTrap trap = getTheDesiredTrapFormBoard(opponentBoard, TrapNames.TRAP_HOLE);
+        trap.setActive(true);
         opponentBoard.addCardToGraveyard(trap);
         gameUpdates.addCardToGraveyard(trap);
         opponentBoard.removeCardFromField(opponentBoard.getSpellPosition(trap), false);
@@ -87,9 +89,44 @@ public class AllTrapsEffects {
             opponentBoard.removeCardFromField(position, true);
         }
         SpellAndTrap trap = getTheDesiredTrapFormBoard(opponentBoard, TrapNames.TORRENTIAL_TRIBUTE);
+        trap.setActive(true);
         opponentBoard.addCardToGraveyard(trap);
         gameUpdates.addCardToGraveyard(trap);
         opponentBoard.removeCardFromField(opponentBoard.getSpellPosition(trap), false);
+    }
+
+    public boolean canMagicCylinderActivate(Game game, PlayerTurn playerTurn, TrapNames trapName) {
+        return doesTheOpponentHaveTheDesiredTrap(game, playerTurn, trapName)
+                && doesTheUserWantToEnableTheTrap(game, playerTurn, trapName);
+    }
+
+    public void magicCylinderEffect(Card attackingCard, Game game, Update gameUpdates, PlayerTurn turn) {
+        Monster attackingMonster = (Monster) attackingCard;
+        int attackPower = attackingMonster.getAttackingPower();
+        Board board = game.getPlayerByTurn(turn).getBoard();
+        board.addCardToGraveyard(attackingMonster);
+        if (attackingMonster.getFaceUpSituation() == FaceUpSituation.FACE_UP)
+            gameUpdates.addCardToGraveyard(attackingMonster);
+        board.removeCardFromField(board.getMonsterPosition(attackingMonster), true);
+        Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
+
+        Player player = game.getPlayerByTurn(turn);
+        player.decreaseHealthByAmount(attackPower);
+
+        SpellAndTrap trap = getTheDesiredTrapFormBoard(opponentBoard, TrapNames.MAGIC_CYLINDER);
+        trap.setActive(true);
+        opponentBoard.addCardToGraveyard(trap);
+        gameUpdates.addCardToGraveyard(trap);
+        opponentBoard.removeCardFromField(opponentBoard.getSpellPosition(trap), false);
+    }
+
+    public boolean canMirrorForceActivate(Game game, PlayerTurn playerTurn, TrapNames trapName) {
+        return doesTheOpponentHaveTheDesiredTrap(game, playerTurn, trapName)
+                && doesTheUserWantToEnableTheTrap(game, playerTurn, trapName);
+    }
+
+    public void mirrorForceEffect(Game game, Update gameUpdates, PlayerTurn turn) {
+
     }
 
     public boolean doesTheUserWantToEnableTheTrap(Game game, PlayerTurn turn, TrapNames trapName) {
