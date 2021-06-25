@@ -1,22 +1,22 @@
 package control.game;
 
 import control.MainController;
-import model.card.AllMonsterEffects;
-import model.card.Card;
-import model.card.Monster;
-import model.card.SpellAndTrap;
+import model.card.*;
 import model.enums.AttackingFormat;
 import model.enums.MonsterTypes;
+import model.enums.TrapNames;
 import model.game.Board;
 import model.game.Game;
 import model.game.Player;
 import model.game.PlayerTurn;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import static model.enums.FaceUpSituation.FACE_UP;
-import static model.enums.SpellAndTrapIcon.FIELD;
+import static model.enums.SpellAndTrapIcon.*;
 
 public class AIController {
     private static AIController AIController;
@@ -66,6 +66,7 @@ public class AIController {
         while (canSetSpellsInHand()) {
             setSpell();
             AIPlayLog.append("AI Set a spell in field\n");
+            AIPlayLog.append("AI Activate a spell effect\n");
         }
 
         while (canAttack()) {
@@ -109,10 +110,30 @@ public class AIController {
             } else {
                 board.setSpellAndTrapsInField(spellAndTrap);
             }
+            activateSpellEffect(card);
+        }
+    }
+
+    private void activateSpellEffect(Card card) {
+        boolean trapActivate = GameController.getInstance().activeTraps(TrapNames.MAGIC_JAMAMER); //TODO double check
+        if (trapActivate)
+            return;
+        SpellAndTrap spell = (SpellAndTrap) card;
+        Board board = bot.getBoard();
+        if (spell.getIcon() == FIELD) {
+            spell.setActive(true);
+            game.setActivatedFieldCard(spell);
+            game.setFiledActivated(true);
+        } else if (spell.getIcon() == EQUIP)
+            AllSpellsEffects.getInstance().equipmentActivator(board, spell, game, gameUpdate, PlayerTurn.PLAYER2);
+        else {
+            AllSpellsEffects.getInstance().cardActivator(spell, game, gameUpdate, PlayerTurn.PLAYER2);
         }
     }
 
     private boolean canSetSpellsInHand() {
+        if (bot.getBoard().getSpellAndTrapsInField().size() >= 5)
+            return false;
         for (Card card : bot.getBoard().getInHandCards()) {
             if (card instanceof SpellAndTrap)
                 return true;
@@ -250,6 +271,8 @@ public class AIController {
     }
 
     private boolean canSummonOrSet() {
+        if (bot.getBoard().getMonstersInField().size() >= 5)
+            return false;
         for (Card card : bot.getBoard().getInHandCards()) {
             if (card instanceof Monster) {
                 Monster monster = (Monster) card;
