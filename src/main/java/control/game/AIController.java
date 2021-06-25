@@ -126,8 +126,36 @@ public class AIController {
         Board board = bot.getBoard();
         Board opponentBoard = opponent.getBoard();
         Card card = bot.getBoard().getInHandCards().get(selectedHandIndex);
+        Random random = new Random();
         if (card instanceof Monster) {
-            board.setOrSummonMonsterFromHandToFiled(card, "Set");
+            Monster monster = (Monster) card;
+            if (monster.getLevel() < 5) {
+                board.setOrSummonMonsterFromHandToFiled(card, "Set");
+                return;
+            }
+            if (monster.getLevel() == 5 || monster.getLevel() == 6) {
+                int position = random.nextInt(board.getMonstersInField().size());
+                Monster tribute = board.getMonsterInFieldByPosition(position);
+                if (tribute == null) {
+                    return;
+                }
+                board.addCardToGraveyard(tribute);
+                board.removeCardFromField(position, true);
+                board.setOrSummonMonsterFromHandToFiled(monster, "Summon");
+            } else if (monster.getLevel() > 6) {
+                int firstPosition = random.nextInt(board.getMonstersInField().size());
+                Monster firstMonster = board.getMonsterInFieldByPosition(firstPosition);
+                int secondPosition = random.nextInt(board.getMonstersInField().size());
+                Monster secondMonster = board.getMonsterInFieldByPosition(secondPosition);
+                if (firstMonster == null || secondMonster == null) {
+                    return;
+                }
+                board.addCardToGraveyard(firstMonster);
+                board.addCardToGraveyard(secondMonster);
+                board.removeCardFromField(firstPosition, true);
+                board.removeCardFromField(secondPosition, true);
+                board.setOrSummonMonsterFromHandToFiled(monster, "Summon");
+            }
         } else {
             SpellAndTrap spellAndTrap = (SpellAndTrap) card;
             if (spellAndTrap.getIcon() == FIELD) {
