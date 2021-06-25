@@ -225,10 +225,13 @@ public class AIController {
 
     private boolean canAttack() {
 
-       /* if (selectedCard instanceof Monster)
-            return gameUpdates.didMonsterAttack((Monster) selectedCard);
-        else return false;*/
-
+        for (Monster monster : bot.getBoard().getMonstersInField().values()) {
+            if (gameUpdate.didMonsterAttack(monster)) {
+                selectedMonsterIndex = bot.getBoard().getMonsterPosition(monster);
+                return true;
+            } else
+                return false;
+        }
         return false;
     }
 
