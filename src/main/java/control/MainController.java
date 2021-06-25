@@ -138,7 +138,6 @@ public class MainController {
     }
 
     private String cheatCodes(JSONObject valueObject) {
-        //TODO
         String token = valueObject.getString("Token");
         String type = valueObject.getString("Type");
 
