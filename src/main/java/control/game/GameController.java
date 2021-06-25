@@ -652,6 +652,7 @@ public class GameController {
         Monster attackingMonster = (Monster) selectedCard;
         int attackingPower = attackingMonster.getAttackingPower();
         game.getPlayerOpponentByTurn(turn).decreaseHealthByAmount(attackingPower);
+        gameUpdates.addMonstersToAttackedMonsters(attackingMonster);
         return attackingPower;
     }
 

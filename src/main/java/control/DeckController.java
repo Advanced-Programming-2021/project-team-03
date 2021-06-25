@@ -56,10 +56,6 @@ public class DeckController {
                         + Collections.frequency(deck.getCardNames(DeckType.SIDE), card.getCardName());
     }
 
-    public boolean isDeckFull(String deckName, DeckType deckType) {
-        return Deck.getByDeckName(deckName).isDeckFull(deckType);
-    }
-
     public boolean canUserAddCardToDeck(String deckName, String cardName) {
         return !Deck.getByDeckName(deckName).isCardMaxedOut(Card.getCardByName(cardName));
     }

@@ -61,7 +61,7 @@ public class AIController {
             }
         }
 
-        while (canSetSpellsInHand()) {
+        if (canSetSpellsInHand()) {
             setSpell();
             AIPlayLog.append("AI Set a spell in field\n");
             AIPlayLog.append("AI Activate a spell effect\n");
@@ -93,17 +93,11 @@ public class AIController {
         int defendingDef = attackingMonster.getAttackingPower() - opponentMonster.getDefensivePower();
         StringBuilder answerString = new StringBuilder();
 
-        if (GameController.getInstance().activeTraps(TrapNames.NEGATE_ATTACK)) {
-            return;
-        }
+        if (GameController.getInstance().activeTraps(TrapNames.NEGATE_ATTACK)) return;
 
-        if (GameController.getInstance().activeTraps(TrapNames.MAGIC_CYLINDER)) {
-            return;
-        }
+        if (GameController.getInstance().activeTraps(TrapNames.MAGIC_CYLINDER)) return;
 
-        if (GameController.getInstance().activeTraps(TrapNames.MIRROR_FORCE)) {
-            return;
-        }
+        if (GameController.getInstance().activeTraps(TrapNames.MIRROR_FORCE)) return;
 
         gameUpdate.addMonstersToAttackedMonsters(attackingMonster);
         if (opponentMonster.getCardName().equals("The Calculator")) {
@@ -213,6 +207,7 @@ public class AIController {
         Monster attackingMonster = bot.getBoard().getMonsterInFieldByPosition(selectedMonsterIndex);
         int attackingPower = attackingMonster.getAttackingPower();
         game.getPlayerOpponentByTurn(PlayerTurn.PLAYER2).decreaseHealthByAmount(attackingPower);
+        gameUpdate.addMonstersToAttackedMonsters(attackingMonster);
         return attackingPower;
     }
 
@@ -226,7 +221,7 @@ public class AIController {
     private boolean canAttack() {
 
         for (Monster monster : bot.getBoard().getMonstersInField().values()) {
-            if (gameUpdate.didMonsterAttack(monster)) {
+            if (!gameUpdate.didMonsterAttack(monster)) {
                 selectedMonsterIndex = bot.getBoard().getMonsterPosition(monster);
                 return true;
             } else

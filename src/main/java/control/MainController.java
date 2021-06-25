@@ -640,7 +640,7 @@ public class MainController {
             answerObject.put("Type", "Error").put("Value", "card with name " + cardName + " does not exist");
         } else if (!DeckController.getInstance().doesUserHaveAnymoreCard(onlineUsers.get(token), cardName, deckName)) {
             answerObject.put("Type", "Error").put("Value", "you don't have anymore " + cardName);
-        } else if (DeckController.getInstance().isDeckFull(deckName, deckType)) {
+        } else if (Deck.getByDeckName(deckName).isDeckFull(deckType)) {
             answerObject.put("Type", "Error").put("Value", deckType.getName() + " is full");
         } else if (!DeckController.getInstance().canUserAddCardToDeck(deckName, cardName)) {
             answerObject.put("Type", "Error")

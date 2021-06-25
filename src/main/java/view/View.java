@@ -747,7 +747,7 @@ public class View {
         value.put("Token", token);
         value.put("Rounds number", String.valueOf(roundCount));
         JSONObject messageToSendToControl = new JSONObject();
-        messageToSendToControl.put("Type", "New duel with ai");
+        messageToSendToControl.put("Type", "New duel AI");
         messageToSendToControl.put("Value", value);
         JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
 
