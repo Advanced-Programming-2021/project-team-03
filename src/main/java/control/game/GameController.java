@@ -390,6 +390,8 @@ public class GameController {
         if (selectedCard instanceof Monster) {
             Monster monster = (Monster) selectedCard;
             if (monster.getCardName().equals("Gate Guardian")) return false;
+            if (monster.getType() == MonsterTypes.RITUAL)
+                return false;
         }
         ArrayList<Card> inHandCards = game.getCardsInBoard(selectedCard).getInHandCards();
         for (Card card : inHandCards) {
