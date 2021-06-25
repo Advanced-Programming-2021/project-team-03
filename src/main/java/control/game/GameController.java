@@ -451,8 +451,8 @@ public class GameController {
         gameUpdates.addMonstersToChangedPositionMonsters((Monster) selectedCard);
     }
 
-    public boolean canFlipSummon(String username) {
-        if (game.getPlayerByName(username).getBoard().getMonstersInField().containsValue((Monster) selectedCard)) {
+    public boolean canFlipSummon() {
+        if (game.getPlayerByTurn(turn).getBoard().getMonstersInField().containsValue((Monster) selectedCard)) {
             Monster monster = (Monster) selectedCard;
             return monster.getFaceUpSituation().equals(FACE_DOWN);
         }
@@ -466,9 +466,9 @@ public class GameController {
         gameUpdates.flipCard(monster);
     }
 
-    public boolean canAttackWithThisCard(String username) {
+    public boolean canAttackWithThisCard() {
         if (typeOfSelectedCard == MONSTER &&
-                game.getPlayerByName(username).getBoard().getMonstersInField().containsValue((Monster) selectedCard)) {
+                game.getPlayerByTurn(turn).getBoard().getMonstersInField().containsValue((Monster) selectedCard)) {
             Monster monster = (Monster) selectedCard;
             return monster.getAttackingFormat() == AttackingFormat.ATTACKING;
         }
@@ -492,10 +492,11 @@ public class GameController {
     }
 
 
-    public String attack(String attackingPlayerUsername, int position) {
+    public String attack(int position) {
         /*return the result of attack in a string*/
+        String attackingPlayerUsername = game.getPlayerByTurn(turn).getUser().getUsername();
 
-        Board attackingPlayerBoard = game.getPlayerByName(attackingPlayerUsername).getBoard();
+        Board attackingPlayerBoard = game.getPlayerByTurn(turn).getBoard();
         Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
         Monster attackingMonster = (Monster) selectedCard;
         Monster opponentMonster = game.getPlayerOpponentByTurn(turn).getBoard().getMonsterInFieldByPosition(position);
@@ -731,13 +732,13 @@ public class GameController {
         return true;
     }
 
-    public String getGraveyard(String username) {
+    public String getGraveyard() {
         StringBuilder graveyardString = new StringBuilder();
         int counter = 1;
-        for (Card card : game.getPlayerByName(username).getBoard().getGraveyard()) {
+        for (Card card : game.getPlayerByTurn(turn).getBoard().getGraveyard()) {
             graveyardString.append(counter).append(". ").append(card.getCardName()).append(" : ").append(card.getDescription()).append("\n");
         }
-        if (game.getPlayerByName(username).getBoard().getGraveyard().size() == 0)
+        if (game.getPlayerByTurn(turn).getBoard().getGraveyard().size() == 0)
             graveyardString.append("graveyard empty!");
         return graveyardString.toString();
     }
@@ -933,7 +934,9 @@ public class GameController {
         return game.showGameBoards();
     }
 
-    public void cheatCode(String type, String username, JSONObject valueObject) {
+    public void cheatCode(String type, JSONObject valueObject) {
+        String username = game.getPlayerByTurn(turn).getUser().getUsername();
+        getPlayerByTurn();
         switch (type) {
             case "Force increase" -> addCardToHand(username);
             case "Increase LP" -> increaseHealth(username, valueObject);

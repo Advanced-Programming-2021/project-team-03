@@ -54,8 +54,8 @@ public class Monster extends Card {
         return "Name: " + this.cardName + "\n" +
                 "Level: " + this.level + "\n" +
                 "Type: " + this.model + "\n" +
-                "ATK: " + this.baseAttack + "\n" +
-                "DEF: " + this.baseDefence + "\n" +
+                "ATK: " + this.baseAttack + " + " + (getAttackingPower() - baseAttack) + "\n" +
+                "DEF: " + this.baseDefence + " + " + (getDefensivePower() - baseDefence) + "\n" +
                 "Description: " + this.description + "\n";
     }
 

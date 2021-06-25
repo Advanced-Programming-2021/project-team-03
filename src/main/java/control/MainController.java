@@ -151,7 +151,7 @@ public class MainController {
         JSONObject answerObject = new JSONObject();
         if (isTokenInvalid(token)) putTokenError(answerObject);
         else {
-            GameController.getInstance().cheatCode(type, onlineUsers.get(token), valueObject);
+            GameController.getInstance().cheatCode(type, valueObject);
             answerObject.put("Type", "Successful").put("Value", "");
         }
         return answerObject.toString();
@@ -206,7 +206,7 @@ public class MainController {
         if (isTokenInvalid(token)) putTokenError(answerObject);
         else {
             answerObject.put("Type", "Graveyard")
-                    .put("Value", GameController.getInstance().getGraveyard(onlineUsers.get(token)));
+                    .put("Value", GameController.getInstance().getGraveyard());
         }
         return answerObject.toString();
     }
@@ -266,7 +266,7 @@ public class MainController {
             answerObject.put("Type", "Error").put("Value", "no card is selected yet!");
         } else if (GameController.getInstance().getCurrentPhase() != BATTLE) {
             answerObject.put("Type", "Error").put("Value", "can't direct attack phase!");
-        } else if (!GameController.getInstance().canAttackWithThisCard(onlineUsers.get(token))) {
+        } else if (!GameController.getInstance().canAttackWithThisCard()) {
             answerObject.put("Type", "Error").put("Value", "you can’t attack with this card!");
         } else if (!GameController.getInstance().cardAlreadyAttacked()) {
             answerObject.put("Type", "Error").put("Value", "this card already attacked!");
@@ -291,14 +291,14 @@ public class MainController {
             answerObject.put("Type", "Error").put("Value", "no card is selected yet!");
         } else if (GameController.getInstance().getCurrentPhase() != BATTLE) {
             answerObject.put("Type", "Error").put("Value", "can't attack in this phase!");
-        } else if (!GameController.getInstance().canAttackWithThisCard(onlineUsers.get(token))) {
+        } else if (!GameController.getInstance().canAttackWithThisCard()) {
             answerObject.put("Type", "Error").put("Value", "you can’t attack with this card!");
         } else if (!GameController.getInstance().cardAlreadyAttacked()) {
             answerObject.put("Type", "Error").put("Value", "this card already attacked!");
         } else if (!GameController.getInstance().canAttackThisPosition(position)) {
             answerObject.put("Type", "Error").put("Value", "there is no card to attack here!");
         } else {
-            String result = GameController.getInstance().attack(onlineUsers.get(token), Integer.parseInt(position));
+            String result = GameController.getInstance().attack(Integer.parseInt(position));
             answerObject.put("Type", "Successful").put("Value", result);
         }
 
@@ -317,7 +317,7 @@ public class MainController {
             answerObject.put("Type", "Error").put("Value", "can't flip summon in this phase!");
         } else if (!GameController.getInstance().canChangeCardPosition()) {
             answerObject.put("Type", "Error").put("Value", "you can’t change this card position!");
-        } else if (!GameController.getInstance().canFlipSummon(onlineUsers.get(token))) {
+        } else if (!GameController.getInstance().canFlipSummon()) {
             answerObject.put("Type", "Error").put("Value", "you can’t flip summon this card!");
         } else {
             GameController.getInstance().flipSummon();

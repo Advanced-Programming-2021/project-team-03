@@ -224,7 +224,7 @@ public class Board {
     private void showSpellAndTrapsOnBoard(int[] cardOrders) {
         board.append('\t');
         for (int i : cardOrders) {
-            if (spellAndTrapsInField.containsKey(i) && spellAndTrapsInField.get(5).isActive())
+            if (spellAndTrapsInField.containsKey(i) && spellAndTrapsInField.get(i).isActive())
                 board.append("O \t");
             else if (spellAndTrapsInField.containsKey(i))
                 board.append("H \t");
@@ -243,7 +243,7 @@ public class Board {
             if (monstersInField.containsKey(i)) {
                 cardAttackingFormat = monstersInField.get(i).getAttackingFormat();
                 cardFaceUpSituation = monstersInField.get(i).getFaceUpSituation();
-                if (cardAttackingFormat == DEFENDING)
+                if (cardAttackingFormat == ATTACKING)
                     board.append("OO\t");
                 else if (cardFaceUpSituation == FACE_UP)
                     board.append("DO\t");

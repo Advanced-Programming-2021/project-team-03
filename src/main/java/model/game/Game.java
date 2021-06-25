@@ -37,10 +37,8 @@ public class Game {
     }
 
     public Player getPlayerByName(String username) {
-        if (player1.getUser().getUsername().equals(username))
-            return player1;
-        else
-            return player2;
+        if (player1.getUser().getUsername().equals(username)) return player1;
+        else return player2;
     }
 
     public Player getPlayerByTurn(PlayerTurn turn) {
