@@ -75,7 +75,6 @@ public class GameController {
             answer.append("its ").append(game.getPlayer2().getUser().getNickname()).append("’s turn\n");
 
         answer.append("phase: Draw Phase\n");
-        currentPhase = DRAW;
         answer.append(drawPhase());
 
         MainController.getInstance().sendPrintRequestToView(answer.toString());
@@ -84,7 +83,17 @@ public class GameController {
     public void newDuelWithAI(String username, int numberOfRound) {
         game = new Game(User.getByUsername(username), numberOfRound);
         gameUpdates = new Update(game);
-        //TODO AI controller
+        AIController.getInstance().initialize(game, gameUpdates);
+
+        this.currentPhase = DRAW;
+        this.currentRound = 1;
+        turn = PLAYER1;
+
+        String answer = "Duel starts between" + username + " & " + "AI" + '\n' +
+                "its " + game.getPlayer1().getUser().getNickname() + "’s turn\n" +
+                "phase: Draw Phase\n" +
+                drawPhase();
+        MainController.getInstance().sendPrintRequestToView(answer);
     }
 
     public boolean isCardAddressValid(int cardPosition) {
@@ -776,6 +785,10 @@ public class GameController {
     }
 
     public void changeTurn() {
+        if (game.getPlayer2().getUser().getUsername().equals("AIBot")) {
+            AIController.getInstance().play();
+            return;
+        }
         if (turn == PLAYER1) turn = PLAYER2;
         else turn = PLAYER1;
     }
@@ -848,8 +861,7 @@ public class GameController {
         activeTraps(TrapNames.TIME_SEAL);
         if (!gameUpdates.isCanPlayerDrawACard()) {
             gameUpdates.setCanPlayerDrawACard(true);
-            StringBuilder answer = new StringBuilder("You can not draw new card Because the opponent has activated Time seal trap");
-            return answer.toString();
+            return "You can not draw new card Because the opponent has activated Time seal trap";
         }
         StringBuilder answer = new StringBuilder("new card added to the hand : ");
         game.getPlayerByTurn(turn).getBoard().addCardFromRemainingToInHandCards();

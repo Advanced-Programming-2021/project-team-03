@@ -11,9 +11,9 @@ import static model.game.PlayerTurn.PLAYER1;
 import static model.game.PlayerTurn.PLAYER2;
 
 public class Game {
-    private Player player1;
-    private Player player2;
-    private int numberOfRounds;
+    private final Player player1;
+    private final Player player2;
+    private final int numberOfRounds;
     private boolean filedActivated;
     private SpellAndTrap activatedFieldCard;
 
@@ -26,6 +26,10 @@ public class Game {
 
     public Game(User user1, int numberOfRounds) {
         /*duel with AI*/
+        this.player1 = new Player(8000, new Board(user1.getActiveDeck(), user1), user1);
+        this.player2 = new AIBot(8000, new Board(User.getByUsername("AIBot").getActiveDeck(), User.getByUsername("AIBot")), User.getByUsername("AIBot"));
+        this.numberOfRounds = numberOfRounds;
+        filedActivated = false;
     }
 
     public SpellAndTrap getActivatedFieldCard() {

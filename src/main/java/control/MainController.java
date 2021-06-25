@@ -457,7 +457,7 @@ public class MainController {
         } else {
             GameController.getInstance().newDuelWithAI(onlineUsers.get(token), numberOfRound);
             answerObject.put("Type", "Successful")
-                    .put("Value", "Duel starts between " + onlineUsers.get(token) + " & AI");
+                    .put("Value", "");
         }
 
         return answerObject.toString();
