@@ -455,9 +455,9 @@ public class MainController {
         if (isTokenInvalid(token)) putTokenError(answerObject);
         else if (numberOfRound != 1 && numberOfRound != 3) {
             answerObject.put("Type", "Error").put("Value", "number of rounds is not supported!");
-        } else if (!UserController.getInstance().doesPlayerHaveActiveDeck(onlineUsers.get(token))) {
+        } else if (User.getByUsername(onlineUsers.get(token)).getActiveDeck() == null) {
             answerObject.put("Type", "Error").put("Value", onlineUsers.get(token) + " has no active deck");
-        } else if (!UserController.getInstance().isUserActiveDeckValid(onlineUsers.get(token))) {
+        } else if (!User.getByUsername(onlineUsers.get(token)).getActiveDeck().isDeckValid()) {
             answerObject.put("Type", "Error").put("Value", onlineUsers.get(token) + "’s deck is invalid");
         } else {
             GameController.getInstance().newDuelWithAI(onlineUsers.get(token), numberOfRound);
@@ -475,17 +475,17 @@ public class MainController {
 
         JSONObject answerObject = new JSONObject();
         if (isTokenInvalid(token)) putTokenError(answerObject);
-        else if (!UserController.getInstance().doesUsernameExist(rivalName)) {
+        else if (User.getByUsername(rivalName) != null) {
             answerObject.put("Type", "Error").put("Value", "there is no player with this username!");
         } else if (numberOfRound != 1 && numberOfRound != 3) {
             answerObject.put("Type", "Error").put("Value", "number of rounds is not supported!");
-        } else if (!UserController.getInstance().doesPlayerHaveActiveDeck(onlineUsers.get(token))) {
+        } else if (User.getByUsername(onlineUsers.get(token)).getActiveDeck() == null) {
             answerObject.put("Type", "Error").put("Value", onlineUsers.get(token) + " has no active deck");
-        } else if (!UserController.getInstance().doesPlayerHaveActiveDeck(rivalName)) {
+        } else if (User.getByUsername(rivalName).getActiveDeck() == null) {
             answerObject.put("Type", "Error").put("Value", rivalName + " has no active deck");
-        } else if (!UserController.getInstance().isUserActiveDeckValid(onlineUsers.get(token))) {
+        } else if (!User.getByUsername(onlineUsers.get(token)).getActiveDeck().isDeckValid()) {
             answerObject.put("Type", "Error").put("Value", onlineUsers.get(token) + "’s deck is invalid");
-        } else if (!UserController.getInstance().isUserActiveDeckValid(rivalName)) {
+        } else if (!User.getByUsername(rivalName).getActiveDeck().isDeckValid()) {
             answerObject.put("Type", "Error").put("Value", rivalName + "’s deck is invalid");
         } else {
             GameController.getInstance().newDuel(onlineUsers.get(token), rivalName, numberOfRound);
@@ -706,7 +706,7 @@ public class MainController {
         return answerObject.toString();
     }
 
-    // Invalid Deck Error
+    // Invalid Request Error
     private String error() {
         JSONObject answerObject = new JSONObject();
         answerObject.put("Type", "Error").put("Value", "Invalid Request Type!!!");
@@ -753,7 +753,7 @@ public class MainController {
 
         // check possible errors
         if (isTokenInvalid(token)) putTokenError(answerObject);
-        else if (UserController.getInstance().doesNicknameExist(newNickname)) {
+        else if (User.doesNicknameExists(newNickname)) {
             answerObject.put("Type", "Error")
                     .put("Value", "user with nickname " + newNickname + " already exists");
         } else {
@@ -832,7 +832,7 @@ public class MainController {
         JSONObject answerObject = new JSONObject();
 
         // check possible errors
-        if (!UserController.getInstance().doesUsernameExist(username) ||
+        if (User.getByUsername(username) == null ||
                 !UserController.getInstance().doesUsernameAndPasswordMatch(username, password)) {
             answerObject.put("Type", "Error")
                     .put("Value", "Username or password is wrong!");
@@ -872,10 +872,10 @@ public class MainController {
         JSONObject answerObject = new JSONObject();
 
         // check possible errors
-        if (UserController.getInstance().doesUsernameExist(username)) {
+        if (User.getByUsername(username) != null) {
             answerObject.put("Type", "Error")
                     .put("Value", "user with username " + username + " already exists");
-        } else if (UserController.getInstance().doesNicknameExist(nickname)) {
+        } else if (User.doesNicknameExists(nickname)) {
             answerObject.put("Type", "Error")
                     .put("Value", "user with nickname " + nickname + " already exists");
         } else {

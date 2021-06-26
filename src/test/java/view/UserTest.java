@@ -14,7 +14,7 @@ class UserTest {
         UserController userController = UserController.getInstance();
         View.getInstance().createNewUser("user create -u ali1337 -p myverystronpassword$$ -n alinick");
 
-        assert userController.doesUsernameExist("ali1337");
+        assert User.getByUsername("ali1337") != null;
         assert userController.doesUsernameAndPasswordMatch("ali1337", "myverystronpassword$$");
         assert !userController.doesUsernameAndPasswordMatch("ali1337", "salam");
     }
@@ -24,11 +24,11 @@ class UserTest {
         MainController.getInstance();
         UserController userController = UserController.getInstance();
         View.getInstance().createNewUser("user create -u mamadAgha -p mammadmammad@@pass -n mammadnick");
-        assert userController.doesUsernameExist("mamadAgha");
+        assert User.getByUsername("mamadAgha") != null;
 
         MainController.getInstance()
                 .getRequest("{\"Type\":\"Register\",\"Value\":{\"Username\":\"mamadAgha\",\"Password\":\"salam\",\"Nickname\":\"mamadAgha123\"}}");
-        assert !userController.doesNicknameExist("mamadAgha123");
+        assert !User.doesNicknameExists("mamadAgha123");
         assert !userController.doesUsernameAndPasswordMatch("mamadAgha", "salam");
     }
 

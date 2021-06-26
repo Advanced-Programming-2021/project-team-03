@@ -6,7 +6,6 @@ import model.user.Deck;
 import model.user.DeckType;
 import model.user.User;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 public class DeckController {
