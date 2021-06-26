@@ -547,7 +547,7 @@ public class MainController {
         if (isTokenInvalid(token)) putTokenError(answerObject);
         else {
             answerObject.put("Type", "Successful");
-            ArrayList<Card> allUsersCards = DeckController.getInstance().getAllUsersCards(onlineUsers.get(token));
+            ArrayList<Card> allUsersCards = User.getByUsername(onlineUsers.get(token)).getCards();
             JSONArray cardsArray = new JSONArray();
             for (Card card : allUsersCards) {
                 cardsArray.put(card.getCardName() + ": " + card.getDescription());
@@ -573,7 +573,7 @@ public class MainController {
                     .put("Value", "deck with name " + deckName + " does not exist");
         } else {
             answerObject.put("Type", "Successful")
-                    .put("Value", DeckController.getInstance().getDeck(deckName).showDeck(DeckType.valueOf(deckType.toUpperCase())));
+                    .put("Value", Deck.getByDeckName(deckName).showDeck(DeckType.valueOf(deckType.toUpperCase())));
         }
 
         return answerObject.toString();
@@ -589,7 +589,8 @@ public class MainController {
             Deck activeDeck = User.getByUsername(onlineUsers.get(token)).getActiveDeck();
             answerObject.put("Type", "Successful")
                     .put("Active deck", DeckController.getInstance().getUserActiveDeck(onlineUsers.get(token)));
-            List<String> otherDecks = DeckController.getInstance().getAllUserDecks(onlineUsers.get(token)).stream()
+
+            List<String> otherDecks = User.getByUsername(onlineUsers.get(token)).getDecks().stream()
                     .filter(deck -> deck != activeDeck).map(Deck::generalOverview).collect(Collectors.toList());
             answerObject.put("Other deck", otherDecks);
         }
@@ -631,7 +632,7 @@ public class MainController {
         if (isTokenInvalid(token)) putTokenError(answerObject);
         else if (Deck.getByDeckName(deckName) == null) {
             answerObject.put("Type", "Error").put("Value", "deck with name " + deckName + " does not exist");
-        } else if (!DeckController.getInstance().doesCardExist(cardName)) {
+        } else if (Card.getCardByName(cardName) == null) {
             answerObject.put("Type", "Error").put("Value", "card with name " + cardName + " does not exist");
         } else if (!DeckController.getInstance().doesUserHaveAnymoreCard(onlineUsers.get(token), cardName, deckName)) {
             answerObject.put("Type", "Error").put("Value", "you don't have anymore " + cardName);

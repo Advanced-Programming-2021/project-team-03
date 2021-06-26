@@ -39,10 +39,6 @@ public class DeckController {
         }
     }
 
-    public boolean doesCardExist(String cardName) {
-        return Card.getCardByName(cardName) != null;
-    }
-
     public boolean doesUserHaveAnymoreCard(String username, String cardName, String deckName) {
         Card card = Card.getCardByName(cardName);
         Deck deck = Deck.getByDeckName(deckName);
@@ -75,20 +71,6 @@ public class DeckController {
     public String getUserActiveDeck(String username) {
         if (User.getByUsername(username).getActiveDeck() == null) return "No active deck\n";
         return User.getByUsername(username).getActiveDeck().generalOverview();
-    }
-
-    public ArrayList<Deck> getAllUserDecks(String username) {
-        /* this method returns all decks except the active deck */
-        return User.getByUsername(username).getDecks();
-    }
-
-    public Deck getDeck(String deckName) {
-        return Deck.getByDeckName(deckName);
-    }
-
-    public ArrayList<Card> getAllUsersCards(String username) {
-        // return all cards that owned by the user
-        return User.getByUsername(username).getCards();
     }
 
     public void setActiveDeck(String username, String deckName) {
