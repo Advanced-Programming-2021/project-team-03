@@ -24,7 +24,7 @@ class DeckTest {
         view.loginUser("user login -u newDeck -p pass");
 
         view.preparatoryDeckWorks("deck create newDeckTest", "Create deck", 3);
-        assert DeckController.getInstance().doesDeckExist("newDeckTest");
+        assert Deck.getByDeckName("newDeckTest") != null;
 
         view.logoutUser();
         View.testing = false;

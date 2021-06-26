@@ -568,7 +568,7 @@ public class MainController {
 
         JSONObject answerObject = new JSONObject();
         if (isTokenInvalid(token)) putTokenError(answerObject);
-        else if (!DeckController.getInstance().doesDeckExist(deckName)) {
+        else if (Deck.getByDeckName(deckName) == null) {
             answerObject.put("Type", "Error")
                     .put("Value", "deck with name " + deckName + " does not exist");
         } else {
@@ -606,7 +606,7 @@ public class MainController {
         // answer Json object
         JSONObject answerObject = new JSONObject();
         if (isTokenInvalid(token)) putTokenError(answerObject);
-        else if (!DeckController.getInstance().doesDeckExist(deckName)) {
+        else if (Deck.getByDeckName(deckName) == null) {
             answerObject.put("Type", "Error")
                     .put("Value", "deck with name " + deckName + " does not exist");
         } else if (!Deck.getByDeckName(deckName).doesContainCard(Card.getCardByName(cardName), DeckType.valueOf(deckType.toUpperCase()))) {
@@ -629,7 +629,7 @@ public class MainController {
         // answer Json object
         JSONObject answerObject = new JSONObject();
         if (isTokenInvalid(token)) putTokenError(answerObject);
-        else if (!DeckController.getInstance().doesDeckExist(deckName)) {
+        else if (Deck.getByDeckName(deckName) == null) {
             answerObject.put("Type", "Error").put("Value", "deck with name " + deckName + " does not exist");
         } else if (!DeckController.getInstance().doesCardExist(cardName)) {
             answerObject.put("Type", "Error").put("Value", "card with name " + cardName + " does not exist");
@@ -656,9 +656,11 @@ public class MainController {
         // answer Json object
         JSONObject answerObject = new JSONObject();
         if (isTokenInvalid(token)) putTokenError(answerObject);
-        else if (!DeckController.getInstance().doesDeckExist(deckName)) {
+        else if (Deck.getByDeckName(deckName) == null) {
             answerObject.put("Type", "Error")
                     .put("Value", "deck with name " + deckName + " does not exist");
+        } else if (!User.getByUsername(onlineUsers.get(token)).getDecks().contains(Deck.getByDeckName(deckName))) {
+            answerObject.put("Type", "Error").put("Value", "this is not your deck!");
         } else {
             DeckController.getInstance().setActiveDeck(onlineUsers.get(token), deckName);
             answerObject.put("Type", "Successful").put("Value", "deck activated successfully!");
@@ -674,7 +676,7 @@ public class MainController {
         // answer Json object
         JSONObject answerObject = new JSONObject();
         if (isTokenInvalid(token)) putTokenError(answerObject);
-        else if (!DeckController.getInstance().doesDeckExist(deckName)) {
+        else if (Deck.getByDeckName(deckName) == null) {
             answerObject.put("Type", "Error")
                     .put("Value", "deck with name " + deckName + " does not exist");
         } else {
@@ -692,7 +694,7 @@ public class MainController {
         // answer Json object
         JSONObject answerObject = new JSONObject();
         if (isTokenInvalid(token)) putTokenError(answerObject);
-        else if (DeckController.getInstance().doesDeckExist(deckName)) {
+        else if (Deck.getByDeckName(deckName) != null) {
             answerObject.put("Type", "Error").put("Value", "deck with name " + deckName + " already exists");
         } else {
             DeckController.getInstance().createNewDeck(onlineUsers.get(token), deckName);

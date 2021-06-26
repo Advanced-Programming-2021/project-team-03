@@ -21,10 +21,6 @@ public class DeckController {
         return deckController;
     }
 
-    public boolean doesDeckExist(String deckName) {
-        return Deck.getByDeckName(deckName) != null;
-    }
-
     public void createNewDeck(String username, String deckName) {
         try {
             Deck deck = new Deck(deckName);
