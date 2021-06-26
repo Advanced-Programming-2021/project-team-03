@@ -169,14 +169,6 @@ public class Update {
         return count;
     }
 
-    public Player getLooser(Player gameWinner) {
-        for (Player looser : roundWinners) {
-            if (!looser.getUser().getUsername().equals(gameWinner.getUser().getUsername()))
-                return looser;
-        }
-        return null;
-    }
-
     public void reset() {
         haveBeenSetOrSummonACardInPhase = false;
         alreadyAttackedMonsters = new ArrayList<>();

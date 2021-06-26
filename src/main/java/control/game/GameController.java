@@ -974,7 +974,7 @@ public class GameController {
     private String checkGameStatus() {
         Player winner = gameUpdates.getWinner();
         int winnerNumberOfWins = gameUpdates.getWins(winner);
-        Player looser = gameUpdates.getLooser(winner);
+        Player looser = game.getPlayerOpponentByPlayer(winner);
         int looserNumberOfWins = gameUpdates.getWins(looser);
         try {
             winner.getUser().increaseBalance((winnerNumberOfWins * 1000) + 3 * winner.getHealth());
