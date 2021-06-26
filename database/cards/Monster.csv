@@ -22,22 +22,21 @@ Slot Machine,7,DARK,Machine,Normal,2000,2300,The machine's ability is said to va
 Haniwa,2,EARTH,Rock,Normal,500,500,An earthen figure that protects the tomb of an ancient ruler.,600,21
 Man-Eater Bug,2,EARTH,Insect,Effect,450,600,FLIP: Target 1 monster on the field; destroy that target.,600,22
 Gate Guardian,11,DARK,Warrior,Effect,3750,3400,"Cannot be Normal Summoned/Set. Must first be Special Summoned (from your hand) by Tributing 1 ""Sanga of the Thunder"", ""Kazejin"", and ""Suijin"".",20000,23
-Scanner,1,LIGHT,Machine,Effect,0,0,"Once per turn, you can select 1 of your opponent's monsters that is removed from play. Until the End Phase, this card's name is treated as the selected monster's name, and this card has the same Attribute, Level, ATK, and DEF as the selected monster. If this card is removed from the field while this effect is applied, remove it from play.",8000,24
-Bitron,2,EARTH,Cyberse,Normal,200,2000,A new species found in electronic space. There's not much information on it.,1000,25
-Marshmallon,3,LIGHT,Fairy,Effect,300,500,"Cannot be destroyed by battle. After damage calculation, if this card was attacked, and was face-down at the start of the Damage Step: The attacking player takes 1000 damage.",700,26
-Beast King Barbaros,8,EARTH,Beast-Warrior,Effect,3000,1200,"You can Normal Summon/Set this card without Tributing, but its original ATK becomes 1900. You can Tribute 3 monsters to Tribute Summon (but not Set) this card. If Summoned this way: Destroy all cards your opponent controls.",9200,27
-Texchanger,1,DARK,Cyberse,Effect,100,100,"Once per turn, when your monster is targeted for an attack: You can negate that attack, then Special Summon 1 Cyberse Normal Monster from your hand, Deck, or GY.",200,28
-Leotron,4,EARTH,Cyberse,Normal,2000,0,A territorial electronic monster that guards its own domain.,2500,29
-The Calculator,2,LIGHT,Thunder,Effect,0,0,The ATK of this card is the combined Levels of all face-up monsters you control x 300.,8000,30
-Alexandrite Dragon,4,LIGHT,Dragon,Normal,2000,100,"Many of the czars' lost jewels can be found in the scales of this priceless dragon. Its creator remains a mystery, along with how they acquired the imperial treasures. But whosoever finds this dragon has hit the jackpot... whether they know it or not.",2600,31
-Mirage Dragon,4,LIGHT,Dragon,Effect,1600,600,Your opponent cannot activate Trap Cards during the Battle Phase.,2500,32
-Herald of Creation,4,LIGHT,Spell caster,Effect,1800,600,"Once per turn: You can discard 1 card, then target 1 Level 7 or higher monster in your Graveyard; add that target to your hand.",2700,33
-Exploder Dragon,3,EARTH,Dragon,Effect,1000,0,If this card is destroyed by battle and sent to the Graveyard: Destroy the monster that destroyed it. Neither player takes any battle damage from attacks involving this attacking card.,1000,34
-Warrior Dai Grepher,4,EARTH,Warrior,Normal,1700,1600,The warrior who can manipulate dragons. Nobody knows his mysterious past.,3400,35
-Dark Blade,4,DARK,Warrior,Normal,1800,1500,"They say he is a dragon-manipulating warrior from the dark world. His attack is tremendous, using his great swords with vicious power.",3500,36
+Bitron,2,EARTH,Cyberse,Normal,200,2000,A new species found in electronic space. There's not much information on it.,1000,24
+Marshmallon,3,LIGHT,Fairy,Effect,300,500,"Cannot be destroyed by battle. After damage calculation, if this card was attacked, and was face-down at the start of the Damage Step: The attacking player takes 1000 damage.",700,25
+Beast King Barbaros,8,EARTH,Beast-Warrior,Effect,3000,1200,"You can Normal Summon/Set this card without Tributing, but its original ATK becomes 1900. You can Tribute 3 monsters to Tribute Summon (but not Set) this card. If Summoned this way: Destroy all cards your opponent controls.",9200,26
+Texchanger,1,DARK,Cyberse,Effect,100,100,"Once per turn, when your monster is targeted for an attack: You can negate that attack, then Special Summon 1 Cyberse Normal Monster from your hand, Deck, or GY.",200,27
+Leotron,4,EARTH,Cyberse,Normal,2000,0,A territorial electronic monster that guards its own domain.,2500,28
+The Calculator,2,LIGHT,Thunder,Effect,0,0,The ATK of this card is the combined Levels of all face-up monsters you control x 300.,8000,29
+Alexandrite Dragon,4,LIGHT,Dragon,Normal,2000,100,"Many of the czars' lost jewels can be found in the scales of this priceless dragon. Its creator remains a mystery, along with how they acquired the imperial treasures. But whosoever finds this dragon has hit the jackpot... whether they know it or not.",2600,30
+Mirage Dragon,4,LIGHT,Dragon,Effect,1600,600,Your opponent cannot activate Trap Cards during the Battle Phase.,2500,31
+Herald of Creation,4,LIGHT,Spell caster,Effect,1800,600,"Once per turn: You can discard 1 card, then target 1 Level 7 or higher monster in your Graveyard; add that target to your hand.",2700,32
+Exploder Dragon,3,EARTH,Dragon,Effect,1000,0,If this card is destroyed by battle and sent to the Graveyard: Destroy the monster that destroyed it. Neither player takes any battle damage from attacks involving this attacking card.,1000,33
+Warrior Dai Grepher,4,EARTH,Warrior,Normal,1700,1600,The warrior who can manipulate dragons. Nobody knows his mysterious past.,3400,34
+Dark Blade,4,DARK,Warrior,Normal,1800,1500,"They say he is a dragon-manipulating warrior from the dark world. His attack is tremendous, using his great swords with vicious power.",3500,35
 Wattaildragon,6,LIGHT,Dragon,Normal,2500,1000,"Capable of indefinite flight. Attacks by wrapping its body with electricity and ramming into opponents.
-IMPORTANT: Capturing the ""Wattaildragon"" is forbidden by the Ancient Rules and is a Level 6 offense, the minimum sentence for which is imprisonment for no less than 2500 heliocycles.",5800,37
-"Terratiger, the Empowered Warrior",4,EARTH,Warrior,Effect,1800,1200,When this card is Normal Summoned: You can Special Summon 1 Level 4 or lower Normal Monster from your hand in Defense Position.,3200,38
-The Tricky,5,WIND,Spell caster,Effect,2000,1200,You can Special Summon this card (from your hand) by discarding 1 card.,4300,39
-Spiral Serpent,8,WATER,Sea Serpent,Normal,2900,2900,"When huge whirlpools lay cities asunder, it is the hunger of this sea serpent at work. No one has ever escaped its dreaded Spiral Wave to accurately describe the terror they experienced.",11700,40
-Command Knight,4,Fire,Warrior,Effect,1000,1000,"All Warrior-Type monsters you control gain 400 ATK. If you control another monster, monsters your opponent controls cannot target this card for an attack.",2100,41
+IMPORTANT: Capturing the ""Wattaildragon"" is forbidden by the Ancient Rules and is a Level 6 offense, the minimum sentence for which is imprisonment for no less than 2500 heliocycles.",5800,36
+"Terratiger, the Empowered Warrior",4,EARTH,Warrior,Effect,1800,1200,When this card is Normal Summoned: You can Special Summon 1 Level 4 or lower Normal Monster from your hand in Defense Position.,3200,37
+The Tricky,5,WIND,Spell caster,Effect,2000,1200,You can Special Summon this card (from your hand) by discarding 1 card.,4300,38
+Spiral Serpent,8,WATER,Sea Serpent,Normal,2900,2900,"When huge whirlpools lay cities asunder, it is the hunger of this sea serpent at work. No one has ever escaped its dreaded Spiral Wave to accurately describe the terror they experienced.",11700,39
+Command Knight,4,Fire,Warrior,Effect,1000,1000,"All Warrior-Type monsters you control gain 400 ATK. If you control another monster, monsters your opponent controls cannot target this card for an attack.",2100,40
