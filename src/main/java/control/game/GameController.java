@@ -51,10 +51,12 @@ public class GameController {
     private Game game;
     private PlayerTurn turn;
     private int currentRound;
+    private boolean firstBattlePhase;
 
     public void newDuel(String firstPlayerName, String secondPlayerName, int numberOfRound) {
         this.currentPhase = DRAW;
         this.currentRound = 1;
+        firstBattlePhase = true;
 
         // creating a random number to determine the starting player
         Random random = new Random();
@@ -88,6 +90,7 @@ public class GameController {
         this.currentPhase = DRAW;
         this.currentRound = 1;
         turn = PLAYER1;
+        firstBattlePhase = true;
 
         String answer = "Duel starts between" + username + " & " + "AI" + '\n' +
                 "its " + game.getPlayer1().getUser().getNickname() + "’s turn\n" +
@@ -844,8 +847,14 @@ public class GameController {
                 activeTraps(TrapNames.MIND_CRUSH);
             }
             case FIRST_MAIN -> {
-                answerAnswer.append("phase: Battle Phase");
-                currentPhase = BATTLE;
+                if (firstBattlePhase) {
+                    answerAnswer.append("phase: Second Phase");
+                    currentPhase = SECOND_MAIN;
+                } else {
+                    answerAnswer.append("phase: Battle Phase");
+                    currentPhase = BATTLE;
+                    firstBattlePhase = false;
+                }
             }
             case BATTLE -> {
                 answerAnswer.append("phase: Second Phase");
