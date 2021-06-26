@@ -301,7 +301,6 @@ public class AIController {
                 Monster monster = (Monster) card;
                 if (monster.getBaseAttack() >= max) {
                     max = monster.getBaseAttack();
-                    selectedHandIndex = i;
                     summon = true;
                 }
             }
@@ -313,7 +312,6 @@ public class AIController {
                 Monster monster = (Monster) card;
                 if (monster.getDefensivePower() >= max) {
                     max = monster.getDefensivePower();
-                    selectedHandIndex = i;
                     summon = false;
                 }
             }
@@ -407,7 +405,6 @@ public class AIController {
             board.removeCardFromField(position, true);
             board.setOrSummonMonsterFromHandToFiled(monster, "Summon");
         } else if (monster.getLevel() > 6) {
-            System.out.println(board.getMonstersInField().size());
             int firstPosition = random.nextInt(board.getMonstersInField().size());
             Monster firstMonster = board.getMonsterInFieldByPosition(firstPosition);
             int secondPosition = random.nextInt(board.getMonstersInField().size());
@@ -433,10 +430,10 @@ public class AIController {
                 if (monster.getLevel() < 5) {
                     selectedHandIndex = i;
                     return true;
-                } else if (monster.getLevel() < 7 && bot.getBoard().getMonstersInField().size() > 1) {
+                } else if (monster.getLevel() < 7 && bot.getBoard().getMonstersInField().size() > 0) {
                     selectedHandIndex = i;
                     return true;
-                } else if (bot.getBoard().getMonstersInField().size() > 2) {
+                } else if (bot.getBoard().getMonstersInField().size() > 1) {
                     selectedHandIndex = i;
                     return true;
                 }
