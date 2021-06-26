@@ -19,11 +19,11 @@ class ProfileTest {
         view.createNewUser("user create -u aliNickname -p ali2logoutPass -n NicknameNickname");
         view.loginUser("user login -u aliNickname -p ali2logoutPass");
         assert mainController.getOnlineUsers().containsValue("aliNickname");
-        assert userController.doesNicknameExist("NicknameNickname");
+        assert User.doesNicknameExists("NicknameNickname");
 
         view.changeNickname("profile change -n NicknameNewNickname");
-        assert !userController.doesNicknameExist("NicknameNickname");
-        assert userController.doesNicknameExist("NicknameNewNickname");
+        assert !User.doesNicknameExists("NicknameNickname");
+        assert User.doesNicknameExists("NicknameNewNickname");
 
         View.testing = false;
     }
@@ -39,7 +39,7 @@ class ProfileTest {
         view.createNewUser("user create -u failedNickname2 -p pass -n failedNickname2");
         view.loginUser("user login -u failedNickname -p pass");
         assert mainController.getOnlineUsers().containsValue("failedNickname");
-        assert userController.doesNicknameExist("failedNickname");
+        assert User.doesNicknameExists("failedNickname");
 
         view.changeNickname("profile change -n failedNickname2");
         Assertions.assertEquals("failedNickname", User.getByUsername("failedNickname").getNickname());

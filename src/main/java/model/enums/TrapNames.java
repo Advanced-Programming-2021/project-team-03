@@ -12,7 +12,7 @@ public enum TrapNames {
     MAGIC_JAMAMER("Magic Jamamer"),
     CALL_OF_THE_HAUNTED("Call of The Haunted");
 
-    private String name;
+    private final String name;
 
     TrapNames(String name) {
         this.name = name;

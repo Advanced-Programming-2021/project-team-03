@@ -295,7 +295,7 @@ public class AllTrapsEffects {
             } catch (Exception ignored) {
             }
         } else {
-            MainController.getInstance().sendPrintRequestToView(String.valueOf(numberOfRemovedCards) + " of your in hand cards was removed");
+            MainController.getInstance().sendPrintRequestToView(numberOfRemovedCards + " of your in hand cards was removed");
         }
 
         SpellAndTrap trap = getTheDesiredTrapFormBoard(board, TrapNames.MIND_CRUSH);
