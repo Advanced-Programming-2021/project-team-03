@@ -5,6 +5,7 @@ import control.game.GameController;
 import control.game.Update;
 import model.card.Card;
 import model.card.SpellAndTrap;
+import model.user.Deck;
 import model.user.User;
 
 import static model.game.PlayerTurn.PLAYER1;
