@@ -17,7 +17,7 @@ public class Update {
     private boolean haveBeenSetOrSummonACardInPhase;
     private ArrayList<Monster> alreadyChangedPositionMonsters;
     private final HashMap<UpdateEnum, Object> allUpdates;
-    private boolean haveRitualSpellBeenActivated = false; //TODO: make this field true if ritual spell activated.
+    private boolean haveRitualSpellBeenActivated = false;
     private final ArrayList<Player> roundWinners;
     private final HashMap<Player, Boolean> canPlayerActivateATrap;
     private final HashMap<Player, Boolean> playerRingOfDefenseActivator;

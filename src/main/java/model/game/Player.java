@@ -28,8 +28,11 @@ public class Player {
 
     public void decreaseHealthByAmount(int amount) {
         this.health -= amount;
-        if (this.health <= 0)
+        if (this.health <= 0) {
+            //TODO
             GameController.getInstance().roundIsOver();
+        }
+
     }
 
     public boolean canPlayerDrawCard() {

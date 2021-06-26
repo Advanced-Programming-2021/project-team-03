@@ -29,8 +29,12 @@ public class UserJson {
         decks = new ArrayList<>();
         cards = new ArrayList<>();
 
-        user.getDecks().forEach(deck -> decks.add(deck.getDeckName()));
-        user.getCards().forEach(card -> cards.add(card.getCardName()));
+        user.getDecks().forEach(deck -> {
+            if (deck != null) decks.add(deck.getDeckName());
+        });
+        user.getCards().forEach(card -> {
+            if (card != null) cards.add(card.getCardName());
+        });
     }
 
     public User convert() throws DatabaseException {

@@ -55,7 +55,6 @@ public class MainController {
 
     public String getRequest(String input) { //this method receives a input string and return a string as an answer
         /* note that this strings are in Json format */
-        // TODO parsing analysing and answering the request of view menu for some more requests
 
         // parsing the json string request with JSONObject library
         JSONObject inputObject = new JSONObject(input);
@@ -131,7 +130,6 @@ public class MainController {
     }
 
     public String sendRequestToView(JSONObject messageToSend) {
-        //TODO: will be complete in future
         /*send the statements of the game to view
          * such as phase name, players' turn, ask for card activation and etc*/
         return View.getInstance().getRequest(messageToSend.toString());
@@ -543,7 +541,6 @@ public class MainController {
     }
 
     private String showAllPlayerCards(JSONObject valueObject) {
-        //TODO double check the card representation
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
@@ -565,7 +562,6 @@ public class MainController {
      * Deck Requests
      **/
     private String showDeck(JSONObject valueObject) {
-        //TODO double check the deck representation
         String token = valueObject.getString("Token");
         String deckName = valueObject.getString("Deck name");
         String deckType = valueObject.getString("Deck type");
@@ -584,7 +580,6 @@ public class MainController {
     }
 
     private String showAllDecks(JSONObject valueObject) {
-        // TODO double check the other decks representation
 
         String token = valueObject.getString("Token");
 
@@ -640,7 +635,7 @@ public class MainController {
             answerObject.put("Type", "Error").put("Value", "card with name " + cardName + " does not exist");
         } else if (!DeckController.getInstance().doesUserHaveAnymoreCard(onlineUsers.get(token), cardName, deckName)) {
             answerObject.put("Type", "Error").put("Value", "you don't have anymore " + cardName);
-        } else if (DeckController.getInstance().isDeckFull(deckName, deckType)) {
+        } else if (Deck.getByDeckName(deckName).isDeckFull(deckType)) {
             answerObject.put("Type", "Error").put("Value", deckType.getName() + " is full");
         } else if (!DeckController.getInstance().canUserAddCardToDeck(deckName, cardName)) {
             answerObject.put("Type", "Error")

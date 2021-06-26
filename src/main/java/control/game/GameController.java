@@ -390,6 +390,8 @@ public class GameController {
         if (selectedCard instanceof Monster) {
             Monster monster = (Monster) selectedCard;
             if (monster.getCardName().equals("Gate Guardian")) return false;
+            if (monster.getType() == MonsterTypes.RITUAL)
+                return false;
         }
         ArrayList<Card> inHandCards = game.getCardsInBoard(selectedCard).getInHandCards();
         for (Card card : inHandCards) {
@@ -650,6 +652,7 @@ public class GameController {
         Monster attackingMonster = (Monster) selectedCard;
         int attackingPower = attackingMonster.getAttackingPower();
         game.getPlayerOpponentByTurn(turn).decreaseHealthByAmount(attackingPower);
+        gameUpdates.addMonstersToAttackedMonsters(attackingMonster);
         return attackingPower;
     }
 
@@ -702,7 +705,6 @@ public class GameController {
             MainController.getInstance().sendPrintRequestToView("there is no way you could ritual summon a monster");
             return false;
         }
-        //TODO
         return true;
     }
 
@@ -903,7 +905,6 @@ public class GameController {
             checkFieldCard();
         checkForEquipments(game.getPlayerByTurn(turn).getBoard());
         checkForEquipments(game.getPlayerOpponentByTurn(turn).getBoard());
-        //TODO
     }
 
     private void checkForEquipments(Board board) {
