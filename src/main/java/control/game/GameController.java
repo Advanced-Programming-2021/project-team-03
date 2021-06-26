@@ -850,14 +850,14 @@ public class GameController {
                 if (firstBattlePhase) {
                     answerAnswer.append("phase: Second Phase");
                     currentPhase = SECOND_MAIN;
+                    firstBattlePhase = false;
                 } else {
                     answerAnswer.append("phase: Battle Phase");
                     currentPhase = BATTLE;
-                    firstBattlePhase = false;
                 }
             }
             case BATTLE -> {
-                answerAnswer.append("phase: Second Phase");
+                answerAnswer.append("phase: Second Main Phase");
                 currentPhase = SECOND_MAIN;
                 activeTraps(TrapNames.CALL_OF_THE_HAUNTED);
                 activeTraps(TrapNames.MIND_CRUSH);

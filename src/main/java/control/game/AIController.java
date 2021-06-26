@@ -37,6 +37,7 @@ public class AIController {
     private int selectedHandIndex;
     private int selectedMonsterIndex;
     private boolean summon;
+    private boolean notSummonOrSetYet;
 
     public void initialize(Game game, Update gameUpdates) {
         this.game = game;
@@ -47,11 +48,13 @@ public class AIController {
 
     public void play() {
         StringBuilder AIPlayLog = new StringBuilder();
+        notSummonOrSetYet = true;
         AIPlayLog.append("Now it's AI turn\n");
         bot.getBoard().addCardFromRemainingToInHandCards();
         AIPlayLog.append("AI Draws a card\n");
-        if (canSummonOrSet()) {
+        while (canSummonOrSet() && notSummonOrSetYet) {
             boolean summon = summonOrSet();
+            notSummonOrSetYet = false;
             if (summon) {
                 summon();
                 AIPlayLog.append("AI Summons a monster in attacking position\n");
@@ -279,9 +282,12 @@ public class AIController {
     private boolean canSetSpellsInHand() {
         if (bot.getBoard().getSpellAndTrapsInField().size() >= 5)
             return false;
-        for (Card card : bot.getBoard().getInHandCards()) {
-            if (card instanceof SpellAndTrap)
+        for (int i = 0; i < bot.getBoard().getInHandCards().size(); i++) {
+            Card card = bot.getBoard().getInHandCards().get(i);
+            if (card instanceof SpellAndTrap) {
+                selectedHandIndex = i;
                 return true;
+            }
         }
         return false;
     }
@@ -373,7 +379,7 @@ public class AIController {
         }
 
         if (monster.getCardName().equals("The Tricky")) {
-            int position = random.nextInt(board.getInHandCards().size());
+            int position = random.nextInt(board.getInHandCards().size() + 1);
             Card card = board.getInHandCardByPosition(position);
             if (card != null && !card.equals(monster)) {
                 board.addCardToGraveyard(card);
@@ -423,19 +429,13 @@ public class AIController {
                 Monster monster = (Monster) card;
                 if (monster.getLevel() < 5)
                     return true;
-                else return checkForTribute(monster.getLevel());
+                else if (monster.getLevel() < 7 && bot.getBoard().getMonstersInField().size() > 0) {
+                    return true;
+                } else if (bot.getBoard().getMonstersInField().size() > 1) {
+                    return true;
+                }
             }
         }
         return false;
     }
-
-    private boolean checkForTribute(int level) {
-        if (level < 7) {
-            return bot.getBoard().getMonstersInField().size() > 0;
-        } else {
-            return bot.getBoard().getMonstersInField().size() > 1;
-        }
-    }
-
-
 }

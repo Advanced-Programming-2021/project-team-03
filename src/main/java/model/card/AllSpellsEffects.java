@@ -203,7 +203,7 @@ public class AllSpellsEffects {
 
     private void twinTwisterEffect(Game game, Update gameUpdates, PlayerTurn turn) {
         Board attackingPlayerBoard = game.getPlayerByTurn(turn).getBoard();
-        MainController.getInstance().sendPrintRequestToView("Mystical Typhoon effect activated!\n");
+        MainController.getInstance().sendPrintRequestToView("Twin twist effect activated!\n");
         Random random = new Random();
         int randomIndex = random.nextInt(attackingPlayerBoard.getInHandCards().size());
         Card sacrificedCard = attackingPlayerBoard.getInHandCards().get(randomIndex);
