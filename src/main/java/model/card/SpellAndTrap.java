@@ -26,7 +26,6 @@ public class SpellAndTrap extends Card {
                         int price, String cardID, SpellAndTrapIcon icon) {
         super(cardName, cardID, description, price, attribute);
         this.icon = icon;
-        //TODO create a constructor
     }
 
     public static SpellAndTrap getSpellAndTrapByName(String cardName) {
