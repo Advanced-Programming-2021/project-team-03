@@ -12,6 +12,7 @@ import model.game.Player;
 import model.game.PlayerTurn;
 
 import java.util.Random;
+import java.util.concurrent.Callable;
 
 import static control.game.UpdateEnum.TEXCHANGER_ACTIVATED;
 import static model.enums.FaceUpSituation.FACE_DOWN;
@@ -406,6 +407,7 @@ public class AIController {
             board.removeCardFromField(position, true);
             board.setOrSummonMonsterFromHandToFiled(monster, "Summon");
         } else if (monster.getLevel() > 6) {
+            System.out.println(board.getMonstersInField().size());
             int firstPosition = random.nextInt(board.getMonstersInField().size());
             Monster firstMonster = board.getMonsterInFieldByPosition(firstPosition);
             int secondPosition = random.nextInt(board.getMonstersInField().size());
@@ -424,14 +426,18 @@ public class AIController {
     private boolean canSummonOrSet() {
         if (bot.getBoard().getMonstersInField().size() >= 5)
             return false;
-        for (Card card : bot.getBoard().getInHandCards()) {
+        for (int i = 0; i < bot.getBoard().getInHandCards().size(); i++) {
+            Card card = bot.getBoard().getInHandCards().get(i);
             if (card instanceof Monster) {
                 Monster monster = (Monster) card;
-                if (monster.getLevel() < 5)
+                if (monster.getLevel() < 5) {
+                    selectedHandIndex = i;
                     return true;
-                else if (monster.getLevel() < 7 && bot.getBoard().getMonstersInField().size() > 0) {
+                } else if (monster.getLevel() < 7 && bot.getBoard().getMonstersInField().size() > 1) {
+                    selectedHandIndex = i;
                     return true;
-                } else if (bot.getBoard().getMonstersInField().size() > 1) {
+                } else if (bot.getBoard().getMonstersInField().size() > 2) {
+                    selectedHandIndex = i;
                     return true;
                 }
             }

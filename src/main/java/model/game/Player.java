@@ -30,7 +30,7 @@ public class Player {
         this.health -= amount;
         if (this.health <= 0) {
             //TODO
-            GameController.getInstance().roundIsOver();
+            GameController.getInstance().roundIsOver(this);
         }
 
     }

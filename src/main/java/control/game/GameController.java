@@ -875,7 +875,7 @@ public class GameController {
                     answerAnswer.append("phase: Draw Phase\n");
                     currentPhase = DRAW;
                     answerAnswer.append(drawPhase());
-                } else roundIsOver();
+                } else roundIsOver(getPlayerByTurn());
             }
         }
         return answerAnswer.toString();
@@ -947,9 +947,10 @@ public class GameController {
         }
     }
 
-    public void roundIsOver() {
+    public void roundIsOver(Player player) {
         currentRound += 1;
         game.checkRoundResults(gameUpdates);
+        gameUpdates.playerWins(game.getPlayerOpponentByPlayer(player));
         String results = game.getWinner().getUser().getUsername() + " won the game and the score is: 1000 - 0";
         JSONObject answerObject = new JSONObject();
         JSONObject value = new JSONObject();

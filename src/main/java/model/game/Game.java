@@ -165,4 +165,11 @@ public class Game {
     public void setFiledActivated(boolean filedActivated) {
         this.filedActivated = filedActivated;
     }
+
+    public Player getPlayerOpponentByPlayer(Player player) {
+        if (player.equals(player1))
+            return player2;
+        else
+            return player1;
+    }
 }
