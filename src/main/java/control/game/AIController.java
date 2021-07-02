@@ -12,7 +12,6 @@ import model.game.Player;
 import model.game.PlayerTurn;
 
 import java.util.Random;
-import java.util.concurrent.Callable;
 
 import static control.game.UpdateEnum.TEXCHANGER_ACTIVATED;
 import static model.enums.FaceUpSituation.FACE_DOWN;
