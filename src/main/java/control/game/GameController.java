@@ -841,7 +841,7 @@ public class GameController {
                 standbyPhase();
             }
             case STANDBY -> {
-                answerAnswer.append("phase: First Main Phase");
+                answerAnswer.append("phase: First view.Main Phase");
                 currentPhase = FIRST_MAIN;
                 activeTraps(TrapNames.CALL_OF_THE_HAUNTED);
                 activeTraps(TrapNames.MIND_CRUSH);
@@ -857,7 +857,7 @@ public class GameController {
                 }
             }
             case BATTLE -> {
-                answerAnswer.append("phase: Second Main Phase");
+                answerAnswer.append("phase: Second view.Main Phase");
                 currentPhase = SECOND_MAIN;
                 activeTraps(TrapNames.CALL_OF_THE_HAUNTED);
                 activeTraps(TrapNames.MIND_CRUSH);

@@ -47,7 +47,7 @@ public class View {
         REGISTER_MENU_COMMANDS[4] = "^user login -(u|p|-username|-password) ([\\S]+)" +
                 " -(u|p|-username|-password) ([\\S]+)$";
 
-        //Main menu valid commands:
+        //view.Main menu valid commands:
         MAIN_MENU_COMMANDS[0] = "^user logout$";
         MAIN_MENU_COMMANDS[1] = "^menu enter Duel$";
         MAIN_MENU_COMMANDS[2] = "^menu enter Deck$";
@@ -472,7 +472,7 @@ public class View {
     private void mainMenu() {
         while (true) {
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
-            if (inputCommand.matches(MAIN_MENU_COMMANDS[0])) { //Main logout and back to register menu
+            if (inputCommand.matches(MAIN_MENU_COMMANDS[0])) { //view.Main logout and back to register menu
                 boolean canUserLogout = logoutUser();
                 if (canUserLogout) break;
             } else if (inputCommand.matches(MAIN_MENU_COMMANDS[1])) duelMenu();
@@ -576,7 +576,7 @@ public class View {
 
         String deckName = "";
         String cardName = "";
-        String deckType = "Main";
+        String deckType = "view.Main";
 
         //Finding card name and deck name and deck type from command:
         if ((6 <= commandRegexIndex && 8 >= commandRegexIndex) || (9 <= commandRegexIndex && 11 >= commandRegexIndex))
@@ -642,7 +642,7 @@ public class View {
         getRegexMatcher(inputCommand, DECK_MENU_COMMANDS[commandRegexIndex], true);
 
         String deckName = regexMatcher.group(2);
-        String deckType = "Main";
+        String deckType = "view.Main";
 
         //Finding deck name and deck type from command
         if (commandRegexIndex == 14 || commandRegexIndex == 15)
