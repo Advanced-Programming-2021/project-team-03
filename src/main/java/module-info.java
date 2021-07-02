@@ -25,4 +25,8 @@ module Yu.Gi.Oh {
     opens model.user to com.google.gson, jbcrypt, org.json, jetty.util, opencsv, commons.collections4;
     exports view;
     opens view to javafx.controls, javafx.base, javafx.fxml, javafx.media, javafx.graphics;
+    exports view.pages;
+    opens view.pages to javafx.controls, javafx.base, javafx.fxml, javafx.media, javafx.graphics;
+    exports view.viewcontroller;
+    opens view.viewcontroller to org.json;
 }
