@@ -19,6 +19,22 @@ public class MonsterCSV {
     private int Price;
     private String CardID;
 
+    public static MonsterCSV exportMonsterCSV(Monster monster) {
+        MonsterCSV monsterCSV = new MonsterCSV();
+        monsterCSV.Name = monster.getCardName();
+        monsterCSV.Level = monster.getLevel();
+        monsterCSV.Attribute = monster.getAttribute().toString();
+        monsterCSV.MonsterType = monster.getModel().toString();
+        monsterCSV.CardType = monster.getType().toString();
+        monsterCSV.Atk = monster.getBaseAttack();
+        monsterCSV.Def = monster.getBaseDefence();
+        monsterCSV.Description = monster.getDescription();
+        monsterCSV.Price = monster.getPrice();
+        monsterCSV.CardID = monster.getCardID();
+
+        return monsterCSV;
+    }
+
     public Monster convert() {
         return new Monster(Name, Level,
                 CardAttributes.valueOf(Database.toEnumCase(Attribute)),

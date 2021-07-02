@@ -12,6 +12,7 @@ import model.game.Player;
 import model.game.PlayerTurn;
 
 import java.util.Random;
+import java.util.concurrent.Callable;
 
 import static control.game.UpdateEnum.TEXCHANGER_ACTIVATED;
 import static model.enums.FaceUpSituation.FACE_DOWN;
@@ -37,6 +38,7 @@ public class AIController {
     private int selectedHandIndex;
     private int selectedMonsterIndex;
     private boolean summon;
+    private boolean notSummonOrSetYet;
 
     public void initialize(Game game, Update gameUpdates) {
         this.game = game;
@@ -47,11 +49,13 @@ public class AIController {
 
     public void play() {
         StringBuilder AIPlayLog = new StringBuilder();
+        notSummonOrSetYet = true;
         AIPlayLog.append("Now it's AI turn\n");
         bot.getBoard().addCardFromRemainingToInHandCards();
         AIPlayLog.append("AI Draws a card\n");
-        if (canSummonOrSet()) {
+        while (canSummonOrSet() && notSummonOrSetYet) {
             boolean summon = summonOrSet();
+            notSummonOrSetYet = false;
             if (summon) {
                 summon();
                 AIPlayLog.append("AI Summons a monster in attacking position\n");
@@ -61,7 +65,7 @@ public class AIController {
             }
         }
 
-        while (canSetSpellsInHand()) {
+        if (canSetSpellsInHand()) {
             setSpell();
             AIPlayLog.append("AI Set a spell in field\n");
             AIPlayLog.append("AI Activate a spell effect\n");
@@ -93,17 +97,11 @@ public class AIController {
         int defendingDef = attackingMonster.getAttackingPower() - opponentMonster.getDefensivePower();
         StringBuilder answerString = new StringBuilder();
 
-        if (GameController.getInstance().activeTraps(TrapNames.NEGATE_ATTACK)) {
-            return;
-        }
+        if (GameController.getInstance().activeTraps(TrapNames.NEGATE_ATTACK)) return;
 
-        if (GameController.getInstance().activeTraps(TrapNames.MAGIC_CYLINDER)) {
-            return;
-        }
+        if (GameController.getInstance().activeTraps(TrapNames.MAGIC_CYLINDER)) return;
 
-        if (GameController.getInstance().activeTraps(TrapNames.MIRROR_FORCE)) {
-            return;
-        }
+        if (GameController.getInstance().activeTraps(TrapNames.MIRROR_FORCE)) return;
 
         gameUpdate.addMonstersToAttackedMonsters(attackingMonster);
         if (opponentMonster.getCardName().equals("The Calculator")) {
@@ -213,6 +211,7 @@ public class AIController {
         Monster attackingMonster = bot.getBoard().getMonsterInFieldByPosition(selectedMonsterIndex);
         int attackingPower = attackingMonster.getAttackingPower();
         game.getPlayerOpponentByTurn(PlayerTurn.PLAYER2).decreaseHealthByAmount(attackingPower);
+        gameUpdate.addMonstersToAttackedMonsters(attackingMonster);
         return attackingPower;
     }
 
@@ -226,7 +225,7 @@ public class AIController {
     private boolean canAttack() {
 
         for (Monster monster : bot.getBoard().getMonstersInField().values()) {
-            if (gameUpdate.didMonsterAttack(monster)) {
+            if (!gameUpdate.didMonsterAttack(monster)) {
                 selectedMonsterIndex = bot.getBoard().getMonsterPosition(monster);
                 return true;
             } else
@@ -284,9 +283,12 @@ public class AIController {
     private boolean canSetSpellsInHand() {
         if (bot.getBoard().getSpellAndTrapsInField().size() >= 5)
             return false;
-        for (Card card : bot.getBoard().getInHandCards()) {
-            if (card instanceof SpellAndTrap)
+        for (int i = 0; i < bot.getBoard().getInHandCards().size(); i++) {
+            Card card = bot.getBoard().getInHandCards().get(i);
+            if (card instanceof SpellAndTrap) {
+                selectedHandIndex = i;
                 return true;
+            }
         }
         return false;
     }
@@ -299,7 +301,6 @@ public class AIController {
                 Monster monster = (Monster) card;
                 if (monster.getBaseAttack() >= max) {
                     max = monster.getBaseAttack();
-                    selectedHandIndex = i;
                     summon = true;
                 }
             }
@@ -311,7 +312,6 @@ public class AIController {
                 Monster monster = (Monster) card;
                 if (monster.getDefensivePower() >= max) {
                     max = monster.getDefensivePower();
-                    selectedHandIndex = i;
                     summon = false;
                 }
             }
@@ -378,7 +378,7 @@ public class AIController {
         }
 
         if (monster.getCardName().equals("The Tricky")) {
-            int position = random.nextInt(board.getInHandCards().size());
+            int position = random.nextInt(board.getInHandCards().size() + 1);
             Card card = board.getInHandCardByPosition(position);
             if (card != null && !card.equals(monster)) {
                 board.addCardToGraveyard(card);
@@ -423,24 +423,22 @@ public class AIController {
     private boolean canSummonOrSet() {
         if (bot.getBoard().getMonstersInField().size() >= 5)
             return false;
-        for (Card card : bot.getBoard().getInHandCards()) {
+        for (int i = 0; i < bot.getBoard().getInHandCards().size(); i++) {
+            Card card = bot.getBoard().getInHandCards().get(i);
             if (card instanceof Monster) {
                 Monster monster = (Monster) card;
-                if (monster.getLevel() < 5)
+                if (monster.getLevel() < 5) {
+                    selectedHandIndex = i;
                     return true;
-                else return checkForTribute(monster.getLevel());
+                } else if (monster.getLevel() < 7 && bot.getBoard().getMonstersInField().size() > 0) {
+                    selectedHandIndex = i;
+                    return true;
+                } else if (bot.getBoard().getMonstersInField().size() > 1) {
+                    selectedHandIndex = i;
+                    return true;
+                }
             }
         }
         return false;
     }
-
-    private boolean checkForTribute(int level) {
-        if (level < 7) {
-            return bot.getBoard().getMonstersInField().size() > 0;
-        } else {
-            return bot.getBoard().getMonstersInField().size() > 1;
-        }
-    }
-
-
 }

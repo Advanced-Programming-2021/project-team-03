@@ -17,7 +17,7 @@ public class Update {
     private boolean haveBeenSetOrSummonACardInPhase;
     private ArrayList<Monster> alreadyChangedPositionMonsters;
     private final HashMap<UpdateEnum, Object> allUpdates;
-    private boolean haveRitualSpellBeenActivated = false; //TODO: make this field true if ritual spell activated.
+    private boolean haveRitualSpellBeenActivated = false;
     private final ArrayList<Player> roundWinners;
     private final HashMap<Player, Boolean> canPlayerActivateATrap;
     private final HashMap<Player, Boolean> playerRingOfDefenseActivator;
@@ -167,14 +167,6 @@ public class Update {
                 count += 1;
         }
         return count;
-    }
-
-    public Player getLooser(Player gameWinner) {
-        for (Player looser : roundWinners) {
-            if (!looser.getUser().getUsername().equals(gameWinner.getUser().getUsername()))
-                return looser;
-        }
-        return null;
     }
 
     public void reset() {

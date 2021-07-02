@@ -5,7 +5,14 @@ import control.game.GameController;
 import control.game.Update;
 import model.card.Card;
 import model.card.SpellAndTrap;
+import model.user.Deck;
+import model.user.DeckType;
 import model.user.User;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 import static model.game.PlayerTurn.PLAYER1;
 import static model.game.PlayerTurn.PLAYER2;
@@ -27,9 +34,26 @@ public class Game {
     public Game(User user1, int numberOfRounds) {
         /*duel with AI*/
         this.player1 = new Player(8000, new Board(user1.getActiveDeck(), user1), user1);
-        this.player2 = new Player(8000, new Board(User.getByUsername("AIBot").getActiveDeck(), User.getByUsername("AIBot")), User.getByUsername("AIBot"));
+
+        User AI = User.getByUsername("AIBot");
+        Deck deck;
+        try {
+            deck = new Deck("AIBotDeck");
+            deck.addCard(generateDeck(AI), DeckType.MAIN);
+            AI.setActiveDeck(deck);
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+
+        this.player2 = new Player(8000, new Board(AI.getActiveDeck(), User.getByUsername("AIBot")), User.getByUsername("AIBot"));
         this.numberOfRounds = numberOfRounds;
         filedActivated = false;
+    }
+
+    private ArrayList<Card> generateDeck(User user) {
+        ArrayList<Card> cards = user.getCards();
+        Collections.shuffle(cards);
+        return cards.stream().limit(50).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public SpellAndTrap getActivatedFieldCard() {
@@ -83,7 +107,6 @@ public class Game {
 
         if (player2.getBoard().doesContainCard(card))
             return player2.getBoard();
-
         return null;
     }
 
@@ -131,7 +154,7 @@ public class Game {
             getWinner().getUser().increaseScore(1000);
             gameUpdates.playerWins(getWinner());
         } catch (DatabaseException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
@@ -141,5 +164,12 @@ public class Game {
 
     public void setFiledActivated(boolean filedActivated) {
         this.filedActivated = filedActivated;
+    }
+
+    public Player getPlayerOpponentByPlayer(Player player) {
+        if (player.equals(player1))
+            return player2;
+        else
+            return player1;
     }
 }

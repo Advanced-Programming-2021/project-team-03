@@ -51,10 +51,12 @@ public class GameController {
     private Game game;
     private PlayerTurn turn;
     private int currentRound;
+    private boolean firstBattlePhase;
 
     public void newDuel(String firstPlayerName, String secondPlayerName, int numberOfRound) {
         this.currentPhase = DRAW;
         this.currentRound = 1;
+        firstBattlePhase = true;
 
         // creating a random number to determine the starting player
         Random random = new Random();
@@ -88,6 +90,7 @@ public class GameController {
         this.currentPhase = DRAW;
         this.currentRound = 1;
         turn = PLAYER1;
+        firstBattlePhase = true;
 
         String answer = "Duel starts between" + username + " & " + "AI" + '\n' +
                 "its " + game.getPlayer1().getUser().getNickname() + "’s turn\n" +
@@ -652,6 +655,7 @@ public class GameController {
         Monster attackingMonster = (Monster) selectedCard;
         int attackingPower = attackingMonster.getAttackingPower();
         game.getPlayerOpponentByTurn(turn).decreaseHealthByAmount(attackingPower);
+        gameUpdates.addMonstersToAttackedMonsters(attackingMonster);
         return attackingPower;
     }
 
@@ -704,7 +708,6 @@ public class GameController {
             MainController.getInstance().sendPrintRequestToView("there is no way you could ritual summon a monster");
             return false;
         }
-        //TODO
         return true;
     }
 
@@ -844,11 +847,17 @@ public class GameController {
                 activeTraps(TrapNames.MIND_CRUSH);
             }
             case FIRST_MAIN -> {
-                answerAnswer.append("phase: Battle Phase");
-                currentPhase = BATTLE;
+                if (firstBattlePhase) {
+                    answerAnswer.append("phase: Second Phase");
+                    currentPhase = SECOND_MAIN;
+                    firstBattlePhase = false;
+                } else {
+                    answerAnswer.append("phase: Battle Phase");
+                    currentPhase = BATTLE;
+                }
             }
             case BATTLE -> {
-                answerAnswer.append("phase: Second Phase");
+                answerAnswer.append("phase: Second Main Phase");
                 currentPhase = SECOND_MAIN;
                 activeTraps(TrapNames.CALL_OF_THE_HAUNTED);
                 activeTraps(TrapNames.MIND_CRUSH);
@@ -866,7 +875,7 @@ public class GameController {
                     answerAnswer.append("phase: Draw Phase\n");
                     currentPhase = DRAW;
                     answerAnswer.append(drawPhase());
-                } else roundIsOver();
+                } else roundIsOver(getPlayerByTurn());
             }
         }
         return answerAnswer.toString();
@@ -905,7 +914,6 @@ public class GameController {
             checkFieldCard();
         checkForEquipments(game.getPlayerByTurn(turn).getBoard());
         checkForEquipments(game.getPlayerOpponentByTurn(turn).getBoard());
-        //TODO
     }
 
     private void checkForEquipments(Board board) {
@@ -939,9 +947,10 @@ public class GameController {
         }
     }
 
-    public void roundIsOver() {
+    public void roundIsOver(Player player) {
         currentRound += 1;
         game.checkRoundResults(gameUpdates);
+        gameUpdates.playerWins(game.getPlayerOpponentByPlayer(player));
         String results = game.getWinner().getUser().getUsername() + " won the game and the score is: 1000 - 0";
         JSONObject answerObject = new JSONObject();
         JSONObject value = new JSONObject();
@@ -965,7 +974,7 @@ public class GameController {
     private String checkGameStatus() {
         Player winner = gameUpdates.getWinner();
         int winnerNumberOfWins = gameUpdates.getWins(winner);
-        Player looser = gameUpdates.getLooser(winner);
+        Player looser = game.getPlayerOpponentByPlayer(winner);
         int looserNumberOfWins = gameUpdates.getWins(looser);
         try {
             winner.getUser().increaseBalance((winnerNumberOfWins * 1000) + 3 * winner.getHealth());

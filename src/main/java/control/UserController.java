@@ -18,14 +18,6 @@ public class UserController {
         return userController;
     }
 
-    public boolean doesUsernameExist(String username) { // checking if a user with this username exists
-        return User.getByUsername(username) != null;
-    }
-
-    public boolean doesNicknameExist(String nickname) {// checking if a user with this nickname exists
-        return User.doesNicknameExists(nickname);
-    }
-
     public void registerUsername(String username, String password, String nickname) {
         try {
             new User(username, password, nickname).setStartingCards();
@@ -35,6 +27,7 @@ public class UserController {
     }
 
     public boolean doesUsernameAndPasswordMatch(String username, String password) {
+        // TODO: remove this duplicated method
         return User.getByUsername(username).doesMatchPassword(password);
     }
 
@@ -66,13 +59,5 @@ public class UserController {
                     .append(user.getScore()).append("\n");
         }
         return scoreboard.toString();
-    }
-
-    public boolean doesPlayerHaveActiveDeck(String username) {
-        return User.getByUsername(username).getActiveDeck() != null;
-    }
-
-    public boolean isUserActiveDeckValid(String username) {
-        return User.getByUsername(username).getActiveDeck().isDeckValid();
     }
 }

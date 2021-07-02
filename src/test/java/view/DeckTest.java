@@ -24,7 +24,7 @@ class DeckTest {
         view.loginUser("user login -u newDeck -p pass");
 
         view.preparatoryDeckWorks("deck create newDeckTest", "Create deck", 3);
-        assert DeckController.getInstance().doesDeckExist("newDeckTest");
+        assert Deck.getByDeckName("newDeckTest") != null;
 
         view.logoutUser();
         View.testing = false;
@@ -50,8 +50,8 @@ class DeckTest {
         view.addOrDeleteCardFromDeck("deck add-card -d addCard -c Call of The Haunted",
                 "Add card to deck", 17);
 
-        ArrayList<Card> mainDeck = deckController.getDeck("addCard").getDeck(DeckType.MAIN);
-        ArrayList<Card> sideDeck = deckController.getDeck("addCard").getDeck(DeckType.SIDE);
+        ArrayList<Card> mainDeck = Deck.getByDeckName("addCard").getDeck(DeckType.MAIN);
+        ArrayList<Card> sideDeck = Deck.getByDeckName("addCard").getDeck(DeckType.SIDE);
 
         assert sideDeck.size() == 1;
         assert mainDeck.size() == 1;

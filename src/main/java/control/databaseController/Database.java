@@ -3,6 +3,7 @@ package control.databaseController;
 import com.google.gson.Gson;
 import com.opencsv.bean.CsvToBeanBuilder;
 import control.MainController;
+import model.card.Card;
 import model.card.Monster;
 import model.card.SpellAndTrap;
 import model.user.Deck;
@@ -14,9 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Database {
-    private static final String USERS_PATH = "./database/users/";
-    private static final String DECKS_PATH = "./database/decks/";
-    private static final String CARDS_PATH = "./database/cards/";
+    public static final String USERS_PATH = "./database/users/";
+    public static final String DECKS_PATH = "./database/decks/";
+    public static final String CARDS_PATH = "./database/cards/";
+    public static final String CARDS_EXPORT_PATH = "./database/cards/export/";
+    public static final String CARDS_IMPORT_PATH = "./database/cards/import/";
 
     public static HashMap<String, Monster> updateMonsters() throws IOException {
         HashMap<String, Monster> monstersByName = new HashMap<>();
@@ -66,10 +69,69 @@ public class Database {
         return spellsByName;
     }
 
+    public static void updateImportedCards() {
+        File parentFile = new File(CARDS_IMPORT_PATH);
+        parentFile.mkdirs();
+
+        File[] listOfFiles = parentFile.listFiles();
+        if (listOfFiles == null) return;
+
+        for (File file : listOfFiles) {
+            if (isJsonFile(file)) {
+                String fileName = file.getName();
+                try {
+                    Card card = importCard(fileName.substring(0, fileName.lastIndexOf('.')));
+                    if (card instanceof Monster) ((Monster) card).addToAllMonsters();
+                    else ((SpellAndTrap) card).addToAllSpells();
+                } catch (DatabaseException ignored) {
+                }
+            }
+        }
+    }
+
+    public static Card importCard(String cardName) throws DatabaseException {
+        Gson gson = new Gson();
+        Gson gson2 = new Gson();
+
+        File parentFile = new File(CARDS_IMPORT_PATH);
+        parentFile.mkdirs();
+
+        File[] listOfFiles = parentFile.listFiles();
+        if (listOfFiles == null)
+            throw new DatabaseException("Can not read path: " + CARDS_IMPORT_PATH + " to import card");
+
+        for (File file : listOfFiles) {
+            if (isJsonFile(file) && file.getName().equals(cardName + ".json")) {
+                try {
+                    BufferedReader reader = new BufferedReader(
+                            new FileReader(CARDS_IMPORT_PATH + file.getName()));
+                    BufferedReader reader2 = new BufferedReader(
+                            new FileReader(CARDS_IMPORT_PATH + file.getName()));
+
+                    MonsterCSV monsterCSV = gson.fromJson(reader, MonsterCSV.class);
+                    SpellAndTrapCSV spellAndTrapCSV = gson2.fromJson(reader2, SpellAndTrapCSV.class);
+                    reader.close();
+                    reader2.close();
+
+                    if (monsterCSV.getAttribute() != null) return monsterCSV.convert().addToAllMonsters();
+                    else return spellAndTrapCSV.convert().addToAllSpells();
+
+                } catch (Exception e) {
+                    throw new DatabaseException("Couldn't import card from: " + CARDS_IMPORT_PATH +
+                            "\nError: " + e.getMessage());
+                }
+            }
+        }
+        throw new DatabaseException("No card found named \"" + cardName + "\" here: " + CARDS_IMPORT_PATH);
+    }
+
     public static void updateAllDecks() {
         Gson gson = new Gson();
 
-        File[] listOfFiles = new File(DECKS_PATH).listFiles();
+        File parentFile = new File(DECKS_PATH);
+        parentFile.mkdirs();
+
+        File[] listOfFiles = parentFile.listFiles();
         assert listOfFiles != null;
 
         Arrays.stream(listOfFiles)   // Don't use parallel without proper testing. (may cause crash)
@@ -78,7 +140,8 @@ public class Database {
                     try {
                         BufferedReader reader = new BufferedReader(
                                 new FileReader(DECKS_PATH + file.getName()));
-                        gson.fromJson(reader, DeckJson.class).convert();
+                        DeckJson deckJson = gson.fromJson(reader, DeckJson.class);
+                        if (deckJson != null) deckJson.convert();
                         reader.close();
 
                     } catch (IOException | DatabaseException ignored) {}
@@ -88,7 +151,10 @@ public class Database {
     public static void updateAllUsers() {
         Gson gson = new Gson();
 
-        File[] listOfFiles = new File(USERS_PATH).listFiles();
+        File parentFile = new File(USERS_PATH);
+        parentFile.mkdirs();
+
+        File[] listOfFiles = parentFile.listFiles();
         assert listOfFiles != null;
 
         Arrays.stream(listOfFiles)   // Don't use parallel without proper testing. (may cause crash)
@@ -128,11 +194,20 @@ public class Database {
         writeToJson(deckJson, pathFinder(deck));
     }
 
+    public static void save(Card card) throws DatabaseException {
+        Object object;
+        if (card instanceof Monster) object = MonsterCSV.exportMonsterCSV((Monster) card);
+        else object = SpellAndTrapCSV.exportSpellAndTrapCSV((SpellAndTrap) card);
+        writeToJson(object, pathFinder(card));
+    }
+
     private static String pathFinder(Object object) throws DatabaseException {
         if (object instanceof User) {
             return USERS_PATH + ((User) object).getUsername() + ".json";
         } else if (object instanceof Deck) {
             return DECKS_PATH + ((Deck) object).getDeckName() + ".json";
+        } else if (object instanceof Card) {
+            return CARDS_EXPORT_PATH + ((Card) object).getCardName() + ".json";
         } else {
             throw new DatabaseException("Unknown object for database to save: " + object.getClass());
         }

@@ -162,7 +162,7 @@ public class Board {
         int index = findPositionToSetSpellOrTrapCard(spellAndTrapsInField);
         addSpellAndTrapByPosition(index, spellAndTrap);
         spellAndTrap.setActive(false);
-        removeCardFromHand((Card) spellAndTrap);
+        removeCardFromHand(spellAndTrap);
     }
 
     public void setOrSummonMonsterFromHandToFiled(Card card, String actionType) { //action type will be set or summon

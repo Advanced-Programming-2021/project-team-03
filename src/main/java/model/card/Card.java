@@ -4,12 +4,15 @@ import model.enums.CardAttributes;
 
 public abstract class Card {
     protected String cardName;
+
+    public String getCardID() {
+        return cardID;
+    }
+
     protected String cardID;
     protected String description;
     protected int price;
     protected CardAttributes attribute;
-
-    // TODO: We have to set card effects to them here after importing them from database
 
     public Card(String cardName, String cardID, String description, int price, CardAttributes attribute) {
         this.cardName = cardName;
