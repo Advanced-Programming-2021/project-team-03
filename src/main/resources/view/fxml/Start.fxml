@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true">
+         <image>
+            <Image url="@../../assets/pageimages/StartingBackground.jpg" />
+         </image>
+      </ImageView>
+      <Button layoutX="34.0" layoutY="141.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="131.0" text="REGISTER" />
+      <Button layoutX="34.0" layoutY="206.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="131.0" text="LOGIN" />
+      <Button layoutX="34.0" layoutY="276.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="131.0" text="EXIT" />
+      <Text fill="#ff8000" layoutX="34.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="YU-GI-OH" wrappingWidth="158.466796875">
+         <font>
+            <Font name="System Bold Italic" size="32.0" />
+         </font>
+         <effect>
+            <Reflection bottomOpacity="0.15" fraction="0.7" />
+         </effect>
+      </Text>
+   </children>
+</AnchorPane>
