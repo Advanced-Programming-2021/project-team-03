@@ -1,17 +1,17 @@
 package model.game;
 
+import control.game.Update;
 import model.card.Card;
 import model.card.Monster;
 import model.card.SpellAndTrap;
 import model.enums.AttackingFormat;
 import model.enums.FaceUpSituation;
+import model.enums.SpellAndTrapIcon;
 import model.user.Deck;
+import model.user.DeckType;
 import model.user.User;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static model.enums.AttackingFormat.ATTACKING;
 import static model.enums.AttackingFormat.DEFENDING;
@@ -41,7 +41,7 @@ public class Board {
     }
 
     private void addStartingDeckToTheRemainingCards(Deck deck) {
-        remainingCards.addAll(deck.getMainDeck());
+        remainingCards.addAll(deck.getDeck(DeckType.MAIN));
         Collections.shuffle(remainingCards); // shuffle all cards for start the game
     }
 
@@ -76,7 +76,12 @@ public class Board {
         return fieldCard;
     }
 
-    public void setFieldCard(SpellAndTrap fieldCard) {
+    public void setFieldCard(Update gameUpdate, SpellAndTrap fieldCard) {
+        if (this.fieldCard != null) {
+            addCardToGraveyard(fieldCard);
+            if (this.fieldCard.isActive())
+                gameUpdate.addCardToGraveyard(this.fieldCard);
+        }
         this.fieldCard = fieldCard;
     }
 
@@ -88,8 +93,12 @@ public class Board {
         return inHandCards;
     }
 
-    public Monster getMonsterByPosition(int position) {
+    public Monster getMonsterInFieldByPosition(int position) {
         return monstersInField.get(position);
+    }
+
+    public Card getCardInHandByPosition(int position) {
+        return inHandCards.get(position - 1);
     }
 
     public int getMonsterPosition(Monster monster) {
@@ -135,21 +144,46 @@ public class Board {
             spellAndTrapsInField.remove(position);
     }
 
-    public void setOrSummonMonsterFromHandToFiled(Card card,String actionType) { //action type will be set or summon
-        int maxIndex = 1;
-        for (Map.Entry<Integer, Monster> entry : monstersInField.entrySet()) {
-            Integer key = entry.getKey();
-            if (maxIndex < key) maxIndex = key;
+    private int findPositionToSetOrSummonMonsterCard(HashMap<Integer, Monster> monsters) {
+        for (int i = 1; i <= 5; i++) {
+            if (!monsters.containsKey(i)) return i;
         }
-        monstersInField.put(maxIndex, (Monster) card);
-        if (actionType.equals("Set")){
+        return 5;
+    }
+
+    private int findPositionToSetSpellOrTrapCard(HashMap<Integer, SpellAndTrap> spellAndTraps) {
+        for (int i = 1; i <= 5; i++) {
+            if (!spellAndTraps.containsKey(i)) return i;
+        }
+        return 5;
+    }
+
+    public void setSpellAndTrapsInField(SpellAndTrap spellAndTrap) {
+        int index = findPositionToSetSpellOrTrapCard(spellAndTrapsInField);
+        addSpellAndTrapByPosition(index, spellAndTrap);
+        spellAndTrap.setActive(false);
+        removeCardFromHand(spellAndTrap);
+    }
+
+    public void setOrSummonMonsterFromHandToFiled(Card card, String actionType) { //action type will be set or summon
+        int index = findPositionToSetOrSummonMonsterCard(monstersInField);
+        monstersInField.put(index, (Monster) card);
+        if (actionType.equals("Set")) {
             ((Monster) card).setAttackingFormat(DEFENDING);
             ((Monster) card).setFaceUpSituation(FACE_DOWN);
-        }else if (actionType.equals("Summon")){
+        } else if (actionType.equals("Summon")) {
             ((Monster) card).setAttackingFormat(ATTACKING);
             ((Monster) card).setFaceUpSituation(FACE_UP);
         }
         removeCardFromHand(card);
+    }
+
+    public void addMonsterFromGraveYardToFiled(Monster monster) { //action type will be set or summon
+        int index = findPositionToSetOrSummonMonsterCard(monstersInField);
+        monstersInField.put(index, monster);
+        monster.setAttackingFormat(ATTACKING);
+        monster.setFaceUpSituation(FACE_UP);
+        graveyard.remove(monster);
     }
 
     //representation of the boards in console
@@ -160,7 +194,7 @@ public class Board {
         int GY = graveyard.size();
         int DN = remainingCards.size();
 
-        board.append("\t").append("c\t".repeat(inHandCards.size()));
+        board.append("\t").append("c\t".repeat(inHandCards.size())).append('\n');
         board.append(DN).append("\n");
 
         showSpellAndTrapsOnBoard(cardOrders);
@@ -182,39 +216,42 @@ public class Board {
         int GY = graveyard.size();
         int DN = remainingCards.size();
         if (fieldCard != null)
-            board.append("O\t\t\t\t\t\t").append(GY).append("\n\t");
+            board.append("O\t\t\t\t\t\t").append(GY).append("\n");
         else
-            board.append("E\t\t\t\t\t\t").append(GY).append("\n\t");
+            board.append("E\t\t\t\t\t\t").append(GY).append("\n");
 
         showMonstersOnBoard(cardOrders);
         showSpellAndTrapsOnBoard(cardOrders);
 
-        board.append("\t\t\t\t\t\t").append(DN).append("\n");
+        board.append("\t\t\t\t\t\t").append(DN).append("\n\t");
         board.append("c\t".repeat(inHandCards.size()));
         board.append("\n");
         return board.toString();
     }
 
     private void showSpellAndTrapsOnBoard(int[] cardOrders) {
+        board.append('\t');
         for (int i : cardOrders) {
-            if (spellAndTrapsInField.containsKey(i) && spellAndTrapsInField.get(5).isActive())
+            if (spellAndTrapsInField.containsKey(i) && spellAndTrapsInField.get(i).isActive())
                 board.append("O \t");
             else if (spellAndTrapsInField.containsKey(i))
                 board.append("H \t");
             else
                 board.append("E \t");
         }
+        board.append('\n');
     }
 
     private void showMonstersOnBoard(int[] cardOrders) {
         AttackingFormat cardAttackingFormat;
         FaceUpSituation cardFaceUpSituation;
+        board.append('\t');
 
         for (int i : cardOrders) {
             if (monstersInField.containsKey(i)) {
                 cardAttackingFormat = monstersInField.get(i).getAttackingFormat();
                 cardFaceUpSituation = monstersInField.get(i).getFaceUpSituation();
-                if (cardAttackingFormat == DEFENDING)
+                if (cardAttackingFormat == ATTACKING)
                     board.append("OO\t");
                 else if (cardFaceUpSituation == FACE_UP)
                     board.append("DO\t");
@@ -223,25 +260,67 @@ public class Board {
             } else
                 board.append("E \t");
         }
+        board.append('\n');
     }
 
-    public boolean doesContainCard(int cardGameId) {
+    public boolean doesContainCard(Card card) {
         for (Monster monster : monstersInField.values()) {
-            if (monster.getCardIdInTheGame() == cardGameId)
+            if (monster.equals(card))
                 return true;
         }
         for (SpellAndTrap spellAndTrap : spellAndTrapsInField.values()) {
-            if (spellAndTrap.getCardIdInTheGame() == cardGameId)
+            if (spellAndTrap.equals(card))
                 return true;
         }
-        for (Card card : inHandCards) {
-            if (card.getCardIdInTheGame() == cardGameId)
+        for (Card inHandCard : inHandCards) {
+            if (inHandCard.equals(card))
                 return true;
         }
         return false;
     }
 
     public Card getInHandCardByPosition(int cardPosition) {
-        return inHandCards.get(cardPosition);
+        return inHandCards.get(cardPosition - 1);
+    }
+
+    public void addFieldSpellToHand() {
+        for (Card card : remainingCards) {
+            if (card instanceof SpellAndTrap) {
+                SpellAndTrap spell = (SpellAndTrap) card;
+                if (spell.getIcon().equals(SpellAndTrapIcon.FIELD)) {
+                    addCardToHand(spell);
+                    remainingCards.remove(card);
+                    return;
+                }
+            }
+        }
+    }
+
+    public int getSpellPosition(SpellAndTrap spell) {
+        for (Integer i : spellAndTrapsInField.keySet()) {
+            if (spellAndTrapsInField.get(i).equals(spell))
+                return i;
+        }
+        return 0;
+    }
+
+    public SpellAndTrap getSpellInField(String cardName) {
+        Optional<SpellAndTrap> spellAndTrap = spellAndTrapsInField.values().stream()
+                .filter(spellAndTrap2 -> spellAndTrap2.getCardName().equals(cardName)).findFirst();
+        return spellAndTrap.orElse(null);
+    }
+
+    public void removeFieldCard(Game game, PlayerTurn turn) {
+        if (this.fieldCard.isActive()) {
+            Board opponentBoard = game.getPlayerOpponentByTurn(turn).getBoard();
+            SpellAndTrap opponentFieldCard = (SpellAndTrap) opponentBoard.getFieldCard();
+            if (opponentFieldCard.isActive()) {
+                game.setActivatedFieldCard(opponentFieldCard);
+            } else {
+                game.setActivatedFieldCard(null);
+                game.setFiledActivated(false);
+            }
+        }
+        this.fieldCard = null;
     }
 }

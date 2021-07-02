@@ -1,5 +1,6 @@
 package model.game;
 
+import control.game.GameController;
 import model.user.User;
 
 public class Player {
@@ -11,8 +12,6 @@ public class Player {
         this.user = user;
         this.health = initialHealth;
         this.board = board;
-        this.health = 8000;
-        // TODO
     }
 
     public Board getBoard() {
@@ -29,6 +28,11 @@ public class Player {
 
     public void decreaseHealthByAmount(int amount) {
         this.health -= amount;
+        if (this.health <= 0) {
+            //TODO
+            GameController.getInstance().roundIsOver(this);
+        }
+
     }
 
     public boolean canPlayerDrawCard() {

@@ -4,15 +4,15 @@ import model.enums.CardAttributes;
 
 public abstract class Card {
     protected String cardName;
-    protected String cardID; // this string is given to read the card effect from the database from the card ID field
-    protected int cardIdInTheGame; // this number is a given value to the card which helps to find and identify this card later in the game
+
+    public String getCardID() {
+        return cardID;
+    }
+
+    protected String cardID;
     protected String description;
     protected int price;
     protected CardAttributes attribute;
-
-
-    // TODO: We have to set card effects to them here after importing them from database
-
 
     public Card(String cardName, String cardID, String description, int price, CardAttributes attribute) {
         this.cardName = cardName;
@@ -20,14 +20,6 @@ public abstract class Card {
         this.description = description;
         this.price = price;
         this.attribute = attribute;
-    }
-
-    public int getCardIdInTheGame() {
-        return cardIdInTheGame;
-    }
-
-    public void setCardIdInTheGame(int cardIdInTheGame) {
-        this.cardIdInTheGame = cardIdInTheGame;
     }
 
     public String getCardName() {
@@ -50,4 +42,6 @@ public abstract class Card {
         if (Monster.getMonsterByName(cardName) != null) return Monster.getMonsterByName(cardName);
         return SpellAndTrap.getSpellAndTrapByName(cardName);
     }
+
+    public abstract Card cloneForDeck();
 }

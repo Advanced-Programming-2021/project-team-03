@@ -1,34 +1,72 @@
 package model.game;
 
+import control.databaseController.DatabaseException;
 import control.game.GameController;
+import control.game.Update;
 import model.card.Card;
+import model.card.SpellAndTrap;
+import model.user.Deck;
+import model.user.DeckType;
 import model.user.User;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 import static model.game.PlayerTurn.PLAYER1;
 import static model.game.PlayerTurn.PLAYER2;
 
 public class Game {
-    private Player player1;
-    private Player player2;
+    private final Player player1;
+    private final Player player2;
+    private final int numberOfRounds;
+    private boolean filedActivated;
+    private SpellAndTrap activatedFieldCard;
 
-    private int numberOfRounds;
-
-    public Game(User user1, User user2, int numberOfRounds) { // TODO
-        // TODO: Construct players with given users.
-        // TODO: Construct boards with user decks.
-        // TODO give each card in the main deck a "card in game" ID
+    public Game(User user1, User user2, int numberOfRounds) {
+        this.player1 = new Player(8000, new Board(user1.getActiveDeck(), user1), user1);
+        this.player2 = new Player(8000, new Board(user2.getActiveDeck(), user2), user2);
         this.numberOfRounds = numberOfRounds;
+        filedActivated = false;
     }
 
     public Game(User user1, int numberOfRounds) {
         /*duel with AI*/
+        this.player1 = new Player(8000, new Board(user1.getActiveDeck(), user1), user1);
+
+        User AI = User.getByUsername("AIBot");
+        Deck deck;
+        try {
+            deck = new Deck("AIBotDeck");
+            deck.addCard(generateDeck(AI), DeckType.MAIN);
+            AI.setActiveDeck(deck);
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+
+        this.player2 = new Player(8000, new Board(AI.getActiveDeck(), User.getByUsername("AIBot")), User.getByUsername("AIBot"));
+        this.numberOfRounds = numberOfRounds;
+        filedActivated = false;
+    }
+
+    private ArrayList<Card> generateDeck(User user) {
+        ArrayList<Card> cards = user.getCards();
+        Collections.shuffle(cards);
+        return cards.stream().limit(50).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public SpellAndTrap getActivatedFieldCard() {
+        return activatedFieldCard;
+    }
+
+    public void setActivatedFieldCard(SpellAndTrap activatedFieldCard) {
+        this.activatedFieldCard = activatedFieldCard;
     }
 
     public Player getPlayerByName(String username) {
-        if (player1.getUser().getUsername().equals(username))
-            return player1;
-        else
-            return player2;
+        if (player1.getUser().getUsername().equals(username)) return player1;
+        else return player2;
     }
 
     public Player getPlayerByTurn(PlayerTurn turn) {
@@ -56,27 +94,26 @@ public class Game {
     }
 
     private void boardBuilder(StringBuilder board, Player firstPlayer, Player secondPlayer) {
-        board.append(firstPlayer.getUser().getNickname()).append(":").append(firstPlayer.getHealth()).append("\n");
+        board.append(firstPlayer.getUser().getNickname()).append(": ").append(firstPlayer.getHealth()).append("\n");
         board.append(firstPlayer.getBoard().showAsEnemyBoard());
-        board.append("\n--------------------------\n\n\n");
+        board.append("\n--------------------------\n\n");
         board.append(secondPlayer.getBoard().toString());
-        board.append(secondPlayer.getUser().getNickname()).append(":").append(secondPlayer.getHealth()).append("\n");
+        board.append(secondPlayer.getUser().getNickname()).append(": ").append(secondPlayer.getHealth()).append("\n");
     }
 
     public Board getCardsInBoard(Card card) { /* monster effect */
-        if (player1.getBoard().doesContainCard(card.getCardIdInTheGame()))
+        if (player1.getBoard().doesContainCard(card))
             return player1.getBoard();
 
-        if (player2.getBoard().doesContainCard(card.getCardIdInTheGame()))
+        if (player2.getBoard().doesContainCard(card))
             return player2.getBoard();
-
         return null;
     }
 
     public PlayerTurn getCardsOwner(Card card) { /* monster effect */
-        if (player1.getBoard().doesContainCard(card.getCardIdInTheGame()))
+        if (player1.getBoard().doesContainCard(card))
             return PLAYER1;
-        if (player2.getBoard().doesContainCard(card.getCardIdInTheGame()))
+        if (player2.getBoard().doesContainCard(card))
             return PLAYER2;
         return null;
     }
@@ -94,8 +131,12 @@ public class Game {
     }
 
     public void surrender(PlayerTurn turn) {
-        getPlayerByTurn(turn).getUser().increaseScore(-1000);
-        getPlayerOpponentByTurn(turn).getUser().increaseScore(1000);
+        try {
+            getPlayerByTurn(turn).getUser().increaseScore(-1000);
+            getPlayerOpponentByTurn(turn).getUser().increaseScore(1000);
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
     }
 
     public Player getWinner() {
@@ -108,7 +149,27 @@ public class Game {
         return player2;
     }
 
-    public void checkRoundResults() {
-        getWinner().getUser().increaseScore(1000);
+    public void checkRoundResults(Update gameUpdates) {
+        try {
+            getWinner().getUser().increaseScore(1000);
+            gameUpdates.playerWins(getWinner());
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean isFiledActivated() {
+        return filedActivated;
+    }
+
+    public void setFiledActivated(boolean filedActivated) {
+        this.filedActivated = filedActivated;
+    }
+
+    public Player getPlayerOpponentByPlayer(Player player) {
+        if (player.equals(player1))
+            return player2;
+        else
+            return player1;
     }
 }

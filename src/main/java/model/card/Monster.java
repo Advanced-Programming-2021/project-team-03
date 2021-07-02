@@ -3,32 +3,33 @@ package model.card;
 import control.databaseController.Database;
 import model.enums.*;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.function.Function;
-
-import static model.enums.MonsterTypes.EFFECT;
 
 public class Monster extends Card {
     private final int level;
-    private final int baseAttack;
+    private int baseAttack;
     private final int baseDefence;
     private final MonsterModels model; // monster model is the model of the card for example warrior or spell caster or ..
-    private IMonsterEffect monsterEffect; // this interface contains the special monster effect if exists
+    private final MonsterTypes type;
 
     /* two enums below contains the position of the monster card in the game board */
     private AttackingFormat attackingFormat;
     private FaceUpSituation faceUpSituation;
 
-    private ArrayList<Function<Monster, Integer>> attackSupplier; // contains all game effects which determine the attacking power of the monster
+    private ArrayList<Integer> attackSupplier; // contains all game effects which determine the attacking power of the monster
+    private ArrayList<Integer> defensiveSupplies;
 
-    private static HashMap<String, Monster> allMonstersByName;
+    //equip card
+    private SpellAndTrap equipment;
 
-    static {
+    private static HashMap<String, Monster> allMonsters;
+
+    public static void initialize() {
         try {
-            allMonstersByName = Database.updateMonsters();
-        } catch (FileNotFoundException e) {
+            allMonsters = Database.updateMonsters();
+        } catch (IOException e) {
             System.out.println("Couldn't find monsters database files");
             e.printStackTrace();
             System.exit(1);
@@ -42,10 +43,9 @@ public class Monster extends Card {
         this.baseAttack = baseAttack;
         this.baseDefence = baseDefence;
         this.model = model;
-        // monster type is the effect type of the card which could be normal, effect or ritual
-        if (monsterType.equals(EFFECT))
-            monsterEffect = AllMonsterEffects.getEffectByID(cardID);
+        this.type = monsterType;
         attackSupplier = new ArrayList<>();
+        defensiveSupplies = new ArrayList<>();
     }
 
 
@@ -54,13 +54,9 @@ public class Monster extends Card {
         return "Name: " + this.cardName + "\n" +
                 "Level: " + this.level + "\n" +
                 "Type: " + this.model + "\n" +
-                "ATK: " + this.baseAttack + "\n" +
-                "DEF: " + this.baseDefence + "\n" +
-                "Description: " + this.description;
-    }
-
-    public IMonsterEffect getMonsterEffect() {
-        return monsterEffect;
+                "ATK: " + this.baseAttack + " + " + (getAttackingPower() - baseAttack) + "\n" +
+                "DEF: " + this.baseDefence + " + " + (getDefensivePower() - baseDefence) + "\n" +
+                "Description: " + this.description + "\n";
     }
 
     public AttackingFormat getAttackingFormat() {
@@ -79,12 +75,12 @@ public class Monster extends Card {
         this.faceUpSituation = faceUpSituation;
     }
 
-    public ArrayList<Function<Monster, Integer>> getAttackSupplier() {
-        return attackSupplier;
+    public void addToAttackSupplier(int power) {
+        attackSupplier.add(power);
     }
 
-    public void addToAttackSupplier(Function<Monster, Integer> function) {
-        attackSupplier.add(function);
+    public void addToDefensiveSupply(int power) {
+        defensiveSupplies.add(power);
     }
 
     public int getBaseAttack() {
@@ -96,16 +92,15 @@ public class Monster extends Card {
     }
 
     public int getAttackingPower() {
-        int AttackingPower = this.baseAttack;
-        for (Function<Monster, Integer> function : attackSupplier) {
-            AttackingPower += function.apply(this);
-        }
-        return AttackingPower;
+        int power = baseAttack;
+        power += attackSupplier.stream().mapToInt(p -> p).sum();
+        return power;
     }
 
     public int getDefensivePower() {
-        //TODO
-        return baseDefence;
+        int power = baseDefence;
+        power += defensiveSupplies.stream().mapToInt(p -> p).sum();
+        return power;
     }
 
     public int getLevel() {
@@ -113,6 +108,50 @@ public class Monster extends Card {
     }
 
     public static Monster getMonsterByName(String name) {
-        return allMonstersByName.get(name);
+        return allMonsters.get(name);
+    }
+
+    public static HashMap<String, Monster> getAllMonsters() {
+        return allMonsters;
+    }
+
+    public MonsterTypes getType() {
+        return type;
+    }
+
+    public void setAttackSupplier(ArrayList<Integer> attackSupplier) {
+        this.attackSupplier = attackSupplier;
+    }
+
+    public void setDefensiveSupplies(ArrayList<Integer> defensiveSupplies) {
+        this.defensiveSupplies = defensiveSupplies;
+    }
+
+    public MonsterModels getModel() {
+        return model;
+    }
+
+    public Monster cloneForDeck() {
+        Monster clone = new Monster(cardName, level, attribute, model, type, baseAttack, baseDefence, description, price, cardID);
+        clone.attackingFormat = this.attackingFormat;
+        clone.faceUpSituation = this.faceUpSituation;
+        return clone;
+    }
+
+    public SpellAndTrap getEquipment() {
+        return equipment;
+    }
+
+    public void setEquipment(SpellAndTrap equipment) {
+        this.equipment = equipment;
+    }
+
+    public void setBaseAttack(int baseAttack) {
+        this.baseAttack = baseAttack;
+    }
+
+    public Monster addToAllMonsters() {
+        allMonsters.put(this.getCardName(), this);
+        return this;
     }
 }
