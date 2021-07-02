@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.LoginPage">
+   <children>
+      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true">
+         <image>
+            <Image url="@../../assets/pageimages/LoginBackground.png" />
+         </image>
+      </ImageView>
+      <Button layoutX="75.0" layoutY="329.0" mnemonicParsing="false" onMouseClicked="#back" text="Back" />
+   </children>
+</AnchorPane>

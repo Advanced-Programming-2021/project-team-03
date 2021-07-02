@@ -11,3 +11,7 @@
     -fx-background-color: #ffe600;
     -fx-rotate: -10;
 }
+
+#loginButton:hover{
+    -fx-rotate: 10;
+}
