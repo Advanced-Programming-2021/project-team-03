@@ -1,0 +1,5 @@
+.registerTextField {
+    -fx-background-radius: 20;
+    -fx-background-color: black;
+    -fx-text-fill: white;
+}

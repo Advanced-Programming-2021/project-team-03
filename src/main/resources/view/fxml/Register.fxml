@@ -20,25 +20,25 @@
          <font>
             <Font name="Baskerville Old Face" size="18.0" />
          </font></Button>
-      <TextField fx:id="usernameField" alignment="CENTER" layoutX="134.0" layoutY="84.0" promptText="username" style="-fx-background-radius: 20; -fx-background-color: black;" />
-      <TextField fx:id="nicknameField" alignment="CENTER" layoutX="134.0" layoutY="124.0" promptText="nickname" style="-fx-background-radius: 20; -fx-background-color: black;" />
-      <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="134.0" layoutY="167.0" promptText="password" style="-fx-background-radius: 20; -fx-background-color: black;" />
-      <Text fill="WHITE" layoutX="27.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:" wrappingWidth="99.13672065734863">
+      <TextField fx:id="usernameField" alignment="CENTER" layoutX="134.0" layoutY="84.0" promptText="username" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" />
+      <TextField fx:id="nicknameField" alignment="CENTER" layoutX="134.0" layoutY="124.0" promptText="nickname" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" />
+      <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="134.0" layoutY="167.0" promptText="password" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" />
+      <Text fill="#ffff00" layoutX="27.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:" wrappingWidth="99.13672065734863">
          <font>
             <Font name="Baskerville Old Face" size="22.0" />
          </font>
       </Text>
-      <Text fill="WHITE" layoutX="27.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nickname:" wrappingWidth="99.13672065734863">
+      <Text fill="YELLOW" layoutX="27.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nickname:" wrappingWidth="99.13672065734863">
          <font>
             <Font name="Baskerville Old Face" size="22.0" />
          </font>
       </Text>
-      <Text fill="WHITE" layoutX="34.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:" wrappingWidth="99.13672065734863">
+      <Text fill="YELLOW" layoutX="34.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:" wrappingWidth="99.13672065734863">
          <font>
             <Font name="Baskerville Old Face" size="22.0" />
          </font>
       </Text>
-      <Text fx:id="messageText" fill="#01ffcc" layoutX="34.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="225.13671875">
+      <Text fx:id="messageText" fill="YELLOW" layoutX="45.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="225.13671875">
          <font>
             <Font name="Baskerville Old Face" size="22.0" />
          </font>
