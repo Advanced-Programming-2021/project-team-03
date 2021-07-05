@@ -18,6 +18,7 @@ public class MainPage extends Application {
         Parent startingPane = FXMLLoader.load(getClass().getResource("/view/fxml/Main.fxml"));
         primaryStage.setScene(new Scene(startingPane));
         stage = primaryStage;
+        primaryStage.show();
     }
 
     public void logout(MouseEvent mouseEvent) throws Exception {

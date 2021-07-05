@@ -19,6 +19,7 @@ public class StartPage extends Application {
         primaryStage.getIcons().add(new Image(String.valueOf(getClass().getResource("/assets/pageimages/logo.png"))));
         primaryStage.setTitle("YU-GI-OH");
         stage = primaryStage;
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
