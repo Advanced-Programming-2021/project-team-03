@@ -5,34 +5,45 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.LoginPage">
-   <children>
-      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true">
-         <image>
-            <Image url="@../../assets/pageimages/LoginBackground.png" />
-         </image>
-      </ImageView>
-      <Button layoutX="30.0" layoutY="301.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="0.0" prefWidth="106.0" styleClass="loginButtons" stylesheets="@../css/buttonStyles.css" text="Back">
+<AnchorPane prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.LoginPage">
+    <children>
+        <ImageView fitHeight="720" fitWidth="1080" pickOnBounds="true">
+            <image>
+                <Image url="@../../assets/pageimages/LoginBackground.png" />
+            </image>
+        </ImageView>
+        <Button layoutX="54" layoutY="541.8" mnemonicParsing="false" onMouseClicked="#back" prefHeight="0.0" prefWidth="190.8" styleClass="loginButtons" stylesheets="@../css/buttonStyles.css" text="Back">
+            <font>
+                <Font name="Baskerville Old Face" size="32.4" />
+            </font>
+        </Button>
+        <Button layoutX="291.6" layoutY="541.8" mnemonicParsing="false" onMouseClicked="#login" prefHeight="0.0" prefWidth="190.8" styleClass="loginButtons" stylesheets="@../css/buttonStyles.css" text="Login">
+            <font>
+                <Font name="Baskerville Old Face" size="32.4" />
+            </font>
+        </Button>
+        <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="253.8" layoutY="286.2" prefHeight="46.0" prefWidth="267.8" promptText="password" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css">
          <font>
-            <Font name="Baskerville Old Face" size="18.0" />
-         </font></Button>
-      <Button layoutX="162.0" layoutY="301.0" mnemonicParsing="false" onMouseClicked="#login" prefHeight="0.0" prefWidth="106.0" styleClass="loginButtons" stylesheets="@../css/buttonStyles.css" text="Login">
+            <Font name="Baskerville Old Face" size="21.6" />
+         </font></PasswordField>
+        <Label layoutX="54" layoutY="178.2" text="Username:" textFill="WHITE">
+            <font>
+                <Font name="Baskerville Old Face" size="39.6" />
+            </font>
+        </Label>
+        <Label layoutX="71.0" layoutY="285.0" text="Password:" textFill="WHITE">
+            <font>
+                <Font name="Baskerville Old Face" size="39.6" />
+            </font>
+        </Label>
+        <TextField fx:id="usernameField" alignment="CENTER" layoutX="253.8" layoutY="180" prefWidth="267.8" promptText="username" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css">
          <font>
-            <Font name="Baskerville Old Face" size="18.0" />
-         </font></Button>
-      <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="141.0" layoutY="159.0" promptText="password" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" />
-      <Label layoutX="30.0" layoutY="99.0" text="Username" textFill="WHITE">
-         <font>
-            <Font name="Baskerville Old Face" size="22.0" />
-         </font></Label>
-      <Label layoutX="34.0" layoutY="158.0" text="Password" textFill="WHITE">
-         <font>
-            <Font name="Baskerville Old Face" size="22.0" />
-         </font></Label>
-      <TextField fx:id="usernameField" alignment="CENTER" layoutX="141.0" layoutY="100.0" promptText="username" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" />
-      <Text fx:id="messageText" fill="WHITE" layoutX="30.0" layoutY="248.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-alignment: center;" wrappingWidth="242.79998474121112">
-         <font>
-            <Font name="Baskerville Old Face" size="22.0" />
-         </font></Text>
-   </children>
+            <Font name="Baskerville Old Face" size="21.6" />
+         </font></TextField>
+        <Text fx:id="messageText" fill="WHITE" layoutX="54" layoutY="446.4" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-alignment: center;" wrappingWidth="437.04">
+            <font>
+                <Font name="Baskerville Old Face" size="39.6" />
+            </font>
+        </Text>
+    </children>
 </AnchorPane>
