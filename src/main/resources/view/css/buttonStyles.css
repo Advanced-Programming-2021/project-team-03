@@ -10,6 +10,7 @@
     -fx-border-width: 1;
     -fx-background-color: #ffe600;
     -fx-rotate: -10;
+    -fx-background-radius: 40;
 }
 
 #loginButton:hover {
@@ -28,6 +29,7 @@
     -fx-border-width: 1;
     -fx-text-fill: red;
     -fx-background-color: black;
+    -fx-background-radius: 40;
 }
 
 .loginButtons {
@@ -42,4 +44,31 @@
     -fx-border-width: 1;
     -fx-text-fill: red;
     -fx-background-color: black;
+    -fx-background-radius: 40;
+}
+
+.mainPageButtons {
+    -fx-border-color: #de04de;
+    -fx-border-radius: 40;
+    -fx-border-width: 1;
+    -fx-text-fill: #de04de;
+    -fx-background-color: #131313;
+    -fx-background-radius: 40;
+}
+
+
+.mainPageButtons:hover {
+    /*-fx-background-color: #ffd832;*/
+    -fx-background-color: #f8f8f6;
+    -fx-background-radius: 40;
+    -fx-text-fill: #c80000;
+}
+
+#leftButtons:hover {
+
+    -fx-rotate: 10;
+}
+
+#rightButtons:hover {
+    -fx-rotate: -10;
 }

@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.LoginPage">
+<AnchorPane prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.LoginPage">
     <children>
         <ImageView fitHeight="720" fitWidth="1080" pickOnBounds="true">
             <image>
@@ -36,7 +36,7 @@
                 <Font name="Baskerville Old Face" size="39.6" />
             </font>
         </Label>
-        <TextField fx:id="usernameField" alignment="CENTER" layoutX="253.8" layoutY="180" prefWidth="267.8" promptText="username" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css">
+        <TextField fx:id="usernameField" alignment="CENTER" layoutX="254.0" layoutY="181.0" prefWidth="267.8" promptText="username" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css">
          <font>
             <Font name="Baskerville Old Face" size="21.6" />
          </font></TextField>
