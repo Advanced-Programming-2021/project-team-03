@@ -16,13 +16,13 @@
          <font>
             <Font name="Baskerville Old Face" size="18.0" />
          </font></Button>
-      <Button layoutX="158.0" layoutY="322.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="99.0" text="Login">
+      <Button layoutX="158.0" layoutY="322.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="99.0" text="Login" onMouseClicked="#login">
          <font>
             <Font name="Baskerville Old Face" size="18.0" />
          </font></Button>
-      <TextField layoutX="134.0" layoutY="84.0" />
-      <TextField layoutX="134.0" layoutY="124.0" />
-      <PasswordField layoutX="134.0" layoutY="167.0" />
+      <TextField fx:id="usernameField" layoutX="134.0" layoutY="84.0" />
+      <TextField fx:id="nicknameField" layoutX="134.0" layoutY="124.0" />
+      <PasswordField fx:id="passwordField" layoutX="134.0" layoutY="167.0" />
       <Text fill="WHITE" layoutX="27.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:" wrappingWidth="99.13672065734863">
          <font>
             <Font name="Baskerville Old Face" size="22.0" />
@@ -38,7 +38,7 @@
             <Font name="Baskerville Old Face" size="22.0" />
          </font>
       </Text>
-      <Text fill="#01ffcc" layoutX="34.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="225.13671875">
+      <Text fx:id="messageText" fill="#01ffcc" layoutX="34.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="225.13671875">
          <font>
             <Font name="Baskerville Old Face" size="22.0" />
          </font>
