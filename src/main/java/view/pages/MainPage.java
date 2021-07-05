@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class MainPage extends Application {
@@ -14,5 +15,26 @@ public class MainPage extends Application {
         Parent startingPane = FXMLLoader.load(getClass().getResource("/view/fxml/Main.fxml"));
         primaryStage.setScene(new Scene(startingPane));
         stage = primaryStage;
+    }
+
+    public void logout(MouseEvent mouseEvent) {
+    }
+
+    public void profile(MouseEvent mouseEvent) {
+    }
+
+    public void scoreBoard(MouseEvent mouseEvent) {
+    }
+
+    public void deck(MouseEvent mouseEvent) {
+    }
+
+    public void duel(MouseEvent mouseEvent) {
+    }
+
+    public void shop(MouseEvent mouseEvent) {
+    }
+
+    public void back(MouseEvent mouseEvent) {
     }
 }
