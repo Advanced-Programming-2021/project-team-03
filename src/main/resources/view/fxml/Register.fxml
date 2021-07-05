@@ -5,44 +5,57 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.RegisterPage">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.RegisterPage">
     <children>
         <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true">
             <image>
-                <Image url="@../../assets/pageimages/RegisterBackground.png" />
+                <Image url="@../../assets/pageimages/RegisterBackground.png"/>
             </image>
         </ImageView>
-        <Button layoutX="47.0" layoutY="322.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="34.0" prefWidth="99.0" styleClass="registerButtons" stylesheets="@../css/buttonStyles.css" text="Back">
+        <Button layoutX="47.0" layoutY="322.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="34.0"
+                prefWidth="99.0" styleClass="registerButtons" stylesheets="@../css/buttonStyles.css" text="Back">
             <font>
-                <Font name="Baskerville Old Face" size="18.0" />
+                <Font name="Baskerville Old Face" size="18.0"/>
             </font>
         </Button>
-        <Button layoutX="158.0" layoutY="322.0" mnemonicParsing="false" onMouseClicked="#login" prefHeight="27.0" prefWidth="99.0" styleClass="registerButtons" stylesheets="@../css/buttonStyles.css" text="Register">
+        <Button layoutX="158.0" layoutY="322.0" mnemonicParsing="false" onMouseClicked="#register" prefHeight="27.0"
+                prefWidth="99.0" styleClass="registerButtons" stylesheets="@../css/buttonStyles.css" text="Register">
             <font>
-                <Font name="Baskerville Old Face" size="18.0" />
+                <Font name="Baskerville Old Face" size="18.0"/>
             </font>
         </Button>
-        <TextField fx:id="usernameField" alignment="CENTER" layoutX="134.0" layoutY="84.0" promptText="username" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" onMouseClicked="#clearMessage"/>
-        <TextField fx:id="nicknameField" alignment="CENTER" layoutX="134.0" layoutY="137.0" promptText="nickname" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" onMouseClicked="#clearMessage"/>
-        <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="134.0" layoutY="187.0" promptText="password" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" onMouseClicked="#clearMessage"/>
-        <Text fill="YELLOW" layoutX="27.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:" wrappingWidth="99.13672065734863">
+        <TextField fx:id="usernameField" alignment="CENTER" layoutX="134.0" layoutY="84.0" promptText="username"
+                   styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css"
+                   onMouseClicked="#clearMessage"/>
+        <TextField fx:id="nicknameField" alignment="CENTER" layoutX="134.0" layoutY="137.0" promptText="nickname"
+                   styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css"
+                   onMouseClicked="#clearMessage"/>
+        <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="134.0" layoutY="187.0" promptText="password"
+                       styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css"
+                       onMouseClicked="#clearMessage"/>
+        <Text fill="YELLOW" layoutX="27.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:"
+              wrappingWidth="99.13672065734863">
             <font>
-                <Font name="Baskerville Old Face" size="22.0" />
+                <Font name="Baskerville Old Face" size="22.0"/>
             </font>
         </Text>
-        <Text fill="YELLOW" layoutX="27.0" layoutY="155.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nickname:" wrappingWidth="99.13672065734863">
+        <Text fill="YELLOW" layoutX="27.0" layoutY="155.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nickname:"
+              wrappingWidth="99.13672065734863">
             <font>
-                <Font name="Baskerville Old Face" size="22.0" />
+                <Font name="Baskerville Old Face" size="22.0"/>
             </font>
         </Text>
-        <Text fill="YELLOW" layoutX="33.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:" wrappingWidth="99.13672065734863">
+        <Text fill="YELLOW" layoutX="33.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:"
+              wrappingWidth="99.13672065734863">
             <font>
-                <Font name="Baskerville Old Face" size="22.0" />
+                <Font name="Baskerville Old Face" size="22.0"/>
             </font>
         </Text>
-        <Text fx:id="messageText" fill="YELLOW" layoutX="33.0" layoutY="271.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-alignment: center;" wrappingWidth="225.13671875">
+        <Text fx:id="messageText" fill="YELLOW" layoutX="33.0" layoutY="271.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              style="-fx-text-alignment: center;" wrappingWidth="225.13671875">
             <font>
-                <Font name="Baskerville Old Face" size="22.0" />
+                <Font name="Baskerville Old Face" size="22.0"/>
             </font>
         </Text>
     </children>
