@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.effect.Reflection?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="view.pages.ProfileMenuPage"
-            prefHeight="720" prefWidth="1080">
-
+<AnchorPane prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.ProfileMenuPage">
+   <children>
+      <ImageView fitHeight="720" fitWidth="1080" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../assets/pageimages/ProfileBackground.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="60.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../assets/profilepictures/8.png" />
+         </image>
+      </ImageView>
+      <Text layoutX="270.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="booozzzz" wrappingWidth="343.1848945617676">
+         <font>
+            <Font name="Baskerville Old Face" size="42.0" />
+         </font>
+         <effect>
+            <Reflection />
+         </effect>
+      </Text>
+      <Text layoutX="270.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" text="booozzzz" wrappingWidth="343.1848945617676">
+         <font>
+            <Font name="Baskerville Old Face" size="42.0" />
+         </font>
+      </Text>
+   </children>
 </AnchorPane>

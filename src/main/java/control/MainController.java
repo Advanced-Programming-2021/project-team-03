@@ -98,8 +98,49 @@ public class MainController {
             case "Surrender" -> surrender(valueObject);
             case "Next phase" -> endPhaseCommand(valueObject);
             case "Show map" -> showMap(valueObject);
+
+
+            //region Graphic requests
+            case "Get username by token" -> getUsernameByToken(valueObject);
+            case "Get nickname by token" -> getNicknameByToken(valueObject);
+            //endregion
+
+
             default -> error();
         };
+    }
+
+    private String getNicknameByToken(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            try {
+                answerObject.put("Value", User.getByUsername(onlineUsers.get(token)).getNickname());
+                answerObject.put("Type", "Success");
+            } catch (NullPointerException exception) {
+                answerObject.put("Type", "Error");
+                answerObject.put("Value", "User not found");
+            }
+        }
+        return answerObject.toString();
+    }
+
+    private String getUsernameByToken(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            answerObject.put("Type", "Success");
+            answerObject.put("Value", onlineUsers.get(token));
+        }
+        return answerObject.toString();
     }
 
     private String showMap(JSONObject valueObject) {
