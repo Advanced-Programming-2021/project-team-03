@@ -1,6 +1,7 @@
 package view.pages;
 
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,6 +15,8 @@ import view.viewcontroller.MainView;
 
 public class RegisterPage extends Application {
     private static Stage stage;
+
+    @FXML
     public TextField usernameField;
     public TextField nicknameField;
     public PasswordField passwordField;
@@ -24,7 +27,6 @@ public class RegisterPage extends Application {
         Parent startingPane = FXMLLoader.load(getClass().getResource("/view/fxml/Register.fxml"));
         primaryStage.setScene(new Scene(startingPane));
         stage = primaryStage;
-        stage.show();
     }
 
     public void back(MouseEvent mouseEvent) throws Exception {
