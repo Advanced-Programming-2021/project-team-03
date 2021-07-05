@@ -21,4 +21,8 @@ public class LoginPage extends Application {
     public void back(MouseEvent mouseEvent) throws Exception {
         new StartPage().start(stage);
     }
+
+    public void login(MouseEvent mouseEvent) {
+
+    }
 }

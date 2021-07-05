@@ -16,16 +16,30 @@
     -fx-rotate: 10;
 }
 
-.registerAndLoginButtons {
+.registerButtons {
     -fx-background-color: red;
     -fx-background-radius: 40;
     -fx-text-fill: white;
 }
 
-.registerAndLoginButtons:hover {
+.registerButtons:hover {
     -fx-border-color: red;
     -fx-border-radius: 40;
     -fx-border-width: 1;
-    -fx-text-fill: black;
-    -fx-background-color: #ff8c00;
+    -fx-text-fill: red;
+    -fx-background-color: black;
+}
+
+.loginButtons {
+    -fx-background-color: white;
+    -fx-background-radius: 40;
+    -fx-text-fill: red;
+}
+
+.loginButtons:hover {
+    -fx-border-color: white;
+    -fx-border-radius: 40;
+    -fx-border-width: 1;
+    -fx-text-fill: white;
+    -fx-background-color: red;
 }

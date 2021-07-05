@@ -12,12 +12,12 @@
                 <Image url="@../../assets/pageimages/RegisterBackground.png" />
             </image>
         </ImageView>
-        <Button layoutX="47.0" layoutY="322.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="34.0" prefWidth="99.0" styleClass="registerAndLoginButtons" stylesheets="@../css/buttonStyles.css" text="Back">
+        <Button layoutX="47.0" layoutY="322.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="34.0" prefWidth="99.0" styleClass="registerButtons" stylesheets="@../css/buttonStyles.css" text="Back">
             <font>
                 <Font name="Baskerville Old Face" size="18.0" />
             </font>
         </Button>
-        <Button layoutX="158.0" layoutY="322.0" mnemonicParsing="false" onMouseClicked="#login" prefHeight="27.0" prefWidth="99.0" styleClass="registerAndLoginButtons" stylesheets="@../css/buttonStyles.css" text="Register">
+        <Button layoutX="158.0" layoutY="322.0" mnemonicParsing="false" onMouseClicked="#login" prefHeight="27.0" prefWidth="99.0" styleClass="registerButtons" stylesheets="@../css/buttonStyles.css" text="Register">
             <font>
                 <Font name="Baskerville Old Face" size="18.0" />
             </font>
