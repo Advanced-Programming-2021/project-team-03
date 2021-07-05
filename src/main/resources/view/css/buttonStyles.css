@@ -12,6 +12,20 @@
     -fx-rotate: -10;
 }
 
-#loginButton:hover{
+#loginButton:hover {
     -fx-rotate: 10;
+}
+
+.registerAndLoginButtons {
+    -fx-background-color: red;
+    -fx-background-radius: 40;
+    -fx-text-fill: white;
+}
+
+.registerAndLoginButtons:hover {
+    -fx-border-color: red;
+    -fx-border-radius: 40;
+    -fx-border-width: 1;
+    -fx-text-fill: black;
+    -fx-background-color: #ff8c00;
 }

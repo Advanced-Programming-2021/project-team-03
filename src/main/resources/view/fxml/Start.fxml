@@ -6,39 +6,34 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-            prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.StartPage">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.StartPage">
     <children>
         <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true">
             <image>
-                <Image url="@../../assets/pageimages/StartingBackground.jpg"/>
+                <Image url="@../../assets/pageimages/StartingBackground.jpg" />
             </image>
         </ImageView>
-        <Button layoutX="34.0" layoutY="141.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="131.0"
-                styleClass="startButtons" stylesheets="@../css/buttonStyles.css" text="REGISTER" onMouseClicked="#register">
+        <Button layoutX="34.0" layoutY="141.0" mnemonicParsing="false" onMouseClicked="#register" prefHeight="34.0" prefWidth="131.0" styleClass="startButtons" stylesheets="@../css/buttonStyles.css" text="REGISTER">
             <font>
-                <Font name="Baskerville Old Face" size="14.0"/>
+                <Font name="Baskerville Old Face" size="14.0" />
             </font>
         </Button>
-        <Button fx:id="loginButton" layoutX="34.0" layoutY="206.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="131.0"
-                styleClass="startButtons" stylesheets="@../css/buttonStyles.css" text="LOGIN" onMouseClicked="#login">
+        <Button fx:id="loginButton" layoutX="34.0" layoutY="206.0" mnemonicParsing="false" onMouseClicked="#login" prefHeight="34.0" prefWidth="131.0" styleClass="startButtons" stylesheets="@../css/buttonStyles.css" text="LOGIN">
             <font>
-                <Font name="Baskerville Old Face" size="14.0"/>
+                <Font name="Baskerville Old Face" size="14.0" />
             </font>
         </Button>
-        <Button layoutX="34.0" layoutY="276.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="131.0"
-                styleClass="startButtons" stylesheets="@../css/buttonStyles.css" text="EXIT" onMouseClicked="#Exit">
+        <Button layoutX="34.0" layoutY="276.0" mnemonicParsing="false" onMouseClicked="#Exit" prefHeight="34.0" prefWidth="131.0" styleClass="startButtons" stylesheets="@../css/buttonStyles.css" text="EXIT">
             <font>
-                <Font name="Baskerville Old Face" size="14.0"/>
+                <Font name="Baskerville Old Face" size="14.0" />
             </font>
         </Button>
-        <Text fill="#ff8000" layoutX="34.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="YU-GI-OH"
-              wrappingWidth="187.466796875">
+        <Text fill="#ff8000" layoutX="34.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="YU-GI-OH" wrappingWidth="187.466796875">
             <font>
-                <Font name="Baskerville Old Face" size="36.0"/>
+                <Font name="Baskerville Old Face" size="36.0" />
             </font>
             <effect>
-                <Reflection bottomOpacity="0.15" fraction="0.7"/>
+                <Reflection bottomOpacity="0.15" fraction="0.7" />
             </effect>
         </Text>
     </children>

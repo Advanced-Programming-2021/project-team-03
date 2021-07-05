@@ -5,24 +5,24 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.RegisterPage">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.RegisterPage">
    <children>
       <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true">
          <image>
             <Image url="@../../assets/pageimages/RegisterBackground.png" />
          </image>
       </ImageView>
-      <Button layoutX="47.0" layoutY="322.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="34.0" prefWidth="99.0" text="Back">
+      <Button layoutX="47.0" layoutY="322.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="34.0" prefWidth="99.0" styleClass="registerAndLoginButtons" stylesheets="@../css/buttonStyles.css" text="Back">
          <font>
             <Font name="Baskerville Old Face" size="18.0" />
          </font></Button>
-      <Button layoutX="158.0" layoutY="322.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="99.0" text="Login" onMouseClicked="#login">
+      <Button layoutX="158.0" layoutY="322.0" mnemonicParsing="false" onMouseClicked="#login" prefHeight="27.0" prefWidth="99.0" styleClass="registerAndLoginButtons" stylesheets="@../css/buttonStyles.css" text="Register">
          <font>
             <Font name="Baskerville Old Face" size="18.0" />
          </font></Button>
-      <TextField fx:id="usernameField" layoutX="134.0" layoutY="84.0" />
-      <TextField fx:id="nicknameField" layoutX="134.0" layoutY="124.0" />
-      <PasswordField fx:id="passwordField" layoutX="134.0" layoutY="167.0" />
+      <TextField fx:id="usernameField" alignment="CENTER" layoutX="134.0" layoutY="84.0" promptText="username" style="-fx-background-radius: 20; -fx-background-color: black;" />
+      <TextField fx:id="nicknameField" alignment="CENTER" layoutX="134.0" layoutY="124.0" promptText="nickname" style="-fx-background-radius: 20; -fx-background-color: black;" />
+      <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="134.0" layoutY="167.0" promptText="password" style="-fx-background-radius: 20; -fx-background-color: black;" />
       <Text fill="WHITE" layoutX="27.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:" wrappingWidth="99.13672065734863">
          <font>
             <Font name="Baskerville Old Face" size="22.0" />
