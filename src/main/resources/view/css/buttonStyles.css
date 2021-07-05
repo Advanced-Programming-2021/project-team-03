@@ -59,9 +59,9 @@
 
 .mainPageButtons:hover {
     /*-fx-background-color: #ffd832;*/
-    -fx-background-color: #f8f8f6;
+    -fx-background-color: #de04de;
     -fx-background-radius: 40;
-    -fx-text-fill: #c80000;
+    -fx-text-fill: #131313;
 }
 
 #leftButtons:hover {
