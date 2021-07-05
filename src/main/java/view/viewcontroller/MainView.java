@@ -1,6 +1,8 @@
 package view.viewcontroller;
 
 import control.MainController;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,6 +21,17 @@ public class MainView {
     public static MainView getInstance() {
         if (instance == null) instance = new MainView();
         return instance;
+    }
+
+    public static void alertMaker(TextField textField, JSONObject controlAnswer) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        if (controlAnswer.getString("Type").equals("Successful")) {
+            alert.setAlertType(Alert.AlertType.INFORMATION);
+            textField.clear();
+        }
+
+        alert.setContentText(controlAnswer.getString("Value"));
+        alert.show();
     }
 
     private JSONObject sendRequestToControl(JSONObject messageToSend) {
@@ -177,5 +190,15 @@ public class MainView {
     public ArrayList<ScoreboardUser> getScoreboardUsers() {
         //TODO
         return null;
+    }
+
+    public JSONObject importExportCard(String cardName, String typeOfCommand) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Card name", cardName);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", typeOfCommand);
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
     }
 }

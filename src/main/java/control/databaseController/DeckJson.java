@@ -5,6 +5,7 @@ import model.user.Deck;
 import model.user.DeckType;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class DeckJson {
     private final String deckName;
@@ -26,8 +27,8 @@ public class DeckJson {
         ArrayList<Card> mainDeckCards = new ArrayList<>();
         ArrayList<Card> sideDeckCards = new ArrayList<>();
 
-        mainDeck.forEach(cardName -> mainDeckCards.add(Card.getCardByName(cardName)));
-        sideDeck.forEach(cardName -> sideDeckCards.add(Card.getCardByName(cardName)));
+        mainDeck.stream().map(Card::getCardByName).filter(Objects::nonNull).forEach(mainDeckCards::add);
+        sideDeck.stream().map(Card::getCardByName).filter(Objects::nonNull).forEach(sideDeckCards::add);
 
         deck.addCard(mainDeckCards, DeckType.MAIN);
         deck.addCard(sideDeckCards, DeckType.SIDE);

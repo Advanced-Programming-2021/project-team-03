@@ -56,6 +56,6 @@ public class MainPage extends Application {
     }
 
     public void importExport(MouseEvent mouseEvent) throws Exception {
-        new ImportExportMenuPage().start(stage);
+        new ImportExportPage().start(stage);
     }
 }
