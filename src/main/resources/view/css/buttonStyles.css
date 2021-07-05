@@ -37,9 +37,9 @@
 }
 
 .loginButtons:hover {
-    -fx-border-color: white;
+    -fx-border-color: red;
     -fx-border-radius: 40;
     -fx-border-width: 1;
-    -fx-text-fill: white;
-    -fx-background-color: red;
+    -fx-text-fill: red;
+    -fx-background-color: black;
 }
