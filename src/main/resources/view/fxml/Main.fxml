@@ -43,7 +43,7 @@
             <Font name="Baskerville Old Face" size="32.4" />
          </font>
       </Button>
-      <Button layoutX="768.0" layoutY="540.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="62.0" prefWidth="237.0" styleClass="registerButtons" stylesheets="@../css/buttonStyles.css" text="Import/Export">
+      <Button layoutX="768.0" layoutY="540.0" mnemonicParsing="false" onMouseClicked="#importExport" prefHeight="62.0" prefWidth="237.0" styleClass="registerButtons" stylesheets="@../css/buttonStyles.css" text="Import/Export">
          <font>
             <Font name="Baskerville Old Face" size="32.4" />
          </font>
