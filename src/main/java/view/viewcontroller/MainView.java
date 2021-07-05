@@ -134,7 +134,7 @@ public class MainView {
         messageToSendToControl.put("Value", value);
         JSONObject answer = sendRequestToControl(messageToSendToControl);
         String type = answer.getString("Type");
-        String username = answer.getString("value");
+        String username = answer.getString("Value");
         if (type.equals("Success")) return username;
         else return "Username not found";
     }
@@ -147,9 +147,30 @@ public class MainView {
         messageToSendToControl.put("Value", value);
         JSONObject answer = sendRequestToControl(messageToSendToControl);
         String type = answer.getString("Type");
-        String nickname = answer.getString("value");
+        String nickname = answer.getString("Value");
         if (type.equals("Success")) return nickname;
         else return "Nickname not found";
+    }
+
+    public JSONObject changeNickname(String nickname) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Nickname", nickname);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Change nickname");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
+    public JSONObject changePassword(String currentPassword, String newPassword) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Current password", currentPassword);
+        value.put("New password", newPassword);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Change password");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
     }
     //endregion
 
