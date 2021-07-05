@@ -4,6 +4,9 @@ import control.MainController;
 import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import view.viewmodel.ScoreboardUser;
+
+import java.util.ArrayList;
 
 public class MainView {
     private static MainView instance;
@@ -149,4 +152,9 @@ public class MainView {
         else return "Nickname not found";
     }
     //endregion
+
+    public ArrayList<ScoreboardUser> getScoreboardUsers() {
+        //TODO
+        return null;
+    }
 }

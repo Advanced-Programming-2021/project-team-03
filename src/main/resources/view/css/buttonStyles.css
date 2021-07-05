@@ -9,12 +9,12 @@
     -fx-border-radius: 40;
     -fx-border-width: 1;
     -fx-background-color: #ffe600;
-    -fx-rotate: -10;
+    -fx-rotate: -8;
     -fx-background-radius: 40;
 }
 
 #loginButton:hover {
-    -fx-rotate: 10;
+    -fx-rotate: 8;
 }
 
 .registerButtons {
@@ -58,17 +58,16 @@
 
 
 .mainPageButtons:hover {
-    /*-fx-background-color: #ffd832;*/
+    -fx-border-color: #c80000;
     -fx-background-color: #f8f8f6;
     -fx-background-radius: 40;
     -fx-text-fill: #c80000;
 }
 
 #leftButtons:hover {
-
-    -fx-rotate: 10;
+    -fx-rotate: 7;
 }
 
 #rightButtons:hover {
-    -fx-rotate: -10;
+    -fx-rotate: -7;
 }

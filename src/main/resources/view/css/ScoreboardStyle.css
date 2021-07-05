@@ -1,0 +1,7 @@
+.scoreBoard {
+    -fx-background-color: transparent;
+    -fx-text-alignment: center;
+    -fx-font-size: 22;
+    -fx-font-weight: bold;
+    -fx-font-family: "Baskerville Old Face";
+}
