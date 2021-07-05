@@ -40,34 +40,34 @@
          <font>
             <Font name="Baskerville Old Face" size="24.0" />
          </font></Button>
-      <TextField fx:id="nicknameField" alignment="CENTER" layoutX="316.0" layoutY="247.0" prefHeight="36.0" prefWidth="211.0" promptText="New Nickname" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" visible="false">
+      <TextField fx:id="nicknameField" alignment="CENTER" layoutX="316.0" layoutY="277.0" prefHeight="36.0" prefWidth="211.0" promptText="New Nickname" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" visible="false">
          <font>
             <Font name="Baskerville Old Face" size="18.0" />
          </font></TextField>
-      <Text fx:id="newNicknameText" layoutX="74.0" layoutY="274.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New Nickname:" visible="false" wrappingWidth="241.8">
+      <Text fx:id="newNicknameText" layoutX="74.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New Nickname:" visible="false" wrappingWidth="241.8">
          <font>
             <Font name="Baskerville Old Face" size="36.0" />
          </font>
       </Text>
-      <PasswordField fx:id="currentPasswordField" alignment="CENTER" layoutX="316.0" layoutY="247.0" prefHeight="36.0" prefWidth="211.0" promptText="Current Password" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" visible="false">
+      <PasswordField fx:id="currentPasswordField" alignment="CENTER" layoutX="316.0" layoutY="277.0" prefHeight="36.0" prefWidth="211.0" promptText="Current Password" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" visible="false">
          <font>
             <Font name="Baskerville Old Face" size="18.0" />
          </font></PasswordField>
-      <Text fx:id="currentPasswordText" layoutX="48.0" layoutY="274.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Password:" visible="false" wrappingWidth="263.8">
+      <Text fx:id="currentPasswordText" layoutX="48.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Password:" visible="false" wrappingWidth="263.8">
          <font>
             <Font name="Baskerville Old Face" size="36.0" />
          </font>
       </Text>
-      <PasswordField fx:id="newPasswordField" alignment="CENTER" layoutX="316.0" layoutY="310" prefHeight="36.0" prefWidth="211.0" promptText="New Password" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" visible="false">
+      <PasswordField fx:id="newPasswordField" alignment="CENTER" layoutX="316.0" layoutY="340" prefHeight="36.0" prefWidth="211.0" promptText="New Password" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" visible="false">
          <font>
             <Font name="Baskerville Old Face" size="18.0" />
          </font></PasswordField>
-      <Text fx:id="newPasswordText" layoutX="93.0" layoutY="337.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New Password:" visible="false" wrappingWidth="218.8">
+      <Text fx:id="newPasswordText" layoutX="93.0" layoutY="367.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New Password:" visible="false" wrappingWidth="218.8">
          <font>
             <Font name="Baskerville Old Face" size="36.0" />
          </font>
       </Text>
-      <Text fx:id="messageText" layoutX="61.0" layoutY="393.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-alignment: center;" wrappingWidth="500.13671875">
+      <Text fx:id="messageText" layoutX="61.0" layoutY="423.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-alignment: center;" wrappingWidth="500.13671875">
          <font>
             <Font name="Baskerville Old Face" size="24.0" />
          </font>
