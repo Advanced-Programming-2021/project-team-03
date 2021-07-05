@@ -17,14 +17,14 @@
                 <Font name="Baskerville Old Face" size="18.0" />
             </font>
         </Button>
-        <Button layoutX="158.0" layoutY="322.0" mnemonicParsing="false" onMouseClicked="#login" prefHeight="27.0" prefWidth="99.0" styleClass="registerAndLoginButtons" stylesheets="@../css/buttonStyles.css" text="Register">
+        <Button layoutX="158.0" layoutY="322.0" mnemonicParsing="false" onMouseClicked="#register" prefHeight="27.0" prefWidth="99.0" styleClass="registerAndLoginButtons" stylesheets="@../css/buttonStyles.css" text="Register">
             <font>
                 <Font name="Baskerville Old Face" size="18.0" />
             </font>
         </Button>
-        <TextField fx:id="usernameField" alignment="CENTER" layoutX="134.0" layoutY="84.0" promptText="username" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" />
-        <TextField fx:id="nicknameField" alignment="CENTER" layoutX="134.0" layoutY="137.0" promptText="nickname" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" />
-        <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="134.0" layoutY="187.0" promptText="password" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" />
+        <TextField fx:id="usernameField" alignment="CENTER" layoutX="134.0" layoutY="84.0" promptText="username" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" onMouseClicked="#clearMessage"/>
+        <TextField fx:id="nicknameField" alignment="CENTER" layoutX="134.0" layoutY="137.0" promptText="nickname" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" onMouseClicked="#clearMessage"/>
+        <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="134.0" layoutY="187.0" promptText="password" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" onMouseClicked="#clearMessage"/>
         <Text fill="YELLOW" layoutX="27.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:" wrappingWidth="99.13672065734863">
             <font>
                 <Font name="Baskerville Old Face" size="22.0" />
