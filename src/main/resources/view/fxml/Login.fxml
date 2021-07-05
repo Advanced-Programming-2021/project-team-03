@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.LoginPage">
    <children>
@@ -11,6 +12,12 @@
             <Image url="@../../assets/pageimages/LoginBackground.png" />
          </image>
       </ImageView>
-      <Button layoutX="46.0" layoutY="328.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="26.0" prefWidth="93.0" text="Back" />
+      <Button layoutX="48.0" layoutY="328.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="26.0" prefWidth="93.0" text="Back" />
+      <Button layoutX="167.0" layoutY="328.0" mnemonicParsing="false" onMouseClicked="#login" prefHeight="26.0" prefWidth="93.0" text="Login" />
+      <PasswordField fx:id="passwordField" layoutX="139.0" layoutY="136.0" />
+      <Label layoutX="48.0" layoutY="91.0" text="USERNAME" />
+      <Label layoutX="65.0" layoutY="131.0" text="PASSWORD" />
+      <TextField fx:id="usernameField" layoutX="139.0" layoutY="87.0" />
+      <Text fx:id="messageText" layoutX="140.0" layoutY="247.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ASFASF" wrappingWidth="87.13671875" />
    </children>
 </AnchorPane>

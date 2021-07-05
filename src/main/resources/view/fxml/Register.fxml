@@ -40,7 +40,7 @@
                 <Font name="Baskerville Old Face" size="22.0" />
             </font>
         </Text>
-        <Text fx:id="messageText" fill="YELLOW" layoutX="33.0" layoutY="271.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-alignment: center;" text="dasdasfaf" wrappingWidth="225.13671875">
+        <Text fx:id="messageText" fill="YELLOW" layoutX="33.0" layoutY="271.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-alignment: center;" wrappingWidth="225.13671875">
             <font>
                 <Font name="Baskerville Old Face" size="22.0" />
             </font>
