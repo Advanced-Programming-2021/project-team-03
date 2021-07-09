@@ -216,7 +216,30 @@ public class MainView {
     }
     //endregion
 
-    public static void alertMaker(TextField textField, JSONObject controlAnswer) {
+    //region DuelMenuPage
+    public JSONObject startNewSingleMatch(int numberOfRounds) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Rounds number", String.valueOf(numberOfRounds));
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "New duel AI");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
+    public JSONObject startNewMultiMatch(int numberOfRounds,String opponentUsername) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Second player name", opponentUsername);
+        value.put("Rounds number", String.valueOf(numberOfRounds));
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "New duel");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+    //endregion
+
+    public void alertMaker(TextField textField, JSONObject controlAnswer) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         if (controlAnswer.getString("Type").equals("Successful")) {
             alert.setAlertType(Alert.AlertType.INFORMATION);

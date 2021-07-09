@@ -31,12 +31,12 @@ public class ImportExportPage extends Application {
     public void importCard(MouseEvent mouseEvent) {
         String cardName = cardNameField.getText();
         if (cardName.equals("")) return;
-        MainView.alertMaker(cardNameField, MainView.getInstance().importExportCard(cardName, "Import card"));
+        MainView.getInstance().alertMaker(cardNameField, MainView.getInstance().importExportCard(cardName, "Import card"));
     }
 
     public void exportCard(MouseEvent mouseEvent) {
         String cardName = cardNameField.getText();
         if (cardName.equals("")) return;
-        MainView.alertMaker(cardNameField, MainView.getInstance().importExportCard(cardName, "Export card"));
+        MainView.getInstance().alertMaker(cardNameField, MainView.getInstance().importExportCard(cardName, "Export card"));
     }
 }
