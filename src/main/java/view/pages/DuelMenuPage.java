@@ -109,7 +109,6 @@ public class DuelMenuPage extends Application {
     }
 
     private void showErrorMessage(String text) {
-        message.setFill(Color.DARKRED);
         message.setText("Error: " + text);
     }
 
