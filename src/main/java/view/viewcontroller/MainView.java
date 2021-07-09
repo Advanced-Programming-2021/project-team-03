@@ -282,14 +282,18 @@ public class MainView {
     //endregion
 
     //region ShopMenuPage
-    public JSONObject getNumberOfBoughtCard(String cardName) {
+    public int getNumberOfBoughtCard(String cardName) {
         JSONObject value = new JSONObject();
         value.put("Token", token);
         value.put("Card name", cardName);
         JSONObject messageToSendToControl = new JSONObject();
         messageToSendToControl.put("Type", "Get number of bought card");
         messageToSendToControl.put("Value", value);
-        return sendRequestToControl(messageToSendToControl);
+        JSONObject answer = sendRequestToControl(messageToSendToControl);
+        String type = answer.getString("Type");
+        int number = answer.getInt("Value");
+        if (type.equals("Success")) return number;
+        else return 0;
     }
 
     public void alertMaker(TextField textField, JSONObject controlAnswer) {
@@ -313,6 +317,16 @@ public class MainView {
 
     public Image getCardImage(String cardName) throws Exception {
         CardNames cardEnum = CardNames.valueOf(toEnumCase(cardName));
-        return new Image(String.valueOf(getClass().getResource("/assets/cards" + cardEnum.imageName + ".jpg")));
+        System.out.println("cardname:               " + cardName + "                " + cardEnum);
+        String url = String.valueOf(getClass().getResource("/assets/cards/" + cardEnum.imageName + ".jpg"));
+        return new Image(url);
+    }
+
+    public static void main(String[] args) {
+        try {
+            MainView.getInstance().getCardImage("Swords of Revealing Light");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

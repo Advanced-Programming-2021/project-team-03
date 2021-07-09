@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.ShopMenuPage">
+<AnchorPane prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.ShopMenuPage">
     <children>
         <ImageView fitHeight="720.0" fitWidth="1080.0" pickOnBounds="true">
             <image>
@@ -100,7 +100,7 @@
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
       </Label>
-      <Text fx:id="balance1" layoutX="188.0" layoutY="334.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
+      <Text fx:id="P1" layoutX="188.0" layoutY="334.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
@@ -130,57 +130,57 @@
             <Font name="Georgia Bold Italic" size="18.0" />
          </font>
       </Label>
-      <Text fx:id="balance11" layoutX="188.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
+      <Text fx:id="N1" layoutX="188.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
       </Text>
-      <Text fx:id="balance12" layoutX="523.0" layoutY="335.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
+      <Text fx:id="P2" layoutX="523.0" layoutY="335.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
       </Text>
-      <Text fx:id="balance121" layoutX="874.0" layoutY="334.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
+      <Text fx:id="P3" layoutX="874.0" layoutY="334.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
       </Text>
-      <Text fx:id="balance1211" layoutX="869.0" layoutY="637.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
+      <Text fx:id="P6" layoutX="869.0" layoutY="637.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
       </Text>
-      <Text fx:id="balance12111" layoutX="490.0" layoutY="626.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
+      <Text fx:id="P5" layoutX="490.0" layoutY="626.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
       </Text>
-      <Text fx:id="balance121111" layoutX="178.0" layoutY="626.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
+      <Text fx:id="P4" layoutX="178.0" layoutY="626.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
       </Text>
-      <Text fx:id="balance111" layoutX="511.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
+      <Text fx:id="N2" layoutX="511.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
       </Text>
-      <Text fx:id="balance1111" layoutX="874.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
+      <Text fx:id="N3" layoutX="874.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
       </Text>
-      <Text fx:id="balance11111" layoutX="874.0" layoutY="393.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
+      <Text fx:id="N6" layoutX="874.0" layoutY="393.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
       </Text>
-      <Text fx:id="balance111111" layoutX="497.0" layoutY="381.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
+      <Text fx:id="N5" layoutX="497.0" layoutY="381.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
       </Text>
-      <Text fx:id="balance1111111" layoutX="157.0" layoutY="380.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
+      <Text fx:id="N4" layoutX="157.0" layoutY="380.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
