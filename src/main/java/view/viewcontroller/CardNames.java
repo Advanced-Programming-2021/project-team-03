@@ -36,6 +36,12 @@ public enum CardNames {
     EXPLODER_DRAGON("ExploderDragon"),
     WARRIOR_DAI_GREPHER("WarriorDaiGrepher"),
     DARK_BLADE("DarkBlade"),
+    WATTAILDRAGON("Wattaildragon"),
+    TERRATIGER_THE_EMPOWERED_WARRIOR("Terratiger"),
+    THE_TRICKY("TheTricky"),
+    SPIRAL_SERPENT("SpiralSerpent"),
+    COMMAND_KNIGHT("CommandKnight"),
+
     TERRAFORMING("Terraforming"),
     POT_OF_GREED("PotOfGreed"),
     RAIGEKI("Raigeki"),

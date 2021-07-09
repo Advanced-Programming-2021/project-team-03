@@ -267,7 +267,7 @@ public class MainView {
     //endregion
 
     //region GamePage
-    public JSONObject getMap(){
+    public JSONObject getMap() {
         //TODO
 //        JSONObject value = new JSONObject();
 //        value.put("Token", token);
@@ -282,10 +282,10 @@ public class MainView {
     //endregion
 
     //region ShopMenuPage
-    public JSONObject getNumberOfBoughtCard(String cardName){
+    public JSONObject getNumberOfBoughtCard(String cardName) {
         JSONObject value = new JSONObject();
         value.put("Token", token);
-        value.put("Card name",cardName);
+        value.put("Card name", cardName);
         JSONObject messageToSendToControl = new JSONObject();
         messageToSendToControl.put("Type", "Get number of bought card");
         messageToSendToControl.put("Value", value);
@@ -307,7 +307,8 @@ public class MainView {
         return string.toUpperCase()
                 .replace(' ', '_')
                 .replace('-', '_')
-                .replace("'", "");
+                .replace("'", "")
+                .replace(",", "");
     }
 
     public Image getCardImage(String cardName) throws Exception {
