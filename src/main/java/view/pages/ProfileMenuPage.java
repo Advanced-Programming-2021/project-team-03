@@ -49,7 +49,9 @@ public class ProfileMenuPage extends Application {
     private void loadUserInfo() {
         usernameText.setText(MainView.getInstance().getUsername());
         nicknameText.setText(MainView.getInstance().getNickname());
-        profileImage.setImage(new Image(String.valueOf(getClass().getResource("/assets/profilepictures/1.png"))));
+        int profileImageNumber = MainView.getInstance().getUserProfileImageNumber();
+        profileImage.setImage(new Image(String.valueOf(getClass().getResource("/assets/profilepictures/"
+                + String.valueOf(profileImageNumber) + ".png"))));
     }
 
     public void back(MouseEvent mouseEvent) throws Exception {

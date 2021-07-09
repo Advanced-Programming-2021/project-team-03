@@ -23,17 +23,6 @@ public class MainView {
         return instance;
     }
 
-    public static void alertMaker(TextField textField, JSONObject controlAnswer) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        if (controlAnswer.getString("Type").equals("Successful")) {
-            alert.setAlertType(Alert.AlertType.INFORMATION);
-            textField.clear();
-        }
-
-        alert.setContentText(controlAnswer.getString("Value"));
-        alert.show();
-    }
-
     private JSONObject sendRequestToControl(JSONObject messageToSend) {
         String controlAnswerString = MainController.getInstance().getRequest(messageToSend.toString());
         return new JSONObject(controlAnswerString);
@@ -185,9 +174,14 @@ public class MainView {
         messageToSendToControl.put("Value", value);
         return sendRequestToControl(messageToSendToControl);
     }
+
+    public int getUserProfileImageNumber(){
+        //TODO
+        return 1;
+    }
     //endregion
 
-    //region ScoreBoard
+    //region ScoreBoardPage
     public ArrayList<ScoreboardUser> getScoreboardUsers() {
         JSONObject value = new JSONObject();
         value.put("Token", token);
@@ -210,7 +204,7 @@ public class MainView {
     }
     //endregion
 
-    //region Import/Export
+    //region ImportExportMenuPage
     public JSONObject importExportCard(String cardName, String typeOfCommand) {
         JSONObject value = new JSONObject();
         value.put("Token", token);
@@ -221,4 +215,15 @@ public class MainView {
         return sendRequestToControl(messageToSendToControl);
     }
     //endregion
+
+    public static void alertMaker(TextField textField, JSONObject controlAnswer) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        if (controlAnswer.getString("Type").equals("Successful")) {
+            alert.setAlertType(Alert.AlertType.INFORMATION);
+            textField.clear();
+        }
+
+        alert.setContentText(controlAnswer.getString("Value"));
+        alert.show();
+    }
 }

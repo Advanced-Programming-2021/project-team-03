@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
 
-
-<AnchorPane prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.DuelMenuPage">
+<AnchorPane prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.DuelMenuPage">
    <children>
       <ImageView fitHeight="720.0" fitWidth="1080.0" pickOnBounds="true">
          <image>
             <Image url="@../../assets/pageimages/DuelMenubackground.jpg" />
          </image>
       </ImageView>
+      <Button layoutX="135.0" layoutY="145.0" mnemonicParsing="false" text="single" onMouseClicked="#singlePlayMatch"/>
+      <Button layoutX="139.0" layoutY="196.0" mnemonicParsing="false" text="muti" onMouseClicked="#multiPlayMatch"/>
+      <Button layoutX="155.0" layoutY="653.0" mnemonicParsing="false" text="Back" onMouseClicked="#back"/>
+      <Button layoutX="156.0" layoutY="571.0" mnemonicParsing="false" text="paly" onMouseClicked="#play"/>
+      <Text layoutX="14.0" layoutY="296.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Number Of Rounds:" wrappingWidth="149.13671875" />
+      <Text fx:id="message" layoutX="89.0" layoutY="445.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="281.13671875" />
+      <Text layoutX="14.0" layoutY="339.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Write Opponent Username:" wrappingWidth="149.13671875" />
+      <TextField fx:id="numberOfRoundsField" layoutX="196.0" layoutY="278.0" />
+      <TextField fx:id="opponentUsernameField" layoutX="196.0" layoutY="322.0" />
    </children>
 </AnchorPane>
