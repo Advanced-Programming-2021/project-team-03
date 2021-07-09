@@ -23,9 +23,6 @@ public class ImportExportPage extends Application {
     private static Stage stage;
     private static boolean initialized;
 
-    public HBox hBox;
-    public VBox vBox;
-
     @FXML
     public TextField cardNameField;
     public Button importButton;

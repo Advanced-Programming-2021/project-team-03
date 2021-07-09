@@ -3,6 +3,7 @@ package view.viewcontroller;
 import control.MainController;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -222,6 +223,7 @@ public class MainView {
         messageToSendToControl.put("Value", value);
         return sendRequestToControl(messageToSendToControl);
     }
+
     public JSONObject importExportCard(String cardName, String typeOfCommand) {
         JSONObject value = new JSONObject();
         value.put("Token", token);
@@ -244,7 +246,7 @@ public class MainView {
         return sendRequestToControl(messageToSendToControl);
     }
 
-    public JSONObject startNewMultiMatch(int numberOfRounds,String opponentUsername) {
+    public JSONObject startNewMultiMatch(int numberOfRounds, String opponentUsername) {
         JSONObject value = new JSONObject();
         value.put("Token", token);
         value.put("Second player name", opponentUsername);
@@ -271,5 +273,16 @@ public class MainView {
 
         alert.setContentText(controlAnswer.getString("Value"));
         alert.show();
+    }
+
+    public String toEnumCase(String string) {
+        return string.toUpperCase()
+                .replace(' ', '_')
+                .replace('-', '_')
+                .replace("'", "");
+    }
+
+    public Image getCardImage(CardNames cardName) throws Exception {
+        return new Image(String.valueOf(getClass().getResource("/assets/cards" + cardName + ".jpg")));
     }
 }
