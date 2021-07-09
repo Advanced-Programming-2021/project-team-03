@@ -3,3 +3,10 @@
     -fx-background-color: black;
     -fx-text-fill: white;
 }
+
+.DuelMenuTextFields{
+    -fx-background-radius: 20;
+    -fx-background-color: transparent;
+    -fx-text-fill: red;
+    -fx-effect: dropshadow(two-pass-box, red, 15, 0.0, 0.1, 3);
+}

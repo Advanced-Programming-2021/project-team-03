@@ -24,6 +24,7 @@ public class DuelMenuPage extends Application {
         Parent startingPane = FXMLLoader.load(getClass().getResource("/view/fxml/DuelMenu.fxml"));
         primaryStage.setScene(new Scene(startingPane));
         stage = primaryStage;
+        primaryStage.show();
     }
 
     public void singlePlayMatch(MouseEvent mouseEvent) {
