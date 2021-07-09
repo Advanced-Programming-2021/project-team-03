@@ -187,11 +187,30 @@ public class MainView {
     }
     //endregion
 
+    //region ScoreBoard
     public ArrayList<ScoreboardUser> getScoreboardUsers() {
-        //TODO
-        return null;
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Scoreboard");
+        messageToSendToControl.put("Value", value);
+        JSONObject answer = sendRequestToControl(messageToSendToControl);
+        String scoreBoardString = answer.getString("Value");
+        System.out.println(scoreBoardString);
+        String[] users = scoreBoardString.split("\n");
+        ArrayList<ScoreboardUser> scoreboard = new ArrayList<>();
+        for (String user : users) {
+            String rank = user.substring(0, user.indexOf("- "));
+            String nickname = user.substring(user.indexOf("- ") + 2, user.indexOf(": "));
+            String score = user.substring(user.indexOf(": ") + 2);
+            ScoreboardUser scoreboardUser = new ScoreboardUser(Integer.parseInt(rank), nickname, Integer.parseInt(score));
+            scoreboard.add(scoreboardUser);
+        }
+        return scoreboard;
     }
+    //endregion
 
+    //region Import/Export
     public JSONObject importExportCard(String cardName, String typeOfCommand) {
         JSONObject value = new JSONObject();
         value.put("Token", token);
@@ -201,4 +220,5 @@ public class MainView {
         messageToSendToControl.put("Value", value);
         return sendRequestToControl(messageToSendToControl);
     }
+    //endregion
 }

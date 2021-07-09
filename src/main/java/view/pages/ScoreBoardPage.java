@@ -38,11 +38,10 @@ public class ScoreBoardPage extends Application implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-       /* nicknameColumn.setCellValueFactory(new PropertyValueFactory<ScoreboardUser, String>("nickname"));
+        nicknameColumn.setCellValueFactory(new PropertyValueFactory<ScoreboardUser, String>("nickname"));
         scoreColumn.setCellValueFactory(new PropertyValueFactory<ScoreboardUser, Integer>("score"));
         rankColumn.setCellValueFactory(new PropertyValueFactory<ScoreboardUser, Integer>("rank"));
-        scoreboard.setItems(updateScoreBoard());*/
-        //TODO remove the comment mode
+        scoreboard.setItems(updateScoreBoard());
         scoreboard.setLayoutY(90);
         TranslateTransition transition = new TranslateTransition();
         transition.setDuration(Duration.millis(1000));
