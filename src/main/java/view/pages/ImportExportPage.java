@@ -11,8 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import view.viewcontroller.MainView;
@@ -30,7 +28,6 @@ public class ImportExportPage extends Application {
     public TextField cardNameField;
     public Button importButton;
 
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent startingPane = FXMLLoader.load(getClass().getResource("/view/fxml/ImportExportMenu.fxml"));
@@ -46,7 +43,7 @@ public class ImportExportPage extends Application {
     public void chooseToImport() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose card file");
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Yu-Gi-Oh! card file (*.json)", "*.json");
         fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showOpenDialog(stage);
 
