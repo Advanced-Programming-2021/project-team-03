@@ -175,9 +175,17 @@ public class MainView {
         return sendRequestToControl(messageToSendToControl);
     }
 
-    public int getUserProfileImageNumber(){
-        //TODO
-        return 1;
+    public int getUserProfileImageNumber() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Get profile picture number by token");
+        messageToSendToControl.put("Value", value);
+        JSONObject answer = sendRequestToControl(messageToSendToControl);
+        String type = answer.getString("Type");
+        String number = answer.getString("Value");
+        if (type.equals("Success")) return Integer.parseInt(number);
+        else return 1;
     }
     //endregion
 
@@ -247,6 +255,12 @@ public class MainView {
         return sendRequestToControl(messageToSendToControl);
     }
     //endregion
+
+    public JSONObject getMap(){
+        //TODO
+        return null;
+    }
+
 
     public void alertMaker(TextField textField, JSONObject controlAnswer) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
