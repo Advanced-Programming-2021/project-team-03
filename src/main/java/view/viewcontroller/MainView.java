@@ -205,6 +205,15 @@ public class MainView {
     //endregion
 
     //region ImportExportMenuPage
+    public JSONObject getCardJson(String cardName) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Card name", cardName);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Get card Json");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
     public JSONObject importExportCard(String cardName, String typeOfCommand) {
         JSONObject value = new JSONObject();
         value.put("Token", token);
@@ -243,7 +252,7 @@ public class MainView {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         if (controlAnswer.getString("Type").equals("Successful")) {
             alert.setAlertType(Alert.AlertType.INFORMATION);
-            textField.clear();
+            if (textField != null) textField.clear();
         }
 
         alert.setContentText(controlAnswer.getString("Value"));

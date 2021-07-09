@@ -103,6 +103,7 @@ public class MainController {
             //region Graphic requests
             case "Get username by token" -> getUsernameByToken(valueObject);
             case "Get nickname by token" -> getNicknameByToken(valueObject);
+            case "Get card Json" -> getCardJson(valueObject);
             //endregion
 
 
@@ -803,6 +804,22 @@ public class MainController {
                     .put("Value", "nickname changed successfully!");
         }
 
+        return answerObject.toString();
+    }
+
+    private String getCardJson(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+        String cardName = valueObject.getString("Card name");
+
+        // creating the json response object
+        JSONObject answerObject = new JSONObject();
+
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (Card.getCardByName(cardName) == null) {
+            answerObject.put("Type", "Error").put("Value", "no card found with this name in your database!");
+        } else {
+
+        }
         return answerObject.toString();
     }
 

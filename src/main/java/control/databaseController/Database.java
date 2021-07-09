@@ -229,6 +229,7 @@ public class Database {
     public static String toEnumCase(String string) {
         return string.toUpperCase()
                 .replace(' ', '_')
-                .replace('-', '_');
+                .replace('-', '_')
+                .replace("'", "");
     }
 }

@@ -10,6 +10,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 
@@ -24,6 +25,7 @@ public class User {
     private final ArrayList<Deck> decks;
     private ArrayList<Card> cards;
     private Deck activeDeck;
+    private int profileImageID;
 
     public static void initialize() {
         Database.updateAllUsers();
@@ -189,5 +191,15 @@ public class User {
         cards.addAll(monsters.stream().limit(30).collect(Collectors.toList()));
         cards.addAll(spellAndTraps.stream().limit(20).collect(Collectors.toList()));
         updateInDatabase();
+        profileImageID = (new Random()).nextInt(20) + 1;
+        updateInDatabase();
+    }
+
+    public void setProfileImageID(int profileImageID) {
+        this.profileImageID = profileImageID;
+    }
+
+    public int getProfileImageID() {
+        return profileImageID;
     }
 }
