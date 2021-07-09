@@ -105,11 +105,16 @@ public class MainController {
             case "Get nickname by token" -> getNicknameByToken(valueObject);
             case "Get profile picture number by token" -> getProfileImageNumberByToken(valueObject);
             case "Get card Json" -> getCardJson(valueObject);
+            case "Get number of bought card" -> getNumberOfBoughtCard(valueObject);
             //endregion
 
 
             default -> error();
         };
+    }
+
+    private String getNumberOfBoughtCard(JSONObject valueObject) {
+        return null;
     }
 
     private String getProfileImageNumberByToken(JSONObject valueObject) {

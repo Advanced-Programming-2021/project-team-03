@@ -258,9 +258,28 @@ public class MainView {
     }
     //endregion
 
+    //region GamePage
     public JSONObject getMap(){
         //TODO
+//        JSONObject value = new JSONObject();
+//        value.put("Token", token);
+//        value.put("Second player name", opponentUsername);
+//        value.put("Rounds number", String.valueOf(numberOfRounds));
+//        JSONObject messageToSendToControl = new JSONObject();
+//        messageToSendToControl.put("Type", "New duel");
+//        messageToSendToControl.put("Value", value);
+//        return sendRequestToControl(messageToSendToControl);
         return null;
+    }
+    //endregion
+
+    public JSONObject getNumberOfBoughtCard(String cardName){
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Get number of bought card");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
     }
 
 
