@@ -261,14 +261,15 @@ public class MainView {
         alert.show();
     }
 
-    public String toEnumCase(String string) {
+    private String toEnumCase(String string) {
         return string.toUpperCase()
                 .replace(' ', '_')
                 .replace('-', '_')
                 .replace("'", "");
     }
 
-    public Image getCardImage(CardNames cardName) throws Exception {
-        return new Image(String.valueOf(getClass().getResource("/assets/cards" + cardName + ".jpg")));
+    public Image getCardImage(String cardName) throws Exception {
+        CardNames cardEnum = CardNames.valueOf(toEnumCase(cardName));
+        return new Image(String.valueOf(getClass().getResource("/assets/cards" + cardEnum.imageName + ".jpg")));
     }
 }
