@@ -29,4 +29,6 @@ module Yu.Gi.Oh {
     opens view.pages to javafx.controls, javafx.base, javafx.fxml, javafx.media, javafx.graphics;
     exports view.viewcontroller;
     opens view.viewcontroller to org.json;
+    exports view.viewmodel;
+    opens view.viewmodel to javafx.base;
 }

@@ -1,8 +1,10 @@
 package view.pages;
 
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -11,6 +13,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import view.viewcontroller.MainView;
 import view.viewmodel.ScoreboardUser;
 
@@ -39,7 +42,13 @@ public class ScoreBoardPage extends Application implements Initializable {
         scoreColumn.setCellValueFactory(new PropertyValueFactory<ScoreboardUser, Integer>("score"));
         rankColumn.setCellValueFactory(new PropertyValueFactory<ScoreboardUser, Integer>("rank"));
         scoreboard.setItems(updateScoreBoard());*/
-        //TODO
+        //TODO remove the comment mode
+        scoreboard.setLayoutY(90);
+        TranslateTransition transition = new TranslateTransition();
+        transition.setDuration(Duration.millis(1000));
+        transition.setToY(-75);
+        transition.setNode(scoreboard);
+        transition.play();
     }
 
     private ObservableList<ScoreboardUser> updateScoreBoard() {
@@ -52,7 +61,7 @@ public class ScoreBoardPage extends Application implements Initializable {
         });
 
         ObservableList<ScoreboardUser> userObservableList = FXCollections.observableArrayList();
-        int counter = 10;
+        int counter = 20;
         int prevRank = 1;
         int prevScore = allUsers.get(0).getScore();
         if (allUsers.size() < counter)
@@ -73,4 +82,7 @@ public class ScoreBoardPage extends Application implements Initializable {
         return userObservableList;
     }
 
+    public void back(ActionEvent actionEvent) throws Exception {
+        new MainPage().start(stage);
+    }
 }
