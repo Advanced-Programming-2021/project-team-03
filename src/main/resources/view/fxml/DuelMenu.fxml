@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Reflection?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -30,16 +31,15 @@
                 <Font name="Georgia Bold Italic" size="22.0"/>
             </font>
         </Button>
-        <Button layoutX="490.0" layoutY="630.0" mnemonicParsing="false" onMouseClicked="#back"
-                prefHeight="40.0" prefWidth="100.0" styleClass="DuelMenuButtons" stylesheets="@../css/buttonStyles.css"
-                text="Back">
+        <Button layoutX="490.0" layoutY="630.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="40.0"
+                prefWidth="100.0" styleClass="DuelMenuButtons" stylesheets="@../css/buttonStyles.css" text="Back">
             <font>
                 <Font name="Georgia Bold Italic" size="22.0"/>
             </font>
         </Button>
         <Button fx:id="playButton" layoutX="490.0" layoutY="540.0" mnemonicParsing="false" onMouseClicked="#play"
-                prefHeight="40.0" prefWidth="100.0" styleClass="DuelMenuButtons"
-                stylesheets="@../css/buttonStyles.css" text="Start">
+                prefHeight="40.0" prefWidth="100.0" styleClass="DuelMenuButtons" stylesheets="@../css/buttonStyles.css"
+                text="Start">
             <font>
                 <Font name="Georgia Bold Italic" size="22.0"/>
             </font>
@@ -50,9 +50,16 @@
                 <Font name="Georgia Bold" size="22.0"/>
             </font>
         </Text>
-        <Text fx:id="message" layoutX="89.0" layoutY="445.0" strokeType="OUTSIDE" strokeWidth="0.0"
-              wrappingWidth="281.13671875"/>
-        <Text fx:id="opponentUsernameText" layoutX="200.0" layoutY="420.0" stroke="WHITE" strokeType="OUTSIDE"
+        <Text fx:id="message" fill="AQUA" layoutX="290.0" layoutY="480.0" smooth="false" stroke="BLACK"
+              strokeType="OUTSIDE" textAlignment="CENTER" wrappingWidth="500.0">
+            <font>
+                <Font name="Georgia Bold Italic" size="24.0"/>
+            </font>
+            <effect>
+                <Reflection/>
+            </effect>
+        </Text>
+        <Text fx:id="opponentUsernameText" layoutX="200.0" layoutY="400.0" stroke="WHITE" strokeType="OUTSIDE"
               strokeWidth="2.0" text="Opponent Username:" textAlignment="CENTER" wrappingWidth="320.0">
             <font>
                 <Font name="Georgia Bold" size="22.0"/>
@@ -65,7 +72,7 @@
                 <Font name="Georgia Italic" size="22.0"/>
             </font>
         </TextField>
-        <TextField fx:id="opponentUsernameField" alignment="CENTER" layoutX="595.0" layoutY="395.0" prefHeight="40.0"
+        <TextField fx:id="opponentUsernameField" alignment="CENTER" layoutX="595.0" layoutY="375.0" prefHeight="40.0"
                    prefWidth="250.0" promptText="Username" style="-fx-background-color: transparent;"
                    styleClass="DuelMenuTextFields" stylesheets="@../css/textFieldStyle.css">
             <font>
