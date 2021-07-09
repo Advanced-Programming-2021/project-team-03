@@ -202,4 +202,13 @@ public class User {
     public int getProfileImageID() {
         return profileImageID;
     }
+
+    public int getNumberOfCards(String cardName) {
+        int counter = 0;
+        for (Card card : cards) {
+            if (card.getCardName().equals(cardName))
+                counter += 1;
+        }
+        return counter;
+    }
 }

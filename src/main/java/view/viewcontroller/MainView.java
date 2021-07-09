@@ -4,7 +4,6 @@ import control.MainController;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import view.viewmodel.ScoreboardUser;
@@ -281,7 +280,6 @@ public class MainView {
         messageToSendToControl.put("Value", value);
         return sendRequestToControl(messageToSendToControl);
     }
-
 
     public void alertMaker(TextField textField, JSONObject controlAnswer) {
         Alert alert = new Alert(Alert.AlertType.ERROR);

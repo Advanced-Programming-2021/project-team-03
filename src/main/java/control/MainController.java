@@ -114,7 +114,23 @@ public class MainController {
     }
 
     private String getNumberOfBoughtCard(JSONObject valueObject) {
-        return null;
+        String token = valueObject.getString("Token");
+        String cardName = valueObject.getString("Card name");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            try {
+                answerObject.put("Value", User.getByUsername(onlineUsers.get(token)).getNumberOfCards(cardName));
+                answerObject.put("Type", "Success");
+            } catch (NullPointerException exception) {
+                answerObject.put("Type", "Error");
+                answerObject.put("Value", "User not found");
+            }
+        }
+        return answerObject.toString();
     }
 
     private String getProfileImageNumberByToken(JSONObject valueObject) {

@@ -11,7 +11,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import model.card.Card;
 import org.json.JSONObject;
 import view.viewcontroller.MainView;
 import view.viewmodel.CardView;
