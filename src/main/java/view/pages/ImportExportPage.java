@@ -21,6 +21,7 @@ public class ImportExportPage extends Application {
         Parent startingPane = FXMLLoader.load(getClass().getResource("/view/fxml/ImportExportMenu.fxml"));
         primaryStage.setScene(new Scene(startingPane));
         stage = primaryStage;
+        primaryStage.show();
     }
 
     public void back(MouseEvent mouseEvent) throws Exception {

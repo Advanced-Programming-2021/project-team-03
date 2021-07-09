@@ -33,7 +33,7 @@ public class ScoreBoardPage extends Application implements Initializable {
         Parent startingPane = FXMLLoader.load(getClass().getResource("/view/fxml/ScoreBoard.fxml"));
         primaryStage.setScene(new Scene(startingPane));
         stage = primaryStage;
-        primaryStage.show();//TODO remove
+        primaryStage.show();
     }
 
     @Override
