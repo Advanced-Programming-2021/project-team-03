@@ -1,7 +1,5 @@
 package model.user;
 
-import control.MainController;
-import control.UserController;
 import control.databaseController.Database;
 import control.databaseController.DatabaseException;
 import model.card.Card;
