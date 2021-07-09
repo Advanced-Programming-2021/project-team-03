@@ -10,7 +10,7 @@ database/users/
 database/decks/
 
 .idea/*.xml
-
+Yu-Gi-Oh.iml
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
