@@ -28,9 +28,9 @@
         <Label layoutX="159.0" layoutY="80.0" text="#"/>
         <Text fx:id="N1" layoutX="178.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text"
               wrappingWidth="68.13671875"/>
-        <Button layoutX="14.0" layoutY="360.0" mnemonicParsing="false" text="Button"/>
-        <Button layoutX="1006.0" layoutY="360.0" mnemonicParsing="false" text="Button"/>
-        <Button layoutX="514.0" layoutY="673.0" mnemonicParsing="false" text="Button"/>
+        <Button layoutX="14.0" layoutY="360.0" mnemonicParsing="false" text="Button" onMouseClicked="#previousPage"/>
+        <Button layoutX="1006.0" layoutY="360.0" mnemonicParsing="false" text="Button" onMouseClicked="#nextPage"/>
+        <Button layoutX="514.0" layoutY="673.0" mnemonicParsing="false" text="Button" onMouseClicked="#back"/>
         <Text fx:id="messageText" layoutX="319.0" layoutY="649.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text"
               textAlignment="CENTER" wrappingWidth="441.13671875"/>
         <ImageView fx:id="I2" fitHeight="219.0" fitWidth="150.0" layoutX="439.0" layoutY="98.0" pickOnBounds="true"

@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -55,6 +56,15 @@ public class ShopMenuPage extends Application {
             prices[j].setText(String.valueOf(allCards.get(i).getPrice()));
             cardsNumbers[j].setText(String.valueOf(MainView.getInstance().getNumberOfBoughtCard(allCards.get(i).getName())));
         }
+    }
+
+    public void back(MouseEvent mouseEvent) {
+    }
+
+    public void previousPage(MouseEvent mouseEvent) {
+    }
+
+    public void nextPage(MouseEvent mouseEvent) {
     }
 }
 
