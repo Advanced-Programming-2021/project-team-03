@@ -114,6 +114,15 @@ public class MainView {
     }
     //endregion
 
+    public JSONObject getAllCards() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Show all cards in shop");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+    //endregion
 
     public JSONObject addOrDeleteCardFromDeck(String deckName, String deckType, String cardName, String commandType) {
         JSONObject value = new JSONObject();
@@ -272,9 +281,11 @@ public class MainView {
     }
     //endregion
 
+    //region ShopMenuPage
     public JSONObject getNumberOfBoughtCard(String cardName){
         JSONObject value = new JSONObject();
         value.put("Token", token);
+        value.put("Card name",cardName);
         JSONObject messageToSendToControl = new JSONObject();
         messageToSendToControl.put("Type", "Get number of bought card");
         messageToSendToControl.put("Value", value);
