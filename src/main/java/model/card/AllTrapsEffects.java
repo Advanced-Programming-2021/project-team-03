@@ -187,7 +187,7 @@ public class AllTrapsEffects {
         opponentBoard.removeCardFromHand(card);
 
         //remove trap
-        SpellAndTrap trap = getTheDesiredTrapFormBoard(opponentBoard, TrapNames.MAGIC_JAMAMER);
+        SpellAndTrap trap = getTheDesiredTrapFormBoard(opponentBoard, TrapNames.MAGIC_JAMMER);
         trap.setActive(true);
         opponentBoard.addCardToGraveyard(trap);
         gameUpdates.addCardToGraveyard(trap);

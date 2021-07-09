@@ -712,7 +712,7 @@ public class GameController {
     }
 
     public boolean activateSpellCard() {
-        boolean trapActivate = activeTraps(TrapNames.MAGIC_JAMAMER);
+        boolean trapActivate = activeTraps(TrapNames.MAGIC_JAMMER);
         if (trapActivate) {
             MainController.getInstance().sendPrintRequestToView("Your spell card was destroyed by opponent trap.");
             return false;
@@ -1105,7 +1105,7 @@ public class GameController {
                 }
                 return false;
             }
-            case MAGIC_JAMAMER -> {
+            case MAGIC_JAMMER -> {
                 if (allTrapsEffects.canMagicJammerActivate(game, turn, trapName)) {
                     allTrapsEffects.magicJammerEffect(selectedCard, game, gameUpdates, turn);
                     return true;

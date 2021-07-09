@@ -9,7 +9,7 @@ public enum TrapNames {
     TIME_SEAL("Time Seal"),
     NEGATE_ATTACK("Negate Attack"),
     SOLEMN_WARNING("Solemn Warning"),
-    MAGIC_JAMAMER("Magic Jamamer"),
+    MAGIC_JAMMER("Magic Jammer"),
     CALL_OF_THE_HAUNTED("Call of The Haunted");
 
     private final String name;

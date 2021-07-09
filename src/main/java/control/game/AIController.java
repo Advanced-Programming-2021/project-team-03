@@ -263,7 +263,7 @@ public class AIController {
     }
 
     private void activateSpellEffect(Card card) {
-        boolean trapActivate = GameController.getInstance().activeTraps(TrapNames.MAGIC_JAMAMER);
+        boolean trapActivate = GameController.getInstance().activeTraps(TrapNames.MAGIC_JAMMER);
         if (trapActivate)
             return;
         SpellAndTrap spell = (SpellAndTrap) card;
