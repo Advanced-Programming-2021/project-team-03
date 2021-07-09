@@ -16,6 +16,7 @@ public class UserJson {
     private String activeDeck;
     private final ArrayList<String> decks;
     private final ArrayList<String> cards;
+    private final int profileImageID;
 
     public UserJson(User user) {
         username = user.getUsername();
@@ -24,6 +25,7 @@ public class UserJson {
         score = user.getScore();
         balance = user.getBalance();
         level = user.getLevel();
+        profileImageID = user.getProfileImageID();
         if (user.getActiveDeck() != null) activeDeck = user.getActiveDeck().getDeckName();
 
         decks = new ArrayList<>();
@@ -44,6 +46,7 @@ public class UserJson {
         user.increaseBalance(balance);
         user.setLevel(level);
         user.setActiveDeck(Deck.getByDeckName(activeDeck));
+        user.setProfileImageID(profileImageID);
 
         decks.forEach(deckName -> {
             try {
