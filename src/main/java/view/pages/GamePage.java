@@ -41,6 +41,7 @@ public class GamePage extends Application {
     public ImageView opponentProfile;
     public ImageView selectedCardImage;
     public AnchorPane pane;
+    public Text messageText;
 
     private ArrayList<CardView> playerMonsters = new ArrayList<>();
     private ArrayList<CardView> playerSpellAndTraps = new ArrayList<>();
@@ -100,6 +101,16 @@ public class GamePage extends Application {
     }
 
     public void nextPhase(MouseEvent mouseEvent) {
+        JSONObject answer = MainView.getInstance().goToTheNextPhase();
+        String value = answer.getString("Value");
+        messageText.setText(value);
+        Timeline playtime = new Timeline(
+                new KeyFrame(Duration.seconds(2), event -> {
+                    messageText.setText("");
+                })
+        );
+        playtime.play();
+        refreshMap();
     }
 
     private void cleanMap() {
@@ -113,6 +124,11 @@ public class GamePage extends Application {
         cleanArray(opponentHand);
         opponentFieldCard.removeImage();
         opponentGraveyard.removeImage();
+    }
+
+    private void refreshMap(){
+        cleanMap();
+        loadMap();
     }
 
     private void cleanArray(ArrayList<CardView> array) {
@@ -367,7 +383,7 @@ public class GamePage extends Application {
         if (type.equals("Successful")){
             try {
                 GameResultPage.setGamePage(this);
-                GameResultPage.setMessageString(value);
+                GameResultPage.setMessageString(MainView.getInstance().getPhase());
                 new GameResultPage().start(stage);
             }catch (Exception e){
                 e.printStackTrace();

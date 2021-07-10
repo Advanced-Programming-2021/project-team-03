@@ -316,6 +316,15 @@ public class MainView {
         messageToSendToControl.put("Value", value);
         return sendRequestToControl(messageToSendToControl);
     }
+
+    public JSONObject goToTheNextPhase() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Next phase");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
     //endregion
 
     //region ShopMenuPage
@@ -352,6 +361,15 @@ public class MainView {
         messageToSendToControl.put("Type", "Buy card");
         messageToSendToControl.put("Value", value);
         return sendRequestToControl(messageToSendToControl);
+    }
+
+    public String getPhase(){
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Get phase");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl).getString("Value");
     }
     //endregion
 

@@ -114,11 +114,26 @@ public class MainController {
             case "Get map for graphic" -> getMapForGraphic(valueObject);
             case "Get player turn" -> getPlayerTurn(valueObject);
             case "Show all decks graphic" -> showAllDecksGraphic(valueObject);
+            case "Get phase" -> getPhase(valueObject);
             //endregion
 
 
             default -> error();
         };
+    }
+
+    private String getPhase(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            answerObject.put("Value", GameController.getInstance().getCurrentPhase().name);
+            answerObject.put("Type", "Success");
+        }
+        return answerObject.toString();
     }
 
     private String getPlayerTurn(JSONObject valueObject) {
