@@ -901,9 +901,14 @@ public class GameController {
             gameUpdates.setCanPlayerDrawACard(true);
             return "You can not draw new card Because the opponent has activated Time seal trap";
         }
-        StringBuilder answer = new StringBuilder("new card added to the hand : ");
-        game.getPlayerByTurn(turn).getBoard().addCardFromRemainingToInHandCards();
-        answer.append(game.getPlayerByTurn(turn).getBoard().getInHandCards().get(game.getPlayerByTurn(turn).getBoard().getInHandCards().size() - 1).getCardName());
+        StringBuilder answer = new StringBuilder();
+        if (game.getPlayerByTurn(turn).getBoard().getInHandCards().size() > 6) {
+            answer.append("Your hand is Full!\n");
+        } else {
+            answer = new StringBuilder("new card added to the hand : ");
+            game.getPlayerByTurn(turn).getBoard().addCardFromRemainingToInHandCards();
+            answer.append(game.getPlayerByTurn(turn).getBoard().getInHandCards().get(game.getPlayerByTurn(turn).getBoard().getInHandCards().size() - 1).getCardName());
+        }
         return answer.toString();
     }
 
