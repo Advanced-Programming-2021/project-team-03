@@ -602,7 +602,7 @@ public class MainController {
 
         JSONObject answerObject = new JSONObject();
         if (isTokenInvalid(token)) putTokenError(answerObject);
-        else if (User.getByUsername(rivalName) != null) {
+        else if (User.getByUsername(rivalName) == null) {
             answerObject.put("Type", "Error").put("Value", "there is no player with this username!");
         } else if (numberOfRound != 1 && numberOfRound != 3) {
             answerObject.put("Type", "Error").put("Value", "number of rounds is not supported!");
