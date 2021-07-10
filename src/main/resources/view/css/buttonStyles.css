@@ -139,7 +139,7 @@
     -fx-effect: dropshadow(two-pass-box, #a8f6a2, 15, 0.0, 0.1, 3);
 }
 
-.GameButtons{
+.GameButtons {
     -fx-border-color: green;
     -fx-border-radius: 40;
     -fx-border-width: 1;
@@ -148,7 +148,7 @@
     -fx-background-radius: 40;
 }
 
-.GameButtons:hover{
+.GameButtons:hover {
     -fx-border-color: yellow;
     -fx-background-color: black;
     -fx-background-radius: 40;
@@ -157,19 +157,19 @@
 }
 
 .PauseButtons {
-    -fx-border-color: #a8f6a2;
+    -fx-border-color: #fcecdf;
     -fx-border-radius: 40;
     -fx-border-width: 1;
-    -fx-text-fill: #a8f6a2;
+    -fx-text-fill: #fcecdf;
     -fx-background-color: black;
     -fx-background-radius: 40;
-    -fx-effect: dropshadow(two-pass-box, #c02cb2, 15, 0.0, 0.1, 3);
+    -fx-effect: dropshadow(two-pass-box, #f97000, 15, 0.0, 0.1, 3);
 }
 
 .PauseButtons:hover {
-    -fx-border-color: #c02cb2;
-    -fx-background-color: transparent;
+    -fx-border-color: #f97000;
+    -fx-background-color: #fcecdf;
     -fx-background-radius: 40;
-    -fx-text-fill: #c02cb2;
-    -fx-effect: dropshadow(two-pass-box, #a8f6a2, 15, 0.0, 0.1, 3);
+    -fx-text-fill: #f97000;
+    -fx-effect: dropshadow(two-pass-box, #fffe10, 15, 0.0, 0.1, 3);
 }
