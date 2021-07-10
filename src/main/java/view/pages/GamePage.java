@@ -79,20 +79,10 @@ public class GamePage extends Application {
         playtime.play();
     }
 
-    public void pause(MouseEvent mouseEvent) throws IOException {
-        Stage pauseWindow = new Stage();
-        Parent startingPane = FXMLLoader.load(getClass().getResource("/view/fxml/GamePauseMenu.fxml"));
-        Scene scene = new Scene(startingPane);
-        pauseWindow.setScene(scene);
-        pauseWindow.getIcons().add(stage.getIcons().get(0));
-        pauseWindow.setTitle(stage.getTitle());
-        pauseWindow.setWidth(600);
-        pauseWindow.setHeight(400);
-        pauseWindow.setResizable(false);
-        pauseWindow.initModality(Modality.APPLICATION_MODAL);
-
-        pauseWindow.show();
+    public void pause(MouseEvent mouseEvent) throws Exception {
+        new GamePausePage().start(stage);
     }
+
     private void runCOinAnimation(ImageView coin) {
         coin.setLayoutY(330);
         coin.setLayoutX(690);
@@ -100,7 +90,7 @@ public class GamePage extends Application {
         coin.setFitHeight(60);
         pane.getChildren().add(coin);
         boolean isStar = MainView.getInstance().isCoinOnStarFace();
-        new CoinFlipAnimation(coin,isStar).play();
+        new CoinFlipAnimation(coin, isStar).play();
     }
 
     public void nextPhase(MouseEvent mouseEvent) {
