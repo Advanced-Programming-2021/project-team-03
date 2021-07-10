@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.ShopMenuPage">
+<AnchorPane prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.ShopMenuPage">
     <children>
         <ImageView fitHeight="720.0" fitWidth="1080.0" pickOnBounds="true">
             <image>
@@ -20,170 +22,338 @@
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font></Text>
-        <ImageView fx:id="I1" fitHeight="219.0" fitWidth="150.0" layoutX="113.0" layoutY="98.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="I1" fitHeight="219.0" fitWidth="150.0" layoutX="151.5" layoutY="100.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../../assets/cards/AlexandriteDragon.jpg" />
             </image>
         </ImageView>
-        <Label layoutX="155.0" layoutY="77.0" text="#">
+        <Label layoutX="212.0" layoutY="76.0" text="#">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
-         </font></Label>
-        <Button layoutX="10.0" layoutY="355.0" mnemonicParsing="false" onMouseClicked="#previousPage" prefHeight="27.0" prefWidth="85.0" text="Previous">
+         </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect></Label>
+        <Button layoutX="10.0" layoutY="355.0" mnemonicParsing="false" onMouseClicked="#previousPage" prefHeight="27.0" prefWidth="87.0" styleClass="ShopButtons" stylesheets="@../css/buttonStyles.css" text="Previous">
          <font>
             <Font name="Georgia Bold Italic" size="14.0" />
          </font></Button>
-        <Button layoutX="985.0" layoutY="355.0" mnemonicParsing="false" onMouseClicked="#nextPage" prefHeight="27.0" prefWidth="85.0" text="Next">
+        <Button layoutX="985.0" layoutY="355.0" mnemonicParsing="false" onMouseClicked="#nextPage" prefHeight="27.0" prefWidth="87.0" styleClass="ShopButtons" stylesheets="@../css/buttonStyles.css" text="Next">
          <font>
             <Font name="Georgia Bold Italic" size="14.0" />
          </font></Button>
-        <Button layoutX="505.0" layoutY="675.0" mnemonicParsing="false" onMouseClicked="#back" text="Back">
+        <Button layoutX="505.0" layoutY="675.0" mnemonicParsing="false" onMouseClicked="#back" styleClass="ShopButtons" stylesheets="@../css/buttonStyles.css" text="Back">
          <font>
             <Font name="Georgia Bold Italic" size="18.0" />
          </font></Button>
         <Text fx:id="messageText" layoutX="290.0" layoutY="652.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Successful" textAlignment="CENTER" wrappingWidth="500.0">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
-         </font></Text>
-        <ImageView fx:id="I2" fitHeight="219.0" fitWidth="150.0" layoutX="439.0" layoutY="98.0" pickOnBounds="true" preserveRatio="true">
+         </font>
+         <effect>
+            <DropShadow spread="0.6">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect></Text>
+        <ImageView fx:id="I2" fitHeight="219.0" fitWidth="150.0" layoutX="464.5" layoutY="100.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../../assets/cards/AlexandriteDragon.jpg" />
             </image>
         </ImageView>
-        <ImageView fx:id="I6" fitHeight="219.0" fitWidth="150.0" layoutX="794.0" layoutY="400.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="I6" fitHeight="219.0" fitWidth="150.0" layoutX="777.5" layoutY="390.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../../assets/cards/AlexandriteDragon.jpg" />
             </image>
         </ImageView>
-        <ImageView fx:id="I5" fitHeight="219.0" fitWidth="150.0" layoutX="423.0" layoutY="386.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="I5" fitHeight="219.0" fitWidth="150.0" layoutX="464.5" layoutY="390.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../../assets/cards/AlexandriteDragon.jpg" />
             </image>
         </ImageView>
-        <ImageView fx:id="I4" fitHeight="219.0" fitWidth="150.0" layoutX="103.0" layoutY="386.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="I4" fitHeight="219.0" fitWidth="150.0" layoutX="151.5" layoutY="390.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../../assets/cards/AlexandriteDragon.jpg" />
             </image>
         </ImageView>
-        <ImageView fx:id="I3" fitHeight="219.0" fitWidth="150.0" layoutX="794.0" layoutY="98.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fx:id="I3" fitHeight="219.0" fitWidth="150.0" layoutX="777.5" layoutY="100.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../../assets/cards/AlexandriteDragon.jpg" />
             </image>
         </ImageView>
-      <Label layoutX="475.0" layoutY="77.0" text="#">
+      <Label layoutX="524.0" layoutY="77.0" text="#">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
       </Label>
-      <Label layoutX="124.0" layoutY="317.0" text="Price:">
+      <Label layoutX="165.0" layoutY="316.0" text="Price:">
          <font>
             <Font name="Georgia Bold Italic" size="18.0" />
          </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
       </Label>
       <Label layoutX="833.0" layoutY="77.0" text="#">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
       </Label>
-      <Label layoutX="124.0" layoutY="362.0" text="#">
+      <Label layoutX="212.0" layoutY="362.0" text="#">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
       </Label>
-      <Label layoutX="833.0" layoutY="374.0" text="#">
+      <Label layoutX="839.0" layoutY="363.0" text="#">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
       </Label>
-      <Label layoutX="468.0" layoutY="361.0" text="#">
+      <Label layoutX="524.0" layoutY="363.0" text="#">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
       </Label>
-      <Text fx:id="P1" layoutX="188.0" layoutY="334.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
+      <Text fx:id="P1" layoutX="220.0" layoutY="334.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
       </Text>
-      <Label layoutX="454.0" layoutY="317.0" text="Price:">
+      <Label layoutX="477.0" layoutY="316.0" text="Price:">
          <font>
             <Font name="Georgia Bold Italic" size="18.0" />
          </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
       </Label>
-      <Label layoutX="819.0" layoutY="317.0" text="Price:">
+      <Label layoutX="790.0" layoutY="315.0" text="Price:">
          <font>
             <Font name="Georgia Bold Italic" size="18.0" />
          </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
       </Label>
-      <Label layoutX="805.0" layoutY="619.0" text="Price:">
+      <Label layoutX="790.0" layoutY="608.0" text="Price:">
          <font>
             <Font name="Georgia Bold Italic" size="18.0" />
          </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
       </Label>
-      <Label layoutX="426.0" layoutY="608.0" text="Price:">
+      <Label layoutX="477.0" layoutY="607.0" text="Price:">
          <font>
             <Font name="Georgia Bold Italic" size="18.0" />
          </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
       </Label>
-      <Label layoutX="110.0" layoutY="608.0" text="Price:">
+      <Label layoutX="165.0" layoutY="607.0" text="Price:">
          <font>
             <Font name="Georgia Bold Italic" size="18.0" />
          </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
       </Label>
-      <Text fx:id="N1" layoutX="188.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
+      <Text fx:id="N1" layoutX="226.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
+         <font>
+            <Font name="Georgia Bold Italic" size="20.0" />
+         </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
+      </Text>
+      <Text fx:id="P2" layoutX="540.0" layoutY="333.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
+         <font>
+            <Font name="Georgia Bold Italic" size="20.0" />
+         </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
+      </Text>
+      <Text fx:id="P3" layoutX="847.0" layoutY="333.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
+         <font>
+            <Font name="Georgia Bold Italic" size="20.0" />
+         </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
+      </Text>
+      <Text fx:id="P6" layoutX="847.0" layoutY="625.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
+         <font>
+            <Font name="Georgia Bold Italic" size="20.0" />
+         </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
+      </Text>
+      <Text fx:id="P5" layoutX="540.0" layoutY="625.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
+         <font>
+            <Font name="Georgia Bold Italic" size="20.0" />
+         </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
+      </Text>
+      <Text fx:id="P4" layoutX="220.0" layoutY="625.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
+         <font>
+            <Font name="Georgia Bold Italic" size="20.0" />
+         </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
+      </Text>
+      <Text fx:id="N2" layoutX="539.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
       </Text>
-      <Text fx:id="P2" layoutX="523.0" layoutY="335.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
+      <Text fx:id="N3" layoutX="848.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
       </Text>
-      <Text fx:id="P3" layoutX="874.0" layoutY="334.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
+      <Text fx:id="N6" layoutX="857.0" layoutY="381.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
       </Text>
-      <Text fx:id="P6" layoutX="869.0" layoutY="637.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
+      <Text fx:id="N5" layoutX="539.0" layoutY="381.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
       </Text>
-      <Text fx:id="P5" layoutX="490.0" layoutY="626.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
+      <Text fx:id="N4" layoutX="226.0" layoutY="380.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
-      </Text>
-      <Text fx:id="P4" layoutX="178.0" layoutY="626.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10000" wrappingWidth="100.0">
-         <font>
-            <Font name="Georgia Bold Italic" size="20.0" />
-         </font>
-      </Text>
-      <Text fx:id="N2" layoutX="511.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
-         <font>
-            <Font name="Georgia Bold Italic" size="20.0" />
-         </font>
-      </Text>
-      <Text fx:id="N3" layoutX="874.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
-         <font>
-            <Font name="Georgia Bold Italic" size="20.0" />
-         </font>
-      </Text>
-      <Text fx:id="N6" layoutX="874.0" layoutY="393.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
-         <font>
-            <Font name="Georgia Bold Italic" size="20.0" />
-         </font>
-      </Text>
-      <Text fx:id="N5" layoutX="497.0" layoutY="381.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
-         <font>
-            <Font name="Georgia Bold Italic" size="20.0" />
-         </font>
-      </Text>
-      <Text fx:id="N4" layoutX="157.0" layoutY="380.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="25.0">
-         <font>
-            <Font name="Georgia Bold Italic" size="20.0" />
-         </font>
+         <effect>
+            <DropShadow spread="0.5">
+               <color>
+                  <Color red="1.0" green="1.0" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
       </Text>
     </children>
 </AnchorPane>

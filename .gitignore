@@ -30,8 +30,6 @@ Yu-Gi-Oh.iml
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
 
-Yu-Gi-Oh.iml
-
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
