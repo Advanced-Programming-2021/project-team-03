@@ -268,16 +268,12 @@ public class MainView {
 
     //region GamePage
     public JSONObject getMap() {
-        //TODO
-//        JSONObject value = new JSONObject();
-//        value.put("Token", token);
-//        value.put("Second player name", opponentUsername);
-//        value.put("Rounds number", String.valueOf(numberOfRounds));
-//        JSONObject messageToSendToControl = new JSONObject();
-//        messageToSendToControl.put("Type", "New duel");
-//        messageToSendToControl.put("Value", value);
-//        return sendRequestToControl(messageToSendToControl);
-        return null;
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Get map for graphic");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
     }
     //endregion
 
@@ -318,6 +314,7 @@ public class MainView {
     }
     //endregion
 
+    //region Global Methods
     public void alertMaker(TextField textField, JSONObject controlAnswer) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         if (controlAnswer.getString("Type").equals("Successful")) {
@@ -342,4 +339,5 @@ public class MainView {
         String url = String.valueOf(getClass().getResource("/assets/cards/" + cardEnum.imageName + ".jpg"));
         return new Image(url);
     }
+    //endregion
 }
