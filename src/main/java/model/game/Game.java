@@ -192,8 +192,8 @@ public class Game {
         board.put("Hand", getHandArray(player1));
         board.put("Monsters", getPlayersMonsterArray(player1));
         board.put("Spells", getPlayersSpellsArray(player1));
-        board.put("Field", player1.getBoard().getFieldCard().getCardName());
-        board.put("Grave", player1.getBoard().getGraveyard().get(player1.getBoard().getGraveyard().size() - 1).getCardName());
+        board.put("Field", getPlayerFieldCard(player1));
+        board.put("Grave", getLastGraveyardCard(player1));
 
         board.put("OPLP", player2.getHealth());
         board.put("OPNI", player2.getUser().getNickname());
@@ -201,10 +201,32 @@ public class Game {
         board.put("OPHand", getHandArray(player2));
         board.put("OPMonsters", getPlayersMonsterArray(player2));
         board.put("OPSpells", getPlayersSpellsArray(player2));
-        board.put("OPField", player2.getBoard().getFieldCard().getCardName());
-        board.put("OPGrave", player2.getBoard().getGraveyard().get(player2.getBoard().getGraveyard().size() - 1).getCardName());
+        board.put("OPField", getPlayerFieldCard(player2));
+        board.put("OPGrave", getLastGraveyardCard(player2));
 
         return board;
+    }
+
+    private String getLastGraveyardCard(Player player) {
+        if (player.getBoard().getGraveyard().get(player.getBoard().getGraveyard().size() - 1) == null) {
+            return "None";
+        } else {
+            return player.getBoard().getGraveyard().get(player.getBoard().getGraveyard().size() - 1).getCardName();
+        }
+    }
+
+    private JSONObject getPlayerFieldCard(Player player) {
+        JSONObject field = new JSONObject();
+
+        if (player.getBoard().getFieldCard() == null) {
+            field.put("Name", "None");
+            field.put("Activation", false);
+        } else {
+            field.put("Name", player.getBoard().getFieldCard().getCardName());
+            field.put("Activation", (filedActivated && activatedFieldCard.getCardName().equals(player.getBoard().getFieldCard().getCardName())));
+        }
+
+        return field;
     }
 
     private JSONArray getHandArray(Player player) {
