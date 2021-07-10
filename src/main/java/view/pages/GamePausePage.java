@@ -1,6 +1,7 @@
 package view.pages;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -9,6 +10,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class GamePausePage extends Application {
+    private static Stage stage;
+
     @Override
     public void start(Stage stage) throws Exception {
         Stage pauseWindow = new Stage();
@@ -21,7 +24,23 @@ public class GamePausePage extends Application {
         pauseWindow.setHeight(400);
         pauseWindow.setResizable(false);
         pauseWindow.initModality(Modality.APPLICATION_MODAL);
-
+        GamePausePage.stage = pauseWindow;
         pauseWindow.showAndWait();
+    }
+
+    public void exit(ActionEvent actionEvent) {
+        stage.close();
+    }
+
+    public void surrender(ActionEvent actionEvent) {
+
+    }
+
+    public void mute(ActionEvent actionEvent) {
+        StartPage.mediaPlayer.pause();
+    }
+
+    public void unmute(ActionEvent actionEvent) {
+        StartPage.mediaPlayer.play();
     }
 }

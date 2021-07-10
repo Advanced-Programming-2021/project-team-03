@@ -28,7 +28,7 @@ public class StartPage extends Application {
         primaryStage.show();
     }
 
-    MediaPlayer mediaPlayer;
+    public static MediaPlayer mediaPlayer;
 
     private void backgroundMusic() {
         mediaPlayer = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/ThemeSongs.mp3")).toString()));
