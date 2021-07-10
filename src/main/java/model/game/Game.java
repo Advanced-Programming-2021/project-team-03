@@ -208,7 +208,7 @@ public class Game {
     }
 
     private String getLastGraveyardCard(Player player) {
-        if (player.getBoard().getGraveyard().get(player.getBoard().getGraveyard().size() - 1) == null) {
+        if (player.getBoard().getGraveyard().size() == 0) {
             return "None";
         } else {
             return player.getBoard().getGraveyard().get(player.getBoard().getGraveyard().size() - 1).getCardName();
