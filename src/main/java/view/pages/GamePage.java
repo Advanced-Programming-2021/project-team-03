@@ -383,7 +383,7 @@ public class GamePage extends Application {
         if (type.equals("Successful")){
             try {
                 GameResultPage.setGamePage(this);
-                GameResultPage.setMessageString(value);
+                GameResultPage.setMessageString(MainView.getInstance().getPhase());
                 new GameResultPage().start(stage);
             }catch (Exception e){
                 e.printStackTrace();

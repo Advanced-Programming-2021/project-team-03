@@ -114,11 +114,16 @@ public class MainController {
             case "Get map for graphic" -> getMapForGraphic(valueObject);
             case "Get player turn" -> getPlayerTurn(valueObject);
             case "Show all decks graphic" -> showAllDecksGraphic(valueObject);
+            case "Get phase" -> getPhase(valueObject);
             //endregion
 
 
             default -> error();
         };
+    }
+
+    private String getPhase(JSONObject valueObject) {
+        return null;
     }
 
     private String getPlayerTurn(JSONObject valueObject) {
