@@ -240,9 +240,13 @@ public class MainView {
                 .put("Token", token)
                 .put("Card name", cardName);
 
-        return sendRequestToControl(new JSONObject()
-                .put("Type", "Get card Json"))
-                .put("Value", value);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Get card Json")
+                .put("Value", value);;
+
+        return sendRequestToControl(messageToSendToControl);
+
+
     }
     //endregion
 

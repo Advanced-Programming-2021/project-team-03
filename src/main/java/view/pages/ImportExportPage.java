@@ -25,13 +25,12 @@ import java.util.ArrayList;
 
 public class ImportExportPage extends Application {
     private final ArrayList<ShopCard> allCards = new ArrayList<>();
+    private static Stage stage;
     public ScrollPane scrollPane;
-    private Stage stage;
     private ShopCard selectedCard;
     private Pane selectedPane;
 
     @FXML
-    public TextField cardNameField;
     public Button importButton;
 
     @Override
@@ -44,11 +43,6 @@ public class ImportExportPage extends Application {
     @FXML
     public void initialize() {
         loadAllCards();
-
-        GridPane gridPane = new GridPane();
-
-
-        // create a VBox
         VBox vbox = new VBox();
 
         try {
@@ -75,9 +69,9 @@ public class ImportExportPage extends Application {
                         pane.setStyle("-fx-border-width: 0");
                     } else {
                         selectedCard = card;
-                        if (selectedPane != null) selectedPane.setStyle("-fx-border-width: 4;");
+                        if (selectedPane != null) selectedPane.setStyle("-fx-border-width: 0");
 
-                        pane.setStyle("-fx-border-width: 4;"
+                        pane.setStyle("-fx-border-width: 10;"
                                 + "-fx-border-color: lightgreen;");
                         selectedPane = pane;
                     }
@@ -90,7 +84,8 @@ public class ImportExportPage extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        vbox.setCenterShape(true);
+        scrollPane.setCenterShape(true);
         scrollPane.setContent(vbox);
 
 
@@ -198,9 +193,9 @@ public class ImportExportPage extends Application {
     }
 
     public void exportCard(MouseEvent mouseEvent) {
+        if (selectedCard == null) return;
+        String cardName = selectedCard.getName();
 
-
-        String cardName = cardNameField.getText();
         MainView view = MainView.getInstance();
         if (cardName.equals("")) return;
         JSONObject answer = view.getCardJson(cardName);
@@ -228,6 +223,8 @@ public class ImportExportPage extends Application {
 
             alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("Card save successfully at: " + file.getAbsolutePath());
+            selectedCard = null;
+            selectedPane = null;
         } catch (IOException e) {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Couldn't export card: " + e.getMessage());
