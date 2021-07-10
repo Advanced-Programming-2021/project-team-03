@@ -85,6 +85,7 @@ public class GamePage extends Application {
     }
 
     public void pause(MouseEvent mouseEvent) throws Exception {
+        GamePausePage.setGamePage(this);
         new GamePausePage().start(stage);
     }
 
@@ -300,7 +301,7 @@ public class GamePage extends Application {
         }
     }
 
-    private void setAllOnMouseEnteredHandler(){
+    private void setAllOnMouseEnteredHandler() {
         setOnMouseEnteredHandler(playerFieldCard);
         setOnMouseEnteredHandler(opponentFieldCard);
         setOnMouseEnteredHandlerForArray(playerHand);
@@ -311,8 +312,8 @@ public class GamePage extends Application {
         setOnMouseEnteredHandlerForArray(opponentSpellAndTraps);
     }
 
-    private void setOnMouseEnteredHandlerForArray(ArrayList<CardView> array){
-        for (CardView cardView: array){
+    private void setOnMouseEnteredHandlerForArray(ArrayList<CardView> array) {
+        for (CardView cardView : array) {
             setOnMouseEnteredHandler(cardView);
         }
     }
@@ -321,9 +322,9 @@ public class GamePage extends Application {
         selectedCardImage.setImage(selectedCard.getImage());
     }
 
-    private void setOnMouseEnteredHandler(CardView cardView){
+    private void setOnMouseEnteredHandler(CardView cardView) {
         EventHandler eventHandler = event -> {
-            if (cardView.isFull()){
+            if (cardView.isFull()) {
                 selectedCard = cardView;
                 showSelectedCard();
             }
@@ -331,7 +332,7 @@ public class GamePage extends Application {
         cardView.setOnMouseEntered(eventHandler);
     }
 
-    private void setAllOnMouseExitHandler(){
+    private void setAllOnMouseExitHandler() {
         setOnMouseExitedHandler(playerFieldCard);
         setOnMouseExitedHandler(opponentFieldCard);
         setOnMouseExitedHandlerForArray(playerHand);
@@ -342,8 +343,8 @@ public class GamePage extends Application {
         setOnMouseExitedHandlerForArray(opponentSpellAndTraps);
     }
 
-    private void setOnMouseExitedHandlerForArray(ArrayList<CardView> array){
-        for (CardView cardView: array){
+    private void setOnMouseExitedHandlerForArray(ArrayList<CardView> array) {
+        for (CardView cardView : array) {
             setOnMouseExitedHandler(cardView);
         }
     }
@@ -352,11 +353,28 @@ public class GamePage extends Application {
         selectedCardImage.setImage(null);
     }
 
-    private void setOnMouseExitedHandler(CardView cardView){
+    private void setOnMouseExitedHandler(CardView cardView) {
         EventHandler eventHandler = event -> {
-                selectedCard = null;
-                removeSelectedCard();
+            selectedCard = null;
+            removeSelectedCard();
         };
         cardView.setOnMouseExited(eventHandler);
+    }
+
+    public void surrender(JSONObject answer) {
+        String type = answer.getString("Type");
+        String value = answer.getString("Value");
+        if (type.equals("Successful")) new GameResultPage(this, value);
+        else{
+            //TODO showError;
+        }
+    }
+
+    public void endGame() {
+        try {
+            new DuelMenuPage().start(stage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

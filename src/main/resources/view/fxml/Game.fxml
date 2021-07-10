@@ -16,7 +16,7 @@
       </ImageView>
       <ImageView fitHeight="720.0" fitWidth="360.0" pickOnBounds="true">
          <image>
-            <Image url="@../../assets/pageimages/GameBackground.jpg" />
+            <Image url="@../../assets/pageImages/GameBackground.jpg" />
          </image></ImageView>
       <ImageView fx:id="selectedCardImage" fitHeight="343.0" fitWidth="294.0" layoutX="33.0" layoutY="188.0" pickOnBounds="true" />
       <ImageView fx:id="opponentProfile" fitHeight="120" fitWidth="110" layoutX="14.0" layoutY="20" pickOnBounds="true" preserveRatio="true">

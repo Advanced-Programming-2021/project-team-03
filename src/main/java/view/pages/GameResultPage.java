@@ -2,22 +2,35 @@ package view.pages;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import view.viewcontroller.MainView;
 
-public class GamePausePage extends Application {
+public class GameResultPage extends Application {
     private static Stage stage;
-    private static GamePage gamePage;
+
+    private String messageString;
+    private GamePage gamePage;
+
+    @FXML
+    public Text message;
+
+    public GameResultPage(GamePage gamePage,String message){
+        this.messageString = message;
+        this.gamePage = gamePage;
+    }
 
     @Override
     public void start(Stage stage) throws Exception {
         Stage pauseWindow = new Stage();
-        Parent startingPane = FXMLLoader.load(getClass().getResource("/view/fxml/GamePauseMenu.fxml"));
+        Parent startingPane = FXMLLoader.load(getClass().getResource("/view/fxml/GameResult.fxml"));
         Scene scene = new Scene(startingPane);
         pauseWindow.setScene(scene);
         pauseWindow.getIcons().add(new Image(String.valueOf(getClass().getResource("/assets/pageImages/logo.png"))));
@@ -26,28 +39,17 @@ public class GamePausePage extends Application {
         pauseWindow.setHeight(400);
         pauseWindow.setResizable(false);
         pauseWindow.initModality(Modality.APPLICATION_MODAL);
-        GamePausePage.stage = pauseWindow;
+        GameResultPage.stage = pauseWindow;
         pauseWindow.showAndWait();
     }
 
-    public void exit(ActionEvent actionEvent) {
+    @FXML
+    public void initialize(){
+        this.message.setText(this.messageString);
+    }
+
+    public void okButton(MouseEvent mouseEvent) {
         stage.close();
-    }
-
-    public void surrender(ActionEvent actionEvent) {
-        stage.close();
-        GamePausePage.gamePage.surrender(MainView.getInstance().surrender());
-    }
-
-    public void mute(ActionEvent actionEvent) {
-        StartPage.mediaPlayer.pause();
-    }
-
-    public void unmute(ActionEvent actionEvent) {
-        StartPage.mediaPlayer.play();
-    }
-
-    public static void setGamePage(GamePage gamePage) {
-        GamePausePage.gamePage = gamePage;
+        gamePage.endGame();
     }
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.GameResultPage">
+   <children>
+      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true">
+         <image>
+            <Image url="@../../assets/pageImages/GameResultBackground.jpg" />
+         </image>
+      </ImageView>
+      <Button layoutX="149.0" layoutY="284.0" mnemonicParsing="false" text="OK" onMouseClicked="#okButton"/>
+      <Text fx:id="message" layoutX="31.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="268.1367073059082">
+         <font>
+            <Font name="Baskerville Old Face" size="18.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>
