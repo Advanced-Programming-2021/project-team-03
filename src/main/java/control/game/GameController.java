@@ -1147,4 +1147,8 @@ public class GameController {
     public boolean isSelectedCardAMonster() {
         return selectedCard instanceof Monster;
     }
+
+    public JSONObject getMapForGraphic() {
+        return game.showGameBoardsForGraphic();
+    }
 }

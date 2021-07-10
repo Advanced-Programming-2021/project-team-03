@@ -133,6 +133,25 @@ public class MainController {
         return answerObject.toString();
     }
 
+    private String getMapForGraphic(JSONObject valueObject){
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            try {
+                answerObject.put("Map", GameController.getInstance().getMapForGraphic());
+                answerObject.put("Type", "Success");
+            } catch (NullPointerException exception) {
+                answerObject.put("Type", "Error");
+                answerObject.put("Value", "Unknown Error");
+            }
+        }
+        return answerObject.toString();
+    }
+
     private String getNumberOfBoughtCard(JSONObject valueObject) {
         String token = valueObject.getString("Token");
         String cardName = valueObject.getString("Card name");
