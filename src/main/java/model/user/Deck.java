@@ -127,4 +127,8 @@ public class Deck {
     public ArrayList<String> getCardNames(DeckType deckType) {
         return decksCardNames.get(deckType);
     }
+
+    public int getNumberOfCards(DeckType deckType) {
+        return decks.get(deckType).size();
+    }
 }

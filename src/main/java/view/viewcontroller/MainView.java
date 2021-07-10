@@ -3,7 +3,7 @@ package view.viewcontroller;
 import control.MainController;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+import javafx.scene.image.Image;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import view.viewmodel.ScoreboardUser;
@@ -27,6 +27,7 @@ public class MainView {
         String controlAnswerString = MainController.getInstance().getRequest(messageToSend.toString());
         return new JSONObject(controlAnswerString);
     }
+    //endregion
 
     //region RegisterPage
     public JSONObject register(String username, String password, String nickname) {
@@ -83,6 +84,18 @@ public class MainView {
         return preparatoryDeckWorks(deckName, "Set active deck");
     }
 
+    public JSONObject showDeck(String deckName) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Deck name", deckName);
+        value.put("Deck name", deckName);
+        value.put("Deck type", "Main");
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Value", value);
+        messageToSendToControl.put("Type", "Show deck");
+        return sendRequestToControl(messageToSendToControl);
+    }
+
     private JSONObject preparatoryDeckWorks(String deckName, String commandType) {
         JSONObject value = new JSONObject();
         value.put("Token", token);
@@ -93,27 +106,25 @@ public class MainView {
         return sendRequestToControl(messageToSendToControl);
     }
 
-    public void getUserDecks() {
-        //Making message JSONObject and passing to sendControl function:
+    public JSONObject getUserDecks() {
         JSONObject value = new JSONObject();
         value.put("Token", token);
         JSONObject messageToSendToControl = new JSONObject();
-        messageToSendToControl.put("Type", "Show all decks");
+        messageToSendToControl.put("Type", "Show all decks graphic");
         messageToSendToControl.put("Value", value);
-        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
-
-        //Survey control JSON message
-        String activeDeck = (String) controlAnswer.get("Active deck");
-        JSONArray otherDecks = (JSONArray) controlAnswer.get("Other deck");
-
-        System.out.println("Deck:\n" +
-                "Active deck:\n" +
-                activeDeck +
-                "Other decks:");
-        otherDecks.forEach(System.out::println);
+        return sendRequestToControl(messageToSendToControl);
     }
     //endregion
 
+    public JSONObject getAllCards() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Show all cards in shop");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+    //endregion
 
     public JSONObject addOrDeleteCardFromDeck(String deckName, String deckType, String cardName, String commandType) {
         JSONObject value = new JSONObject();
@@ -174,10 +185,19 @@ public class MainView {
         messageToSendToControl.put("Value", value);
         return sendRequestToControl(messageToSendToControl);
     }
+    //endregion
 
-    public int getUserProfileImageNumber(){
-        //TODO
-        return 1;
+    public int getUserProfileImageNumber() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Get profile picture number by token");
+        messageToSendToControl.put("Value", value);
+        JSONObject answer = sendRequestToControl(messageToSendToControl);
+        String type = answer.getString("Type");
+        int number = answer.getInt("Value");
+        if (type.equals("Success")) return number;
+        else return 1;
     }
     //endregion
 
@@ -205,25 +225,41 @@ public class MainView {
     //endregion
 
     //region ImportExportMenuPage
-    public JSONObject getCardJson(String cardName) {
-        JSONObject value = new JSONObject();
-        value.put("Token", token);
-        value.put("Card name", cardName);
-        JSONObject messageToSendToControl = new JSONObject();
-        messageToSendToControl.put("Type", "Get card Json");
-        messageToSendToControl.put("Value", value);
-        return sendRequestToControl(messageToSendToControl);
+    public JSONObject showCard(String cardName) {
+        JSONObject value = new JSONObject()
+                .put("Token", token)
+                .put("Card name", cardName);
+
+        return sendRequestToControl(new JSONObject()
+                .put("Type", "Show card")
+                .put("Value", value));
     }
-    public JSONObject importExportCard(String cardName, String typeOfCommand) {
-        JSONObject value = new JSONObject();
-        value.put("Token", token);
-        value.put("Card name", cardName);
+
+    public JSONObject getCardJson(String cardName) {
+        JSONObject value = new JSONObject()
+                .put("Token", token)
+                .put("Card name", cardName);
+
         JSONObject messageToSendToControl = new JSONObject();
-        messageToSendToControl.put("Type", typeOfCommand);
-        messageToSendToControl.put("Value", value);
+        messageToSendToControl.put("Type", "Get card Json")
+                .put("Value", value);
+        ;
+
         return sendRequestToControl(messageToSendToControl);
+
+
     }
     //endregion
+
+    public JSONObject importCardJson(String Json) {
+        JSONObject value = new JSONObject()
+                .put("Token", token)
+                .put("Json", Json);
+
+        return sendRequestToControl(new JSONObject()
+                .put("Value", value)
+                .put("Type", "Import card Json"));
+    }
 
     //region DuelMenuPage
     public JSONObject startNewSingleMatch(int numberOfRounds) {
@@ -235,8 +271,9 @@ public class MainView {
         messageToSendToControl.put("Value", value);
         return sendRequestToControl(messageToSendToControl);
     }
+    //endregion
 
-    public JSONObject startNewMultiMatch(int numberOfRounds,String opponentUsername) {
+    public JSONObject startNewMultiMatch(int numberOfRounds, String opponentUsername) {
         JSONObject value = new JSONObject();
         value.put("Token", token);
         value.put("Second player name", opponentUsername);
@@ -248,14 +285,120 @@ public class MainView {
     }
     //endregion
 
-    public void alertMaker(TextField textField, JSONObject controlAnswer) {
+    //region GamePage
+    public JSONObject getMap() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Get map for graphic");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
+    public boolean isCoinOnStarFace() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Get player turn");
+        messageToSendToControl.put("Value", value);
+        JSONObject answer = sendRequestToControl(messageToSendToControl);
+        String type = answer.getString("Type");
+        String username = answer.getString("Value");
+        if (type.equals("Success")) return username.equals(MainView.getInstance().getUsername());
+        else return true;
+    }
+
+    public JSONObject surrender() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Surrender");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
+    public JSONObject goToTheNextPhase() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Next phase");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+    //endregion
+
+    //region ShopMenuPage
+    public int getNumberOfBoughtCard(String cardName) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Card name", cardName);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Get number of bought card");
+        messageToSendToControl.put("Value", value);
+        JSONObject answer = sendRequestToControl(messageToSendToControl);
+        String type = answer.getString("Type");
+        if (type.equals("Success")) return answer.getInt("Value");
+        else return 0;
+    }
+
+    public int getBalance() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Get balance by token");
+        messageToSendToControl.put("Value", value);
+        JSONObject answer = sendRequestToControl(messageToSendToControl);
+        String type = answer.getString("Type");
+        if (type.equals("Success")) return answer.getInt("Value");
+        return 0;
+    }
+
+    public JSONObject buyCard(String cardName) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Card name", cardName);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Buy card");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
+    public String getPhase(){
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Get phase");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl).getString("Value");
+    }
+    //endregion
+
+    //region Global Methods
+    public boolean alertMaker(JSONObject controlAnswer) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
+        boolean success = false;
         if (controlAnswer.getString("Type").equals("Successful")) {
             alert.setAlertType(Alert.AlertType.INFORMATION);
-            if (textField != null) textField.clear();
+            success = true;
         }
 
         alert.setContentText(controlAnswer.getString("Value"));
         alert.show();
+        return success;
     }
+
+    private String toEnumCase(String string) {
+        return string.toUpperCase()
+                .replace(' ', '_')
+                .replace('-', '_')
+                .replace("'", "")
+                .replace(",", "");
+    }
+
+    public Image getCardImage(String cardName) throws Exception {
+        CardNames cardEnum = CardNames.valueOf(toEnumCase(cardName));
+        String url = String.valueOf(getClass().getResource("/assets/cards/" + cardEnum.imageName + ".jpg"));
+        return new Image(url);
+    }
+    //endregion
 }

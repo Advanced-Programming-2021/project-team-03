@@ -36,7 +36,6 @@ public class User {
         this.username = username;
         this.passwordHash = hashString(password);
         this.score = 0;
-        this.balance = 10000;
         this.level = 1;
 
         decks = new ArrayList<>();
@@ -190,8 +189,10 @@ public class User {
 
         cards.addAll(monsters.stream().limit(30).collect(Collectors.toList()));
         cards.addAll(spellAndTraps.stream().limit(20).collect(Collectors.toList()));
-        updateInDatabase();
+
         profileImageID = (new Random()).nextInt(20) + 1;
+        balance = 10000;
+
         updateInDatabase();
     }
 
@@ -201,5 +202,14 @@ public class User {
 
     public int getProfileImageID() {
         return profileImageID;
+    }
+
+    public int getNumberOfCards(String cardName) {
+        int counter = 0;
+        for (Card card : cards) {
+            if (card.getCardName().equals(cardName))
+                counter += 1;
+        }
+        return counter;
     }
 }

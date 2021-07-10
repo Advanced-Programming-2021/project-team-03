@@ -8,6 +8,8 @@ import model.card.SpellAndTrap;
 import model.user.Deck;
 import model.user.DeckType;
 import model.user.User;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -171,5 +173,102 @@ public class Game {
             return player2;
         else
             return player1;
+    }
+
+    public JSONObject showGameBoardsForGraphic() {
+        if (GameController.getInstance().getTurn() == PLAYER1) {
+            return boardBuilderForGraphic(player1, player2);
+        } else {
+            return boardBuilderForGraphic(player2, player1);
+        }
+    }
+
+    private JSONObject boardBuilderForGraphic(Player player1, Player player2) {
+        JSONObject board = new JSONObject();
+
+        board.put("LP", player1.getHealth());
+        board.put("NI", player1.getUser().getNickname());
+        board.put("IM", player1.getUser().getProfileImageID());
+        board.put("Hand", getHandArray(player1));
+        board.put("Monsters", getPlayersMonsterArray(player1));
+        board.put("Spells", getPlayersSpellsArray(player1));
+        board.put("Field", getPlayerFieldCard(player1));
+        board.put("Grave", getLastGraveyardCard(player1));
+
+        board.put("OPLP", player2.getHealth());
+        board.put("OPNI", player2.getUser().getNickname());
+        board.put("OPIM", player2.getUser().getProfileImageID());
+        board.put("OPHand", getHandArray(player2));
+        board.put("OPMonsters", getPlayersMonsterArray(player2));
+        board.put("OPSpells", getPlayersSpellsArray(player2));
+        board.put("OPField", getPlayerFieldCard(player2));
+        board.put("OPGrave", getLastGraveyardCard(player2));
+
+        return board;
+    }
+
+    private String getLastGraveyardCard(Player player) {
+        if (player.getBoard().getGraveyard().size() == 0) {
+            return "None";
+        } else {
+            return player.getBoard().getGraveyard().get(player.getBoard().getGraveyard().size() - 1).getCardName();
+        }
+    }
+
+    private JSONObject getPlayerFieldCard(Player player) {
+        JSONObject field = new JSONObject();
+
+        if (player.getBoard().getFieldCard() == null) {
+            field.put("Name", "None");
+            field.put("Activation", false);
+        } else {
+            field.put("Name", player.getBoard().getFieldCard().getCardName());
+            field.put("Activation", (filedActivated && activatedFieldCard.getCardName().equals(player.getBoard().getFieldCard().getCardName())));
+        }
+
+        return field;
+    }
+
+    private JSONArray getHandArray(Player player) {
+        JSONArray spells = new JSONArray();
+
+        for (Card card : player.getBoard().getInHandCards()) {
+            spells.put(card.getCardName());
+        }
+
+        return spells;
+    }
+
+    private JSONArray getPlayersSpellsArray(Player player) {
+        JSONArray spells = new JSONArray();
+
+        for (Integer position : player.getBoard().getSpellAndTrapsInField().keySet()) {
+            JSONObject spell = new JSONObject();
+
+            spell.put("Name", player.getBoard().getSpellAndTrapsInField().get(position).getCardName());
+            spell.put("Position", position);
+            spell.put("Activation", player.getBoard().getSpellAndTrapsInField().get(position).isActive());
+
+            spells.put(spell);
+        }
+
+        return spells;
+    }
+
+    private JSONArray getPlayersMonsterArray(Player player) {
+        JSONArray monsters = new JSONArray();
+
+        for (Integer position : player.getBoard().getMonstersInField().keySet()) {
+            JSONObject monster = new JSONObject();
+
+            monster.put("Name", player.getBoard().getMonstersInField().get(position).getCardName());
+            monster.put("Position", position);
+            monster.put("AttackingFormat", player.getBoard().getMonstersInField().get(position).getAttackingFormat().string);
+            monster.put("FaceUpSit", player.getBoard().getMonstersInField().get(position).getFaceUpSituation().string);
+
+            monsters.put(monster);
+        }
+
+        return monsters;
     }
 }

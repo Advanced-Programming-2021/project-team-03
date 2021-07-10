@@ -1,7 +1,11 @@
 package control;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import control.databaseController.Database;
 import control.databaseController.DatabaseException;
+import control.databaseController.MonsterCSV;
+import control.databaseController.SpellAndTrapCSV;
 import control.game.GameController;
 import model.card.Card;
 import model.card.Monster;
@@ -26,8 +30,9 @@ import static control.game.GamePhases.*;
 public class MainController {
     // this class is responsible for view request and send the feedback to thee view via a Json string
 
-    private static MainController mainControllerInstance;
     public static boolean initializing;
+    private static MainController mainControllerInstance;
+    private final HashMap<String, String> onlineUsers;
 
     private MainController() {
         onlineUsers = new HashMap<>();
@@ -46,8 +51,6 @@ public class MainController {
             mainControllerInstance = new MainController();
         return mainControllerInstance;
     }
-
-    private final HashMap<String, String> onlineUsers;
 
     public HashMap<String, String> getOnlineUsers() {
         return onlineUsers;
@@ -103,12 +106,125 @@ public class MainController {
             //region Graphic requests
             case "Get username by token" -> getUsernameByToken(valueObject);
             case "Get nickname by token" -> getNicknameByToken(valueObject);
+            case "Get profile picture number by token" -> getProfileImageNumberByToken(valueObject);
             case "Get card Json" -> getCardJson(valueObject);
+            case "Get number of bought card" -> getNumberOfBoughtCard(valueObject);
+            case "Import card Json" -> importCardJsonRequest(valueObject);
+            case "Get balance by token" -> getBalanceByToken(valueObject);
+            case "Get map for graphic" -> getMapForGraphic(valueObject);
+            case "Get player turn" -> getPlayerTurn(valueObject);
+            case "Show all decks graphic" -> showAllDecksGraphic(valueObject);
+            case "Get phase" -> getPhase(valueObject);
             //endregion
 
 
             default -> error();
         };
+    }
+
+    private String getPhase(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            answerObject.put("Value", GameController.getInstance().getCurrentPhase().name);
+            answerObject.put("Type", "Success");
+        }
+        return answerObject.toString();
+    }
+
+    private String getPlayerTurn(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            answerObject.put("Value", GameController.getInstance().getPlayerByTurn().getUser().getUsername());
+            answerObject.put("Type", "Success");
+        }
+        return answerObject.toString();
+    }
+
+    private String getBalanceByToken(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            try {
+                answerObject.put("Value", User.getByUsername(onlineUsers.get(token)).getBalance());
+                answerObject.put("Type", "Success");
+            } catch (NullPointerException exception) {
+                answerObject.put("Type", "Error");
+                answerObject.put("Value", "User not found");
+            }
+        }
+        return answerObject.toString();
+    }
+
+    private String getMapForGraphic(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            try {
+                answerObject.put("Map", GameController.getInstance().getMapForGraphic());
+                answerObject.put("Type", "Success");
+            } catch (NullPointerException exception) {
+                answerObject.put("Type", "Error");
+                answerObject.put("Value", "Unknown Error");
+            }
+        }
+        return answerObject.toString();
+    }
+
+    private String getNumberOfBoughtCard(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+        String cardName = valueObject.getString("Card name");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            try {
+                answerObject.put("Value", User.getByUsername(onlineUsers.get(token)).getNumberOfCards(cardName));
+                answerObject.put("Type", "Success");
+            } catch (NullPointerException exception) {
+                answerObject.put("Type", "Error");
+                answerObject.put("Value", "User not found");
+            }
+        }
+        return answerObject.toString();
+    }
+
+    private String getProfileImageNumberByToken(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            try {
+                answerObject.put("Value", User.getByUsername(onlineUsers.get(token)).getProfileImageID());
+                answerObject.put("Type", "Success");
+            } catch (NullPointerException exception) {
+                answerObject.put("Type", "Error");
+                answerObject.put("Value", "User not found");
+            }
+        }
+        return answerObject.toString();
     }
 
     private String getNicknameByToken(JSONObject valueObject) {
@@ -517,7 +633,7 @@ public class MainController {
 
         JSONObject answerObject = new JSONObject();
         if (isTokenInvalid(token)) putTokenError(answerObject);
-        else if (User.getByUsername(rivalName) != null) {
+        else if (User.getByUsername(rivalName) == null) {
             answerObject.put("Type", "Error").put("Value", "there is no player with this username!");
         } else if (numberOfRound != 1 && numberOfRound != 3) {
             answerObject.put("Type", "Error").put("Value", "number of rounds is not supported!");
@@ -621,8 +737,34 @@ public class MainController {
         return answerObject.toString();
     }
 
-    private String showAllDecks(JSONObject valueObject) {
+    private String showAllDecksGraphic(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
 
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else {
+            Deck activeDeck = User.getByUsername(onlineUsers.get(token)).getActiveDeck();
+            JsonArray decks = new JsonArray();
+
+            ArrayList<Deck> userDecks = User.getByUsername(onlineUsers.get(token)).getDecks();
+            for (Deck deck : userDecks) {
+                JSONObject jsonDeck = new JSONObject();
+                jsonDeck.put("Name", deck.getDeckName())
+                        .put("SideDeckNum", deck.getNumberOfCards(DeckType.SIDE))
+                        .put("MainDeckNum", deck.getNumberOfCards(DeckType.MAIN))
+                        .put("Valid", deck.isDeckValid())
+                        .put("Active", deck == activeDeck);
+
+                decks.add(jsonDeck.toString());
+            }
+
+            answerObject.put("Type", "Successful")
+                    .put("Decks", decks);
+        }
+        return answerObject.toString();
+    }
+
+    private String showAllDecks(JSONObject valueObject) {
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
@@ -807,6 +949,26 @@ public class MainController {
         return answerObject.toString();
     }
 
+    private String importCardJsonRequest(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+
+        // creating the json response object
+        JSONObject answerObject = new JSONObject();
+
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else {
+            try {
+                Database.importCardFromJson(valueObject.getString("Json"));
+                answerObject.put("Value", "Card Imported successfully")
+                        .put("Type", "Successful");
+            } catch (Exception e) {
+                answerObject.put("Value", "Couldn't import card: " + e.getMessage())
+                        .put("Type", "Error");
+            }
+        }
+        return answerObject.toString();
+    }
+
     private String getCardJson(JSONObject valueObject) {
         String token = valueObject.getString("Token");
         String cardName = valueObject.getString("Card name");
@@ -818,6 +980,17 @@ public class MainController {
         else if (Card.getCardByName(cardName) == null) {
             answerObject.put("Type", "Error").put("Value", "no card found with this name in your database!");
         } else {
+            try {
+                Object object;
+                Card card = Card.getCardByName(cardName);
+                if (card instanceof Monster) object = MonsterCSV.exportMonsterCSV((Monster) card);
+                else object = SpellAndTrapCSV.exportSpellAndTrapCSV((SpellAndTrap) card);
+                answerObject.put("Value", new Gson().toJson(object))
+                        .put("Type", "Successful");
+            } catch (Exception e) {
+                answerObject.put("Value", "Couldn't export card: " + e.getMessage())
+                        .put("Type", "Error");
+            }
 
         }
         return answerObject.toString();

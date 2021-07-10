@@ -1,10 +1,16 @@
 package control.game;
 
 public enum GamePhases {
-    DRAW,
-    STANDBY,
-    FIRST_MAIN,
-    BATTLE,
-    SECOND_MAIN,
+    DRAW("DRAW"),
+    STANDBY("STANDBY"),
+    FIRST_MAIN("FIRST MAIN"),
+    BATTLE("BATTLE"),
+    SECOND_MAIN("SECOND MAIN");
+
+    public String name;
+
+    GamePhases(String name) {
+        this.name = name;
+    }
 }
 

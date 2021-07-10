@@ -9,7 +9,7 @@
     <children>
         <ImageView fitHeight="720" fitWidth="1080" pickOnBounds="true">
             <image>
-                <Image url="@../../assets/pageimages/LoginBackground.png" />
+                <Image url="@../../assets/pageImages/LoginBackground.png" />
             </image>
         </ImageView>
         <Button layoutX="54" layoutY="541.8" mnemonicParsing="false" onMouseClicked="#back" prefHeight="0.0" prefWidth="190.8" styleClass="loginButtons" stylesheets="@../css/buttonStyles.css" text="Back">
