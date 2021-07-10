@@ -1,10 +1,10 @@
 package view.pages;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,8 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.json.JSONArray;
@@ -96,10 +96,25 @@ public class DeckMenuPage extends Application {
         popup.setAutoHide(true);
 
         deckVBox.setOnMouseEntered(event -> {
-            JSONObject answer = MainView.getInstance().showDeck(deck.name);
+            JSONObject answer = MainView.getInstance().showDeckSummary(deck.name);
+
             if (answer.getString("Type").equals("Successful")) {
-                Label label = new Label(deck.name + ":\n" + answer.getString("Value"));
-                label.setStyle("-fx-background-color: white;");
+                Label label = new Label(answer.getString("Value"));
+                label.setWrapText(true);
+                label.setTextAlignment(TextAlignment.JUSTIFY);
+                label.setAlignment(Pos.CENTER);
+                label.setPadding(new Insets(15));
+                label.setMaxWidth(350);
+                label.setMaxHeight(470);
+
+                label.setStyle("-fx-background-color: rgba(255, 255, 255, 0.7);" +
+                        "-fx-border-radius: 30px;" +
+                        "-fx-background-radius: 30px;" +
+                        "-fx-font-size: 15px");
+
+                popup.setAnchorX(stage.getX() + 650);
+                popup.setAnchorY(stage.getY() + 150);
+
                 popup.getContent().add(label);
 
                 if (!popup.isShowing())
@@ -155,8 +170,11 @@ public class DeckMenuPage extends Application {
         String newDeckName = newDeckNameField.getText();
         if (newDeckName.equals("")) return;
 
-        if (MainView.getInstance().alertMaker(MainView.getInstance().createNewDeck(newDeckName)))
+        if (MainView.getInstance().alertMaker(MainView.getInstance().createNewDeck(newDeckName))) {
             initialize();
+            newDeckNameField.clear();
+        }
+
     }
 }
 

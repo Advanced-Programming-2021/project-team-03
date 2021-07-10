@@ -132,4 +132,19 @@ public class Deck {
     public int getNumberOfCards(DeckType deckType) {
         return decks.get(deckType).size();
     }
+
+    public String showDeckSummary(DeckType deckType) {
+        StringBuilder showDeck = new StringBuilder();
+
+        showDeck.append("Deck: ").append(deckName).append("\n");
+        showDeck.append(deckType.getName());
+        showDeck.append(":\nMonsters: \n");
+        decks.get(deckType).stream().filter(card -> card instanceof Monster)
+                .forEach(card -> showDeck.append(card.getCardName()).append(", "));
+        showDeck.append("\n\nSpell and Traps: \n");
+        decks.get(deckType).stream().filter(card -> card instanceof SpellAndTrap)
+                .forEach(card -> showDeck.append(card.getCardName()).append(", "));
+
+        return showDeck.toString();
+    }
 }

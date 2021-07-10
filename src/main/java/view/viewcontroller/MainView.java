@@ -84,7 +84,7 @@ public class MainView {
         return preparatoryDeckWorks(deckName, "Set active deck");
     }
 
-    public JSONObject showDeck(String deckName) {
+    public JSONObject showDeckSummary(String deckName) {
         JSONObject value = new JSONObject();
         value.put("Token", token);
         value.put("Deck name", deckName);
@@ -92,7 +92,7 @@ public class MainView {
         value.put("Deck type", "Main");
         JSONObject messageToSendToControl = new JSONObject();
         messageToSendToControl.put("Value", value);
-        messageToSendToControl.put("Type", "Show deck");
+        messageToSendToControl.put("Type", "Show deck summary");
         return sendRequestToControl(messageToSendToControl);
     }
 

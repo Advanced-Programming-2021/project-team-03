@@ -114,6 +114,7 @@ public class MainController {
             case "Get map for graphic" -> getMapForGraphic(valueObject);
             case "Get player turn" -> getPlayerTurn(valueObject);
             case "Show all decks graphic" -> showAllDecksGraphic(valueObject);
+            case "Show deck summary" -> showDeckSummary(valueObject);
             case "Get phase" -> getPhase(valueObject);
             //endregion
 
@@ -732,6 +733,24 @@ public class MainController {
         } else {
             answerObject.put("Type", "Successful")
                     .put("Value", Deck.getByDeckName(deckName).showDeck(DeckType.valueOf(deckType.toUpperCase())));
+        }
+
+        return answerObject.toString();
+    }
+
+    private String showDeckSummary(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+        String deckName = valueObject.getString("Deck name");
+        String deckType = valueObject.getString("Deck type");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (Deck.getByDeckName(deckName) == null) {
+            answerObject.put("Type", "Error")
+                    .put("Value", "deck with name " + deckName + " does not exist");
+        } else {
+            answerObject.put("Type", "Successful")
+                    .put("Value", Deck.getByDeckName(deckName).showDeckSummary(DeckType.valueOf(deckType.toUpperCase())));
         }
 
         return answerObject.toString();
