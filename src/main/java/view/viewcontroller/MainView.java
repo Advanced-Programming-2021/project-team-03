@@ -306,6 +306,15 @@ public class MainView {
         if (type.equals("Success")) return username.equals(MainView.getInstance().getUsername());
         else return true;
     }
+
+    public JSONObject surrender() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Surrender");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
     //endregion
 
     //region ShopMenuPage

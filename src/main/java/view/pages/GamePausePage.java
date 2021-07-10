@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import view.viewcontroller.MainView;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -22,6 +23,7 @@ public class GamePausePage extends Application implements Initializable {
     public Button surrender;
     public Button mute;
     public Button unmute;
+    private static GamePage gamePage;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -44,7 +46,8 @@ public class GamePausePage extends Application implements Initializable {
     }
 
     public void surrender(ActionEvent actionEvent) {
-
+        stage.close();
+        GamePausePage.gamePage.surrender(MainView.getInstance().surrender());
     }
 
     public void mute(ActionEvent actionEvent) {
@@ -77,5 +80,9 @@ public class GamePausePage extends Application implements Initializable {
         buttonTransition.setToX(214);
         buttonTransition.setNode(button);
         buttonTransition.play();
+    }
+
+    public static void setGamePage(GamePage gamePage) {
+        GamePausePage.gamePage = gamePage;
     }
 }
