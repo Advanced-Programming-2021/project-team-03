@@ -61,20 +61,30 @@ public class GamePage extends Application {
 
     @FXML
     public void initialize() {
-        ImageView imageView = new ImageView();
-        imageView.setLayoutY(400);
-        imageView.setLayoutX(500);
-        imageView.setFitWidth(100);
-        imageView.setFitHeight(100);
-        pane.getChildren().add(imageView);
-        new CoinFlipAnimation(imageView,true).play();
+        ImageView coin = new ImageView();
+        runCOinAnimation(coin);
+        opponentLPBar.setVisible(false);
+        playerLPBar.setVisible(false);
         Timeline playtime = new Timeline(
-                new KeyFrame(Duration.seconds(10), event -> {
+                new KeyFrame(Duration.seconds(3), event -> {
+                    pane.getChildren().remove(coin);
+                    opponentLPBar.setVisible(true);
+                    playerLPBar.setVisible(true);
                     loadStartingCardViews();
                     loadMap();
                 })
         );
         playtime.play();
+    }
+
+    private void runCOinAnimation(ImageView coin) {
+        coin.setLayoutY(330);
+        coin.setLayoutX(690);
+        coin.setFitWidth(60);
+        coin.setFitHeight(60);
+        pane.getChildren().add(coin);
+        boolean isStar = MainView.getInstance().isCoinOnStarFace();
+        new CoinFlipAnimation(coin,isStar).play();
     }
 
     public void pause(MouseEvent mouseEvent) {
@@ -246,10 +256,6 @@ public class GamePage extends Application {
             if (positions[i] == position) return i;
         }
         return 0;
-    }
-
-    private void loadPlayersInfo() {
-
     }
 
     private void loadStartingCardViews() {

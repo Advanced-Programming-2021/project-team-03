@@ -241,7 +241,8 @@ public class MainView {
 
         JSONObject messageToSendToControl = new JSONObject();
         messageToSendToControl.put("Type", "Get card Json")
-                .put("Value", value);;
+                .put("Value", value);
+        ;
 
         return sendRequestToControl(messageToSendToControl);
 
@@ -291,6 +292,19 @@ public class MainView {
         messageToSendToControl.put("Type", "Get map for graphic");
         messageToSendToControl.put("Value", value);
         return sendRequestToControl(messageToSendToControl);
+    }
+
+    public boolean isCoinOnStarFace() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Get player turn");
+        messageToSendToControl.put("Value", value);
+        JSONObject answer = sendRequestToControl(messageToSendToControl);
+        String type = answer.getString("Type");
+        String username = answer.getString("Value");
+        if (type.equals("Success")) return username.equals(MainView.getInstance().getUsername());
+        else return true;
     }
     //endregion
 

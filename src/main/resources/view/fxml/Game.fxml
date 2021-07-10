@@ -16,7 +16,7 @@
       </ImageView>
       <ImageView fitHeight="720.0" fitWidth="360.0" pickOnBounds="true">
          <image>
-            <Image url="@../../assets/pageImages/GameBackground.jpg" />
+            <Image url="@../../assets/pageimages/GameBackground.jpg" />
          </image></ImageView>
       <ImageView fx:id="selectedCard" fitHeight="343.0" fitWidth="294.0" layoutX="33.0" layoutY="188.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="opponentProfile" fitHeight="90.0" fitWidth="80.0" layoutX="14.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
@@ -35,7 +35,8 @@
                </color>
             </DropShadow>
          </effect></ProgressBar>
-      <Text fx:id="opponentNickname" fill="#3642ff" layoutX="105.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="opponent nickname" textAlignment="CENTER" wrappingWidth="250.0">
+      <Text fx:id="opponentNickname" fill="#3642ff" layoutX="105.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0"
+            textAlignment="CENTER" wrappingWidth="250.0">
          <font>
             <Font name="Georgia Bold Italic" size="24.0" />
          </font>
@@ -47,7 +48,7 @@
             </DropShadow>
          </effect>
       </Text>
-      <Text fx:id="playerLifePoint" fill="#fa4dba" layoutX="175.0" layoutY="625.0" strokeType="OUTSIDE" strokeWidth="0.0" text="8000" textAlignment="CENTER" wrappingWidth="130.0">
+      <Text fx:id="playerLifePoint" fill="#fa4dba" layoutX="175.0" layoutY="625.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="130.0">
          <font>
             <Font name="Georgia Bold Italic" size="24.0" />
          </font>
@@ -58,7 +59,7 @@
                </color>
             </DropShadow>
          </effect></Text>
-      <Text fx:id="playerNickname" fill="#ff2654" layoutX="105.0" layoutY="675.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" nickname" textAlignment="CENTER" wrappingWidth="250.0">
+      <Text fx:id="playerNickname" fill="#ff2654" layoutX="105.0" layoutY="675.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="250.0">
          <font>
             <Font name="Georgia Bold Italic" size="24.0" />
          </font>
@@ -78,7 +79,7 @@
                </color>
             </DropShadow>
          </effect></ProgressBar>
-      <Text fx:id="opponentLifePoint" fill="#23ccff" layoutX="175.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="8000" textAlignment="CENTER" wrappingWidth="130.0">
+      <Text fx:id="opponentLifePoint" fill="#23ccff" layoutX="175.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="130.0">
          <font>
             <Font name="Georgia Bold Italic" size="28.0" />
          </font>

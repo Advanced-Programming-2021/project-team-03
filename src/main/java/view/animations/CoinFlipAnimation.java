@@ -13,8 +13,8 @@ public class CoinFlipAnimation extends Transition {
     public CoinFlipAnimation(ImageView imageView, boolean head) {
         this.imageView = imageView;
         this.head = head;
-        this.setCycleDuration(Duration.millis(600));
-        this.setCycleCount(5);
+        this.setCycleDuration(Duration.millis(700));
+        this.setCycleCount(4);
     }
 
     @Override
