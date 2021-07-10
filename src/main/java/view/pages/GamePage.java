@@ -13,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.json.JSONArray;
@@ -57,6 +58,7 @@ public class GamePage extends Application {
         this.pane = (AnchorPane) startingPane;
         primaryStage.setScene(new Scene(startingPane));
         stage = primaryStage;
+        stage.show();
     }
 
     @FXML
@@ -67,7 +69,7 @@ public class GamePage extends Application {
         imageView.setFitWidth(100);
         imageView.setFitHeight(100);
         pane.getChildren().add(imageView);
-        new CoinFlipAnimation(imageView,true).play();
+        new CoinFlipAnimation(imageView, true).play();
         Timeline playtime = new Timeline(
                 new KeyFrame(Duration.seconds(10), event -> {
                     loadStartingCardViews();
@@ -77,13 +79,25 @@ public class GamePage extends Application {
         playtime.play();
     }
 
-    public void pause(MouseEvent mouseEvent) {
+    public void pause(MouseEvent mouseEvent) throws IOException {
+        Stage pauseWindow = new Stage();
+        Parent startingPane = FXMLLoader.load(getClass().getResource("/view/fxml/GamePauseMenu.fxml"));
+        Scene scene = new Scene(startingPane);
+        pauseWindow.setScene(scene);
+        pauseWindow.getIcons().add(stage.getIcons().get(0));
+        pauseWindow.setTitle(stage.getTitle());
+        pauseWindow.setWidth(600);
+        pauseWindow.setHeight(400);
+        pauseWindow.setResizable(false);
+        pauseWindow.initModality(Modality.APPLICATION_MODAL);
+
+        pauseWindow.show();
     }
 
     public void nextPhase(MouseEvent mouseEvent) {
     }
 
-    private void cleanMap(){
+    private void cleanMap() {
         cleanArray(playerMonsters);
         cleanArray(playerSpellAndTraps);
         cleanArray(playerHand);
@@ -96,8 +110,8 @@ public class GamePage extends Application {
         opponentGraveyard.removeImage();
     }
 
-    private void cleanArray(ArrayList<CardView> array){
-        for (CardView cardView: array){
+    private void cleanArray(ArrayList<CardView> array) {
+        for (CardView cardView : array) {
             cardView.removeImage();
         }
     }
