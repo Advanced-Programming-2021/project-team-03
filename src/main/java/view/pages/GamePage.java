@@ -103,9 +103,9 @@ public class GamePage extends Application {
     public void nextPhase(MouseEvent mouseEvent) {
         JSONObject answer = MainView.getInstance().goToTheNextPhase();
         String value = answer.getString("Value");
-        messageText.setText(value);
+        messageText.setText(MainView.getInstance().getPhase());
         Timeline playtime = new Timeline(
-                new KeyFrame(Duration.seconds(2), event -> {
+                new KeyFrame(Duration.seconds(1), event -> {
                     messageText.setText("");
                 })
         );
@@ -383,7 +383,7 @@ public class GamePage extends Application {
         if (type.equals("Successful")){
             try {
                 GameResultPage.setGamePage(this);
-                GameResultPage.setMessageString(MainView.getInstance().getPhase());
+                GameResultPage.setMessageString(value);
                 new GameResultPage().start(stage);
             }catch (Exception e){
                 e.printStackTrace();
