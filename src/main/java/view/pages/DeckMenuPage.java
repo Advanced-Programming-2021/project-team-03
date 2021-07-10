@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class DeckMenuPage extends Application {
@@ -23,4 +24,7 @@ public class DeckMenuPage extends Application {
     }
 
 
+    public void back(MouseEvent mouseEvent) throws Exception {
+        new MainPage().start(stage);
+    }
 }

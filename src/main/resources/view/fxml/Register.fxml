@@ -9,7 +9,7 @@
     <children>
         <ImageView fitHeight="720" fitWidth="1080" pickOnBounds="true">
             <image>
-                <Image url="@../../assets/pageimages/RegisterBackground.png" />
+                <Image url="@../../assets/pageImages/RegisterBackground.png" />
             </image>
         </ImageView>
         <Button layoutX="84.6" layoutY="579.6" mnemonicParsing="false" onMouseClicked="#back" prefHeight="61.2" prefWidth="178.2" styleClass="registerButtons" stylesheets="@../css/buttonStyles.css" text="Back">
