@@ -106,11 +106,31 @@ public class MainController {
             case "Get profile picture number by token" -> getProfileImageNumberByToken(valueObject);
             case "Get card Json" -> getCardJson(valueObject);
             case "Get number of bought card" -> getNumberOfBoughtCard(valueObject);
+            case "Get balance by token" -> getBalanceByToken(valueObject);
             //endregion
 
 
             default -> error();
         };
+    }
+
+    private String getBalanceByToken(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            try {
+                answerObject.put("Value",User.getByUsername(onlineUsers.get(token)).getBalance());
+                answerObject.put("Type", "Success");
+            } catch (NullPointerException exception) {
+                answerObject.put("Type", "Error");
+                answerObject.put("Value", "User not found");
+            }
+        }
+        return answerObject.toString();
     }
 
     private String getNumberOfBoughtCard(JSONObject valueObject) {

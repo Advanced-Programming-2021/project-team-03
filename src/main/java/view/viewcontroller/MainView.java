@@ -291,10 +291,32 @@ public class MainView {
         messageToSendToControl.put("Value", value);
         JSONObject answer = sendRequestToControl(messageToSendToControl);
         String type = answer.getString("Type");
-        int number = answer.getInt("Value");
-        if (type.equals("Success")) return number;
+        if (type.equals("Success")) return answer.getInt("Value");
         else return 0;
     }
+
+    public int getBalance() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Get balance by token");
+        messageToSendToControl.put("Value", value);
+        JSONObject answer = sendRequestToControl(messageToSendToControl);
+        String type = answer.getString("Type");
+        if (type.equals("Success")) return answer.getInt("Value");
+        return 0;
+    }
+
+    public JSONObject buyCard(String cardName) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Card name", cardName);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Buy card");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+    //endregion
 
     public void alertMaker(TextField textField, JSONObject controlAnswer) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -317,16 +339,7 @@ public class MainView {
 
     public Image getCardImage(String cardName) throws Exception {
         CardNames cardEnum = CardNames.valueOf(toEnumCase(cardName));
-        System.out.println("cardname:               " + cardName + "                " + cardEnum);
         String url = String.valueOf(getClass().getResource("/assets/cards/" + cardEnum.imageName + ".jpg"));
         return new Image(url);
-    }
-
-    public static void main(String[] args) {
-        try {
-            MainView.getInstance().getCardImage("Swords of Revealing Light");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
     }
 }
