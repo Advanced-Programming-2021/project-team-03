@@ -236,7 +236,7 @@ public class GamePage extends Application {
 
     private void loadOpponentInfo(int profileImageNumber, String nickname, int LP) {
         opponentProfile.setImage(new Image(String.valueOf(getClass().getResource("/assets/profilepictures/"
-                + String.valueOf(profileImageNumber) + ".png"))));
+                + profileImageNumber + ".png"))));
         opponentNickname.setText(nickname);
         opponentLifePoint.setText(String.valueOf(LP));
         opponentLPBar.setProgress(LP / MAX_HEALTH);

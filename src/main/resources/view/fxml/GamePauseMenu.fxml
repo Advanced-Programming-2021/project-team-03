@@ -12,25 +12,25 @@
                 <Image url="@../../assets/pageImages/PauseBackground.jpg" />
             </image>
         </ImageView>
-        <Button layoutX="75.0" layoutY="299.0" mnemonicParsing="false" onAction="#exit" styleClass="PauseButtons" stylesheets="@../css/buttonStyles.css" text="Exit">
+        <Button fx:id="back" layoutX="10.0" layoutY="290.0" mnemonicParsing="false" onAction="#exit" prefHeight="40.0" prefWidth="152.0" styleClass="PauseButtons" stylesheets="@../css/buttonStyles.css" text="Back">
             <font>
                 <Font name="Georgia Bold Italic" size="22.0" />
             </font>
         </Button>
-        <Button layoutX="206.0" layoutY="223.0" mnemonicParsing="false" onAction="#surrender" styleClass="PauseButtons" stylesheets="@../css/buttonStyles.css" text="Surrender">
+        <Button fx:id="surrender" layoutX="438.0" layoutY="210.0" mnemonicParsing="false" onAction="#surrender" prefHeight="40.0" prefWidth="152.0" styleClass="PauseButtons" stylesheets="@../css/buttonStyles.css" text="Surrender">
             <font>
                 <Font name="Georgia Bold Italic" size="22.0" />
             </font>
         </Button>
-        <Button layoutX="398.0" layoutY="267.0" mnemonicParsing="false" onAction="#mute" styleClass="PauseButtons" stylesheets="@../css/buttonStyles.css" text="Mute">
+        <Button fx:id="mute" layoutX="438.0" layoutY="50.0" mnemonicParsing="false" onAction="#mute" prefHeight="40.0" prefWidth="152.0" styleClass="PauseButtons" stylesheets="@../css/buttonStyles.css" text="Mute">
             <font>
                 <Font name="Georgia Bold Italic" size="22.0" />
             </font>
         </Button>
-      <Button layoutX="429.0" layoutY="155.0" mnemonicParsing="false" onAction="#unmute" styleClass="PauseButtons" stylesheets="@../css/buttonStyles.css" text="Unmute">
-         <font>
-            <Font name="Georgia Bold Italic" size="22.0" />
-         </font>
-      </Button>
+        <Button fx:id="unmute" layoutX="10.0" layoutY="130.0" mnemonicParsing="false" onAction="#unmute" prefHeight="40.0" prefWidth="152.0" styleClass="PauseButtons" stylesheets="@../css/buttonStyles.css" text="Unmute">
+            <font>
+                <Font name="Georgia Bold Italic" size="22.0" />
+            </font>
+        </Button>
     </children>
 </AnchorPane>
