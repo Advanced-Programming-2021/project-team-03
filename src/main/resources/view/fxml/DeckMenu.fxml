@@ -12,18 +12,18 @@
     <children>
         <ImageView fitHeight="720.0" fitWidth="1080.0" pickOnBounds="true">
             <image>
-                <Image url="@../../assets/pageImages/ImportExportBackground.jpg" />
+                <Image url="@../../assets/pageImages/DeckMenuBackground.jpg" />
             </image>
         </ImageView>
 
-        <Button layoutX="43.0" layoutY="646.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="61.2" prefWidth="235.8" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Back">
+        <Button layoutX="12.0" layoutY="641.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="61.2" prefWidth="235.8" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Back">
             <font>
                 <Font size="24.0" />
             </font>
         </Button>
-        <ScrollPane fx:id="scrollPane" layoutX="639.0" layoutY="53.0" prefHeight="567.0" prefWidth="411.0" style="-fx-background-color: rgba(255, 255, 255, 0.7)rgba(255, 255, 255, 0.7); -fx-opacity: 0.7;" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css">
+        <ScrollPane fx:id="scrollPane" layoutX="112.0" layoutY="109.0" prefHeight="489.0" prefWidth="888.0" style="-fx-background-color: rgba(255, 255, 255, 0.7)rgba(255, 255, 255, 0.7); -fx-opacity: 0.7;" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css">
             <content>
-                <VBox prefHeight="903.0" prefWidth="380.0" />
+                <VBox prefHeight="903.0" prefWidth="871.0" />
             </content>
         </ScrollPane>
     </children>
