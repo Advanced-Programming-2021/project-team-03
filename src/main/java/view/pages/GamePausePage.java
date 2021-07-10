@@ -30,7 +30,7 @@ public class GamePausePage extends Application implements Initializable {
         Scene scene = new Scene(startingPane);
         pauseWindow.setScene(scene);
         pauseWindow.getIcons().add(new Image(String.valueOf(getClass().getResource("/assets/pageImages/logo.png"))));
-        pauseWindow.setTitle(stage.getTitle());
+        pauseWindow.setTitle("PAUSE");
         pauseWindow.setWidth(600);
         pauseWindow.setHeight(400);
         pauseWindow.setResizable(false);
