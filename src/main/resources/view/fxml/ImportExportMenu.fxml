@@ -30,9 +30,9 @@
                 <Font size="24.0" />
             </font>
         </Button>
-      <ScrollPane fx:id="scrollPane" layoutX="639.0" layoutY="53.0" prefHeight="567.0" prefWidth="411.0" style="-fx-background-color: rgba(255, 255, 255, 0.7)rgba(255, 255, 255, 0.7); -fx-opacity: 0.7;" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css">
+      <ScrollPane fx:id="scrollPane" layoutX="639.0" layoutY="53.0" prefHeight="567.0" prefWidth="411.0" style="-fx-background-color: rgba(255, 255, 255, 0.7)rgba(255, 255, 255, 0.7);" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css">
          <content>
-            <VBox prefHeight="903.0" prefWidth="380.0" />
+            <VBox prefHeight="903.0" prefWidth="380.0" style="-fx-background-color: rgba(255,255,255,0.7);" />
          </content>
       </ScrollPane>
     </children>
