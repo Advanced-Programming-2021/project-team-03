@@ -364,7 +364,15 @@ public class GamePage extends Application {
     public void surrender(JSONObject answer) {
         String type = answer.getString("Type");
         String value = answer.getString("Value");
-        if (type.equals("Successful")) new GameResultPage(this, value);
+        if (type.equals("Successful")){
+            try {
+                GameResultPage.setGamePage(this);
+                GameResultPage.setMessageString(value);
+                new GameResultPage().start(stage);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
         else{
             //TODO showError;
         }

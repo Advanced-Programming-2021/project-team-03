@@ -16,16 +16,11 @@ import view.viewcontroller.MainView;
 public class GameResultPage extends Application {
     private static Stage stage;
 
-    private String messageString;
-    private GamePage gamePage;
+    private static String messageString;
+    private static GamePage gamePage;
 
     @FXML
     public Text message;
-
-    public GameResultPage(GamePage gamePage,String message){
-        this.messageString = message;
-        this.gamePage = gamePage;
-    }
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -45,11 +40,20 @@ public class GameResultPage extends Application {
 
     @FXML
     public void initialize(){
-        this.message.setText(this.messageString);
+        this.message.setText(GameResultPage.messageString);
     }
 
     public void okButton(MouseEvent mouseEvent) {
         stage.close();
-        gamePage.endGame();
+        GameResultPage.gamePage.endGame();
+    }
+
+
+    public static void setMessageString(String messageString) {
+        GameResultPage.messageString = messageString;
+    }
+
+    public static void setGamePage(GamePage gamePage) {
+        GameResultPage.gamePage = gamePage;
     }
 }
