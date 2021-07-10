@@ -3,6 +3,7 @@ package view.animations;
 import javafx.animation.Transition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 
 public class CoinFlipAnimation extends Transition {
     private final boolean head;
@@ -12,6 +13,8 @@ public class CoinFlipAnimation extends Transition {
     public CoinFlipAnimation(ImageView imageView, boolean head) {
         this.imageView = imageView;
         this.head = head;
+        this.setCycleDuration(Duration.millis(600));
+        this.setCycleCount(5);
     }
 
     @Override
@@ -24,14 +27,14 @@ public class CoinFlipAnimation extends Transition {
 
     //Heart
     private void tailAnimation(double v) {
-        int frame = (int) Math.floor(v * 80) % 20;
+        int frame = (int) Math.floor(v * 20);
         image = new Image(String.valueOf(getClass().getResource("/assets/coin/tail/" + frame + ".png")));
         imageView.setImage(image);
     }
 
     //Star
     private void headAnimation(double v) {
-        int frame = (int) Math.floor(v * 80) % 20;
+        int frame = (int) Math.floor(v * 20);
         image = new Image(String.valueOf(getClass().getResource("/assets/coin/head/" + frame + ".png")));
         imageView.setImage(image);
     }

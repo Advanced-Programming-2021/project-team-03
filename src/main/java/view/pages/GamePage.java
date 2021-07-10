@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import view.animations.CoinFlipAnimation;
 import view.viewcontroller.MainView;
 import view.viewmodel.CardView;
 
@@ -60,8 +61,20 @@ public class GamePage extends Application {
 
     @FXML
     public void initialize() {
-        loadStartingCardViews();
-        loadMap();
+        ImageView imageView = new ImageView();
+        imageView.setLayoutY(400);
+        imageView.setLayoutX(500);
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(100);
+        pane.getChildren().add(imageView);
+        new CoinFlipAnimation(imageView,true).play();
+        Timeline playtime = new Timeline(
+                new KeyFrame(Duration.seconds(10), event -> {
+                    loadStartingCardViews();
+                    loadMap();
+                })
+        );
+        playtime.play();
     }
 
     public void pause(MouseEvent mouseEvent) {
@@ -272,4 +285,5 @@ public class GamePage extends Application {
             pane.getChildren().add(card);
         }
     }
+
 }

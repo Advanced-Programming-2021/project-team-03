@@ -112,11 +112,16 @@ public class MainController {
             case "Import card Json" -> importCardJsonRequest(valueObject);
             case "Get balance by token" -> getBalanceByToken(valueObject);
             case "Get map for graphic" -> getMapForGraphic(valueObject);
+            case "Get player turn" -> getPlayerTurn(valueObject);
             //endregion
 
 
             default -> error();
         };
+    }
+
+    private String getPlayerTurn(JSONObject valueObject) {
+        return null;
     }
 
     private String getBalanceByToken(JSONObject valueObject) {
