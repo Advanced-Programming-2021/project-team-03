@@ -7,7 +7,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.ShopMenuPage">
+<AnchorPane prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.ShopMenuPage">
     <children>
         <ImageView fitHeight="720.0" fitWidth="1080.0" pickOnBounds="true">
             <image>
@@ -27,7 +27,7 @@
                 <Image url="@../../assets/cards/AlexandriteDragon.jpg" />
             </image>
         </ImageView>
-        <Label layoutX="212.0" layoutY="76.0" text="#">
+        <Label fx:id="NL1" layoutX="212.0" layoutY="76.0" text="#">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
@@ -50,7 +50,7 @@
          <font>
             <Font name="Georgia Bold Italic" size="18.0" />
          </font></Button>
-        <Text fx:id="messageText" layoutX="290.0" layoutY="652.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Successful" textAlignment="CENTER" wrappingWidth="500.0">
+        <Text fx:id="messageText" layoutX="50.0" layoutY="652.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="980.0">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
@@ -86,7 +86,7 @@
                 <Image url="@../../assets/cards/AlexandriteDragon.jpg" />
             </image>
         </ImageView>
-      <Label layoutX="524.0" layoutY="77.0" text="#">
+      <Label fx:id="NL2" layoutX="524.0" layoutY="77.0" text="#">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
@@ -98,7 +98,7 @@
             </DropShadow>
          </effect>
       </Label>
-      <Label layoutX="165.0" layoutY="316.0" text="Price:">
+      <Label fx:id="PL1" layoutX="165.0" layoutY="316.0" text="Price:">
          <font>
             <Font name="Georgia Bold Italic" size="18.0" />
          </font>
@@ -110,7 +110,7 @@
             </DropShadow>
          </effect>
       </Label>
-      <Label layoutX="833.0" layoutY="77.0" text="#">
+      <Label fx:id="NL3" layoutX="833.0" layoutY="77.0" text="#">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
@@ -122,7 +122,7 @@
             </DropShadow>
          </effect>
       </Label>
-      <Label layoutX="212.0" layoutY="362.0" text="#">
+      <Label fx:id="NL4" layoutX="212.0" layoutY="362.0" text="#">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
@@ -134,7 +134,7 @@
             </DropShadow>
          </effect>
       </Label>
-      <Label layoutX="839.0" layoutY="363.0" text="#">
+      <Label fx:id="NL6" layoutX="839.0" layoutY="363.0" text="#">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
@@ -146,7 +146,7 @@
             </DropShadow>
          </effect>
       </Label>
-      <Label layoutX="524.0" layoutY="363.0" text="#">
+      <Label fx:id="NL5" layoutX="524.0" layoutY="363.0" text="#">
          <font>
             <Font name="Georgia Bold Italic" size="20.0" />
          </font>
@@ -170,7 +170,7 @@
             </DropShadow>
          </effect>
       </Text>
-      <Label layoutX="477.0" layoutY="316.0" text="Price:">
+      <Label fx:id="PL2" layoutX="477.0" layoutY="316.0" text="Price:">
          <font>
             <Font name="Georgia Bold Italic" size="18.0" />
          </font>
@@ -182,7 +182,7 @@
             </DropShadow>
          </effect>
       </Label>
-      <Label layoutX="790.0" layoutY="315.0" text="Price:">
+      <Label fx:id="PL3" layoutX="790.0" layoutY="315.0" text="Price:">
          <font>
             <Font name="Georgia Bold Italic" size="18.0" />
          </font>
@@ -194,7 +194,7 @@
             </DropShadow>
          </effect>
       </Label>
-      <Label layoutX="790.0" layoutY="608.0" text="Price:">
+      <Label fx:id="PL6" layoutX="790.0" layoutY="608.0" text="Price:">
          <font>
             <Font name="Georgia Bold Italic" size="18.0" />
          </font>
@@ -206,7 +206,7 @@
             </DropShadow>
          </effect>
       </Label>
-      <Label layoutX="477.0" layoutY="607.0" text="Price:">
+      <Label fx:id="PL5" layoutX="477.0" layoutY="607.0" text="Price:">
          <font>
             <Font name="Georgia Bold Italic" size="18.0" />
          </font>
@@ -218,7 +218,7 @@
             </DropShadow>
          </effect>
       </Label>
-      <Label layoutX="165.0" layoutY="607.0" text="Price:">
+      <Label fx:id="PL4" layoutX="165.0" layoutY="607.0" text="Price:">
          <font>
             <Font name="Georgia Bold Italic" size="18.0" />
          </font>
