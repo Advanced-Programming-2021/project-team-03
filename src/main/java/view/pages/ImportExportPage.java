@@ -26,14 +26,13 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class ImportExportPage extends Application {
-    private final ArrayList<ShopCard> allCards = new ArrayList<>();
     private static Stage stage;
+    private final ArrayList<ShopCard> allCards = new ArrayList<>();
     public ScrollPane scrollPane;
-    private ShopCard selectedCard;
-    private Pane selectedPane;
-
     @FXML
     public Button importButton;
+    private ShopCard selectedCard;
+    private Pane selectedPane;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -56,51 +55,32 @@ public class ImportExportPage extends Application {
                 imageView.setOnMouseEntered(mouseEvent -> {
                     if (selectedCard != card)
                         pane.setStyle("-fx-border-width: 6;"
-                            + "-fx-border-color: lightgreen;");
+                                + "-fx-border-color: lightgreen;");
                 });
 
                 imageView.setOnMouseExited(mouseEvent -> {
-                    if (selectedCard != card)
-                        pane.setStyle("-fx-border-width: 0;");
+                    if (selectedCard != card) pane.setStyle("-fx-border-width: 0;");
                 });
 
                 imageView.setOnMouseClicked(mouseEvent -> {
                     if (selectedCard == card) {
+                        pane.setStyle("-fx-border-width: 0");
                         selectedCard = null;
                         selectedPane = null;
-                        pane.setStyle("-fx-border-width: 0");
                     } else {
-                        selectedCard = card;
                         if (selectedPane != null) selectedPane.setStyle("-fx-border-width: 0");
 
                         pane.setStyle("-fx-border-width: 10;"
                                 + "-fx-border-color: lightgreen;");
                         selectedPane = pane;
+                        selectedCard = card;
                     }
                 });
 
                 imageView.setOnDragDetected(event -> {
-                    Dragboard db = imageView.startDragAndDrop(TransferMode.ANY);
-
-                    try {
-                        JSONObject answer = MainView.getInstance().getCardJson(card.getName());
-
-                        if (answer.getString("Type").equals("Successful")) {
-                            File file = new File(card.getName() + ".json");
-                            FileWriter writer = new FileWriter(file);
-                            writer.write(answer.getString("Value"));
-                            writer.close();
-                            ClipboardContent content = new ClipboardContent();
-                            ArrayList<File> files = new ArrayList<>();
-                            files.add(file);
-                            content.putFiles(files);
-                            db.setContent(content);
-                            file.deleteOnExit();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
+                    JSONObject answer = MainView.getInstance().getCardJson(card.getName());
+                    if (answer.getString("Type").equals("Successful"))
+                        setJsonOnDrag(answer.getString("Value"), card.getName(), imageView);
                     event.consume();
                 });
 
@@ -161,6 +141,26 @@ public class ImportExportPage extends Application {
         });
     }
 
+    private void setJsonOnDrag(String value, String cardName, ImageView imageView) {
+        Dragboard db = imageView.startDragAndDrop(TransferMode.ANY);
+        File file = new File(cardName + ".json");
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter(file);
+            writer.write(value);
+            writer.close();
+
+            ClipboardContent content = new ClipboardContent();
+            ArrayList<File> files = new ArrayList<>();
+            files.add(file);
+            content.putFiles(files);
+            db.setContent(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        file.deleteOnExit();
+    }
+
     public void back(MouseEvent mouseEvent) throws Exception {
         new MainPage().start(stage);
     }
@@ -198,7 +198,7 @@ public class ImportExportPage extends Application {
                 alert = new Alert(Alert.AlertType.ERROR);
             }
             alert.setContentText(answer.getString("Value")
-             + "\n" + MainView.getInstance().showCard(newCardName).getString("Value"));
+                    + "\n" + MainView.getInstance().showCard(newCardName).getString("Value"));
         } catch (Exception e) {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Couldn't read card file: " + e.getMessage());
