@@ -89,6 +89,16 @@ public class Database {
         }
     }
 
+    public static Card importCardFromJson(String Json) {
+        Gson gson = new Gson();
+        Gson gson2 = new Gson();
+        MonsterCSV monsterCSV = gson.fromJson(Json, MonsterCSV.class);
+        SpellAndTrapCSV spellAndTrapCSV = gson2.fromJson(Json, SpellAndTrapCSV.class);
+
+        if (monsterCSV.getAttribute() != null) return monsterCSV.convert().addToAllMonsters();
+        else return spellAndTrapCSV.convert().addToAllSpells();
+    }
+
     public static Card importCard(String cardName) throws DatabaseException {
         Gson gson = new Gson();
         Gson gson2 = new Gson();

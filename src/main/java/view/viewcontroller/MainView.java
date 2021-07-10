@@ -27,6 +27,7 @@ public class MainView {
         String controlAnswerString = MainController.getInstance().getRequest(messageToSend.toString());
         return new JSONObject(controlAnswerString);
     }
+    //endregion
 
     //region RegisterPage
     public JSONObject register(String username, String password, String nickname) {
@@ -92,6 +93,7 @@ public class MainView {
         messageToSendToControl.put("Value", value);
         return sendRequestToControl(messageToSendToControl);
     }
+    //endregion
 
     public void getUserDecks() {
         //Making message JSONObject and passing to sendControl function:
@@ -183,6 +185,7 @@ public class MainView {
         messageToSendToControl.put("Value", value);
         return sendRequestToControl(messageToSendToControl);
     }
+    //endregion
 
     public int getUserProfileImageNumber() {
         JSONObject value = new JSONObject();
@@ -222,26 +225,36 @@ public class MainView {
     //endregion
 
     //region ImportExportMenuPage
-    public JSONObject getCardJson(String cardName) {
-        JSONObject value = new JSONObject();
-        value.put("Token", token);
-        value.put("Card name", cardName);
-        JSONObject messageToSendToControl = new JSONObject();
-        messageToSendToControl.put("Type", "Get card Json");
-        messageToSendToControl.put("Value", value);
-        return sendRequestToControl(messageToSendToControl);
+    public JSONObject showCard(String cardName) {
+        JSONObject value = new JSONObject()
+                .put("Token", token)
+                .put("Card name", cardName);
+
+        return sendRequestToControl(new JSONObject()
+                .put("Type", "Show card")
+                .put("Value", value));
     }
 
-    public JSONObject importExportCard(String cardName, String typeOfCommand) {
-        JSONObject value = new JSONObject();
-        value.put("Token", token);
-        value.put("Card name", cardName);
-        JSONObject messageToSendToControl = new JSONObject();
-        messageToSendToControl.put("Type", typeOfCommand);
-        messageToSendToControl.put("Value", value);
-        return sendRequestToControl(messageToSendToControl);
+    public JSONObject getCardJson(String cardName) {
+        JSONObject value = new JSONObject()
+                .put("Token", token)
+                .put("Card name", cardName);
+
+        return sendRequestToControl(new JSONObject()
+                .put("Type", "Get card Json"))
+                .put("Value", value);
     }
     //endregion
+
+    public JSONObject importCardJson(String Json) {
+        JSONObject value = new JSONObject()
+                .put("Token", token)
+                .put("Json", Json);
+
+        return sendRequestToControl(new JSONObject()
+                .put("Value", value)
+                .put("Type", "Import card Json"));
+    }
 
     //region DuelMenuPage
     public JSONObject startNewSingleMatch(int numberOfRounds) {
@@ -253,6 +266,7 @@ public class MainView {
         messageToSendToControl.put("Value", value);
         return sendRequestToControl(messageToSendToControl);
     }
+    //endregion
 
     public JSONObject startNewMultiMatch(int numberOfRounds, String opponentUsername) {
         JSONObject value = new JSONObject();

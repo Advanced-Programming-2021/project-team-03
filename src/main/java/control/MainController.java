@@ -1,7 +1,10 @@
 package control;
 
+import com.google.gson.Gson;
 import control.databaseController.Database;
 import control.databaseController.DatabaseException;
+import control.databaseController.MonsterCSV;
+import control.databaseController.SpellAndTrapCSV;
 import control.game.GameController;
 import model.card.Card;
 import model.card.Monster;
@@ -106,6 +109,7 @@ public class MainController {
             case "Get profile picture number by token" -> getProfileImageNumberByToken(valueObject);
             case "Get card Json" -> getCardJson(valueObject);
             case "Get number of bought card" -> getNumberOfBoughtCard(valueObject);
+            case "Import card Json" -> importCardJsonRequest(valueObject);
             case "Get balance by token" -> getBalanceByToken(valueObject);
             case "Get map for graphic" -> getMapForGraphic(valueObject);
             //endregion
@@ -888,6 +892,26 @@ public class MainController {
         return answerObject.toString();
     }
 
+    private String importCardJsonRequest(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+
+        // creating the json response object
+        JSONObject answerObject = new JSONObject();
+
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else {
+            try {
+                Database.importCardFromJson(valueObject.getString("Json"));
+                answerObject.put("Value", "Card Imported successfully")
+                        .put("Type", "Successful");
+            } catch (Exception e) {
+                answerObject.put("Value", "Couldn't import card: " + e.getMessage())
+                        .put("Type", "Error");
+            }
+        }
+        return answerObject.toString();
+    }
+
     private String getCardJson(JSONObject valueObject) {
         String token = valueObject.getString("Token");
         String cardName = valueObject.getString("Card name");
@@ -899,6 +923,17 @@ public class MainController {
         else if (Card.getCardByName(cardName) == null) {
             answerObject.put("Type", "Error").put("Value", "no card found with this name in your database!");
         } else {
+            try {
+                Object object;
+                Card card = Card.getCardByName(cardName);
+                if (card instanceof Monster) object = MonsterCSV.exportMonsterCSV((Monster) card);
+                else object = SpellAndTrapCSV.exportSpellAndTrapCSV((SpellAndTrap) card);
+                answerObject.put("Value", new Gson().toJson(object))
+                        .put("Type", "Successful");
+            } catch (Exception e) {
+                answerObject.put("Value", "Couldn't export card: " + e.getMessage())
+                        .put("Type", "Error");
+            }
 
         }
         return answerObject.toString();
