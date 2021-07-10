@@ -123,7 +123,17 @@ public class MainController {
     }
 
     private String getPhase(JSONObject valueObject) {
-        return null;
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            answerObject.put("Value", GameController.getInstance().getCurrentPhase().name);
+            answerObject.put("Type", "Success");
+        }
+        return answerObject.toString();
     }
 
     private String getPlayerTurn(JSONObject valueObject) {
