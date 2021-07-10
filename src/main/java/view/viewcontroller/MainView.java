@@ -93,7 +93,6 @@ public class MainView {
         messageToSendToControl.put("Value", value);
         return sendRequestToControl(messageToSendToControl);
     }
-    //endregion
 
     public void getUserDecks() {
         //Making message JSONObject and passing to sendControl function:
