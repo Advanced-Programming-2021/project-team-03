@@ -98,13 +98,17 @@ public class DeckMenuPage extends Application {
         deckVBox.setOnMouseEntered(event -> {
             JSONObject answer = MainView.getInstance().showDeck(deck.name);
             if (answer.getString("Type").equals("Successful")) {
-                TextField textField = new TextField(deck.name + ":\n" + answer.getString("Value"));
-                textField.setEditable(false);
-                popup.getContent().add(textField);
+                Label label = new Label(deck.name + ":\n" + answer.getString("Value"));
+                label.setStyle("-fx-background-color: white;");
+                popup.getContent().add(label);
 
                 if (!popup.isShowing())
                     popup.show(stage);
             }
+        });
+
+        deckVBox.setOnMouseExited(event -> {
+            if (popup.isShowing()) popup.hide();
         });
 
         deckVBox.setOnMouseClicked(event -> {

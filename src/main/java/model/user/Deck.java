@@ -9,6 +9,7 @@ import model.card.SpellAndTrap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Deck {
     private static final HashMap<String, Deck> allDecks = new HashMap<>();
@@ -106,7 +107,7 @@ public class Deck {
     }
 
     public void addCard(ArrayList<Card> cards, DeckType deckType) throws DatabaseException {
-        cards.forEach(card -> {
+        cards.stream().filter(Objects::nonNull).forEach(card -> {
             decks.get(deckType).add(card.cloneForDeck());
             decksCardNames.get(deckType).add(card.getCardName());
         });
