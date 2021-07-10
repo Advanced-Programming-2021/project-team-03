@@ -94,24 +94,13 @@ public class MainView {
         return sendRequestToControl(messageToSendToControl);
     }
 
-    public void getUserDecks() {
-        //Making message JSONObject and passing to sendControl function:
+    public JSONObject getUserDecks() {
         JSONObject value = new JSONObject();
         value.put("Token", token);
         JSONObject messageToSendToControl = new JSONObject();
-        messageToSendToControl.put("Type", "Show all decks");
+        messageToSendToControl.put("Type", "Show all decks graphic");
         messageToSendToControl.put("Value", value);
-        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
-
-        //Survey control JSON message
-        String activeDeck = (String) controlAnswer.get("Active deck");
-        JSONArray otherDecks = (JSONArray) controlAnswer.get("Other deck");
-
-        System.out.println("Deck:\n" +
-                "Active deck:\n" +
-                activeDeck +
-                "Other decks:");
-        otherDecks.forEach(System.out::println);
+        return sendRequestToControl(messageToSendToControl);
     }
     //endregion
 
@@ -355,15 +344,17 @@ public class MainView {
     //endregion
 
     //region Global Methods
-    public void alertMaker(TextField textField, JSONObject controlAnswer) {
+    public boolean alertMaker(JSONObject controlAnswer) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
+        boolean success = false;
         if (controlAnswer.getString("Type").equals("Successful")) {
             alert.setAlertType(Alert.AlertType.INFORMATION);
-            if (textField != null) textField.clear();
+            success = true;
         }
 
         alert.setContentText(controlAnswer.getString("Value"));
         alert.show();
+        return success;
     }
 
     private String toEnumCase(String string) {

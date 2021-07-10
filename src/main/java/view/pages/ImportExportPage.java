@@ -128,7 +128,6 @@ public class ImportExportPage extends Application {
 
         importButton.setOnDragDropped(event -> {
             /* data dropped */
-            System.out.println("onDragDropped");
             /* if there is a card file on dragBoard, read it and use it */
             Dragboard dragboard = event.getDragboard();
             boolean success = false;
@@ -144,9 +143,9 @@ public class ImportExportPage extends Application {
     private void setJsonOnDrag(String value, String cardName, ImageView imageView) {
         Dragboard db = imageView.startDragAndDrop(TransferMode.ANY);
         File file = new File(cardName + ".json");
-        FileWriter writer = null;
+
         try {
-            writer = new FileWriter(file);
+            FileWriter writer = new FileWriter(file);
             writer.write(value);
             writer.close();
 

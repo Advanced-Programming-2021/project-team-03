@@ -1,6 +1,7 @@
 package control;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import control.databaseController.Database;
 import control.databaseController.DatabaseException;
 import control.databaseController.MonsterCSV;
@@ -29,8 +30,9 @@ import static control.game.GamePhases.*;
 public class MainController {
     // this class is responsible for view request and send the feedback to thee view via a Json string
 
-    private static MainController mainControllerInstance;
     public static boolean initializing;
+    private static MainController mainControllerInstance;
+    private final HashMap<String, String> onlineUsers;
 
     private MainController() {
         onlineUsers = new HashMap<>();
@@ -49,8 +51,6 @@ public class MainController {
             mainControllerInstance = new MainController();
         return mainControllerInstance;
     }
-
-    private final HashMap<String, String> onlineUsers;
 
     public HashMap<String, String> getOnlineUsers() {
         return onlineUsers;
@@ -113,6 +113,7 @@ public class MainController {
             case "Get balance by token" -> getBalanceByToken(valueObject);
             case "Get map for graphic" -> getMapForGraphic(valueObject);
             case "Get player turn" -> getPlayerTurn(valueObject);
+            case "Show all decks graphic" -> showAllDecksGraphic(valueObject);
             //endregion
 
 
@@ -721,8 +722,34 @@ public class MainController {
         return answerObject.toString();
     }
 
-    private String showAllDecks(JSONObject valueObject) {
+    private String showAllDecksGraphic(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
 
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else {
+            Deck activeDeck = User.getByUsername(onlineUsers.get(token)).getActiveDeck();
+            JsonArray decks = new JsonArray();
+
+            ArrayList<Deck> userDecks = User.getByUsername(onlineUsers.get(token)).getDecks();
+            for (Deck deck : userDecks) {
+                JSONObject jsonDeck = new JSONObject();
+                jsonDeck.put("Name", deck.getDeckName())
+                        .put("SideDeckNum", deck.getNumberOfCards(DeckType.SIDE))
+                        .put("MainDeckNum", deck.getNumberOfCards(DeckType.MAIN))
+                        .put("Valid", deck.isDeckValid())
+                        .put("Active", deck == activeDeck);
+
+                decks.add(jsonDeck.toString());
+            }
+
+            answerObject.put("Type", "Successful")
+                    .put("Decks", decks);
+        }
+        return answerObject.toString();
+    }
+
+    private String showAllDecks(JSONObject valueObject) {
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
