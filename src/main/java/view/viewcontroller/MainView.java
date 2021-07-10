@@ -84,6 +84,18 @@ public class MainView {
         return preparatoryDeckWorks(deckName, "Set active deck");
     }
 
+    public JSONObject showDeck(String deckName) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Deck name", deckName);
+        value.put("Deck name", deckName);
+        value.put("Deck type", "Main");
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Value", value);
+        messageToSendToControl.put("Type", "Show deck");
+        return sendRequestToControl(messageToSendToControl);
+    }
+
     private JSONObject preparatoryDeckWorks(String deckName, String commandType) {
         JSONObject value = new JSONObject();
         value.put("Token", token);

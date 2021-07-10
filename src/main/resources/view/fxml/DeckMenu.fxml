@@ -22,9 +22,9 @@
                 <Font size="24.0" />
             </font>
         </Button>
-        <ScrollPane fx:id="scrollPane" layoutX="112.0" layoutY="109.0" prefHeight="489.0" prefWidth="888.0" style="-fx-background-color: rgba(255, 255, 255, 0.7)rgba(255, 255, 255, 0.7); -fx-opacity: 0.7;" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css">
+        <ScrollPane fx:id="scrollPane" layoutX="112.0" layoutY="109.0" prefHeight="489.0" prefWidth="454.0" style="-fx-background-color: rgba(255, 255, 255, 0.7)rgba(255, 255, 255, 0.7); -fx-opacity: 0.7;" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css">
             <content>
-                <VBox prefHeight="495.0" prefWidth="871.0" />
+                <VBox prefHeight="495.0" prefWidth="434.0" />
             </content>
         </ScrollPane>
       <Button layoutX="775.0" layoutY="639.0" mnemonicParsing="false" onMouseClicked="#createNewDeck" prefHeight="62.0" prefWidth="236.0" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Create new deck">

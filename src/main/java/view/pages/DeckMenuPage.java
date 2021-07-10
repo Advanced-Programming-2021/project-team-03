@@ -1,6 +1,8 @@
 package view.pages;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -11,7 +13,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,6 +28,7 @@ public class DeckMenuPage extends Application {
     private ArrayList<ViewDeck> allDecks;
     public ScrollPane scrollPane;
     public TextField newDeckNameField;
+    public static String selectedDeck;
 
 
     @Override
@@ -41,13 +46,9 @@ public class DeckMenuPage extends Application {
         Label label = new Label("Your decks");
         label.setCenterShape(true);
         label.setStyle("-fx-font-size : 23px;" + "-fx-text-fill : green;");
-
         vbox.getChildren().add(label);
-        vbox.getChildren().add(new TextField());
 
         allDecks.forEach(viewDeck -> vbox.getChildren().add(deckVBoxGenerator(viewDeck)));
-
-
 
         scrollPane.setContent(vbox);
     }
@@ -90,6 +91,30 @@ public class DeckMenuPage extends Application {
         } else {
             deckVBox.setStyle("-fx-border-width: 3;" + "-fx-border-color: gray;");
         }
+
+        Popup popup = new Popup();
+        popup.setAutoHide(true);
+
+        deckVBox.setOnMouseEntered(event -> {
+            JSONObject answer = MainView.getInstance().showDeck(deck.name);
+            if (answer.getString("Type").equals("Successful")) {
+                TextField textField = new TextField(deck.name + ":\n" + answer.getString("Value"));
+                textField.setEditable(false);
+                popup.getContent().add(textField);
+
+                if (!popup.isShowing())
+                    popup.show(stage);
+            }
+        });
+
+        deckVBox.setOnMouseClicked(event -> {
+            try {
+                selectedDeck = deck.name;
+                new DeckPage().start(stage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
         return deckVBox;
     }
