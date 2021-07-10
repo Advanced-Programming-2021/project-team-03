@@ -115,11 +115,6 @@ public class MainController {
         };
     }
 
-    private String getMapForGraphic(JSONObject valueObject) {
-        //TODO
-        return null;
-    }
-
     private String getBalanceByToken(JSONObject valueObject) {
         String token = valueObject.getString("Token");
 
