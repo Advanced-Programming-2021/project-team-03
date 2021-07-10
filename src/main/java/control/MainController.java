@@ -107,11 +107,17 @@ public class MainController {
             case "Get card Json" -> getCardJson(valueObject);
             case "Get number of bought card" -> getNumberOfBoughtCard(valueObject);
             case "Get balance by token" -> getBalanceByToken(valueObject);
+            case "Get map for graphic" -> getMapForGraphic(valueObject);
             //endregion
 
 
             default -> error();
         };
+    }
+
+    private String getMapForGraphic(JSONObject valueObject) {
+        //TODO
+        return null;
     }
 
     private String getBalanceByToken(JSONObject valueObject) {
