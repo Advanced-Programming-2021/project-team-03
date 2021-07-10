@@ -3,6 +3,8 @@ package view.pages;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -37,7 +39,7 @@ public class GamePage extends Application {
     public ProgressBar opponentLPBar;
     public ImageView playerProfile;
     public ImageView opponentProfile;
-    public ImageView selectedCard;
+    public ImageView selectedCardImage;
     public AnchorPane pane;
 
     private ArrayList<CardView> playerMonsters = new ArrayList<>();
@@ -51,6 +53,7 @@ public class GamePage extends Application {
     private CardView opponentFieldCard;
     private CardView opponentGraveyard;
     private final double MAX_HEALTH = 8000.0;
+    private CardView selectedCard;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -68,11 +71,13 @@ public class GamePage extends Application {
         opponentLPBar.setVisible(false);
         playerLPBar.setVisible(false);
         Timeline playtime = new Timeline(
-                new KeyFrame(Duration.seconds(3), event -> {
+                new KeyFrame(Duration.seconds(3.5), event -> {
                     pane.getChildren().remove(coin);
                     opponentLPBar.setVisible(true);
                     playerLPBar.setVisible(true);
                     loadStartingCardViews();
+                    setAllOnMouseEnteredHandler();
+                    setAllOnMouseExitHandler();
                     loadMap();
                 })
         );
@@ -84,10 +89,10 @@ public class GamePage extends Application {
     }
 
     private void runCOinAnimation(ImageView coin) {
-        coin.setLayoutY(330);
-        coin.setLayoutX(690);
-        coin.setFitWidth(60);
-        coin.setFitHeight(60);
+        coin.setLayoutY(310);
+        coin.setLayoutX(670);
+        coin.setFitWidth(100);
+        coin.setFitHeight(100);
         pane.getChildren().add(coin);
         boolean isStar = MainView.getInstance().isCoinOnStarFace();
         new CoinFlipAnimation(coin, isStar).play();
@@ -295,4 +300,63 @@ public class GamePage extends Application {
         }
     }
 
+    private void setAllOnMouseEnteredHandler(){
+        setOnMouseEnteredHandler(playerFieldCard);
+        setOnMouseEnteredHandler(opponentFieldCard);
+        setOnMouseEnteredHandlerForArray(playerHand);
+        setOnMouseEnteredHandlerForArray(playerMonsters);
+        setOnMouseEnteredHandlerForArray(playerSpellAndTraps);
+        setOnMouseEnteredHandlerForArray(opponentHand);
+        setOnMouseEnteredHandlerForArray(opponentMonsters);
+        setOnMouseEnteredHandlerForArray(opponentSpellAndTraps);
+    }
+
+    private void setOnMouseEnteredHandlerForArray(ArrayList<CardView> array){
+        for (CardView cardView: array){
+            setOnMouseEnteredHandler(cardView);
+        }
+    }
+
+    private void showSelectedCard() {
+        selectedCardImage.setImage(selectedCard.getImage());
+    }
+
+    private void setOnMouseEnteredHandler(CardView cardView){
+        EventHandler eventHandler = event -> {
+            if (cardView.isFull()){
+                selectedCard = cardView;
+                showSelectedCard();
+            }
+        };
+        cardView.setOnMouseEntered(eventHandler);
+    }
+
+    private void setAllOnMouseExitHandler(){
+        setOnMouseExitedHandler(playerFieldCard);
+        setOnMouseExitedHandler(opponentFieldCard);
+        setOnMouseExitedHandlerForArray(playerHand);
+        setOnMouseExitedHandlerForArray(playerMonsters);
+        setOnMouseExitedHandlerForArray(playerSpellAndTraps);
+        setOnMouseExitedHandlerForArray(opponentHand);
+        setOnMouseExitedHandlerForArray(opponentMonsters);
+        setOnMouseExitedHandlerForArray(opponentSpellAndTraps);
+    }
+
+    private void setOnMouseExitedHandlerForArray(ArrayList<CardView> array){
+        for (CardView cardView: array){
+            setOnMouseExitedHandler(cardView);
+        }
+    }
+
+    private void removeSelectedCard() {
+        selectedCardImage.setImage(null);
+    }
+
+    private void setOnMouseExitedHandler(CardView cardView){
+        EventHandler eventHandler = event -> {
+                selectedCard = null;
+                removeSelectedCard();
+        };
+        cardView.setOnMouseExited(eventHandler);
+    }
 }
