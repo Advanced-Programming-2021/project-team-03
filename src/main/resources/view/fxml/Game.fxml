@@ -7,7 +7,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="pane" prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.GamePage">
+<AnchorPane fx:id="pane" prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.GamePage">
    <children>
       <ImageView fitHeight="720.0" fitWidth="720.0" layoutX="360.0" pickOnBounds="true">
          <image>
@@ -18,12 +18,12 @@
          <image>
             <Image url="@../../assets/pageimages/GameBackground.jpg" />
          </image></ImageView>
-      <ImageView fx:id="selectedCard" fitHeight="343.0" fitWidth="294.0" layoutX="33.0" layoutY="188.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="opponentProfile" fitHeight="90.0" fitWidth="80.0" layoutX="14.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="selectedCardImage" fitHeight="343.0" fitWidth="294.0" layoutX="33.0" layoutY="188.0" pickOnBounds="true" />
+      <ImageView fx:id="opponentProfile" fitHeight="120" fitWidth="110" layoutX="14.0" layoutY="20" pickOnBounds="true" preserveRatio="true">
          <effect>
             <Reflection />
          </effect></ImageView>
-      <ImageView fx:id="playerProfile" fitHeight="90.0" fitWidth="80.0" layoutX="14.0" layoutY="598.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="playerProfile" fitHeight="120" fitWidth="110" layoutX="14.0" layoutY="578.0" pickOnBounds="true" preserveRatio="true">
          <effect>
             <Reflection />
          </effect></ImageView>
@@ -35,8 +35,7 @@
                </color>
             </DropShadow>
          </effect></ProgressBar>
-      <Text fx:id="opponentNickname" fill="#3642ff" layoutX="105.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0"
-            textAlignment="CENTER" wrappingWidth="250.0">
+      <Text fx:id="opponentNickname" fill="#3642ff" layoutX="105.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="250.0">
          <font>
             <Font name="Georgia Bold Italic" size="24.0" />
          </font>
