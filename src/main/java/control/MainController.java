@@ -121,7 +121,17 @@ public class MainController {
     }
 
     private String getPlayerTurn(JSONObject valueObject) {
-        return null;
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "invalid token!");
+        } else {
+            answerObject.put("Value", GameController.getInstance().getPlayerByTurn().getUser().getUsername());
+            answerObject.put("Type", "Success");
+        }
+        return answerObject.toString();
     }
 
     private String getBalanceByToken(JSONObject valueObject) {
@@ -133,7 +143,7 @@ public class MainController {
             answerObject.put("Value", "invalid token!");
         } else {
             try {
-                answerObject.put("Value",User.getByUsername(onlineUsers.get(token)).getBalance());
+                answerObject.put("Value", User.getByUsername(onlineUsers.get(token)).getBalance());
                 answerObject.put("Type", "Success");
             } catch (NullPointerException exception) {
                 answerObject.put("Type", "Error");
@@ -143,7 +153,7 @@ public class MainController {
         return answerObject.toString();
     }
 
-    private String getMapForGraphic(JSONObject valueObject){
+    private String getMapForGraphic(JSONObject valueObject) {
         String token = valueObject.getString("Token");
 
         JSONObject answerObject = new JSONObject();
