@@ -5,13 +5,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -77,6 +79,31 @@ public class ImportExportPage extends Application {
                     }
                 });
 
+                imageView.setOnDragDetected(event -> {
+                    Dragboard db = imageView.startDragAndDrop(TransferMode.ANY);
+
+                    try {
+                        JSONObject answer = MainView.getInstance().getCardJson(card.getName());
+
+                        if (answer.getString("Type").equals("Successful")) {
+                            File file = new File(card.getName() + ".json");
+                            FileWriter writer = new FileWriter(file);
+                            writer.write(answer.getString("Value"));
+                            writer.close();
+                            ClipboardContent content = new ClipboardContent();
+                            ArrayList<File> files = new ArrayList<>();
+                            files.add(file);
+                            content.putFiles(files);
+                            db.setContent(content);
+                            file.deleteOnExit();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    event.consume();
+                });
+
                 imageView.setPreserveRatio(true);
                 imageView.setFitWidth(350);
                 vbox.getChildren().add(pane);
@@ -106,12 +133,8 @@ public class ImportExportPage extends Application {
         });
 
         importButton.setOnDragOver(event -> {
-            /* data is dragged over the target */
-            /* accept it only if it is  not dragged from the same node
-             * and if it has a proper file */
             if (event.getGestureSource() != importButton &&
                     isJsonFile(event.getDragboard())) {
-                /* allow for both copying and moving, whatever user chooses */
                 event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             }
             event.consume();
