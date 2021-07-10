@@ -192,8 +192,8 @@ public class MainView {
         messageToSendToControl.put("Value", value);
         JSONObject answer = sendRequestToControl(messageToSendToControl);
         String type = answer.getString("Type");
-        String number = answer.getString("Value");
-        if (type.equals("Success")) return Integer.parseInt(number);
+        int number = answer.getInt("Value");
+        if (type.equals("Success")) return number;
         else return 1;
     }
     //endregion
