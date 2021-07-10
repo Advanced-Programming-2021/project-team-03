@@ -20,7 +20,7 @@ public class StartPage extends Application {
         Parent startingPane = FXMLLoader.load(getClass().getResource("/view/fxml/Start.fxml"));
         Scene scene = new Scene(startingPane);
         primaryStage.setScene(scene);
-        primaryStage.getIcons().add(new Image(String.valueOf(getClass().getResource("/assets/pageimages/logo.png"))));
+        primaryStage.getIcons().add(new Image(String.valueOf(getClass().getResource("/assets/pageImages/logo.png"))));
         primaryStage.setTitle("YU-GI-OH");
         backgroundMusic();
         stage = primaryStage;
