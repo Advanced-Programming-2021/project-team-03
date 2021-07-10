@@ -91,5 +91,6 @@
          </effect></Text>
       <Button layoutX="328.0" layoutY="163.0" mnemonicParsing="false" onMouseClicked="#pause" prefHeight="47.0" prefWidth="110.0" style="-fx-rotate: 270;" styleClass="GameButtons" stylesheets="@../css/buttonStyles.css" text="Pause" />
       <Button layoutX="327.0" layoutY="520.0" mnemonicParsing="false" onMouseClicked="#nextPhase" prefHeight="45.0" prefWidth="110.0" style="-fx-rotate: 270;" styleClass="GameButtons" stylesheets="@../css/buttonStyles.css" text="Next Phase" />
+      <Text fx:id="messageText" layoutX="548.0" layoutY="364.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="344.1367301940918" />
    </children>
 </AnchorPane>

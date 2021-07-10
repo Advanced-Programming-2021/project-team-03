@@ -304,6 +304,15 @@ public class MainView {
         messageToSendToControl.put("Value", value);
         return sendRequestToControl(messageToSendToControl);
     }
+
+    public JSONObject goToTheNextPhase() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Next phase");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
     //endregion
 
     //region ShopMenuPage
