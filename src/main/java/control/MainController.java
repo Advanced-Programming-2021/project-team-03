@@ -114,6 +114,7 @@ public class MainController {
             case "Get map for graphic" -> getMapForGraphic(valueObject);
             case "Get player turn" -> getPlayerTurn(valueObject);
             case "Show all decks graphic" -> showAllDecksGraphic(valueObject);
+            case "Show deck graphic" -> showDeckGraphic(valueObject);
             case "Show deck summary" -> showDeckSummary(valueObject);
             case "Get phase" -> getPhase(valueObject);
             //endregion
@@ -779,6 +780,30 @@ public class MainController {
 
             answerObject.put("Type", "Successful")
                     .put("Decks", decks);
+        }
+        return answerObject.toString();
+    }
+
+    private String showDeckGraphic(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+        String deckName = valueObject.getString("Deck name");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (Deck.getByDeckName(deckName) == null)
+            answerObject.put("Type", "Error")
+                    .put("Value", "deck with name " + deckName + " does not exist");
+        else {
+            answerObject.put("Type", "Successful");
+            Deck deck = Deck.getByDeckName(deckName);
+            JSONObject deckJson = new JSONObject();
+            deckJson.put("Name", deck.getDeckName())
+                    .put("SideDeckNum", deck.getNumberOfCards(DeckType.SIDE))
+                    .put("MainDeckNum", deck.getNumberOfCards(DeckType.MAIN))
+                    .put("Valid", deck.isDeckValid())
+                    .put("MainDeck", deck.getCardNames(DeckType.MAIN))
+                    .put("SideDeck", deck.getCardNames(DeckType.SIDE));
+            answerObject.put("Deck", deckJson);
         }
         return answerObject.toString();
     }

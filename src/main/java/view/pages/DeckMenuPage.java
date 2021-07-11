@@ -190,7 +190,7 @@ class ViewDeck {
     int mainDeckCardsNum;
     int sideDeckCardsNum;
     boolean isValid;
-    boolean isActive = false;
+    boolean isActive;
     Popup popup;
 
     ViewDeck(String name, int mainDeckCardsNum, int sideDeckCardsNum, boolean isValid, boolean isActive) {

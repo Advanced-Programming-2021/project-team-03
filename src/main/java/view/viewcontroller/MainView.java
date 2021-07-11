@@ -2,9 +2,7 @@ package view.viewcontroller;
 
 import control.MainController;
 import javafx.scene.control.Alert;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import view.viewmodel.ScoreboardUser;
 
@@ -84,10 +82,20 @@ public class MainView {
         return preparatoryDeckWorks(deckName, "Set active deck");
     }
 
-    public JSONObject showDeckSummary(String deckName) {
+    public JSONObject showDeck(String deckName) {
         JSONObject value = new JSONObject();
         value.put("Token", token);
         value.put("Deck name", deckName);
+
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Value", value);
+        messageToSendToControl.put("Type", "Show deck graphic");
+        return sendRequestToControl(messageToSendToControl);
+    }
+
+    public JSONObject showDeckSummary(String deckName) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
         value.put("Deck name", deckName);
         value.put("Deck type", "Main");
         JSONObject messageToSendToControl = new JSONObject();
@@ -363,7 +371,7 @@ public class MainView {
         return sendRequestToControl(messageToSendToControl);
     }
 
-    public String getPhase(){
+    public String getPhase() {
         JSONObject value = new JSONObject();
         value.put("Token", token);
         JSONObject messageToSendToControl = new JSONObject();

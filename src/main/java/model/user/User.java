@@ -1,5 +1,6 @@
 package model.user;
 
+import control.MainController;
 import control.databaseController.Database;
 import control.databaseController.DatabaseException;
 import model.card.Card;
@@ -141,7 +142,7 @@ public class User {
     }
 
     public void updateInDatabase() throws DatabaseException {
-        Database.save(this);
+        if (!MainController.initializing) Database.save(this);
     }
 
     public static User getByUsername(String username) {
