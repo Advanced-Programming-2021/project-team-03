@@ -24,12 +24,12 @@ import view.viewcontroller.MainView;
 import java.util.ArrayList;
 
 public class DeckMenuPage extends Application {
+    public static String selectedDeck;
     private static Stage stage;
-    private ArrayList<ViewDeck> allDecks;
+    private static VBox selectedVbox;
     public ScrollPane scrollPane;
     public TextField newDeckNameField;
-    public static String selectedDeck;
-
+    private ArrayList<ViewDeck> allDecks;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -47,91 +47,77 @@ public class DeckMenuPage extends Application {
         label.setCenterShape(true);
         label.setStyle("-fx-font-size : 23px;" + "-fx-text-fill : green;");
         vbox.getChildren().add(label);
+        vbox.setSpacing(20);
+        vbox.setAlignment(Pos.TOP_CENTER);
+        vbox.setPadding(new Insets(20));
+        scrollPane.setPadding(new Insets(5));
 
         allDecks.forEach(viewDeck -> vbox.getChildren().add(deckVBoxGenerator(viewDeck)));
-
         scrollPane.setContent(vbox);
     }
 
     private Node deckVBoxGenerator(ViewDeck deck) {
+        String normalBorderStyle = "-fx-border-width: 3;-fx-border-color: gray;-fx-border-radius: 20;" +
+                "-fx-background-color: rgba(199, 226, 240, 0.8);-fx-background-radius: 20";
+        String selectedBorderStyle = "-fx-border-width: 5;" + "-fx-border-color: rgba(62, 83, 144, 1);" + "-fx-border-radius: 20;";
+        String hoveredBorderStyle = "-fx-border-width: 3;" + "-fx-border-color: rgba(163, 102, 117, 0.8);" + "-fx-border-radius: 20;";
+
         VBox deckVBox = new VBox();
+        deckVBox.setPadding(new Insets(10));
+        deckVBox.setAlignment(Pos.CENTER);
+        deckVBox.setStyle(normalBorderStyle);
 
-        TextField nameTextField = new TextField();
-        nameTextField.setEditable(false);
-        nameTextField.setText(deck.name);
-        nameTextField.setStyle("-fx-font-size : 20px");
-        deckVBox.getChildren().add(nameTextField);
+        Label nameLabel = new Label(deck.name);
+        nameLabel.setStyle("-fx-font-size : 20px");
+        deckVBox.getChildren().add(nameLabel);
 
-        TextField mainDeckTextField = new TextField();
-        mainDeckTextField.setEditable(false);
-        mainDeckTextField.setText("Main deck cards: " + deck.mainDeckCardsNum);
-        mainDeckTextField.setStyle("-fx-font-size : 16px");
-        deckVBox.getChildren().add(mainDeckTextField);
+        Label mainDeckLabel = new Label("Main deck cards: " + deck.mainDeckCardsNum);
+        mainDeckLabel.setAlignment(Pos.CENTER);
+        mainDeckLabel.setStyle("-fx-font-size : 16px;" + "-fx-alignment: center;");
+        deckVBox.getChildren().add(mainDeckLabel);
 
-        TextField sideDeckTextfield = new TextField();
-        sideDeckTextfield.setEditable(false);
-        sideDeckTextfield.setText("Side deck cards: " + deck.sideDeckCardsNum);
-        sideDeckTextfield.setStyle("-fx-font-size : 16px");
-        deckVBox.getChildren().add(sideDeckTextfield);
+        Label sideDeckLabel = new Label("Side deck cards: " + deck.sideDeckCardsNum);
+        sideDeckLabel.setStyle("-fx-font-size : 16px");
+        deckVBox.getChildren().add(sideDeckLabel);
 
-        TextField validTextfield = new TextField();
-        validTextfield.setEditable(false);
-        validTextfield.setText(deck.isValid ? "Valid" : "Invalid");
-        validTextfield.setStyle("-fx-font-size : 16px;"
+        Label validLabel = new Label(deck.isValid ? "Valid" : "Invalid");
+        validLabel.setStyle("-fx-font-size : 16px;"
                 + "-fx-text-fill : " + ((deck.isValid) ? "green" : "red"));
-        deckVBox.getChildren().add(validTextfield);
+        deckVBox.getChildren().add(validLabel);
 
         if (deck.isActive) {
-            TextField activeTextfield = new TextField();
-            activeTextfield.setEditable(false);
-            activeTextfield.setText("Active deck");
-            activeTextfield.setStyle("-fx-font-size : 16px;" + "-fx-text-fill : green");
-            deckVBox.getChildren().add(activeTextfield);
-            deckVBox.setStyle("-fx-border-width: 5;" + "-fx-border-color: green;");
-        } else {
-            deckVBox.setStyle("-fx-border-width: 3;" + "-fx-border-color: gray;");
+            Label activeLabel = new Label("Active deck");
+            activeLabel.setStyle("-fx-font-size : 16px;" + "-fx-text-fill : green");
+            deckVBox.getChildren().add(activeLabel);
         }
 
-        Popup popup = new Popup();
-        popup.setAutoHide(true);
-
         deckVBox.setOnMouseEntered(event -> {
-            JSONObject answer = MainView.getInstance().showDeckSummary(deck.name);
-
-            if (answer.getString("Type").equals("Successful")) {
-                Label label = new Label(answer.getString("Value"));
-                label.setWrapText(true);
-                label.setTextAlignment(TextAlignment.JUSTIFY);
-                label.setAlignment(Pos.CENTER);
-                label.setPadding(new Insets(15));
-                label.setMaxWidth(350);
-                label.setMaxHeight(470);
-
-                label.setStyle("-fx-background-color: rgba(255, 255, 255, 0.7);" +
-                        "-fx-border-radius: 30px;" +
-                        "-fx-background-radius: 30px;" +
-                        "-fx-font-size: 15px");
-
-                popup.setAnchorX(stage.getX() + 650);
-                popup.setAnchorY(stage.getY() + 150);
-
-                popup.getContent().add(label);
-
-                if (!popup.isShowing())
-                    popup.show(stage);
+            if (!deck.popup.isShowing()) {
+                deck.popup.setAnchorX(stage.getX() + 450);
+                deck.popup.setAnchorY(stage.getY() + 110);
+                deck.popup.show(stage);
             }
+            if (!deck.name.equals(selectedDeck)) deckVBox.setStyle(hoveredBorderStyle);
         });
 
         deckVBox.setOnMouseExited(event -> {
-            if (popup.isShowing()) popup.hide();
+            if (deck.popup.isShowing()) deck.popup.hide();
+            if (!deck.name.equals(selectedDeck)) {
+                deckVBox.setStyle(normalBorderStyle);
+            }
         });
 
         deckVBox.setOnMouseClicked(event -> {
-            try {
+            if (deck.name.equals(selectedDeck)) {
+                deckVBox.setStyle(normalBorderStyle);
+                selectedDeck = null;
+                selectedVbox = null;
+            } else {
+                deckVBox.setStyle(selectedBorderStyle);
+                if (selectedVbox != null)
+                    selectedVbox.setStyle(normalBorderStyle);
                 selectedDeck = deck.name;
-                new DeckPage().start(stage);
-            } catch (Exception e) {
-                e.printStackTrace();
+                selectedVbox = deckVBox;
             }
         });
 
@@ -151,12 +137,13 @@ public class DeckMenuPage extends Application {
         JSONArray decks = new JSONArray(answer.getString("Decks"));
 
         for (Object deckObject : decks) {
-            JSONObject deck = new JSONObject(deckObject.toString());
-            allDecks.add(new ViewDeck(deck.getString("Name"),
-                    deck.getInt("MainDeckNum"),
-                    deck.getInt("SideDeckNum"),
-                    deck.getBoolean("Valid"),
-                    deck.getBoolean("Active")));
+            JSONObject deckJson = new JSONObject(deckObject.toString());
+            ViewDeck deck = new ViewDeck(deckJson.getString("Name"),
+                    deckJson.getInt("MainDeckNum"),
+                    deckJson.getInt("SideDeckNum"),
+                    deckJson.getBoolean("Valid"),
+                    deckJson.getBoolean("Active"));
+            allDecks.add(deck);
         }
         return true;
     }
@@ -174,7 +161,27 @@ public class DeckMenuPage extends Application {
             initialize();
             newDeckNameField.clear();
         }
+    }
 
+    public void deleteDeck(MouseEvent mouseEvent) {
+        if (selectedDeck == null) return;
+        if (MainView.getInstance().alertMaker(MainView.getInstance().deleteDeck(selectedDeck))) {
+            newDeckNameField.clear();
+            initialize();
+        }
+    }
+
+    public void editDeck(MouseEvent mouseEvent) throws Exception {
+        if (selectedDeck == null) return;
+        new DeckEditPage().start(stage);
+    }
+
+    public void setAsActiveDeck(MouseEvent mouseEvent) {
+        if (selectedDeck == null) return;
+        if (MainView.getInstance().alertMaker(MainView.getInstance().setActiveDeck(selectedDeck))) {
+            newDeckNameField.clear();
+            initialize();
+        }
     }
 }
 
@@ -184,6 +191,7 @@ class ViewDeck {
     int sideDeckCardsNum;
     boolean isValid;
     boolean isActive = false;
+    Popup popup;
 
     ViewDeck(String name, int mainDeckCardsNum, int sideDeckCardsNum, boolean isValid, boolean isActive) {
         this.name = name;
@@ -191,5 +199,28 @@ class ViewDeck {
         this.sideDeckCardsNum = sideDeckCardsNum;
         this.isValid = isValid;
         this.isActive = isActive;
+        setDeckSummaryPopup();
+    }
+
+    public void setDeckSummaryPopup() {
+        popup = new Popup();
+        JSONObject answer = MainView.getInstance().showDeckSummary(name);
+
+        if (answer.getString("Type").equals("Successful")) {
+            Label label = new Label(answer.getString("Value"));
+            label.setWrapText(true);
+            label.setTextAlignment(TextAlignment.JUSTIFY);
+            label.setAlignment(Pos.CENTER);
+            label.setPadding(new Insets(15));
+            label.setMaxWidth(350);
+            label.setMaxHeight(470);
+
+            label.setStyle("-fx-background-color: rgba(255, 255, 255, 0.7);" +
+                    "-fx-border-radius: 30px;" +
+                    "-fx-background-radius: 30px;" +
+                    "-fx-font-size: 15px");
+
+            popup.getContent().add(label);
+        }
     }
 }
