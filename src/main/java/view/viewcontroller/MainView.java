@@ -114,9 +114,20 @@ public class MainView {
         return sendRequestToControl(messageToSendToControl);
     }
 
+    public JSONObject getUserCards() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Show all user cards");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
     public JSONObject getUserDecks() {
         JSONObject value = new JSONObject();
         value.put("Token", token);
+
         JSONObject messageToSendToControl = new JSONObject();
         messageToSendToControl.put("Type", "Show all decks graphic");
         messageToSendToControl.put("Value", value);

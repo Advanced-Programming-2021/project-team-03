@@ -116,6 +116,7 @@ public class MainController {
             case "Show all decks graphic" -> showAllDecksGraphic(valueObject);
             case "Show deck graphic" -> showDeckGraphic(valueObject);
             case "Show deck summary" -> showDeckSummary(valueObject);
+            case "Show all user cards" -> showAllUserCards(valueObject);
             case "Get phase" -> getPhase(valueObject);
             //endregion
 
@@ -823,6 +824,18 @@ public class MainController {
             answerObject.put("Other deck", otherDecks);
         }
 
+        return answerObject.toString();
+    }
+
+    private String showAllUserCards(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else {
+            answerObject.put("Type", "Successful").put("Cards",
+                    User.getByUsername(onlineUsers.get(token)).getCards().stream().map(Card::getCardName).toArray());
+        }
         return answerObject.toString();
     }
 

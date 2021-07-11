@@ -135,7 +135,6 @@ public class DeckEditPage extends Application {
         for (int i = sideCards.length(); i < 15; i++)
             sideCardImages.get(i).setImage(null);
 
-
     }
 
     private void setCardImages(JSONArray cards, ArrayList<ImageView> cardImages) {
