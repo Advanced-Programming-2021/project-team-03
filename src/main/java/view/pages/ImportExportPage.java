@@ -3,11 +3,14 @@ package view.pages;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
@@ -16,6 +19,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.json.JSONArray;
@@ -32,7 +37,7 @@ public class ImportExportPage extends Application {
     @FXML
     public Button importButton;
     private ShopCard selectedCard;
-    private Pane selectedPane;
+    private ImageView selectedImage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -54,25 +59,25 @@ public class ImportExportPage extends Application {
 
                 imageView.setOnMouseEntered(mouseEvent -> {
                     if (selectedCard != card)
-                        pane.setStyle("-fx-border-width: 6;"
-                                + "-fx-border-color: lightgreen;");
+                        imageView.setEffect(new DropShadow(20, Color.BLACK));
                 });
 
                 imageView.setOnMouseExited(mouseEvent -> {
-                    if (selectedCard != card) pane.setStyle("-fx-border-width: 0;");
+                    if (selectedCard != card) imageView.setEffect(new DropShadow(0, Color.BLACK));
                 });
 
                 imageView.setOnMouseClicked(mouseEvent -> {
                     if (selectedCard == card) {
-                        pane.setStyle("-fx-border-width: 0");
+                        imageView.setEffect(new DropShadow(0, Color.BLACK));
                         selectedCard = null;
-                        selectedPane = null;
+                        selectedImage = null;
                     } else {
-                        if (selectedPane != null) selectedPane.setStyle("-fx-border-width: 0");
+                        if (selectedImage != null) selectedImage.setEffect(new DropShadow(0, Color.BLACK));
 
-                        pane.setStyle("-fx-border-width: 10;"
-                                + "-fx-border-color: lightgreen;");
-                        selectedPane = pane;
+                        DropShadow dropShadow = new DropShadow(25, Color.GREEN);
+                        dropShadow.setSpread(0.6);
+                        imageView.setEffect(dropShadow);
+                        selectedImage = imageView;
                         selectedCard = card;
                     }
                 });
@@ -85,13 +90,17 @@ public class ImportExportPage extends Application {
                 });
 
                 imageView.setPreserveRatio(true);
-                imageView.setFitWidth(350);
+                imageView.setFitWidth(340);
                 vbox.getChildren().add(pane);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        vbox.setCenterShape(true);
+
+        vbox.setSpacing(20);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setPadding(new Insets(10));
+        scrollPane.setPadding(new Insets(15));
         scrollPane.setCenterShape(true);
         scrollPane.setContent(vbox);
 
@@ -196,8 +205,8 @@ public class ImportExportPage extends Application {
             } else {
                 alert = new Alert(Alert.AlertType.ERROR);
             }
-            alert.setContentText(answer.getString("Value")
-                    + "\n" + MainView.getInstance().showCard(newCardName).getString("Value"));
+            alert.setTitle(answer.getString("Value"));
+            alert.setContentText(MainView.getInstance().showCard(newCardName).getString("Value"));
         } catch (Exception e) {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Couldn't read card file: " + e.getMessage());
@@ -245,8 +254,6 @@ public class ImportExportPage extends Application {
 
             alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("Card save successfully at: " + file.getAbsolutePath());
-            selectedCard = null;
-            selectedPane = null;
         } catch (IOException e) {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Couldn't export card: " + e.getMessage());

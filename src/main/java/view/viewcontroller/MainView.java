@@ -2,9 +2,7 @@ package view.viewcontroller;
 
 import control.MainController;
 import javafx.scene.control.Alert;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import view.viewmodel.ScoreboardUser;
 
@@ -88,11 +86,21 @@ public class MainView {
         JSONObject value = new JSONObject();
         value.put("Token", token);
         value.put("Deck name", deckName);
+
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Value", value);
+        messageToSendToControl.put("Type", "Show deck graphic");
+        return sendRequestToControl(messageToSendToControl);
+    }
+
+    public JSONObject showDeckSummary(String deckName) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
         value.put("Deck name", deckName);
         value.put("Deck type", "Main");
         JSONObject messageToSendToControl = new JSONObject();
         messageToSendToControl.put("Value", value);
-        messageToSendToControl.put("Type", "Show deck");
+        messageToSendToControl.put("Type", "Show deck summary");
         return sendRequestToControl(messageToSendToControl);
     }
 
@@ -106,9 +114,20 @@ public class MainView {
         return sendRequestToControl(messageToSendToControl);
     }
 
+    public JSONObject getUserCards() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Show all user cards");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
     public JSONObject getUserDecks() {
         JSONObject value = new JSONObject();
         value.put("Token", token);
+
         JSONObject messageToSendToControl = new JSONObject();
         messageToSendToControl.put("Type", "Show all decks graphic");
         messageToSendToControl.put("Value", value);
@@ -133,7 +152,7 @@ public class MainView {
         value.put("Deck type", deckType);
         value.put("Card name", cardName);
         JSONObject messageToSendToControl = new JSONObject();
-        messageToSendToControl.put("Type", commandType); //Command type will be "Add card to deck" or "Delete card from deck"
+        messageToSendToControl.put("Type", commandType);
         messageToSendToControl.put("Value", value);
         return sendRequestToControl(messageToSendToControl);
     }
@@ -243,7 +262,6 @@ public class MainView {
         JSONObject messageToSendToControl = new JSONObject();
         messageToSendToControl.put("Type", "Get card Json")
                 .put("Value", value);
-        ;
 
         return sendRequestToControl(messageToSendToControl);
 
@@ -363,7 +381,7 @@ public class MainView {
         return sendRequestToControl(messageToSendToControl);
     }
 
-    public String getPhase(){
+    public String getPhase() {
         JSONObject value = new JSONObject();
         value.put("Token", token);
         JSONObject messageToSendToControl = new JSONObject();

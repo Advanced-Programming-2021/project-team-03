@@ -3,10 +3,11 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.DeckMenuPage">
@@ -17,25 +18,44 @@
             </image>
         </ImageView>
 
-        <Button layoutX="12.0" layoutY="641.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="61.2" prefWidth="235.8" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Back">
+        <Button layoutX="12.0" layoutY="634.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="61.2" prefWidth="235.8" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Back">
             <font>
                 <Font size="24.0" />
             </font>
         </Button>
-        <ScrollPane fx:id="scrollPane" layoutX="112.0" layoutY="109.0" prefHeight="489.0" prefWidth="454.0" style="-fx-background-color: rgba(255, 255, 255, 0.7)rgba(255, 255, 255, 0.7); -fx-opacity: 0.7;" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css">
-            <content>
-                <VBox prefHeight="495.0" prefWidth="434.0" />
-            </content>
+        <ScrollPane fx:id="scrollPane" layoutX="100.0" layoutY="92.0" prefHeight="489.0" prefWidth="249.0" style="-fx-background-color: rgba(255, 255, 255, 0.7)rgba(255, 255, 255, 0.7); -fx-opacity: 0.7; -fx-background-radius: 20; -fx-border-radius: 40;" stylesheets="@../css/buttonStyles.css">
+         <effect>
+            <DropShadow spread="0.59">
+               <color>
+                  <Color red="0.1041666641831398" green="0.3118055462837219" blue="0.375" />
+               </color>
+            </DropShadow>
+         </effect>
         </ScrollPane>
-      <Button layoutX="775.0" layoutY="639.0" mnemonicParsing="false" onMouseClicked="#createNewDeck" prefHeight="62.0" prefWidth="236.0" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Create new deck">
+      <Button layoutX="811.0" layoutY="540.0" mnemonicParsing="false" onMouseClicked="#createNewDeck" prefHeight="62.0" prefWidth="236.0" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Create new deck">
          <font>
             <Font size="24.0" />
          </font>
       </Button>
-      <TextField fx:id="newDeckNameField" layoutX="444.0" layoutY="642.0" prefHeight="62.0" prefWidth="317.0" promptText="new deck name" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css">
+      <TextField fx:id="newDeckNameField" layoutX="470.0" layoutY="540.0" prefHeight="62.0" prefWidth="317.0" promptText="new deck name" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css">
          <font>
             <Font size="24.0" />
          </font>
       </TextField>
+      <Button layoutX="283.0" layoutY="634.0" mnemonicParsing="false" onMouseClicked="#deleteDeck" prefHeight="61.2" prefWidth="235.8" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Delete deck">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <Button layoutX="551.0" layoutY="634.0" mnemonicParsing="false" onMouseClicked="#editDeck" prefHeight="61.2" prefWidth="235.8" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Edit deck">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <Button layoutX="811.0" layoutY="635.0" mnemonicParsing="false" onMouseClicked="#setAsActiveDeck" prefHeight="61.2" prefWidth="235.8" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Set as active deck">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
     </children>
 </AnchorPane>

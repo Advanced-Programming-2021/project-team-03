@@ -1,5 +1,6 @@
 package model.user;
 
+import control.MainController;
 import control.databaseController.Database;
 import control.databaseController.DatabaseException;
 import model.card.Card;
@@ -9,6 +10,7 @@ import model.card.SpellAndTrap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Deck {
     private static final HashMap<String, Deck> allDecks = new HashMap<>();
@@ -71,7 +73,7 @@ public class Deck {
     }
 
     public void updateInDatabase() throws DatabaseException {
-        Database.save(this);
+        if (!MainController.initializing) Database.save(this);
     }
 
     public String generalOverview() {
@@ -88,9 +90,14 @@ public class Deck {
         return decksCardNames.get(deckType).contains(card.getCardName());
     }
 
-    public void removeCard(Card card, DeckType deckType) throws DatabaseException {
-        decks.get(deckType).remove(card);
-        decksCardNames.get(deckType).remove(card.getCardName());
+    public void removeCard(String cardName, DeckType deckType) throws DatabaseException {
+        for (Card card1 : decks.get(deckType)) {
+            if (card1.getCardName().equals(cardName)) {
+                decks.get(deckType).remove(card1);
+                break;
+            }
+        }
+        decksCardNames.get(deckType).remove(cardName);
         updateInDatabase();
     }
 
@@ -106,7 +113,7 @@ public class Deck {
     }
 
     public void addCard(ArrayList<Card> cards, DeckType deckType) throws DatabaseException {
-        cards.forEach(card -> {
+        cards.stream().filter(Objects::nonNull).forEach(card -> {
             decks.get(deckType).add(card.cloneForDeck());
             decksCardNames.get(deckType).add(card.getCardName());
         });
@@ -130,5 +137,20 @@ public class Deck {
 
     public int getNumberOfCards(DeckType deckType) {
         return decks.get(deckType).size();
+    }
+
+    public String showDeckSummary(DeckType deckType) {
+        StringBuilder showDeck = new StringBuilder();
+
+        showDeck.append("Deck: ").append(deckName).append("\n");
+        showDeck.append(deckType.getName());
+        showDeck.append(":\nMonsters: \n");
+        decks.get(deckType).stream().filter(card -> card instanceof Monster)
+                .forEach(card -> showDeck.append(card.getCardName()).append(", "));
+        showDeck.append("\n\nSpell and Traps: \n");
+        decks.get(deckType).stream().filter(card -> card instanceof SpellAndTrap)
+                .forEach(card -> showDeck.append(card.getCardName()).append(", "));
+
+        return showDeck.toString();
     }
 }

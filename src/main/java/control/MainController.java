@@ -114,6 +114,9 @@ public class MainController {
             case "Get map for graphic" -> getMapForGraphic(valueObject);
             case "Get player turn" -> getPlayerTurn(valueObject);
             case "Show all decks graphic" -> showAllDecksGraphic(valueObject);
+            case "Show deck graphic" -> showDeckGraphic(valueObject);
+            case "Show deck summary" -> showDeckSummary(valueObject);
+            case "Show all user cards" -> showAllUserCards(valueObject);
             case "Get phase" -> getPhase(valueObject);
             //endregion
 
@@ -737,6 +740,24 @@ public class MainController {
         return answerObject.toString();
     }
 
+    private String showDeckSummary(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+        String deckName = valueObject.getString("Deck name");
+        String deckType = valueObject.getString("Deck type");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (Deck.getByDeckName(deckName) == null) {
+            answerObject.put("Type", "Error")
+                    .put("Value", "deck with name " + deckName + " does not exist");
+        } else {
+            answerObject.put("Type", "Successful")
+                    .put("Value", Deck.getByDeckName(deckName).showDeckSummary(DeckType.valueOf(deckType.toUpperCase())));
+        }
+
+        return answerObject.toString();
+    }
+
     private String showAllDecksGraphic(JSONObject valueObject) {
         String token = valueObject.getString("Token");
 
@@ -764,6 +785,30 @@ public class MainController {
         return answerObject.toString();
     }
 
+    private String showDeckGraphic(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+        String deckName = valueObject.getString("Deck name");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (Deck.getByDeckName(deckName) == null)
+            answerObject.put("Type", "Error")
+                    .put("Value", "deck with name " + deckName + " does not exist");
+        else {
+            answerObject.put("Type", "Successful");
+            Deck deck = Deck.getByDeckName(deckName);
+            JSONObject deckJson = new JSONObject();
+            deckJson.put("Name", deck.getDeckName())
+                    .put("SideDeckNum", deck.getNumberOfCards(DeckType.SIDE))
+                    .put("MainDeckNum", deck.getNumberOfCards(DeckType.MAIN))
+                    .put("Valid", deck.isDeckValid())
+                    .put("MainDeck", deck.getCardNames(DeckType.MAIN))
+                    .put("SideDeck", deck.getCardNames(DeckType.SIDE));
+            answerObject.put("Deck", deckJson);
+        }
+        return answerObject.toString();
+    }
+
     private String showAllDecks(JSONObject valueObject) {
         String token = valueObject.getString("Token");
 
@@ -779,6 +824,18 @@ public class MainController {
             answerObject.put("Other deck", otherDecks);
         }
 
+        return answerObject.toString();
+    }
+
+    private String showAllUserCards(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else {
+            answerObject.put("Type", "Successful").put("Cards",
+                    User.getByUsername(onlineUsers.get(token)).getCards().stream().map(Card::getCardName).toArray());
+        }
         return answerObject.toString();
     }
 
@@ -798,8 +855,12 @@ public class MainController {
             answerObject.put("Type", "Error")
                     .put("Value", "card with name " + cardName + " does not exist in " + deckName + " deck");
         } else {
-            DeckController.getInstance().removeCardFromDeck(deckName, DeckType.valueOf(deckType.toUpperCase()), cardName);
-            answerObject.put("Type", "Successful").put("Value", cardName + " removed form deck successfully!");
+            try {
+                Deck.getByDeckName(deckName).removeCard(cardName, DeckType.valueOf(deckType.toUpperCase()));
+                answerObject.put("Type", "Successful").put("Value", cardName + " removed from deck successfully!");
+            } catch (DatabaseException e) {
+                answerObject.put("Type", "Error").put("Value", e.errorMessage);
+            }
         }
 
         return answerObject.toString();

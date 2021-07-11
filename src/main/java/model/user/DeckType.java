@@ -1,7 +1,7 @@
 package model.user;
 
 public enum DeckType {
-    MAIN("view.Main deck", 40, 60),
+    MAIN("Main deck", 40, 60),
     SIDE("Side deck", 0, 15);
 
     private final String name;
