@@ -212,8 +212,8 @@ class ViewDeck {
             label.setTextAlignment(TextAlignment.JUSTIFY);
             label.setAlignment(Pos.CENTER);
             label.setPadding(new Insets(15));
-            label.setMaxWidth(350);
-            label.setMaxHeight(470);
+            label.setMaxWidth(380);
+            label.setMaxHeight(450);
 
             label.setStyle("-fx-background-color: rgba(255, 255, 255, 0.7);" +
                     "-fx-border-radius: 30px;" +

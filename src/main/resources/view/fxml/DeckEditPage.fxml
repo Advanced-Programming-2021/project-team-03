@@ -18,7 +18,7 @@
                 <Image url="@../../assets/pageImages/DeckEditBackground.jpg" />
             </image>
         </ImageView>
-      <Pane layoutX="255.0" layoutY="13.0" prefHeight="490.0" prefWidth="805.0" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css">
+      <Pane fx:id="mainPane" layoutX="255.0" layoutY="13.0" prefHeight="490.0" prefWidth="805.0" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css">
          <children>
             <ImageView fx:id="main1" fitHeight="85.0" fitWidth="58.0" layoutX="23.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -321,7 +321,7 @@
             </ImageView>
          </children>
       </Pane>
-      <Pane layoutX="255.0" layoutY="509.0" prefHeight="202.0" prefWidth="805.0" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css">
+      <Pane fx:id="sidePane" layoutX="255.0" layoutY="509.0" prefHeight="202.0" prefWidth="805.0" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css">
          <children>
             <ImageView fx:id="side1" fitHeight="85.0" fitWidth="58.0" layoutX="23.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>

@@ -855,8 +855,12 @@ public class MainController {
             answerObject.put("Type", "Error")
                     .put("Value", "card with name " + cardName + " does not exist in " + deckName + " deck");
         } else {
-            DeckController.getInstance().removeCardFromDeck(deckName, DeckType.valueOf(deckType.toUpperCase()), cardName);
-            answerObject.put("Type", "Successful").put("Value", cardName + " removed form deck successfully!");
+            try {
+                Deck.getByDeckName(deckName).removeCard(cardName, DeckType.valueOf(deckType.toUpperCase()));
+                answerObject.put("Type", "Successful").put("Value", cardName + " removed from deck successfully!");
+            } catch (DatabaseException e) {
+                answerObject.put("Type", "Error").put("Value", e.errorMessage);
+            }
         }
 
         return answerObject.toString();

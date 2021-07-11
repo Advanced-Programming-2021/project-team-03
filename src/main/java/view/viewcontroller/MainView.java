@@ -152,7 +152,7 @@ public class MainView {
         value.put("Deck type", deckType);
         value.put("Card name", cardName);
         JSONObject messageToSendToControl = new JSONObject();
-        messageToSendToControl.put("Type", commandType); //Command type will be "Add card to deck" or "Delete card from deck"
+        messageToSendToControl.put("Type", commandType);
         messageToSendToControl.put("Value", value);
         return sendRequestToControl(messageToSendToControl);
     }
@@ -262,7 +262,6 @@ public class MainView {
         JSONObject messageToSendToControl = new JSONObject();
         messageToSendToControl.put("Type", "Get card Json")
                 .put("Value", value);
-        ;
 
         return sendRequestToControl(messageToSendToControl);
 

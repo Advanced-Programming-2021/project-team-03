@@ -59,14 +59,6 @@ public class DeckController {
         }
     }
 
-    public void removeCardFromDeck(String deckName, DeckType deckType, String cardName) {
-        try {
-            Deck.getByDeckName(deckName).removeCard(Card.getCardByName(cardName), deckType);
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-    }
-
     public String getUserActiveDeck(String username) {
         if (User.getByUsername(username).getActiveDeck() == null) return "No active deck\n";
         return User.getByUsername(username).getActiveDeck().generalOverview();

@@ -90,9 +90,14 @@ public class Deck {
         return decksCardNames.get(deckType).contains(card.getCardName());
     }
 
-    public void removeCard(Card card, DeckType deckType) throws DatabaseException {
-        decks.get(deckType).remove(card);
-        decksCardNames.get(deckType).remove(card.getCardName());
+    public void removeCard(String cardName, DeckType deckType) throws DatabaseException {
+        for (Card card1 : decks.get(deckType)) {
+            if (card1.getCardName().equals(cardName)) {
+                decks.get(deckType).remove(card1);
+                break;
+            }
+        }
+        decksCardNames.get(deckType).remove(cardName);
         updateInDatabase();
     }
 

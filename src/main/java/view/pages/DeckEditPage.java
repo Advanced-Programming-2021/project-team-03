@@ -1,23 +1,40 @@
 package view.pages;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import view.viewcontroller.MainView;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+enum CardSource {
+    USER_CARDS,
+    MAIN_DECK,
+    SIDE_DECK
+}
 
 public class DeckEditPage extends Application {
     private static Stage stage;
+    private static CardSource clipboardSource;
     private final String deckName = DeckMenuPage.selectedDeck;
     @FXML
     public ImageView main1;
@@ -98,19 +115,24 @@ public class DeckEditPage extends Application {
     public ArrayList<ImageView> mainCardImages;
     public ArrayList<ImageView> sideCardImages;
     public ArrayList<ImageView> userCardImages;
-    public JSONArray mainCards;
-    public JSONArray sideCards;
-    public ArrayList<String> userCards;
+    public List<String> mainCards;
+    public List<String> sideCards;
+    public List<String> userCards;
     public Label deckLabel;
     public Label mainLabel;
     public Label sideLabel;
     public ScrollPane scrollPane;
     public ImageView zoomedImage;
+    public Pane sidePane;
+    public Pane mainPane;
 
     private void updateDeck() {
         MainView view = MainView.getInstance();
         JSONObject answer = view.showDeck(deckName);
-        if (!answer.getString("Type").equals("Successful")) view.alertMaker(answer);
+        if (!answer.getString("Type").equals("Successful")) {
+            view.alertMaker(answer);
+            return;
+        }
 
         JSONObject deckJson = answer.getJSONObject("Deck");
 
@@ -124,23 +146,56 @@ public class DeckEditPage extends Application {
 
         zoomedImage.setImage(null);
 
-        mainCards = deckJson.getJSONArray("MainDeck");
-        sideCards = deckJson.getJSONArray("SideDeck");
+        mainCards = deckJson.getJSONArray("MainDeck").toList().stream().map(Object::toString).collect(Collectors.toList());
+        sideCards = deckJson.getJSONArray("SideDeck").toList().stream().map(Object::toString).collect(Collectors.toList());
+        userCards = MainView.getInstance().getUserCards().getJSONArray("Cards")
+                .toList().stream().map(Object::toString).collect(Collectors.toList());
+
 
         setCardImages(mainCards, mainCardImages);
         setCardImages(sideCards, sideCardImages);
 
-        for (int i = mainCards.length(); i < 60; i++)
+        for (int i = mainCards.size(); i < 60; i++)
             mainCardImages.get(i).setImage(null);
-        for (int i = sideCards.length(); i < 15; i++)
+        for (int i = sideCards.size(); i < 15; i++)
             sideCardImages.get(i).setImage(null);
 
+        for (String card : mainCards) userCards.remove(card);
+        for (String card : sideCards) userCards.remove(card);
+
+        userCardImages = new ArrayList<>();
+        for (int i = 0; i < userCards.size(); i++) userCardImages.add(new ImageView());
+        setCardImages(userCards, userCardImages);
+
+        VBox vbox = new VBox();
+        for (ImageView cardImage : userCardImages) {
+            cardImage.setPreserveRatio(true);
+            cardImage.setFitWidth(200);
+            cardImage.setOnMouseEntered(event -> zoomedImage.setImage(cardImage.getImage()));
+            cardImage.setOnMouseExited(event -> zoomedImage.setImage(null));
+
+            cardImage.setOnDragDetected(event -> {
+                Dragboard db = cardImage.startDragAndDrop(TransferMode.MOVE);
+                ClipboardContent content = new ClipboardContent();
+                clipboardSource = CardSource.USER_CARDS;
+                content.putString(userCards.get(userCardImages.indexOf(cardImage)));
+                db.setContent(content);
+
+                event.consume();
+            });
+
+            vbox.getChildren().add(cardImage);
+        }
+        vbox.setSpacing(5);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setPadding(new Insets(5));
+        scrollPane.setContent(vbox);
     }
 
-    private void setCardImages(JSONArray cards, ArrayList<ImageView> cardImages) {
-        for (int i = 0; i < cards.length(); i++) {
+    private void setCardImages(List<String> cards, ArrayList<ImageView> cardImages) {
+        for (int i = 0; i < cards.size(); i++) {
             try {
-                cardImages.get(i).setImage(MainView.getInstance().getCardImage(cards.get(i).toString()));
+                cardImages.get(i).setImage(MainView.getInstance().getCardImage(cards.get(i)));
             } catch (Exception e) {
                 cardImages.get(i).setImage(null);
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -247,15 +302,178 @@ public class DeckEditPage extends Application {
         allCards.addAll(sideCardImages);
 
         for (ImageView card : allCards) {
-            card.setOnMouseEntered(event -> {
-                zoomedImage.setImage(card.getImage());
-            });
+            card.setOnMouseEntered(event -> zoomedImage.setImage(card.getImage()));
 
-            card.setOnMouseExited(event -> {
-                zoomedImage.setImage(null);
+            card.setOnMouseExited(event -> zoomedImage.setImage(null));
+        }
+
+        for (ImageView cardImage : mainCardImages) {
+            cardImage.setOnDragDetected(event -> {
+                Dragboard db = cardImage.startDragAndDrop(TransferMode.MOVE);
+                ClipboardContent content = new ClipboardContent();
+                clipboardSource = CardSource.MAIN_DECK;
+                content.putString(mainCards.get(mainCardImages.indexOf(cardImage)));
+                db.setContent(content);
+
+                event.consume();
             });
         }
 
+        for (ImageView cardImage : sideCardImages) {
+            cardImage.setOnDragDetected(event -> {
+                Dragboard db = cardImage.startDragAndDrop(TransferMode.MOVE);
+                ClipboardContent content = new ClipboardContent();
+                clipboardSource = CardSource.SIDE_DECK;
+                content.putString(sideCards.get(sideCardImages.indexOf(cardImage)));
+                db.setContent(content);
+
+                event.consume();
+            });
+        }
+        scrollPane.setPadding(new Insets(5));
+        scrollPane.setCenterShape(true);
+
+        scrollPane.setOnDragEntered(event -> {
+            if (event.getDragboard().hasString() &&
+                    clipboardSource != null && clipboardSource != CardSource.USER_CARDS) {
+                scrollPane.setStyle("-fx-border-width: 7;-fx-border-radius: 20;-fx-border-color: green");
+            }
+            event.consume();
+        });
+
+        scrollPane.setOnDragExited(event -> {
+            scrollPane.setStyle("-fx-border-width: 0;");
+            event.consume();
+        });
+
+        scrollPane.setOnDragOver(event -> {
+            if (event.getDragboard().hasString() &&
+                    clipboardSource != null && clipboardSource != CardSource.USER_CARDS) {
+                event.acceptTransferModes(TransferMode.MOVE);
+            }
+            event.consume();
+        });
+
+        scrollPane.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (db.hasString() && clipboardSource != null && clipboardSource != CardSource.USER_CARDS) {
+                String cardName = db.getString();
+                String deckType = clipboardSource == CardSource.MAIN_DECK ? "Main" : "Side";
+
+                JSONObject answer = MainView.getInstance()
+                        .addOrDeleteCardFromDeck(deckName, deckType, cardName, "Remove card from deck");
+                if (!answer.getString("Type").equals("Successful")) MainView.getInstance().alertMaker(answer);
+                updateDeck();
+
+                clipboardSource = null;
+                success = true;
+            }
+            event.setDropCompleted(success);
+            event.consume();
+        });
+
+        mainPane.setOnDragEntered(event -> {
+            if (event.getDragboard().hasString() &&
+                    clipboardSource != null && clipboardSource != CardSource.MAIN_DECK) {
+                mainPane.setStyle("-fx-border-width: 7;-fx-border-radius: 20;-fx-border-color: green");
+            }
+            event.consume();
+        });
+
+        mainPane.setOnDragExited(event -> {
+            mainPane.setStyle("-fx-border-width: 0;");
+            event.consume();
+        });
+
+        mainPane.setOnDragOver(event -> {
+            if (event.getDragboard().hasString() &&
+                    clipboardSource != null && clipboardSource != CardSource.MAIN_DECK) {
+                event.acceptTransferModes(TransferMode.MOVE);
+            }
+            event.consume();
+        });
+
+        mainPane.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (mainCards.size() >= 60) deckFullAlert();
+            if (db.hasString() && clipboardSource != null
+                    && clipboardSource != CardSource.MAIN_DECK && mainCards.size() < 60) {
+                String cardName = db.getString();
+
+                if (clipboardSource == CardSource.SIDE_DECK) {
+                    JSONObject answer = MainView.getInstance()
+                            .addOrDeleteCardFromDeck(deckName, "Side", cardName, "Remove card from deck");
+                    if (!answer.getString("Type").equals("Successful")) MainView.getInstance().alertMaker(answer);
+                }
+
+                JSONObject answer = MainView.getInstance()
+                        .addOrDeleteCardFromDeck(deckName, "Main", cardName, "Add card to deck");
+                if (!answer.getString("Type").equals("Successful")) MainView.getInstance().alertMaker(answer);
+                updateDeck();
+
+                clipboardSource = null;
+                success = true;
+            }
+
+            event.setDropCompleted(success);
+            event.consume();
+        });
+
+        sidePane.setOnDragEntered(event -> {
+            if (event.getDragboard().hasString() &&
+                    clipboardSource != null && clipboardSource != CardSource.SIDE_DECK) {
+                sidePane.setStyle("-fx-border-width: 7;-fx-border-radius: 20;-fx-border-color: green");
+            }
+            event.consume();
+        });
+
+        sidePane.setOnDragExited(event -> {
+            sidePane.setStyle("-fx-border-width: 0;");
+            event.consume();
+        });
+
+        sidePane.setOnDragOver(event -> {
+            if (event.getDragboard().hasString() &&
+                    clipboardSource != null && clipboardSource != CardSource.SIDE_DECK) {
+                event.acceptTransferModes(TransferMode.MOVE);
+            }
+            event.consume();
+        });
+
+        sidePane.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            if (sideCards.size() >= 15) deckFullAlert();
+            boolean success = false;
+            if (db.hasString() && clipboardSource != null &&
+                    clipboardSource != CardSource.SIDE_DECK && sideCards.size() < 15) {
+                String cardName = db.getString();
+
+                if (clipboardSource == CardSource.MAIN_DECK) {
+                    JSONObject answer = MainView.getInstance()
+                            .addOrDeleteCardFromDeck(deckName, "Main", cardName, "Remove card from deck");
+                    if (!answer.getString("Type").equals("Successful")) MainView.getInstance().alertMaker(answer);
+                }
+
+                JSONObject answer = MainView.getInstance()
+                        .addOrDeleteCardFromDeck(deckName, "Side", cardName, "Add card to deck");
+                if (!answer.getString("Type").equals("Successful")) MainView.getInstance().alertMaker(answer);
+                updateDeck();
+
+                clipboardSource = null;
+                success = true;
+            }
+            event.setDropCompleted(success);
+            event.consume();
+        });
+
         updateDeck();
+    }
+
+    private void deckFullAlert() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText("Your deck is full!");
+        alert.show();
     }
 }
