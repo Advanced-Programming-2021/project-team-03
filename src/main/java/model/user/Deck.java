@@ -1,5 +1,6 @@
 package model.user;
 
+import control.MainController;
 import control.databaseController.Database;
 import control.databaseController.DatabaseException;
 import model.card.Card;
@@ -72,7 +73,7 @@ public class Deck {
     }
 
     public void updateInDatabase() throws DatabaseException {
-        Database.save(this);
+        if (!MainController.initializing) Database.save(this);
     }
 
     public String generalOverview() {
