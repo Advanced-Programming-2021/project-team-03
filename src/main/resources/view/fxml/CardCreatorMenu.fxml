@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.CardCreatorPage">
+    <children>
+        <ImageView fitHeight="720.0" fitWidth="1080.0" pickOnBounds="true">
+            <Image url="@../../assets/pageImages/CardCreatorBackground.jpg" />
+        </ImageView>
+        <Button layoutX="521.0" layoutY="646.0" mnemonicParsing="false" onMouseClicked="#createCard" prefHeight="61.2" prefWidth="235.8" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Create Card">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Button>
+        <Button layoutX="775.0" layoutY="646.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="61.2" prefWidth="235.8" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Back">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Button>
+      <ImageView fitHeight="723.0" fitWidth="501.0" layoutX="-4.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../assets/pageImages/BlankCard.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="45.0" layoutY="29.0" prefHeight="57.0" prefWidth="121.0" text="Name:">
+         <font>
+            <Font size="29.0" />
+         </font>
+      </Label>
+      <TextField alignment="CENTER" layoutX="180.0" layoutY="33.0" prefHeight="40.0" prefWidth="263.0" promptText="enter card name" style="-fx-background-color: rgba(255,255,255,0.5); -fx-border-radius: 10; -fx-background-radius: 10;">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </TextField>
+      <Slider fx:id="attackSlider" layoutX="44.0" layoutY="570.0" majorTickUnit="1000.0" max="10000.0" minorTickCount="100" prefHeight="33.0" prefWidth="400.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+      <Slider fx:id="defenceSlider" layoutX="44.0" layoutY="636.0" majorTickUnit="1000.0" max="10000.0" minorTickCount="100" prefHeight="33.0" prefWidth="400.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+      <Label fx:id="attackLabel" alignment="CENTER" layoutX="143.0" layoutY="546.0" prefHeight="23.0" prefWidth="201.0" text="Attack: ">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="defenceLabel" alignment="CENTER" layoutX="143.0" layoutY="613.0" prefHeight="23.0" prefWidth="201.0" text="Defence: ">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <ChoiceBox fx:id="attributeChoiceBox" layoutX="237.0" layoutY="246.0" prefHeight="25.0" prefWidth="150.0" />
+      <Slider fx:id="levelSlider" layoutX="78.0" layoutY="174.0" majorTickUnit="1.0" max="20.0" min="1.0" minorTickCount="1" prefHeight="38.0" prefWidth="334.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+      <Label alignment="CENTER" layoutX="145.0" layoutY="145.0" prefHeight="23.0" prefWidth="201.0" text="Level: ">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER_RIGHT" contentDisplay="TOP" layoutX="119.0" layoutY="248.0" prefHeight="23.0" prefWidth="80.0" text="Attribute">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Separator layoutX="57.0" layoutY="223.0" prefHeight="5.0" prefWidth="374.0" />
+      <Label alignment="CENTER_RIGHT" layoutX="87.0" layoutY="294.0" prefHeight="23.0" prefWidth="114.0" text="Monster Type">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Separator layoutX="215.0" layoutY="226.0" opacity="0.55" orientation="VERTICAL" prefHeight="104.0" prefWidth="1.0" />
+      <ChoiceBox fx:id="monsterTypeChoiceBox" layoutX="237.0" layoutY="292.0" prefHeight="25.0" prefWidth="150.0" />
+      <Label layoutX="67.0" layoutY="337.0" prefHeight="23.0" prefWidth="114.0" text="Description">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Separator layoutX="57.0" layoutY="328.0" prefHeight="5.0" prefWidth="374.0" />
+      <TextArea fx:id="descriptionText" layoutX="66.0" layoutY="362.0" prefHeight="140.0" prefWidth="357.0" />
+      <Label fx:id="priceLabel" alignment="CENTER" layoutX="521.0" layoutY="573.0" prefHeight="62.0" prefWidth="491.0" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Calculated price: ">
+         <padding>
+            <Insets left="20.0" right="20.0" />
+         </padding>
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+    </children>
+</AnchorPane>
