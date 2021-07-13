@@ -48,6 +48,6 @@
                 </RadialGradient>
             </fill>
         </Text>
-      <ScrollPane layoutX="10.0" layoutY="135.0" opacity="0.8" prefHeight="250.0" prefWidth="380.0" />
+      <ScrollPane fx:id="scrollBar" layoutX="10.0" layoutY="135.0" opacity="0.8" prefHeight="250.0" prefWidth="380.0" />
     </children>
 </AnchorPane>
