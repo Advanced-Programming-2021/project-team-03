@@ -58,4 +58,8 @@ public class MainPage extends Application {
     public void importExport(MouseEvent mouseEvent) throws Exception {
         new ImportExportPage().start(stage);
     }
+
+    public void cardCreator(MouseEvent mouseEvent) {
+
+    }
 }

@@ -61,5 +61,12 @@
                 <Font name="Baskerville Old Face" size="32.4"/>
             </font>
         </Button>
+        <Button layoutX="418.0" layoutY="180.0" mnemonicParsing="false" onMouseClicked="#cardCreator" prefHeight="62.0"
+                prefWidth="237.0" styleClass="mainPageButtons" stylesheets="@../css/buttonStyles.css"
+                text="Card Creator" textAlignment="CENTER">
+            <font>
+                <Font name="Baskerville Old Face" size="32.4"/>
+            </font>
+        </Button>
     </children>
 </AnchorPane>
