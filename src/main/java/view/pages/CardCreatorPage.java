@@ -32,11 +32,14 @@ public class CardCreatorPage extends Application {
     public Slider attackSlider;
     public Label levelLabel;
     public TextField cardNameField;
+    public Label taxLabel;
+    public Label balanceLabel;
 
     private int level = 1;
     private int attack = 0;
     private int defence = 0;
     private int price = 0;
+    private int balance;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -56,6 +59,8 @@ public class CardCreatorPage extends Application {
         levelSlider.valueProperty()
                 .addListener((source, oldValue, newValue) -> {
                     level = (int) levelSlider.getValue();
+                    attackSlider.setMax(level * 1000 + 2000);
+                    defenceSlider.setMax(level * 1000 + 2000);
                     updateLevel();
                     updatePrice();
                 });
@@ -79,6 +84,14 @@ public class CardCreatorPage extends Application {
 
         attributeChoiceBox.valueProperty()
                 .addListener((source, oldValue, newValue) -> updatePrice());
+
+        levelSlider.setBlockIncrement(1);
+        levelSlider.setMajorTickUnit(1);
+        levelSlider.setMinorTickCount(0);
+        levelSlider.setShowTickLabels(true);
+        levelSlider.setSnapToTicks(true);
+
+        resetFields();
     }
 
     private void updateLevel() {
@@ -86,7 +99,7 @@ public class CardCreatorPage extends Application {
     }
 
     private void updatePrice() {
-        price = (int) (((attack + defence) / 1.1) * Math.exp(level / 6.0));
+        price = (int) (((attack + defence) / 1.1) * Math.exp(level / 10.0));
         if (monsterTypeChoiceBox.getValue() != null &&
                 monsterTypeChoiceBox.getValue().toString()
                         .equals("Beast Warrior")) price += 500;
@@ -95,6 +108,9 @@ public class CardCreatorPage extends Application {
                         .equals("Fire")) price += 500;
 
         priceLabel.setText("Calculated price: " + price);
+        taxLabel.setText("Your Tax (10%): " + (price / 10));
+        if (balance < price / 10) balanceLabel.setStyle("-fx-text-fill: red");
+        else balanceLabel.setStyle("-fx-text-fill: green");
     }
 
     private void updateDefence() {
@@ -103,6 +119,11 @@ public class CardCreatorPage extends Application {
 
     private void updateAttack() {
         attackLabel.setText("Attack: " + attack);
+    }
+
+    private void updateBalance() {
+        balance = MainView.getInstance().getBalance();
+        balanceLabel.setText("Your Balance: " + balance);
     }
 
     public void back(MouseEvent mouseEvent) throws Exception {
@@ -143,7 +164,6 @@ public class CardCreatorPage extends Application {
         monsterCSV.setCardID("0");
 
         Alert alert;
-        int balance = view.getBalance();
         int amount = price / 10;
 
         if (balance < amount) {
@@ -190,6 +210,7 @@ public class CardCreatorPage extends Application {
         updateDefence();
         updateAttack();
         updateLevel();
+        updateBalance();
         updatePrice();
         cardNameField.clear();
         defenceSlider.adjustValue(0);
@@ -198,5 +219,7 @@ public class CardCreatorPage extends Application {
         descriptionText.clear();
         attributeChoiceBox.setValue(null);
         monsterTypeChoiceBox.setValue(null);
+        attackSlider.setMax(3000);
+        defenceSlider.setMax(3000);
     }
 }

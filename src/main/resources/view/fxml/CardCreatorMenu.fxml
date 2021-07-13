@@ -56,7 +56,7 @@
          </font>
       </Label>
       <ChoiceBox fx:id="attributeChoiceBox" layoutX="237.0" layoutY="246.0" prefHeight="25.0" prefWidth="150.0" />
-      <Slider fx:id="levelSlider" layoutX="78.0" layoutY="174.0" majorTickUnit="1.0" max="20.0" min="1.0" minorTickCount="1" prefHeight="38.0" prefWidth="334.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+      <Slider fx:id="levelSlider" blockIncrement="1.0" layoutX="78.0" layoutY="174.0" majorTickUnit="1.0" max="8.0" min="1.0" minorTickCount="1" prefHeight="38.0" prefWidth="334.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
       <Label fx:id="levelLabel" alignment="CENTER" layoutX="145.0" layoutY="145.0" prefHeight="23.0" prefWidth="201.0" text="Level: 1">
          <font>
             <Font size="18.0" />
@@ -82,7 +82,23 @@
       </Label>
       <Separator layoutX="57.0" layoutY="328.0" prefHeight="5.0" prefWidth="374.0" />
       <TextArea fx:id="descriptionText" layoutX="66.0" layoutY="362.0" prefHeight="140.0" prefWidth="357.0" />
-      <Label fx:id="priceLabel" alignment="CENTER" layoutX="521.0" layoutY="573.0" prefHeight="62.0" prefWidth="491.0" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Calculated price: ">
+      <Label fx:id="priceLabel" alignment="CENTER" layoutX="521.0" layoutY="436.0" prefHeight="62.0" prefWidth="491.0" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Calculated Price: ">
+         <padding>
+            <Insets left="20.0" right="20.0" />
+         </padding>
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="taxLabel" alignment="CENTER" layoutX="521.0" layoutY="505.0" prefHeight="62.0" prefWidth="491.0" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Your Tax (10%): ">
+         <padding>
+            <Insets left="20.0" right="20.0" />
+         </padding>
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="balanceLabel" alignment="CENTER" layoutX="521.0" layoutY="574.0" prefHeight="62.0" prefWidth="491.0" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Balance: ">
          <padding>
             <Insets left="20.0" right="20.0" />
          </padding>
