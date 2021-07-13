@@ -535,14 +535,89 @@ public class GamePage extends Application {
                 }
             });
         }
+        playerFieldCard.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if (playerFieldCard.isFull()) {
+                    clickedOnPlayerFieldCard();
+                }
+            }
+        });
+    }
+
+    private void clickedOnPlayerFieldCard() {
+        try {
+            selectCard(playerFieldCard.getOwner(), playerFieldCard.getType(), playerFieldCard.getPosition());
+            activeSpell();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void clickedOnPlayerMonsters(CardView cardView, MouseEvent mouseEvent) {
-        //TODO
+        String phase = MainView.getInstance().getPhase();
+        if (phase.equals("BATTLE")){
+
+        }else {
+            if (mouseEvent.getButton() == MouseButton.SECONDARY) { //Right click
+                selectCard(cardView.getOwner(), cardView.getType(), cardView.getPosition());
+                setMonsterPosition(cardView);
+            } else if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                selectCard(cardView.getOwner(), cardView.getType(), cardView.getPosition());
+                filipSummonMonster();
+            }
+        }
+    }
+
+    private void setMonsterPosition(CardView cardView) {
+        Double rotate = cardView.getRotate();
+        JSONObject answer;
+        if (rotate < 10){ //now attack
+            answer = MainView.getInstance().setPosition("Defense");
+        }else { //now defence
+            answer = MainView.getInstance().setPosition("Attack");
+        }
+        String type = answer.getString("Type");
+        if (type.equals("Successful")) {
+            Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/SetPosition.wav")).toExternalForm());
+            if (mediaPlayer != null){
+                mediaPlayer.stop();
+            }
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+            refreshMap();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(answer.getString("Value"));
+            alert.show();
+        }
+    }
+
+    private void filipSummonMonster() {
+        JSONObject answer = MainView.getInstance().filipSummonMonster();
+        String type = answer.getString("Type");
+        if (type.equals("Successful")) {
+            Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/SummonMonster.wav")).toExternalForm());
+            if (mediaPlayer != null){
+                mediaPlayer.stop();
+            }
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+            refreshMap();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(answer.getString("Value"));
+            alert.show();
+        }
     }
 
     private void clickedOnPlayerSpells(CardView cardView, MouseEvent mouseEvent) {
-        //TODO
+        try {
+            selectCard(cardView.getOwner(), cardView.getType(), cardView.getPosition());
+            activeSpell();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void clickedOnPlayerHand(CardView cardView, MouseEvent mouseEvent) {

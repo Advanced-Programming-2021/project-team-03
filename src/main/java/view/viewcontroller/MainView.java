@@ -432,6 +432,25 @@ public class MainView {
         messageToSendToControl.put("Value", value);
         return sendRequestToControl(messageToSendToControl);
     }
+
+    public JSONObject filipSummonMonster() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Flip summon");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
+    public JSONObject setPosition(String positionMode) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Mode", positionMode);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Set position");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
     //endregion
 
     //region ShopMenuPage
