@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.StartPage">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.StartPage">
     <children>
         <ImageView fitHeight="720.0" fitWidth="1080.0" pickOnBounds="true">
             <image>
@@ -18,7 +18,7 @@
                 <Font name="Baskerville Old Face" size="25.2" />
             </font>
         </Button>
-        <Button fx:id="loginButton" layoutX="61.2" layoutY="370.8" mnemonicParsing="false" onMouseClicked="#login" prefHeight="61.2" prefWidth="235.8" styleClass="startButtons" stylesheets="@../css/buttonStyles.css" text="LOGIN">
+        <Button layoutX="61.2" layoutY="370.8" mnemonicParsing="false" onMouseClicked="#login" prefHeight="61.2" prefWidth="235.8" styleClass="startButtons" stylesheets="@../css/buttonStyles.css" text="LOGIN">
             <font>
                 <Font name="Baskerville Old Face" size="25.2" />
             </font>
@@ -36,5 +36,10 @@
                 <Reflection bottomOpacity="0.15" fraction="0.7" />
             </effect>
         </Text>
+        <Button fx:id="muteButton" layoutX="820.0" layoutY="50.0" mnemonicParsing="false" onMouseClicked="#mute" prefHeight="61.2" prefWidth="235.8" styleClass="startButtons" stylesheets="@../css/buttonStyles.css" text="MUTE">
+            <font>
+                <Font name="Baskerville Old Face" size="25.2" />
+            </font>
+        </Button>
     </children>
 </AnchorPane>
