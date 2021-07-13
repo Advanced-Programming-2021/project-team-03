@@ -46,8 +46,10 @@ public class Board {
     }
 
     public void addCardFromRemainingToInHandCards() {
-        inHandCards.add(remainingCards.get(0));
-        remainingCards.remove(0);
+        if (inHandCards.size() < 6) {
+            inHandCards.add(remainingCards.get(0));
+            remainingCards.remove(0);
+        }
     }
 
     private void addStartingCardsToInHandCards() {
