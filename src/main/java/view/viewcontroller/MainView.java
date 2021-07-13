@@ -538,4 +538,17 @@ public class MainView {
         if (findMatches) regexMatcher.find();
     }
     //end region
+
+    public String getCardType(String cardName) throws Exception {
+        JSONObject value = new JSONObject();
+        value.put("Card Name", cardName);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Get Card Type");
+        messageToSendToControl.put("Value", value);
+        JSONObject answer = sendRequestToControl(messageToSendToControl);
+        if (answer.getString("Value").equals("Card not found"))
+            throw new Exception();
+        else
+            return answer.getString("Value");
+    }
 }

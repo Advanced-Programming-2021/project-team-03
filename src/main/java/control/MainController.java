@@ -118,11 +118,25 @@ public class MainController {
             case "Show all user cards" -> showAllUserCards(valueObject);
             case "Get phase" -> getPhase(valueObject);
             case "Show opponent graveyard" -> showOpponentGraveyard(valueObject);
+            case "Get Card Type" -> getCardType(valueObject);
             //endregion
-
 
             default -> error();
         };
+    }
+
+    private String getCardType(JSONObject valueObject) {
+        String cardName = valueObject.getString("Card Name");
+
+        JSONObject answerObject = new JSONObject();
+        Card card = Card.getCardByName(cardName);
+        if (card instanceof Monster)
+            answerObject.put("Value", "Monster");
+        else if (card instanceof SpellAndTrap)
+            answerObject.put("Value", "Spell");
+        else answerObject.put("Value", "Card not found");
+
+        return answerObject.toString();
     }
 
     private String showOpponentGraveyard(JSONObject valueObject) {

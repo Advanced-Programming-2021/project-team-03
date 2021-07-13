@@ -7,9 +7,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import view.Main;
 import view.viewcontroller.MainView;
 
 public class Cheat extends Application {
@@ -27,6 +30,7 @@ public class Cheat extends Application {
         cheatWindow.setResizable(false);
         cheatWindow.initModality(Modality.APPLICATION_MODAL);
         cheatWindow.showAndWait();
+
     }
 
     public void submit(ActionEvent event) {
