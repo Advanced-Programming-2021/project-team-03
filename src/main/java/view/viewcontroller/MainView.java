@@ -460,6 +460,16 @@ public class MainView {
         return 0;
     }
 
+    public JSONObject reduceBalance(int amount) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Amount", amount);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Reduce balance");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
     public JSONObject buyCard(String cardName) {
         JSONObject value = new JSONObject();
         value.put("Token", token);
@@ -494,7 +504,7 @@ public class MainView {
         return success;
     }
 
-    private String toEnumCase(String string) {
+    public String toEnumCase(String string) {
         return string.toUpperCase()
                 .replace(' ', '_')
                 .replace('-', '_')
