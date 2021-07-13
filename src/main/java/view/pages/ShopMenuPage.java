@@ -4,21 +4,29 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Cursor;
+import javafx.scene.ImageCursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Light;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import view.viewcontroller.MainView;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -26,6 +34,7 @@ public class ShopMenuPage extends Application {
     private static Stage stage;
 
     @FXML
+    private Scene scene;
     public Text balance;
     public Text messageText;
     public ImageView I1;
@@ -66,19 +75,23 @@ public class ShopMenuPage extends Application {
     private Label[] priceLabels = new Label[6];
     private Label[] cardNumberLabels = new Label[6];
     private int pageIndex = 0;
+    private Image canNotBuyIcon = new Image(String.valueOf(getClass().getResource("/assets/icon/canNotBuyIcon.png")));
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent startingPane = FXMLLoader.load(getClass().getResource("/view/fxml/ShopMenu.fxml"));
-        primaryStage.setScene(new Scene(startingPane));
+        this.scene = new Scene(startingPane);
+        primaryStage.setScene(scene);
         stage = primaryStage;
     }
 
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
         loadAllCards();
         loadStartingTextsAndImages();
         setAllImagesOnMouseClickedFunction();
+        setAllImagesOnMouseEnteredFunction();
+        setAllImagesOnMouseExitedFunction();
         loadSixCard();
         loadBalance();
     }
@@ -201,11 +214,43 @@ public class ShopMenuPage extends Application {
         for (int i = 0; i < 6; i++) {
             ImageView imageView = cardImages[i];
             int finalI = i;
-            imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
+            imageView.setOnMouseClicked(mouseEvent -> {
+                int cardIndex = pageIndex * 6 + finalI;
+                ShopCard card = allCards.get(cardIndex);
+                if (card.getPrice() <= Integer.parseInt(balance.getText())){
                     buyCard(finalI);
                 }
+            });
+        }
+    }
+
+    private void setAllImagesOnMouseEnteredFunction(){
+        for (int i = 0; i < 6; i++) {
+            ImageView imageView = cardImages[i];
+            int finalI = i;
+            imageView.setOnMouseEntered(mouseEvent -> {
+                int cardIndex = pageIndex * 6 + finalI;
+                ShopCard card = allCards.get(cardIndex);
+                if (card.getPrice() > Integer.parseInt(balance.getText())){
+                    stage.getScene().setCursor(new ImageCursor(canNotBuyIcon));
+                }
+
+                card.popup.setX(mouseEvent.getScreenX() + 20);
+                card.popup.setY(mouseEvent.getScreenY() + 20);
+                card.popup.show(stage);
+            });
+        }
+    }
+
+    private void setAllImagesOnMouseExitedFunction(){
+        for (int i = 0; i < 6; i++) {
+            ImageView imageView = cardImages[i];
+            int finalI = i;
+            imageView.setOnMouseExited(mouseEvent -> {
+                stage.getScene().setCursor(Cursor.DISAPPEAR);
+                int cardIndex = pageIndex * 6 + finalI;
+                ShopCard card = allCards.get(cardIndex);
+                card.popup.hide();
             });
         }
     }
@@ -247,9 +292,34 @@ class ShopCard {
 
     private String name;
     private int price;
+    public final Popup popup;
 
     public ShopCard(String name, int price) {
         this.name = name;
         this.price = price;
+        popup = setPopup();
+    }
+
+    private Popup setPopup() {
+        Popup newPopup = new Popup();
+        JSONObject answer = MainView.getInstance().showCard(name);
+
+        if (answer.getString("Type").equals("Successful")) {
+            Label label = new Label(answer.getString("Value"));
+            label.setWrapText(true);
+            label.setTextAlignment(TextAlignment.JUSTIFY);
+            label.setAlignment(Pos.CENTER);
+            label.setPadding(new Insets(15));
+            label.setMaxWidth(250);
+            label.setMaxHeight(300);
+
+            label.setStyle("-fx-background-color: rgba(255, 255, 255, 0.7);" +
+                    "-fx-border-radius: 30px;" +
+                    "-fx-background-radius: 30px;" +
+                    "-fx-font-size: 14px");
+
+            newPopup.getContent().add(label);
+        }
+        return newPopup;
     }
 }

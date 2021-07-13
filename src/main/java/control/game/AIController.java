@@ -255,6 +255,7 @@ public class AIController {
                 } else {
                     board.setFieldCard(gameUpdate, spellAndTrap);
                 }
+                board.removeCardFromHand(spellAndTrap);
             } else {
                 board.setSpellAndTrapsInField(spellAndTrap);
             }

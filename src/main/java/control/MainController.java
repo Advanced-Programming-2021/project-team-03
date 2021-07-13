@@ -17,6 +17,7 @@ import model.user.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import view.View;
+import view.viewcontroller.MainView;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -102,7 +103,6 @@ public class MainController {
             case "Next phase" -> endPhaseCommand(valueObject);
             case "Show map" -> showMap(valueObject);
 
-
             //region Graphic requests
             case "Get username by token" -> getUsernameByToken(valueObject);
             case "Get nickname by token" -> getNicknameByToken(valueObject);
@@ -118,11 +118,39 @@ public class MainController {
             case "Show deck summary" -> showDeckSummary(valueObject);
             case "Show all user cards" -> showAllUserCards(valueObject);
             case "Get phase" -> getPhase(valueObject);
+            case "Show opponent graveyard" -> showOpponentGraveyard(valueObject);
+            case "Get Card Type" -> getCardType(valueObject);
+            case "Reduce balance" -> reduceBalance(valueObject);
             //endregion
-
 
             default -> error();
         };
+    }
+
+    private String getCardType(JSONObject valueObject) {
+        String cardName = valueObject.getString("Card Name");
+
+        JSONObject answerObject = new JSONObject();
+        Card card = Card.getCardByName(cardName);
+        if (card instanceof Monster)
+            answerObject.put("Value", "Monster");
+        else if (card instanceof SpellAndTrap)
+            answerObject.put("Value", "Spell");
+        else answerObject.put("Value", "Card not found");
+
+        return answerObject.toString();
+    }
+
+    private String showOpponentGraveyard(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else {
+            answerObject.put("Type", "Graveyard")
+                    .put("Value", GameController.getInstance().getOpponentGraveyard());
+        }
+        return answerObject.toString();
     }
 
     private String getPhase(JSONObject valueObject) {
@@ -675,6 +703,32 @@ public class MainController {
                 cardsArray.put(card.getPrice() + ": " + card.getCardName());
             }
             answerObject.put("Value", cardsArray);
+        }
+
+        return answerObject.toString();
+    }
+
+    private String reduceBalance(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+        int amount = valueObject.getInt("Amount");
+        User user = User.getByUsername(onlineUsers.get(token));
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else if (user.getBalance() < amount) {
+            answerObject.put("Type", "Error")
+                    .put("Value", "Not enough balance to pay for this.\n"+
+                            "Price: " + amount +
+                            "\nYour balance: " + user.getBalance() + " (-" + (amount - user.getBalance()) + ")");
+        } else {
+            try {
+                user.increaseBalance(-amount);
+                answerObject.put("Type", "Successful")
+                        .put("Value", "User balance successfully changed");
+            } catch (DatabaseException e) {
+                answerObject.put("Type", "Error")
+                        .put("Value", e.errorMessage);
+            }
         }
 
         return answerObject.toString();

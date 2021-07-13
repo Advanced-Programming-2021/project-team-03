@@ -46,8 +46,10 @@ public class Board {
     }
 
     public void addCardFromRemainingToInHandCards() {
-        inHandCards.add(remainingCards.get(0));
-        remainingCards.remove(0);
+        if (inHandCards.size() < 6) {
+            inHandCards.add(remainingCards.get(0));
+            remainingCards.remove(0);
+        }
     }
 
     private void addStartingCardsToInHandCards() {
@@ -78,7 +80,7 @@ public class Board {
 
     public void setFieldCard(Update gameUpdate, SpellAndTrap fieldCard) {
         if (this.fieldCard != null) {
-            addCardToGraveyard(fieldCard);
+            addCardToGraveyard(this.fieldCard);
             if (this.fieldCard.isActive())
                 gameUpdate.addCardToGraveyard(this.fieldCard);
         }

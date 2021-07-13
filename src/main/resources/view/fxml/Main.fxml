@@ -13,30 +13,30 @@
                 <Image url="@../../assets/pageImages/MainBackground.jpg"/>
             </image>
         </ImageView>
-        <Button id="leftButtons" layoutX="75.0" layoutY="540.0" mnemonicParsing="false" onMouseClicked="#logout"
-                prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons" stylesheets="@../css/buttonStyles.css"
-                text="Logout">
+        <Button id="leftButtons" fx:id="logout" layoutX="75.0" layoutY="540.0" mnemonicParsing="false"
+                onMouseClicked="#logout" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons"
+                stylesheets="@../css/buttonStyles.css" text="Logout">
             <font>
                 <Font name="Baskerville Old Face" size="32.4"/>
             </font>
         </Button>
-        <Button id="leftButtons" layoutX="75.0" layoutY="180.0" mnemonicParsing="false" onMouseClicked="#profile"
-                prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons" stylesheets="@../css/buttonStyles.css"
-                text="Profile">
+        <Button id="leftButtons" fx:id="profile" layoutX="75.0" layoutY="180.0" mnemonicParsing="false"
+                onMouseClicked="#profile" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons"
+                stylesheets="@../css/buttonStyles.css" text="Profile">
             <font>
                 <Font name="Baskerville Old Face" size="32.4"/>
             </font>
         </Button>
-        <Button id="leftButtons" layoutX="75.0" layoutY="360.0" mnemonicParsing="false" onMouseClicked="#scoreBoard"
-                prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons" stylesheets="@../css/buttonStyles.css"
-                text="Score Board">
+        <Button id="leftButtons" fx:id="scoreboard" layoutX="75.0" layoutY="360.0" mnemonicParsing="false"
+                onMouseClicked="#scoreBoard" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons"
+                stylesheets="@../css/buttonStyles.css" text="Score Board">
             <font>
                 <Font name="Baskerville Old Face" size="32.4"/>
             </font>
         </Button>
-        <Button id="rightButtons" layoutX="768.0" layoutY="180.0" mnemonicParsing="false" onMouseClicked="#deck"
-                prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons" stylesheets="@../css/buttonStyles.css"
-                text="Deck">
+        <Button id="rightButtons" fx:id="deck" layoutX="768.0" layoutY="180.0" mnemonicParsing="false"
+                onMouseClicked="#deck" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons"
+                stylesheets="@../css/buttonStyles.css" text="Deck">
             <font>
                 <Font name="Baskerville Old Face" size="32.4"/>
             </font>
@@ -47,16 +47,23 @@
                 <Font name="Baskerville Old Face" size="32.4"/>
             </font>
         </Button>
-        <Button id="rightButtons" layoutX="768.0" layoutY="360.0" mnemonicParsing="false" onMouseClicked="#shop"
-                prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons" stylesheets="@../css/buttonStyles.css"
-                text="Shop">
+        <Button id="rightButtons" fx:id="shop" layoutX="768.0" layoutY="360.0" mnemonicParsing="false"
+                onMouseClicked="#shop" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons"
+                stylesheets="@../css/buttonStyles.css" text="Shop">
             <font>
                 <Font name="Baskerville Old Face" size="32.4"/>
             </font>
         </Button>
-        <Button id="rightButtons" layoutX="768.0" layoutY="540.0" mnemonicParsing="false" onMouseClicked="#importExport"
-                prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons" stylesheets="@../css/buttonStyles.css"
-                text="Import/Export">
+        <Button id="rightButtons" fx:id="IO" layoutX="768.0" layoutY="540.0" mnemonicParsing="false"
+                onMouseClicked="#importExport" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons"
+                stylesheets="@../css/buttonStyles.css" text="Import/Export">
+            <font>
+                <Font name="Baskerville Old Face" size="32.4"/>
+            </font>
+        </Button>
+        <Button layoutX="418.0" layoutY="180.0" mnemonicParsing="false" onMouseClicked="#cardCreator" prefHeight="62.0"
+                prefWidth="237.0" styleClass="mainPageButtons" stylesheets="@../css/buttonStyles.css"
+                text="Card Creator" textAlignment="CENTER">
             <font>
                 <Font name="Baskerville Old Face" size="32.4"/>
             </font>

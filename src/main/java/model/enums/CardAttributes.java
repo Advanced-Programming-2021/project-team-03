@@ -1,12 +1,18 @@
 package model.enums;
 
 public enum CardAttributes {
-    DARK,
-    LIGHT,
-    EARTH,
-    FIRE,
-    WATER,
-    WIND,
-    SPELL,
-    TRAP
+    DARK("Dark"),
+    LIGHT("Light"),
+    EARTH("Earth"),
+    FIRE("Fire"),
+    WATER("Water"),
+    WIND("Wind"),
+    SPELL("Spell"),
+    TRAP("Trap");
+
+    public final String name;
+
+    CardAttributes(String name) {
+        this.name = name;
+    }
 }

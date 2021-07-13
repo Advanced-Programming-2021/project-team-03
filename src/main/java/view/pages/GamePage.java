@@ -3,19 +3,25 @@ package view.pages;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.json.JSONArray;
@@ -24,8 +30,8 @@ import view.animations.CoinFlipAnimation;
 import view.viewcontroller.MainView;
 import view.viewmodel.CardView;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class GamePage extends Application {
     private static Stage stage;
@@ -42,6 +48,10 @@ public class GamePage extends Application {
     public ImageView selectedCardImage;
     public AnchorPane pane;
     public Text messageText;
+    public ImageView gameField;
+    public Image normalFieldImage;
+    public Button pauseButton;
+    public Button nextPhaseButton;
 
     private ArrayList<CardView> playerMonsters = new ArrayList<>();
     private ArrayList<CardView> playerSpellAndTraps = new ArrayList<>();
@@ -55,12 +65,21 @@ public class GamePage extends Application {
     private CardView opponentGraveyard;
     private final double MAX_HEALTH = 8000.0;
     private CardView selectedCard;
+    private static MediaPlayer mediaPlayer;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent startingPane = FXMLLoader.load(getClass().getResource("/view/fxml/Game.fxml"));
         this.pane = (AnchorPane) startingPane;
-        primaryStage.setScene(new Scene(startingPane));
+        Scene scene = new Scene(startingPane);
+        scene.setOnKeyPressed(keyEvent -> {
+            try {
+                checkForCheat(keyEvent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        primaryStage.setScene(scene);
         stage = primaryStage;
         stage.show();
     }
@@ -71,18 +90,24 @@ public class GamePage extends Application {
         runCOinAnimation(coin);
         opponentLPBar.setVisible(false);
         playerLPBar.setVisible(false);
+        pauseButton.setVisible(false);
+        nextPhaseButton.setVisible(false);
         Timeline playtime = new Timeline(
                 new KeyFrame(Duration.seconds(3.5), event -> {
                     pane.getChildren().remove(coin);
                     opponentLPBar.setVisible(true);
                     playerLPBar.setVisible(true);
+                    pauseButton.setVisible(true);
+                    nextPhaseButton.setVisible(true);
                     loadStartingCardViews();
                     setAllOnMouseEnteredHandler();
                     setAllOnMouseExitHandler();
+                    setAllOnMouseClickedHandler();
                     loadMap();
                 })
         );
         playtime.play();
+        MainView.getInstance().setGamePage(this);
     }
 
     public void pause(MouseEvent mouseEvent) throws Exception {
@@ -113,6 +138,17 @@ public class GamePage extends Application {
         refreshMap();
     }
 
+    public void printMessage(String value) {
+        messageText.setText(value);
+        Timeline playtime = new Timeline(
+                new KeyFrame(Duration.seconds(1), event -> {
+                    messageText.setText("");
+                })
+        );
+        playtime.play();
+        refreshMap();
+    }
+
     private void cleanMap() {
         cleanArray(playerMonsters);
         cleanArray(playerSpellAndTraps);
@@ -126,9 +162,38 @@ public class GamePage extends Application {
         opponentGraveyard.removeImage();
     }
 
-    private void refreshMap(){
+    private boolean resultShown = false;
+
+    private void refreshMap() {
+        if (!resultShown)
+            checkGameResults();
         cleanMap();
         loadMap();
+    }
+
+    private void checkGameResults() {
+        if (MainView.getInstance().isGameOver()) {
+            try {
+                Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/Lose1.wav")).toExternalForm());
+                if (mediaPlayer != null) {
+                    mediaPlayer.stop();
+                }
+                mediaPlayer = new MediaPlayer(media);
+                mediaPlayer.setOnEndOfMedia(new Runnable() {
+                    @Override
+                    public void run() {
+                        Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/Lose2.wav")).toExternalForm());
+                        mediaPlayer = new MediaPlayer(media);
+                        mediaPlayer.play();
+                    }
+                });
+                mediaPlayer.play();
+                GameResultPage.setGamePage(this);
+                new GameResultPage().start(stage);
+                resultShown = true;
+            } catch (Exception ignored) {
+            }
+        }
     }
 
     private void cleanArray(ArrayList<CardView> array) {
@@ -144,6 +209,7 @@ public class GamePage extends Application {
             JSONObject map = answer.getJSONObject("Map");
             loadOpponentMap(map);
             loadPlayerMap(map);
+            loadGameField();
         }
     }
 
@@ -194,7 +260,6 @@ public class GamePage extends Application {
         int opponentLP = map.getInt("OPLP");
         String opponentNickname = map.getString("OPNI");
         int opponentProfileImageNumber = map.getInt("OPIM");
-        System.out.println(opponentProfileImageNumber);
         loadOpponentInfo(opponentProfileImageNumber, opponentNickname, opponentLP);
         JSONArray opponentMonsters = map.getJSONArray("OPMonsters");
         for (int i = 0; i < opponentMonsters.length(); i++) {
@@ -243,13 +308,36 @@ public class GamePage extends Application {
         }
     }
 
+    private void loadGameField() {
+        if (playerFieldCard.isFull() && playerFieldCard.isFaceUp()) {
+            try {
+                gameField.setImage(MainView.getInstance().getBackgroundImage(playerFieldCard.getCardName()));
+            } catch (Exception exception) {
+                gameField.setImage(normalFieldImage);
+            }
+        } else if (opponentFieldCard.isFull() && opponentFieldCard.isFaceUp()) {
+            try {
+                gameField.setImage(MainView.getInstance().getBackgroundImage(opponentFieldCard.getCardName()));
+            } catch (Exception exception) {
+                gameField.setImage(normalFieldImage);
+            }
+        } else {
+            gameField.setImage(normalFieldImage);
+        }
+    }
+
     private void loadGraveyard(String cardName, CardView graveyard) {
         graveyard.setFrontImage(cardName);
         graveyard.putTheCardOnTheFront();
     }
 
     private void loadSpellAndTrapCard(int position, String name, boolean isActive, ArrayList<CardView> array) {
-        int index = convertPositionToIndex(position);
+        int index;
+        if (array == playerSpellAndTraps) {
+            index = convertPlayerPositionToIndex(position);
+        } else {
+            index = convertOpponentPositionToIndex(position);
+        }
         CardView cardView = array.get(index);
         cardView.setFrontImage(name);
         if (isActive) cardView.putTheCardOnTheFront();
@@ -262,11 +350,15 @@ public class GamePage extends Application {
         opponentNickname.setText(nickname);
         opponentLifePoint.setText(String.valueOf(LP));
         opponentLPBar.setProgress(LP / MAX_HEALTH);
-        System.out.println("opponentProf");
     }
 
     private void loadMonsterCard(int position, String monsterName, String faceUpSit, String attackingFormat, ArrayList<CardView> array) {
-        int index = convertPositionToIndex(position);
+        int index;
+        if (array == playerMonsters) {
+            index = convertPlayerPositionToIndex(position);
+        } else {
+            index = convertOpponentPositionToIndex(position);
+        }
         CardView cardView = array.get(index);
         cardView.setFrontImage(monsterName);
         if (faceUpSit.equals("Up")) cardView.putTheCardOnTheFront();
@@ -275,8 +367,16 @@ public class GamePage extends Application {
         else cardView.putTheCardOnDefenceFormat();
     }
 
-    private int convertPositionToIndex(int position) {
+    private int convertPlayerPositionToIndex(int position) {
         int[] positions = {5, 3, 1, 2, 4};
+        for (int i = 0; i < 5; i++) {
+            if (positions[i] == position) return i;
+        }
+        return 0;
+    }
+
+    private int convertOpponentPositionToIndex(int position) {
+        int[] positions = {4, 2, 1, 3, 5};
         for (int i = 0; i < 5; i++) {
             if (positions[i] == position) return i;
         }
@@ -286,19 +386,19 @@ public class GamePage extends Application {
     private void loadStartingCardViews() {
         Integer[] xPositions = {500, 597, 697, 798, 896};
         for (int i = 0; i < 5; i++) {
-            opponentSpellAndTraps.add(new CardView(125, xPositions[i]));
-            opponentMonsters.add(new CardView(244, xPositions[i]));
-            playerMonsters.add(new CardView(389, xPositions[i]));
-            playerSpellAndTraps.add(new CardView(511, xPositions[i]));
+            opponentSpellAndTraps.add(new CardView(125, xPositions[i], "Opponent", "Spell", i));
+            opponentMonsters.add(new CardView(244, xPositions[i], "Opponent", "Monster", i));
+            playerMonsters.add(new CardView(389, xPositions[i], "Myself", "Monster", i));
+            playerSpellAndTraps.add(new CardView(511, xPositions[i], "Myself", "Spell", i));
         }
         for (int i = 0; i < 6; i++) {
-            playerHand.add(new CardView(650, 400 + i * 100));
-            opponentHand.add(new CardView(-15, 400 + i * 100));
+            playerHand.add(new CardView(650, 400 + i * 100, "Myself", "Hand", i));
+            opponentHand.add(new CardView(-15, 400 + i * 100, "Opponent", "Hand", i));
         }
-        playerFieldCard = new CardView(413, 1000);
-        playerGraveyard = new CardView(381, 399);
-        opponentFieldCard = new CardView(216, 399);
-        opponentGraveyard = new CardView(241, 1000);
+        playerFieldCard = new CardView(413, 1000, "Myself", "Field", 0);
+        playerGraveyard = new CardView(381, 399, "Myself", "Grave", 0);
+        opponentFieldCard = new CardView(216, 399, "Opponent", "Field", 0);
+        opponentGraveyard = new CardView(241, 1000, "Opponent", "Grave", 0);
         pane.getChildren().add(playerFieldCard);
         pane.getChildren().add(playerGraveyard);
         pane.getChildren().add(opponentFieldCard);
@@ -380,17 +480,63 @@ public class GamePage extends Application {
     public void surrender(JSONObject answer) {
         String type = answer.getString("Type");
         String value = answer.getString("Value");
-        if (type.equals("Successful")){
+        if (type.equals("Successful")) {
             try {
+                Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/Lose2.wav")).toExternalForm());
+                if (mediaPlayer != null) {
+                    mediaPlayer.stop();
+                }
+                mediaPlayer = new MediaPlayer(media);
+                mediaPlayer.play();
+
                 GameResultPage.setGamePage(this);
                 GameResultPage.setMessageString(value);
                 new GameResultPage().start(stage);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(value);
+            alert.show();
         }
-        else{
-            //TODO showError;
+    }
+
+    private void setGraveyardOnMouseClicked() {
+        playerGraveyard.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                showPlayerGraveyard();
+
+            }
+        });
+        opponentGraveyard.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                showOpponentGraveyard();
+            }
+        });
+    }
+
+    private void showOpponentGraveyard() {
+        ArrayList<String> cards = MainView.getInstance().showOpponentGraveyard();
+        GraveyardPage graveyard = new GraveyardPage();
+        graveyard.setCardNames(cards);
+        try {
+            graveyard.start(stage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showPlayerGraveyard() {
+        ArrayList<String> cards = MainView.getInstance().showPlayerGraveyard();
+        GraveyardPage graveyard = new GraveyardPage();
+        graveyard.setCardNames(cards);
+        try {
+            graveyard.start(stage);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -400,5 +546,303 @@ public class GamePage extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void checkForCheat(KeyEvent keyEvent) throws Exception {
+        KeyCombination combination = new KeyCodeCombination(KeyCode.C, KeyCombination.SHIFT_DOWN, KeyCombination.CONTROL_DOWN);
+        if (combination.match(keyEvent))
+            new Cheat().start(stage);
+    }
+
+    private void setAllOnMouseClickedHandler() {
+        setGraveyardOnMouseClicked();
+        for (CardView cardView : playerHand) {
+            cardView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    if (cardView.isFull()) {
+                        clickedOnPlayerHand(cardView, mouseEvent);
+                    }
+                }
+            });
+        }
+        for (CardView cardView : playerSpellAndTraps) {
+            cardView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    if (cardView.isFull()) {
+                        clickedOnPlayerSpells(cardView, mouseEvent);
+                    }
+                }
+            });
+        }
+        for (CardView cardView : playerMonsters) {
+            cardView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    if (cardView.isFull()) {
+                        clickedOnPlayerMonsters(cardView, mouseEvent);
+                    }
+                }
+            });
+        }
+        playerFieldCard.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if (playerFieldCard.isFull()) {
+                    clickedOnPlayerFieldCard();
+                }
+            }
+        });
+        for (CardView cardView : opponentMonsters) {
+            cardView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    if (cardView.isFull()) {
+                        clickedOnOpponentMonsters(cardView, mouseEvent);
+                    }
+                }
+            });
+        }
+        opponentProfile.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                clickedOnOpponentProfile(opponentProfile);
+            }
+        });
+    }
+
+    private void clickedOnOpponentProfile(ImageView opponentProfile) {
+        String phase = MainView.getInstance().getPhase();
+        if (phase.equals("BATTLE")) {
+            directAttack();
+            opponentProfile.setEffect(new DropShadow(60, Color.DARKRED));
+            Timeline playtime = new Timeline(
+                    new KeyFrame(Duration.seconds(1.5), event -> {
+                        opponentProfile.setEffect(null);
+                    })
+            );
+            playtime.play();
+        }
+    }
+
+    private void directAttack() {
+        JSONObject answer = MainView.getInstance().directAttack();
+        String type = answer.getString("Type");
+        if (type.equals("Successful")) {
+            Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/AttackMonster.wav")).toExternalForm());
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+            }
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+            refreshMap();
+        } else {
+            Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/SadSolton.wav")).toExternalForm());
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+            }
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(answer.getString("Value"));
+            alert.show();
+        }
+    }
+
+    private void clickedOnOpponentMonsters(CardView cardView, MouseEvent mouseEvent) {
+        String phase = MainView.getInstance().getPhase();
+        if (phase.equals("BATTLE")) {
+            attackCard(cardView);
+        }
+    }
+
+    private void attackCard(CardView cardView) {
+        JSONObject answer = MainView.getInstance().attackToMonster(cardView.getPosition());
+        String type = answer.getString("Type");
+        if (type.equals("Successful")) {
+            Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/AttackMonster.wav")).toExternalForm());
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+            }
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+            refreshMap();
+        } else {
+            Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/SadSolton.wav")).toExternalForm());
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+            }
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(answer.getString("Value"));
+            alert.show();
+        }
+    }
+
+    private void clickedOnPlayerFieldCard() {
+        try {
+            selectCard(playerFieldCard.getOwner(), playerFieldCard.getType(), playerFieldCard.getPosition());
+            activeSpell();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void clickedOnPlayerMonsters(CardView cardView, MouseEvent mouseEvent) {
+        String phase = MainView.getInstance().getPhase();
+        if (phase.equals("BATTLE")) {
+            selectCard(cardView.getOwner(), cardView.getType(), cardView.getPosition());
+            cardView.setEffect(new DropShadow(60, Color.DARKRED));
+            Timeline playtime = new Timeline(
+                    new KeyFrame(Duration.seconds(1.5), event -> {
+                        cardView.setEffect(null);
+                    })
+            );
+            playtime.play();
+        } else {
+            if (mouseEvent.getButton() == MouseButton.SECONDARY) { //Right click
+                selectCard(cardView.getOwner(), cardView.getType(), cardView.getPosition());
+                setMonsterPosition(cardView);
+            } else if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                selectCard(cardView.getOwner(), cardView.getType(), cardView.getPosition());
+                filipSummonMonster();
+            }
+        }
+    }
+
+    private void setMonsterPosition(CardView cardView) {
+        Double rotate = cardView.getRotate();
+        JSONObject answer;
+        if (rotate < 10) { //now attack
+            answer = MainView.getInstance().setPosition("Defense");
+        } else { //now defence
+            answer = MainView.getInstance().setPosition("Attack");
+        }
+        String type = answer.getString("Type");
+        if (type.equals("Successful")) {
+            Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/SetPosition.wav")).toExternalForm());
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+            }
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+            refreshMap();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(answer.getString("Value"));
+            alert.show();
+        }
+    }
+
+    private void filipSummonMonster() {
+        JSONObject answer = MainView.getInstance().filipSummonMonster();
+        String type = answer.getString("Type");
+        if (type.equals("Successful")) {
+            Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/SummonMonster.wav")).toExternalForm());
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+            }
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+            refreshMap();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(answer.getString("Value"));
+            alert.show();
+        }
+    }
+
+    private void clickedOnPlayerSpells(CardView cardView, MouseEvent mouseEvent) {
+        try {
+            selectCard(cardView.getOwner(), cardView.getType(), cardView.getPosition());
+            activeSpell();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void clickedOnPlayerHand(CardView cardView, MouseEvent mouseEvent) {
+        try {
+            String cardType = MainView.getInstance().getCardType(cardView.getCardName());
+            if (cardType.equals("Monster")) {
+                if (mouseEvent.getButton() == MouseButton.SECONDARY) { //Right click
+                    selectCard(cardView.getOwner(), cardView.getType(), cardView.getPosition());
+                    setCard();
+                } else if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                    selectCard(cardView.getOwner(), cardView.getType(), cardView.getPosition());
+                    summonMonster();
+                }
+            } else {
+                if (mouseEvent.getButton() == MouseButton.SECONDARY) { //Right click
+                    selectCard(cardView.getOwner(), cardView.getType(), cardView.getPosition());
+                    setCard();
+                } else if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                    selectCard(cardView.getOwner(), cardView.getType(), cardView.getPosition());
+                    activeSpell();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void activeSpell() {
+        JSONObject answer = MainView.getInstance().activeSpell();
+        String type = answer.getString("Type");
+        if (type.equals("Successful")) {
+            Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/ActiveSpell.wav")).toExternalForm());
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+            }
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+            refreshMap();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(answer.getString("Value"));
+            alert.show();
+        }
+    }
+
+    private void summonMonster() {
+        JSONObject answer = MainView.getInstance().summonMonster();
+        String type = answer.getString("Type");
+        if (type.equals("Successful")) {
+            Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/SummonMonster.wav")).toExternalForm());
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+            }
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+            refreshMap();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(answer.getString("Value"));
+            alert.show();
+        }
+    }
+
+    private void setCard() {
+        JSONObject answer = MainView.getInstance().setCard();
+        String type = answer.getString("Type");
+        if (type.equals("Successful")) {
+            Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/SetCard.wav")).toExternalForm());
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+            }
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+            refreshMap();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(answer.getString("Value"));
+            alert.show();
+        }
+    }
+
+    private void selectCard(String owner, String type, int position) {
+        MainView.getInstance().selectCard(owner, type, position);
     }
 }

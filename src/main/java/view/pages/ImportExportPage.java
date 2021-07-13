@@ -1,5 +1,9 @@
 package view.pages;
 
+import com.google.gson.Gson;
+import com.opencsv.bean.CsvToBeanBuilder;
+import control.databaseController.MonsterCSV;
+import control.databaseController.SpellAndTrapCSV;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +24,6 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.json.JSONArray;
@@ -29,6 +32,7 @@ import view.viewcontroller.MainView;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ImportExportPage extends Application {
     private static Stage stage;
@@ -109,7 +113,7 @@ public class ImportExportPage extends Application {
             /* the drag-and-drop gesture entered the target */
             /* show to the user that it is an actual gesture target */
             if (event.getGestureSource() != importButton) {
-                if (isJsonFile(event.getDragboard()))
+                if (hasJsonFile(event.getDragboard()) || hasCSVFile(event.getDragboard()))
                     importButton.setStyle("-fx-border-radius: 40;"
                             + "-fx-border-width: 6;"
                             + "-fx-border-color: lightgreen;");
@@ -123,7 +127,7 @@ public class ImportExportPage extends Application {
 
         importButton.setOnDragOver(event -> {
             if (event.getGestureSource() != importButton &&
-                    isJsonFile(event.getDragboard())) {
+                    hasJsonFile(event.getDragboard()) || hasCSVFile(event.getDragboard())) {
                 event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             }
             event.consume();
@@ -140,8 +144,11 @@ public class ImportExportPage extends Application {
             /* if there is a card file on dragBoard, read it and use it */
             Dragboard dragboard = event.getDragboard();
             boolean success = false;
-            if (isJsonFile(dragboard)) {
-                importCardFromFile(dragboard.getFiles().get(0));
+            if (hasJsonFile(dragboard)) {
+                importCardFromJsonFile(dragboard.getFiles().get(0));
+                success = true;
+            } else if (hasCSVFile(dragboard)) {
+                importCardFromCSVFile(dragboard.getFiles().get(0));
                 success = true;
             }
             event.setDropCompleted(success);
@@ -190,7 +197,7 @@ public class ImportExportPage extends Application {
     }
 
 
-    private void importCardFromFile(File file) {
+    private void importCardFromJsonFile(File file) {
         if (file == null) return;
         Alert alert;
         try {
@@ -200,11 +207,9 @@ public class ImportExportPage extends Application {
 
             String newCardName = new JSONObject(cardFile).getString("Name");
 
-            if (answer.get("Type").equals("Successful")) {
-                alert = new Alert(Alert.AlertType.INFORMATION);
-            } else {
-                alert = new Alert(Alert.AlertType.ERROR);
-            }
+            if (answer.get("Type").equals("Successful")) alert = new Alert(Alert.AlertType.INFORMATION);
+            else alert = new Alert(Alert.AlertType.ERROR);
+
             alert.setTitle(answer.getString("Value"));
             alert.setContentText(MainView.getInstance().showCard(newCardName).getString("Value"));
         } catch (Exception e) {
@@ -217,10 +222,87 @@ public class ImportExportPage extends Application {
     public void importCard(MouseEvent mouseEvent) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose card file");
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Yu-Gi-Oh card (*.json)", "*.json");
-        fileChooser.getExtensionFilters().add(extFilter);
+
+        fileChooser.getExtensionFilters()
+                .add(new FileChooser.ExtensionFilter("Yu-Gi-Oh card (*.json)", "*.json"));
+        fileChooser.getExtensionFilters()
+                .add(new FileChooser.ExtensionFilter("Yu-Gi-Oh multiple card (*.csv)", "*.csv"));
         File file = fileChooser.showOpenDialog(stage);
-        importCardFromFile(file);
+
+        if (file == null) return;
+        if (isJsonFileName(file.getName())) importCardFromJsonFile(file);
+        else importCardFromCSVFile(file);
+    }
+
+    private void importCardFromCSVFile(File file) {
+        if (file == null) return;
+
+        int success = 0;
+        int fail = 0;
+        StringBuilder cardNames = new StringBuilder();
+        Alert alert;
+
+        try {
+            Reader reader = new BufferedReader(new FileReader(file));
+            List<MonsterCSV> monsters = new CsvToBeanBuilder(reader)
+                    .withType(MonsterCSV.class)
+                    .withSeparator(',')
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .withIgnoreEmptyLine(true)
+                    .build().parse();
+            reader.close();
+
+            Reader reader2 = new BufferedReader(new FileReader(file));
+            List<SpellAndTrapCSV> spells = new CsvToBeanBuilder(reader2)
+                    .withType(SpellAndTrapCSV.class)
+                    .withSeparator(',')
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .withIgnoreEmptyLine(true)
+                    .build().parse();
+            reader2.close();
+
+            for (SpellAndTrapCSV spell : spells) {
+                if (spell.getIcon() != null && !spell.getIcon().equals("")) {
+                    JSONObject answer = MainView.getInstance().importCardJson(new Gson().toJson(spell));
+                    if (answer.getString("Type").equals("Successful")) {
+                        cardNames.append(spell.getName()).append(", ");
+                        success++;
+                    }
+                    else fail++;
+                }
+            }
+
+            for (MonsterCSV monster : monsters) {
+                if (monster.getMonsterType() != null && !monster.getMonsterType().equals("")) {
+                    String result = new Gson().toJson(monster);
+                    JSONObject answer = MainView.getInstance().importCardJson(result);
+                    if (answer.getString("Type").equals("Successful")) {
+                        cardNames.append(monster.getName()).append(", ");
+                        success++;
+                    }
+                    else fail++;
+                }
+            }
+
+            if (success == 0) {
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Failed to import any card");
+            } else {
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Successful import");
+            }
+
+            alert.setContentText("Successful: " + success + "\n" +
+                    "Failed: " + fail + "\n" +
+                    "From total of " + (success + fail) + " found cards\n Card(s): " + cardNames);
+            alert.show();
+
+        } catch (Exception e) {
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Failed to import CSV file");
+            alert.setContentText(e.getMessage());
+            alert.show();
+        }
     }
 
     public void exportCard(MouseEvent mouseEvent) {
@@ -240,16 +322,47 @@ public class ImportExportPage extends Application {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select a directory to save the card file");
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Yu-Gi-Oh card (*.json)", "*.json");
-        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.getExtensionFilters()
+                .add(new FileChooser.ExtensionFilter("Yu-Gi-Oh card (*.json)", "*.json"));
+        fileChooser.getExtensionFilters()
+                .add(new FileChooser.ExtensionFilter("Yu-Gi-Oh multiple card (*.csv)", "*.csv"));
         fileChooser.setInitialFileName(cardName);
         File file = fileChooser.showSaveDialog(stage);
         if (file == null) return;
 
+        JSONObject value = new JSONObject(answer.getString("Value"));
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (isJsonFileName(file.getName())) stringBuilder.append(value);
+        else { // requested file is csv
+            if (value.has("Atk")) { // card is monster
+                stringBuilder.append("Name,Level,Attribute,MonsterType,CardType,Atk,Def,Description,Price,cardID\n");
+                stringBuilder.append("\"").append(value.getString("Name")).append("\"").append(",")
+                        .append(value.getInt("Level")).append(",")
+                        .append(value.getString("Attribute")).append(",")
+                        .append(value.getString("MonsterType")).append(",")
+                        .append(value.getString("CardType")).append(',')
+                        .append(value.getInt("Atk")).append(",")
+                        .append(value.getInt("Def")).append(",")
+                        .append("\"").append(value.getString("Description")).append("\"").append(",")
+                        .append(value.getInt("Price")).append(",")
+                        .append(value.getInt("CardID")).append("\n");
+            } else { // card is spell
+                stringBuilder.append("Name,Type,Icon,Description,Status,Price,cardID\n");
+                stringBuilder.append("\"").append(value.getString("Name")).append("\"").append(",")
+                        .append(value.getString("Type")).append(",")
+                        .append(value.getString("Icon")).append(",")
+                        .append("\"").append(value.getString("Description")).append("\"").append(",")
+                        .append(value.getString("Status")).append(",")
+                        .append(value.getInt("Price")).append(",")
+                        .append(value.getInt("CardID")).append("\n");
+            }
+        }
+
         Alert alert;
         try {
             FileWriter fileWriter = new FileWriter(file);
-            fileWriter.write(answer.getString("Value"));
+            fileWriter.write(stringBuilder.toString());
             fileWriter.close();
 
             alert = new Alert(Alert.AlertType.INFORMATION);
@@ -261,11 +374,20 @@ public class ImportExportPage extends Application {
         alert.show();
     }
 
-    private boolean isJsonFile(Dragboard dragboard) {
+    private boolean hasJsonFile(Dragboard dragboard) {
         if (!dragboard.hasFiles()) return false;
+        return isJsonFileName(dragboard.getFiles().get(0).getName());
+    }
 
-        String fileName = dragboard.getFiles().get(0).getName();
+    private boolean isJsonFileName(String fileName) {
         int i = fileName.lastIndexOf('.');
         return i > 0 && fileName.substring(i + 1).equals("json");
+    }
+
+    private boolean hasCSVFile(Dragboard dragboard) {
+        if (!dragboard.hasFiles()) return false;
+        String fileName = dragboard.getFiles().get(0).getName();
+        int i = fileName.lastIndexOf('.');
+        return i > 0 && fileName.substring(i + 1).equals("csv");
     }
 }

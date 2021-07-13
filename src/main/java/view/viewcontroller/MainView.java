@@ -4,9 +4,13 @@ import control.MainController;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import org.json.JSONObject;
+import view.pages.GamePage;
+import view.pages.GameResultPage;
 import view.viewmodel.ScoreboardUser;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MainView {
     private static MainView instance;
@@ -229,7 +233,6 @@ public class MainView {
         messageToSendToControl.put("Value", value);
         JSONObject answer = sendRequestToControl(messageToSendToControl);
         String scoreBoardString = answer.getString("Value");
-        System.out.println(scoreBoardString);
         String[] users = scoreBoardString.split("\n");
         ArrayList<ScoreboardUser> scoreboard = new ArrayList<>();
         for (String user : users) {
@@ -310,7 +313,8 @@ public class MainView {
         JSONObject messageToSendToControl = new JSONObject();
         messageToSendToControl.put("Type", "Get map for graphic");
         messageToSendToControl.put("Value", value);
-        return sendRequestToControl(messageToSendToControl);
+        JSONObject answer = sendRequestToControl(messageToSendToControl);
+        return answer;
     }
 
     public boolean isCoinOnStarFace() {
@@ -332,7 +336,8 @@ public class MainView {
         JSONObject messageToSendToControl = new JSONObject();
         messageToSendToControl.put("Type", "Surrender");
         messageToSendToControl.put("Value", value);
-        return sendRequestToControl(messageToSendToControl);
+        JSONObject answer = sendRequestToControl(messageToSendToControl);
+        return answer;
     }
 
     public JSONObject goToTheNextPhase() {
@@ -340,6 +345,127 @@ public class MainView {
         value.put("Token", token);
         JSONObject messageToSendToControl = new JSONObject();
         messageToSendToControl.put("Type", "Next phase");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
+    public ArrayList<String> showPlayerGraveyard() {
+        ArrayList<String> graveyard = new ArrayList<>();
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Show graveyard");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+        String type = controlAnswer.getString("Type");
+        String answerValue = controlAnswer.getString("Value");
+        if (!type.equals("Graveyard") || answerValue.equals("graveyard empty!")) {
+            return graveyard;
+        }
+        String[] split = answerValue.split("\\n");
+        for (String string : split) {
+            int startIndex = string.indexOf(". ") + 2;
+            int endIndex = string.indexOf(":") - 1;
+            graveyard.add(string.substring(startIndex, endIndex));
+        }
+        return graveyard;
+    }
+
+    public ArrayList<String> showOpponentGraveyard() {
+        ArrayList<String> graveyard = new ArrayList<>();
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Show opponent graveyard");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+        String type = controlAnswer.getString("Type");
+        String answerValue = controlAnswer.getString("Value");
+        if (!type.equals("Graveyard") || answerValue.equals("graveyard empty!")) {
+            return graveyard;
+        }
+        String[] split = answerValue.split("\\n");
+        for (String string : split) {
+            int startIndex = string.indexOf(". ") + 2;
+            int endIndex = string.indexOf(":") - 1;
+            graveyard.add(string.substring(startIndex, endIndex));
+        }
+        return graveyard;
+    }
+
+    public JSONObject selectCard(String cardOwner, String type, int position) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Type", type);
+        value.put("Position", String.valueOf(position));
+        value.put("Owner", cardOwner);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Select Card");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
+    public JSONObject setCard() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Set in field");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
+    public JSONObject summonMonster() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Summon");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
+    public JSONObject activeSpell() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Active effect");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
+    public JSONObject filipSummonMonster() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Flip summon");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
+    public JSONObject setPosition(String positionMode) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Mode", positionMode);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Set position");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
+    public JSONObject attackToMonster(int position) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Position", String.valueOf(position));
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Attack");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
+    public JSONObject directAttack() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Direct attack");
         messageToSendToControl.put("Value", value);
         return sendRequestToControl(messageToSendToControl);
     }
@@ -369,6 +495,16 @@ public class MainView {
         String type = answer.getString("Type");
         if (type.equals("Success")) return answer.getInt("Value");
         return 0;
+    }
+
+    public JSONObject reduceBalance(int amount) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Amount", amount);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Reduce balance");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
     }
 
     public JSONObject buyCard(String cardName) {
@@ -405,7 +541,7 @@ public class MainView {
         return success;
     }
 
-    private String toEnumCase(String string) {
+    public String toEnumCase(String string) {
         return string.toUpperCase()
                 .replace(' ', '_')
                 .replace('-', '_')
@@ -413,10 +549,144 @@ public class MainView {
                 .replace(",", "");
     }
 
-    public Image getCardImage(String cardName) throws Exception {
-        CardNames cardEnum = CardNames.valueOf(toEnumCase(cardName));
-        String url = String.valueOf(getClass().getResource("/assets/cards/" + cardEnum.imageName + ".jpg"));
+    public Image getCardImage(String cardName) {
+        CardNames cardEnum;
+        String url;
+        try {
+            cardEnum = CardNames.valueOf(toEnumCase(cardName));
+            url = String.valueOf(getClass().getResource("/assets/cards/" + cardEnum.imageName + ".jpg"));
+        } catch (IllegalArgumentException e) {
+            url = String.valueOf(getClass().getResource("/assets/cards/Default.jpg"));
+        }
+        return new Image(url);
+    }
+
+    public Image getBackgroundImage(String fieldName) {
+        BackgroundEnums background = BackgroundEnums.valueOf(toEnumCase(fieldName));
+        String url = String.valueOf(getClass().getResource("/assets/field/" + background.backgroundName + ".jpg"));
         return new Image(url);
     }
     //endregion
+
+    //region cheat
+    public final String[] GAME_MENU_COMMANDS = new String[6];
+    private Matcher regexMatcher;
+
+    {
+        GAME_MENU_COMMANDS[0] = "^select -(?:h|-hand) -(?:f|-force)$";
+        GAME_MENU_COMMANDS[1] = "^select -(?:f|-force) -(?:h|-hand)$";
+        GAME_MENU_COMMANDS[2] = "^increase -(?:l|-LP) (.+)$";
+        GAME_MENU_COMMANDS[3] = "^duel set-winner$";
+        GAME_MENU_COMMANDS[4] = "^increase --money (\\d+)$";
+        GAME_MENU_COMMANDS[5] = "^hesoyam$|^HESOYAM$";
+    }
+
+    public String activeCheat(String inputCommand, int regexCommandIndex) {
+        getRegexMatcher(inputCommand, GAME_MENU_COMMANDS[regexCommandIndex], true);
+
+        //Making message JSONObject and passing to sendControl function:
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Cheat code");
+
+        //Finding cheat type
+        //cheat type will be one of this types: 1-"Force increase" 2-"Increase LP" 3-"Set winner" 4-Increase money
+        switch (regexCommandIndex) {
+            case 0, 1 -> {
+                value.put("Type", "Force increase");
+            }
+            case 2 -> {
+                value.put("Type", "Increase LP");
+                value.put("Amount", regexMatcher.group(1));
+            }
+            case 3 -> {
+                value.put("Type", "Set winner");
+            }
+            case 4 -> {
+                value.put("Type", "Increase money");
+                value.put("Amount", regexMatcher.group(1));
+            }
+            case 5 -> {
+                value.put("Type", "hesoyam");
+            }
+        }
+
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        return (String) controlAnswer.get("Value");
+    }
+
+    private void getRegexMatcher(String command, String regex, boolean findMatches) {
+        regexMatcher = Pattern.compile(regex).matcher(command);
+        if (findMatches) regexMatcher.find();
+    }
+    //end region
+
+    public String getCardType(String cardName) throws Exception {
+        JSONObject value = new JSONObject();
+        value.put("Card Name", cardName);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Get Card Type");
+        messageToSendToControl.put("Value", value);
+        JSONObject answer = sendRequestToControl(messageToSendToControl);
+        if (answer.getString("Value").equals("Card not found"))
+            throw new Exception();
+        else
+            return answer.getString("Value");
+    }
+
+
+    //region requests
+    public String getRequest(String input) {
+        JSONObject inputObject = new JSONObject(input);
+        String requestType = inputObject.getString("Type");
+        JSONObject valueObject = new JSONObject();
+        try {
+            valueObject = inputObject.getJSONObject("Value");
+        } catch (Exception ignored) {
+        }
+
+        return switch (requestType) {
+            case "Print message" -> printMessage(valueObject);
+            case "Game is over" -> gameIsOver(valueObject);
+            default -> error();
+        };
+    }
+
+    private boolean isGameOver;
+    private GamePage gamePage;
+
+    private String printMessage(JSONObject valueObject) {
+        String message = valueObject.getString("Message");
+        if (gamePage != null)
+            gamePage.printMessage(message);
+        return "Do not need request answer";
+    }
+
+    private String gameIsOver(JSONObject valueObject) {
+        String message = valueObject.getString("Message");
+        GameResultPage.setMessageString(message);
+        isGameOver = true;
+        return "Do not need request answer";
+    }
+
+    private String error() {
+        JSONObject answerObject = new JSONObject();
+        answerObject.put("Type", "Error");
+        answerObject.put("Value", "Invalid Request Type!!!");
+        return answerObject.toString();
+    }
+
+    public boolean isGameOver() {
+        return isGameOver;
+    }
+
+    public void setGamePage(GamePage gamePage) {
+        this.gamePage = gamePage;
+    }
+
+    //end region
 }
