@@ -10,6 +10,7 @@ public class CardView extends ImageView {
 
     private boolean isFull;
     private boolean isFaceUp;
+    private String cardName = "";
 
     public CardView(int yLocation, int xLocation) {
         this.setLayoutY(yLocation);
@@ -34,6 +35,7 @@ public class CardView extends ImageView {
         try {
             this.frontImage = MainView.getInstance().getCardImage(cardName);
             this.isFull = true;
+            this.cardName = cardName;
         } catch (Exception exception) {
             this.frontImage = null;
             exception.printStackTrace();
@@ -51,10 +53,18 @@ public class CardView extends ImageView {
     public void removeImage() {
         this.isFull = false;
         this.setImage(null);
+        this.cardName = "";
     }
 
     public boolean isFull() {
         return isFull;
     }
 
+    public boolean isFaceUp() {
+        return isFaceUp;
+    }
+
+    public String getCardName() {
+        return cardName;
+    }
 }

@@ -42,6 +42,8 @@ public class GamePage extends Application {
     public ImageView selectedCardImage;
     public AnchorPane pane;
     public Text messageText;
+    public ImageView gameField;
+    public Image normalFieldImage;
 
     private ArrayList<CardView> playerMonsters = new ArrayList<>();
     private ArrayList<CardView> playerSpellAndTraps = new ArrayList<>();
@@ -144,6 +146,7 @@ public class GamePage extends Application {
             JSONObject map = answer.getJSONObject("Map");
             loadOpponentMap(map);
             loadPlayerMap(map);
+            loadGameField();
         }
     }
 
@@ -240,6 +243,24 @@ public class GamePage extends Application {
             fieldCard.setFrontImage(name);
             if (isActive) fieldCard.putTheCardOnTheFront();
             else fieldCard.putTheCardOnTheBack();
+        }
+    }
+
+    private void loadGameField() {
+        if (playerFieldCard.isFull() && playerFieldCard.isFaceUp()){
+            try {
+                gameField.setImage(MainView.getInstance().getBackgroundImage(playerFieldCard.getCardName()));
+            }catch (Exception exception){
+                gameField.setImage(normalFieldImage);
+            }
+        }else if (opponentFieldCard.isFull() && opponentFieldCard.isFaceUp()){
+            try {
+                gameField.setImage(MainView.getInstance().getBackgroundImage(opponentFieldCard.getCardName()));
+            }catch (Exception exception){
+                gameField.setImage(normalFieldImage);
+            }
+        }else {
+            gameField.setImage(normalFieldImage);
         }
     }
 
