@@ -260,7 +260,6 @@ public class GamePage extends Application {
         int opponentLP = map.getInt("OPLP");
         String opponentNickname = map.getString("OPNI");
         int opponentProfileImageNumber = map.getInt("OPIM");
-        System.out.println(opponentProfileImageNumber);
         loadOpponentInfo(opponentProfileImageNumber, opponentNickname, opponentLP);
         JSONArray opponentMonsters = map.getJSONArray("OPMonsters");
         for (int i = 0; i < opponentMonsters.length(); i++) {
@@ -351,7 +350,6 @@ public class GamePage extends Application {
         opponentNickname.setText(nickname);
         opponentLifePoint.setText(String.valueOf(LP));
         opponentLPBar.setProgress(LP / MAX_HEALTH);
-        System.out.println("opponentProf");
     }
 
     private void loadMonsterCard(int position, String monsterName, String faceUpSit, String attackingFormat, ArrayList<CardView> array) {
@@ -491,7 +489,9 @@ public class GamePage extends Application {
                 e.printStackTrace();
             }
         } else {
-            //TODO showError;
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(value);
+            alert.show();
         }
     }
 

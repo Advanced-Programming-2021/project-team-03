@@ -233,7 +233,6 @@ public class MainView {
         messageToSendToControl.put("Value", value);
         JSONObject answer = sendRequestToControl(messageToSendToControl);
         String scoreBoardString = answer.getString("Value");
-        System.out.println(scoreBoardString);
         String[] users = scoreBoardString.split("\n");
         ArrayList<ScoreboardUser> scoreboard = new ArrayList<>();
         for (String user : users) {
@@ -338,8 +337,6 @@ public class MainView {
         messageToSendToControl.put("Type", "Surrender");
         messageToSendToControl.put("Value", value);
         JSONObject answer = sendRequestToControl(messageToSendToControl);
-        System.out.println(answer.getString("Type"));
-        System.out.println(answer.getString("Value"));
         return answer;
     }
 
