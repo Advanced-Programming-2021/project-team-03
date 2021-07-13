@@ -96,6 +96,7 @@ public class MainPage extends Application implements Initializable {
         new ImportExportPage().start(stage);
     }
 
-    public void cardCreator(MouseEvent mouseEvent) {
+    public void cardCreator(MouseEvent mouseEvent) throws Exception {
+        new CardCreatorPage().start(stage);
     }
 }

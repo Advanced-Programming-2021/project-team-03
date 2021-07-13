@@ -1,25 +1,20 @@
 package view.pages;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import view.viewcontroller.MainView;
+import model.enums.CardAttributes;
+import model.enums.MonsterModels;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class CardCreatorPage extends Application {
     private static Stage stage;
@@ -42,11 +37,12 @@ public class CardCreatorPage extends Application {
 
     @FXML
     public void initialize() {
-        /*monsterTypeChoiceBox.getItems().addAll("", "", "", "", "");
-        attributeChoiceBox.getItems().addAll("DARK", "LIGHT","    EARTH,\n" +
-                "    FIRE,\n" +
-                "    WATER,\n" +
-                "    WIND,"));*/
+
+        monsterTypeChoiceBox.setItems(FXCollections.observableList(Arrays.stream(MonsterModels.values())
+                .map(cardEnum -> cardEnum.name).collect(Collectors.toList())));
+        attributeChoiceBox.setItems(FXCollections.observableList(Arrays.stream(CardAttributes.values())
+                .filter(attribute -> (attribute != CardAttributes.SPELL && attribute != CardAttributes.TRAP))
+                .map(cardEnum -> cardEnum.name).collect(Collectors.toList())));
     }
 
     public void back(MouseEvent mouseEvent) throws Exception {
