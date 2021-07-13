@@ -343,6 +343,50 @@ public class MainView {
         messageToSendToControl.put("Value", value);
         return sendRequestToControl(messageToSendToControl);
     }
+
+    public ArrayList<String> showPlayerGraveyard() {
+        ArrayList<String> graveyard = new ArrayList<>();
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Show graveyard");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+        String type = controlAnswer.getString("Type");
+        String answerValue = controlAnswer.getString("Value");
+        if (!type.equals("Graveyard") || answerValue.equals("graveyard empty!")){
+            return graveyard;
+        }
+        String[] split = answerValue.split("\\n");
+        for(String string: split){
+            int startIndex = string.indexOf(". ") + 2;
+            int endIndex = string.indexOf(":") - 1;
+            graveyard.add(string.substring(startIndex,endIndex));
+        }
+        return graveyard;
+    }
+
+    public ArrayList<String> showOpponentGraveyard() {
+        ArrayList<String> graveyard = new ArrayList<>();
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Show opponent graveyard");
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+        String type = controlAnswer.getString("Type");
+        String answerValue = controlAnswer.getString("Value");
+        if (!type.equals("Graveyard") || answerValue.equals("graveyard empty!")){
+            return graveyard;
+        }
+        String[] split = answerValue.split("\\n");
+        for(String string: split){
+            int startIndex = string.indexOf(". ") + 2;
+            int endIndex = string.indexOf(":") - 1;
+            graveyard.add(string.substring(startIndex,endIndex));
+        }
+        return graveyard;
+    }
     //endregion
 
     //region ShopMenuPage
@@ -424,6 +468,5 @@ public class MainView {
         String url = String.valueOf(getClass().getResource("/assets/field/" + background.backgroundName + ".jpg"));
         return new Image(url);
     }
-
     //endregion
 }

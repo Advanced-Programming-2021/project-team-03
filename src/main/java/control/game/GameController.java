@@ -1156,4 +1156,15 @@ public class GameController {
     public JSONObject getMapForGraphic() {
         return game.showGameBoardsForGraphic();
     }
+
+    public String getOpponentGraveyard() {
+        StringBuilder graveyardString = new StringBuilder();
+        int counter = 1;
+        for (Card card : game.getPlayerOpponentByTurn(turn).getBoard().getGraveyard()) {
+            graveyardString.append(counter).append(". ").append(card.getCardName()).append(" : ").append(card.getDescription()).append("\n");
+        }
+        if (game.getPlayerOpponentByTurn(turn).getBoard().getGraveyard().size() == 0)
+            graveyardString.append("graveyard empty!");
+        return graveyardString.toString();
+    }
 }
