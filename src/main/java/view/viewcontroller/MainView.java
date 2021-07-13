@@ -7,6 +7,8 @@ import org.json.JSONObject;
 import view.viewmodel.ScoreboardUser;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MainView {
     private static MainView instance;
@@ -354,14 +356,14 @@ public class MainView {
         JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
         String type = controlAnswer.getString("Type");
         String answerValue = controlAnswer.getString("Value");
-        if (!type.equals("Graveyard") || answerValue.equals("graveyard empty!")){
+        if (!type.equals("Graveyard") || answerValue.equals("graveyard empty!")) {
             return graveyard;
         }
         String[] split = answerValue.split("\\n");
-        for(String string: split){
+        for (String string : split) {
             int startIndex = string.indexOf(". ") + 2;
             int endIndex = string.indexOf(":") - 1;
-            graveyard.add(string.substring(startIndex,endIndex));
+            graveyard.add(string.substring(startIndex, endIndex));
         }
         return graveyard;
     }
@@ -376,14 +378,14 @@ public class MainView {
         JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
         String type = controlAnswer.getString("Type");
         String answerValue = controlAnswer.getString("Value");
-        if (!type.equals("Graveyard") || answerValue.equals("graveyard empty!")){
+        if (!type.equals("Graveyard") || answerValue.equals("graveyard empty!")) {
             return graveyard;
         }
         String[] split = answerValue.split("\\n");
-        for(String string: split){
+        for (String string : split) {
             int startIndex = string.indexOf(". ") + 2;
             int endIndex = string.indexOf(":") - 1;
-            graveyard.add(string.substring(startIndex,endIndex));
+            graveyard.add(string.substring(startIndex, endIndex));
         }
         return graveyard;
     }
@@ -475,4 +477,61 @@ public class MainView {
         return new Image(url);
     }
     //endregion
+
+    //region cheat
+    public final String[] GAME_MENU_COMMANDS = new String[6];
+    private Matcher regexMatcher;
+
+    {
+        GAME_MENU_COMMANDS[0] = "^select -(?:h|-hand) -(?:f|-force)$";
+        GAME_MENU_COMMANDS[1] = "^select -(?:f|-force) -(?:h|-hand)$";
+        GAME_MENU_COMMANDS[2] = "^increase -(?:l|-LP) (.+)$";
+        GAME_MENU_COMMANDS[3] = "^duel set-winner$";
+        GAME_MENU_COMMANDS[4] = "^increase --money (\\d+)$";
+        GAME_MENU_COMMANDS[5] = "^hesoyam$|^HESOYAM$";
+    }
+
+    public String activeCheat(String inputCommand, int regexCommandIndex) {
+        getRegexMatcher(inputCommand, GAME_MENU_COMMANDS[regexCommandIndex], true);
+
+        //Making message JSONObject and passing to sendControl function:
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Cheat code");
+
+        //Finding cheat type
+        //cheat type will be one of this types: 1-"Force increase" 2-"Increase LP" 3-"Set winner" 4-Increase money
+        switch (regexCommandIndex) {
+            case 0, 1 -> {
+                value.put("Type", "Force increase");
+            }
+            case 2 -> {
+                value.put("Type", "Increase LP");
+                value.put("Amount", regexMatcher.group(1));
+            }
+            case 3 -> {
+                value.put("Type", "Set winner");
+            }
+            case 4 -> {
+                value.put("Type", "Increase money");
+                value.put("Amount", regexMatcher.group(1));
+            }
+            case 5 -> {
+                value.put("Type", "hesoyam");
+            }
+        }
+
+        messageToSendToControl.put("Value", value);
+        JSONObject controlAnswer = sendRequestToControl(messageToSendToControl);
+
+        //Survey control JSON message
+        return (String) controlAnswer.get("Value");
+    }
+
+    private void getRegexMatcher(String command, String regex, boolean findMatches) {
+        regexMatcher = Pattern.compile(regex).matcher(command);
+        if (findMatches) regexMatcher.find();
+    }
+    //end region
 }

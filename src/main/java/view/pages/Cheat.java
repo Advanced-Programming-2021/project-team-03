@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import view.viewcontroller.MainView;
 
 public class Cheat extends Application {
     public TextField input;
@@ -29,6 +30,19 @@ public class Cheat extends Application {
     }
 
     public void submit(ActionEvent event) {
-
+        String inputCommand = input.getText().trim();
+        if (inputCommand.matches(MainView.getInstance().GAME_MENU_COMMANDS[0]))
+            result.setText(MainView.getInstance().activeCheat(inputCommand, 0));
+        else if (inputCommand.matches(MainView.getInstance().GAME_MENU_COMMANDS[1]))
+            result.setText(MainView.getInstance().activeCheat(inputCommand, 1));
+        else if (inputCommand.matches(MainView.getInstance().GAME_MENU_COMMANDS[2]))
+            result.setText(MainView.getInstance().activeCheat(inputCommand, 2));
+        else if (inputCommand.matches(MainView.getInstance().GAME_MENU_COMMANDS[3]))
+            result.setText(MainView.getInstance().activeCheat(inputCommand, 3));
+        else if (inputCommand.matches(MainView.getInstance().GAME_MENU_COMMANDS[4]))
+            result.setText(MainView.getInstance().activeCheat(inputCommand, 4));
+        else if (inputCommand.matches(MainView.getInstance().GAME_MENU_COMMANDS[5]))
+            result.setText(MainView.getInstance().activeCheat(inputCommand, 5));
+        else result.setText("WRONG INPUT!");
     }
 }
