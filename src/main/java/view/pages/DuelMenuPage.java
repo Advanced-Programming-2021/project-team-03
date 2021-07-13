@@ -1,5 +1,6 @@
 package view.pages;
 
+import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,10 +8,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.json.JSONObject;
 import view.viewcontroller.MainView;
 
@@ -24,6 +27,7 @@ public class DuelMenuPage extends Application {
     public Button playButton;
     public Text numberOfRoundsText;
     public Text opponentUsernameText;
+    public ImageView fireImageView;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -37,6 +41,14 @@ public class DuelMenuPage extends Application {
     public void initialize() {
         setSinglePlayMatchFiledVisible(false);
         setMultiPlayMatchFiledVisible(false);
+        fireAnimation();
+    }
+
+    private void fireAnimation() {
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(5), fireImageView);
+        fadeTransition.setFromValue(1.0);
+        fadeTransition.setToValue(0.0);
+        fadeTransition.play();
     }
 
     public void singlePlayMatch(MouseEvent mouseEvent) {
