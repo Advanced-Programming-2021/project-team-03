@@ -136,16 +136,16 @@ public class CardCreatorPage extends Application {
         Object monsterTypeObject = monsterTypeChoiceBox.getValue();
         Object attributeObject = attributeChoiceBox.getValue();
 
-        if (monsterTypeObject == null) {
-            fillAlert("Monster Type");
-            return;
-        }
         if (cardName.equals("")) {
             fillAlert("Card name");
             return;
         }
         if (attributeObject == null) {
             fillAlert("Attribute");
+            return;
+        }
+        if (monsterTypeObject == null) {
+            fillAlert("Monster Type");
             return;
         }
 
