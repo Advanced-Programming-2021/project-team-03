@@ -482,6 +482,13 @@ public class GamePage extends Application {
         String value = answer.getString("Value");
         if (type.equals("Successful")) {
             try {
+                Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/Lose2.wav")).toExternalForm());
+                if (mediaPlayer != null) {
+                    mediaPlayer.stop();
+                }
+                mediaPlayer = new MediaPlayer(media);
+                mediaPlayer.play();
+
                 GameResultPage.setGamePage(this);
                 GameResultPage.setMessageString(value);
                 new GameResultPage().start(stage);
