@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.GraveyardPage">
+    <children>
+        <ImageView fitHeight="400.0" fitWidth="400.0" pickOnBounds="true">
+            <image>
+                <Image url="@../../assets/pageImages/GraveyardBackground.jpg" />
+            </image>
+        </ImageView>
+        <Text layoutX="75.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GRAVEYARD" textAlignment="CENTER">
+            <font>
+                <Font name="Georgia Bold Italic" size="36.0" />
+            </font>
+            <effect>
+                <Reflection topOpacity="0.58" />
+            </effect>
+            <fill>
+                <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+                    <stops>
+                        <Stop>
+                            <color>
+                                <Color red="1.0" />
+                            </color>
+                        </Stop>
+                        <Stop offset="0.007633587786259542">
+                            <color>
+                                <Color red="1.0" />
+                            </color>
+                        </Stop>
+                        <Stop offset="0.46954407612673826">
+                            <color>
+                                <Color red="1.0" green="0.035185184329748154" blue="0.035185184329748154" />
+                            </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                            <color>
+                                <Color />
+                            </color>
+                        </Stop>
+                    </stops>
+                </RadialGradient>
+            </fill>
+        </Text>
+      <ScrollPane layoutX="10.0" layoutY="135.0" opacity="0.8" prefHeight="250.0" prefWidth="380.0" />
+    </children>
+</AnchorPane>

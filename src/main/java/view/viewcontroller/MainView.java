@@ -413,13 +413,13 @@ public class MainView {
                 .replace(",", "");
     }
 
-    public Image getCardImage(String cardName) throws Exception {
+    public Image getCardImage(String cardName) {
         CardNames cardEnum = CardNames.valueOf(toEnumCase(cardName));
         String url = String.valueOf(getClass().getResource("/assets/cards/" + cardEnum.imageName + ".jpg"));
         return new Image(url);
     }
 
-    public Image getBackgroundImage(String fieldName) throws Exception {
+    public Image getBackgroundImage(String fieldName) {
         BackgroundEnums background = BackgroundEnums.valueOf(toEnumCase(fieldName));
         String url = String.valueOf(getClass().getResource("/assets/field/" + background.backgroundName + ".jpg"));
         return new Image(url);
