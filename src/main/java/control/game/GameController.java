@@ -443,6 +443,7 @@ public class GameController {
                 } else {
                     board.setFieldCard(gameUpdates, spellAndTrap);
                 }
+                removeFieldCardFromHand(game,spellAndTrap);
             } else {
                 board.setSpellAndTrapsInField(spellAndTrap);
             }
@@ -782,6 +783,11 @@ public class GameController {
             AllSpellsEffects.getInstance().cardActivator(spell, game, gameUpdates, turn);
         }
         return true;
+    }
+
+    private void removeFieldCardFromHand(Game game, SpellAndTrap spell) {
+        Board board = game.getPlayerByTurn(turn).getBoard();
+        board.removeCardFromHand(spell);
     }
 
     public String getGraveyard() {

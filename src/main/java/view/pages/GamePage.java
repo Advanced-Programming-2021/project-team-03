@@ -3,19 +3,18 @@ package view.pages;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.json.JSONArray;
@@ -24,7 +23,6 @@ import view.animations.CoinFlipAnimation;
 import view.viewcontroller.MainView;
 import view.viewmodel.CardView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class GamePage extends Application {
@@ -44,6 +42,8 @@ public class GamePage extends Application {
     public Text messageText;
     public ImageView gameField;
     public Image normalFieldImage;
+    public Button pauseButton;
+    public Button nextPhaseButton;
 
     private ArrayList<CardView> playerMonsters = new ArrayList<>();
     private ArrayList<CardView> playerSpellAndTraps = new ArrayList<>();
@@ -81,16 +81,21 @@ public class GamePage extends Application {
         runCOinAnimation(coin);
         opponentLPBar.setVisible(false);
         playerLPBar.setVisible(false);
+        pauseButton.setVisible(false);
+        nextPhaseButton.setVisible(false);
         Timeline playtime = new Timeline(
                 new KeyFrame(Duration.seconds(3.5), event -> {
                     pane.getChildren().remove(coin);
                     opponentLPBar.setVisible(true);
                     playerLPBar.setVisible(true);
+                    pauseButton.setVisible(true);
+                    nextPhaseButton.setVisible(true);
                     loadStartingCardViews();
                     setAllOnMouseEnteredHandler();
                     setAllOnMouseExitHandler();
                     setGraveyardOnMouseClicked();
                     loadMap();
+                    setAllOnMouseClickedHandler();
                 })
         );
         playtime.play();
@@ -279,7 +284,12 @@ public class GamePage extends Application {
     }
 
     private void loadSpellAndTrapCard(int position, String name, boolean isActive, ArrayList<CardView> array) {
-        int index = convertPositionToIndex(position);
+        int index;
+        if (array == playerSpellAndTraps) {
+            index = convertPlayerPositionToIndex(position);
+        } else {
+            index = convertOpponentPositionToIndex(position);
+        }
         CardView cardView = array.get(index);
         cardView.setFrontImage(name);
         if (isActive) cardView.putTheCardOnTheFront();
@@ -296,7 +306,12 @@ public class GamePage extends Application {
     }
 
     private void loadMonsterCard(int position, String monsterName, String faceUpSit, String attackingFormat, ArrayList<CardView> array) {
-        int index = convertPositionToIndex(position);
+        int index;
+        if (array == playerMonsters) {
+            index = convertPlayerPositionToIndex(position);
+        } else {
+            index = convertOpponentPositionToIndex(position);
+        }
         CardView cardView = array.get(index);
         cardView.setFrontImage(monsterName);
         if (faceUpSit.equals("Up")) cardView.putTheCardOnTheFront();
@@ -305,8 +320,16 @@ public class GamePage extends Application {
         else cardView.putTheCardOnDefenceFormat();
     }
 
-    private int convertPositionToIndex(int position) {
+    private int convertPlayerPositionToIndex(int position) {
         int[] positions = {5, 3, 1, 2, 4};
+        for (int i = 0; i < 5; i++) {
+            if (positions[i] == position) return i;
+        }
+        return 0;
+    }
+
+    private int convertOpponentPositionToIndex(int position) {
+        int[] positions = {4, 2, 1, 3, 5};
         for (int i = 0; i < 5; i++) {
             if (positions[i] == position) return i;
         }
@@ -427,7 +450,6 @@ public class GamePage extends Application {
         playerGraveyard.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                System.out.println("player graveyard"); //TODO remove me
                 showPlayerGraveyard();
 
             }
@@ -435,7 +457,6 @@ public class GamePage extends Application {
         opponentGraveyard.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                System.out.println("opponent graveyard"); //TODO remove me
                 showOpponentGraveyard();
             }
         });
@@ -445,9 +466,6 @@ public class GamePage extends Application {
         ArrayList<String> cards = MainView.getInstance().showOpponentGraveyard();
         GraveyardPage graveyard = new GraveyardPage();
         graveyard.setCardNames(cards);
-        for (String string : cards) {
-            System.out.println(string); //TODO remove me;
-        }
         try {
             graveyard.start(stage);
         } catch (Exception e) {
@@ -466,7 +484,6 @@ public class GamePage extends Application {
         }
     }
 
-
     public void endGame() {
         try {
             new DuelMenuPage().start(stage);
@@ -479,5 +496,10 @@ public class GamePage extends Application {
         KeyCombination combination = new KeyCodeCombination(KeyCode.C, KeyCombination.SHIFT_DOWN, KeyCombination.CONTROL_DOWN);
         if (combination.match(keyEvent))
             new Cheat().start(stage);
+    }
+
+    private void setAllOnMouseClickedHandler() {
+        setGraveyardOnMouseClicked();
+
     }
 }
