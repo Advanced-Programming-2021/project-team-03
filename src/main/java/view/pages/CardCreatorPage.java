@@ -73,6 +73,12 @@ public class CardCreatorPage extends Application {
                     updateDefence();
                     updatePrice();
                 });
+
+        monsterTypeChoiceBox.valueProperty()
+                .addListener((source, oldValue, newValue) -> updatePrice());
+
+        attributeChoiceBox.valueProperty()
+                .addListener((source, oldValue, newValue) -> updatePrice());
     }
 
     private void updateLevel() {
@@ -84,6 +90,9 @@ public class CardCreatorPage extends Application {
         if (monsterTypeChoiceBox.getValue() != null &&
                 monsterTypeChoiceBox.getValue().toString()
                         .equals("Beast Warrior")) price += 500;
+        if (attributeChoiceBox.getValue() != null &&
+                attributeChoiceBox.getValue().toString()
+                        .equals("Fire")) price += 500;
 
         priceLabel.setText("Calculated price: " + price);
     }
