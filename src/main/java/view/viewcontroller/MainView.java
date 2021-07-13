@@ -453,6 +453,25 @@ public class MainView {
         messageToSendToControl.put("Value", value);
         return sendRequestToControl(messageToSendToControl);
     }
+
+    public JSONObject attackToMonster(int position) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Position", String.valueOf(position));
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Attack");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
+    public JSONObject directAttack() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Direct attack");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
     //endregion
 
     //region ShopMenuPage

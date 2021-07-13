@@ -11,6 +11,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -18,6 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -570,22 +573,102 @@ public class GamePage extends Application {
                 }
             }
         });
+        for (CardView cardView : opponentMonsters) {
+            cardView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    if (cardView.isFull()) {
+                        clickedOnOpponentMonsters(cardView, mouseEvent);
+                    }
+                }
+            });
+        }
+        opponentProfile.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                clickedOnOpponentProfile(opponentProfile);
+            }
+        });
+    }
+
+    private void clickedOnOpponentProfile(ImageView opponentProfile) {
+        String phase = MainView.getInstance().getPhase();
+        if (phase.equals("BATTLE")) {
+            directAttack();
+            opponentProfile.setEffect(new DropShadow(60, Color.DARKRED));
+            Timeline playtime = new Timeline(
+                    new KeyFrame(Duration.seconds(1.5), event -> {
+                        opponentProfile.setEffect(null);
+                    })
+            );
+            playtime.play();
+        }
+    }
+
+    private void directAttack() {
+        JSONObject answer = MainView.getInstance().directAttack();
+        String type = answer.getString("Type");
+        if (type.equals("Successful")) {
+            Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/AttackMonster.wav")).toExternalForm());
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+            }
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+            refreshMap();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(answer.getString("Value"));
+            alert.show();
+        }
+    }
+
+    private void clickedOnOpponentMonsters(CardView cardView, MouseEvent mouseEvent) {
+        String phase = MainView.getInstance().getPhase();
+        if (phase.equals("BATTLE")) {
+            attackCard(cardView);
+        }
+    }
+
+    private void attackCard(CardView cardView) {
+        JSONObject answer = MainView.getInstance().attackToMonster(cardView.getPosition());
+        String type = answer.getString("Type");
+        if (type.equals("Successful")) {
+            Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/AttackMonster.wav")).toExternalForm());
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+            }
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+            refreshMap();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(answer.getString("Value"));
+            alert.show();
+        }
     }
 
     private void clickedOnPlayerFieldCard() {
         try {
             selectCard(playerFieldCard.getOwner(), playerFieldCard.getType(), playerFieldCard.getPosition());
             activeSpell();
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void clickedOnPlayerMonsters(CardView cardView, MouseEvent mouseEvent) {
         String phase = MainView.getInstance().getPhase();
-        if (phase.equals("BATTLE")){
-
-        }else {
+        if (phase.equals("BATTLE")) {
+            selectCard(cardView.getOwner(), cardView.getType(), cardView.getPosition());
+            cardView.setEffect(new DropShadow(60, Color.DARKRED));
+            Timeline playtime = new Timeline(
+                    new KeyFrame(Duration.seconds(1.5), event -> {
+                        cardView.setEffect(null);
+                    })
+            );
+            playtime.play();
+        } else {
             if (mouseEvent.getButton() == MouseButton.SECONDARY) { //Right click
                 selectCard(cardView.getOwner(), cardView.getType(), cardView.getPosition());
                 setMonsterPosition(cardView);
@@ -599,15 +682,15 @@ public class GamePage extends Application {
     private void setMonsterPosition(CardView cardView) {
         Double rotate = cardView.getRotate();
         JSONObject answer;
-        if (rotate < 10){ //now attack
+        if (rotate < 10) { //now attack
             answer = MainView.getInstance().setPosition("Defense");
-        }else { //now defence
+        } else { //now defence
             answer = MainView.getInstance().setPosition("Attack");
         }
         String type = answer.getString("Type");
         if (type.equals("Successful")) {
             Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/SetPosition.wav")).toExternalForm());
-            if (mediaPlayer != null){
+            if (mediaPlayer != null) {
                 mediaPlayer.stop();
             }
             mediaPlayer = new MediaPlayer(media);
@@ -625,7 +708,7 @@ public class GamePage extends Application {
         String type = answer.getString("Type");
         if (type.equals("Successful")) {
             Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/SummonMonster.wav")).toExternalForm());
-            if (mediaPlayer != null){
+            if (mediaPlayer != null) {
                 mediaPlayer.stop();
             }
             mediaPlayer = new MediaPlayer(media);
@@ -642,7 +725,7 @@ public class GamePage extends Application {
         try {
             selectCard(cardView.getOwner(), cardView.getType(), cardView.getPosition());
             activeSpell();
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
