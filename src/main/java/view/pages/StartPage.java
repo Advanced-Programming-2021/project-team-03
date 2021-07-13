@@ -15,6 +15,7 @@ import java.util.Objects;
 
 public class StartPage extends Application {
     private static Stage stage;
+    private static boolean startedBefore = false;
     public Button muteButton;
 
     @Override
@@ -24,7 +25,10 @@ public class StartPage extends Application {
         primaryStage.setScene(scene);
         primaryStage.getIcons().add(new Image(String.valueOf(getClass().getResource("/assets/pageImages/logo.png"))));
         primaryStage.setTitle("YU-GI-OH");
-        backgroundMusic();
+        if (!startedBefore) {
+            backgroundMusic();
+            startedBefore = true;
+        }
         stage = primaryStage;
         primaryStage.setResizable(false);
         primaryStage.show();
