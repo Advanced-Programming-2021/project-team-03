@@ -174,6 +174,20 @@ public class GamePage extends Application {
     private void checkGameResults() {
         if (MainView.getInstance().isGameOver()) {
             try {
+                Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/Lose1.wav")).toExternalForm());
+                if (mediaPlayer != null) {
+                    mediaPlayer.stop();
+                }
+                mediaPlayer = new MediaPlayer(media);
+                mediaPlayer.setOnEndOfMedia(new Runnable() {
+                    @Override
+                    public void run() {
+                        Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/Lose2.wav")).toExternalForm());
+                        mediaPlayer = new MediaPlayer(media);
+                        mediaPlayer.play();
+                    }
+                });
+                mediaPlayer.play();
                 GameResultPage.setGamePage(this);
                 new GameResultPage().start(stage);
                 resultShown = true;
@@ -617,6 +631,12 @@ public class GamePage extends Application {
             mediaPlayer.play();
             refreshMap();
         } else {
+            Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/SadSolton.wav")).toExternalForm());
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+            }
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText(answer.getString("Value"));
             alert.show();
@@ -642,6 +662,12 @@ public class GamePage extends Application {
             mediaPlayer.play();
             refreshMap();
         } else {
+            Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/SadSolton.wav")).toExternalForm());
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+            }
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText(answer.getString("Value"));
             alert.show();
