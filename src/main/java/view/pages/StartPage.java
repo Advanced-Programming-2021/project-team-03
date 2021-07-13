@@ -2,6 +2,7 @@ package view.pages;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,11 +12,14 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
+import java.net.URL;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
-public class StartPage extends Application {
+public class StartPage extends Application implements Initializable {
     private static Stage stage;
     private static boolean startedBefore = false;
+    private static boolean mute = false;
     public Button muteButton;
 
     @Override
@@ -32,6 +36,15 @@ public class StartPage extends Application {
         stage = primaryStage;
         primaryStage.setResizable(false);
         primaryStage.show();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        if (mute) {
+            muteButton.setText("UNMUTE");
+        } else {
+            muteButton.setText("MUTE");
+        }
     }
 
     public static MediaPlayer mediaPlayer;
@@ -56,10 +69,12 @@ public class StartPage extends Application {
     }
 
     public void mute(MouseEvent mouseEvent) {
-        if (muteButton.getText().equals("UNMUTE")) {
+        if (mute) {
+            mute = false;
             muteButton.setText("MUTE");
             mediaPlayer.play();
         } else {
+            mute = true;
             muteButton.setText("UNMUTE");
             mediaPlayer.pause();
         }
