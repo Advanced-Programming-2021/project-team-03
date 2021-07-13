@@ -89,12 +89,17 @@ public class Database {
         }
     }
 
-    public static Card importCardFromJson(String Json) {
+    public static Card importCardFromJson(String json) throws IOException {
         Gson gson = new Gson();
         Gson gson2 = new Gson();
-        MonsterCSV monsterCSV = gson.fromJson(Json, MonsterCSV.class);
-        SpellAndTrapCSV spellAndTrapCSV = gson2.fromJson(Json, SpellAndTrapCSV.class);
+        MonsterCSV monsterCSV = gson.fromJson(json, MonsterCSV.class);
+        SpellAndTrapCSV spellAndTrapCSV = gson2.fromJson(json, SpellAndTrapCSV.class);
 
+        File file = new File(CARDS_IMPORT_PATH + monsterCSV.getName() + ".json");
+        file.getParentFile().mkdirs();
+        Writer writer = new FileWriter(file);
+        writer.write(json);
+        writer.close();
         if (monsterCSV.getAttribute() != null) return monsterCSV.convert().addToAllMonsters();
         else return spellAndTrapCSV.convert().addToAllSpells();
     }
