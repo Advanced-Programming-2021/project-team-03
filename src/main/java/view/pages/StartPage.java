@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.Media;
@@ -14,6 +15,7 @@ import java.util.Objects;
 
 public class StartPage extends Application {
     private static Stage stage;
+    public Button muteButton;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -47,5 +49,15 @@ public class StartPage extends Application {
 
     public void Exit(MouseEvent mouseEvent) {
         stage.close();
+    }
+
+    public void mute(MouseEvent mouseEvent) {
+        if (muteButton.getText().equals("UNMUTE")) {
+            muteButton.setText("MUTE");
+            mediaPlayer.play();
+        } else {
+            muteButton.setText("UNMUTE");
+            mediaPlayer.pause();
+        }
     }
 }

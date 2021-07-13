@@ -102,7 +102,6 @@ public class MainController {
             case "Next phase" -> endPhaseCommand(valueObject);
             case "Show map" -> showMap(valueObject);
 
-
             //region Graphic requests
             case "Get username by token" -> getUsernameByToken(valueObject);
             case "Get nickname by token" -> getNicknameByToken(valueObject);
