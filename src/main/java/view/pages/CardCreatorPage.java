@@ -159,15 +159,20 @@ public class CardCreatorPage extends Application {
 
         JSONObject balanceAnswer = view.reduceBalance(price / 10);
         if (!balanceAnswer.getString("Type").equals("Successful")) {
-            alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Couldn't create card");
-            alert.setContentText(balanceAnswer.getString("Value"));
-            alert.show();
+            view.alertMaker(balanceAnswer);
             return;
         }
 
-        if (view.alertMaker(view.importCardJson(new Gson().toJson(monsterCSV))))
+        JSONObject answer = view.importCardJson(new Gson().toJson(monsterCSV));
+        if (answer.getString("Type").equals("Successful")) {
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Card created successfully");
+            alert.setContentText(view.showCard(cardName).getString("Value"));
+            alert.show();
             resetFields();
+        } else {
+            view.alertMaker(answer);
+        }
 
     }
 
