@@ -17,6 +17,7 @@ import model.user.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import view.View;
+import view.viewcontroller.MainView;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;

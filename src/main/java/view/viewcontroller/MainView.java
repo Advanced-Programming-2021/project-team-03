@@ -590,4 +590,65 @@ public class MainView {
         else
             return answer.getString("Value");
     }
+
+
+    //region requests
+    public String getRequest(String input) {
+        JSONObject inputObject = new JSONObject(input);
+        String requestType = inputObject.getString("Type");
+        JSONObject valueObject = new JSONObject();
+        try {
+            valueObject = inputObject.getJSONObject("Value");
+        } catch (Exception ignored) {
+        }
+
+        return switch (requestType) {
+            case "Print message" -> printMessage(valueObject);
+            case "Game is over" -> gameIsOver(valueObject);
+            case "Round is over" -> roundIsOver(valueObject);
+            default -> error();
+        };
+    }
+
+    private String incomingMessageToShow;
+    private boolean isRoundOver;
+    private boolean isGameOver;
+
+    private String printMessage(JSONObject valueObject) {
+        incomingMessageToShow = valueObject.getString("Message");
+        return "Do not need request answer";
+    }
+
+    private String roundIsOver(JSONObject valueObject) {
+        printMessage(valueObject);
+        isRoundOver = true;
+        return "Do not need request answer";
+    }
+
+    private String gameIsOver(JSONObject valueObject) {
+        printMessage(valueObject);
+        isGameOver = true;
+        return "Do not need request answer";
+    }
+
+    private String error() {
+        JSONObject answerObject = new JSONObject();
+        answerObject.put("Type", "Error");
+        answerObject.put("Value", "Invalid Request Type!!!");
+        return answerObject.toString();
+    }
+
+    public String getIncomingMessageToShow() {
+        return incomingMessageToShow;
+    }
+
+    public boolean isRoundOver() {
+        return isRoundOver;
+    }
+
+    public boolean isGameOver() {
+        return isGameOver;
+    }
+
+    //end region
 }
