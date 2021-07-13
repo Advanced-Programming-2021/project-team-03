@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -44,6 +45,8 @@ public class GamePage extends Application {
     public Text messageText;
     public ImageView gameField;
     public Image normalFieldImage;
+    public Button pauseButton;
+    public Button nextPhaseButton;
 
     private ArrayList<CardView> playerMonsters = new ArrayList<>();
     private ArrayList<CardView> playerSpellAndTraps = new ArrayList<>();
@@ -73,11 +76,15 @@ public class GamePage extends Application {
         runCOinAnimation(coin);
         opponentLPBar.setVisible(false);
         playerLPBar.setVisible(false);
+        pauseButton.setVisible(false);
+        nextPhaseButton.setVisible(false);
         Timeline playtime = new Timeline(
                 new KeyFrame(Duration.seconds(3.5), event -> {
                     pane.getChildren().remove(coin);
                     opponentLPBar.setVisible(true);
                     playerLPBar.setVisible(true);
+                    pauseButton.setVisible(true);
+                    nextPhaseButton.setVisible(true);
                     loadStartingCardViews();
                     setAllOnMouseEnteredHandler();
                     setAllOnMouseExitHandler();
@@ -424,7 +431,6 @@ public class GamePage extends Application {
         playerGraveyard.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                System.out.println("player graveyard"); //TODO remove me
                 showPlayerGraveyard();
 
             }
@@ -432,7 +438,6 @@ public class GamePage extends Application {
         opponentGraveyard.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                System.out.println("opponent graveyard"); //TODO remove me
                 showOpponentGraveyard();
             }
         });
@@ -442,9 +447,6 @@ public class GamePage extends Application {
         ArrayList<String> cards = MainView.getInstance().showOpponentGraveyard();
         GraveyardPage graveyard = new GraveyardPage();
         graveyard.setCardNames(cards);
-        for (String string: cards){
-            System.out.println(string); //TODO remove me;
-        }
         try {
             graveyard.start(stage);
         }catch (Exception e){

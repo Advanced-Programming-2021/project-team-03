@@ -311,7 +311,6 @@ public class MainView {
         messageToSendToControl.put("Type", "Get map for graphic");
         messageToSendToControl.put("Value", value);
         JSONObject answer = sendRequestToControl(messageToSendToControl);
-        System.out.println(answer.getJSONObject("Map").toString()); //TODO remove me
         return answer;
     }
 
