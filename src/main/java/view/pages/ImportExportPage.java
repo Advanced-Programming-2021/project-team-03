@@ -20,7 +20,6 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.json.JSONArray;
@@ -109,7 +108,7 @@ public class ImportExportPage extends Application {
             /* the drag-and-drop gesture entered the target */
             /* show to the user that it is an actual gesture target */
             if (event.getGestureSource() != importButton) {
-                if (isJsonFile(event.getDragboard()))
+                if (hasJsonFile(event.getDragboard()))
                     importButton.setStyle("-fx-border-radius: 40;"
                             + "-fx-border-width: 6;"
                             + "-fx-border-color: lightgreen;");
@@ -123,7 +122,7 @@ public class ImportExportPage extends Application {
 
         importButton.setOnDragOver(event -> {
             if (event.getGestureSource() != importButton &&
-                    isJsonFile(event.getDragboard())) {
+                    hasJsonFile(event.getDragboard())) {
                 event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             }
             event.consume();
@@ -140,7 +139,7 @@ public class ImportExportPage extends Application {
             /* if there is a card file on dragBoard, read it and use it */
             Dragboard dragboard = event.getDragboard();
             boolean success = false;
-            if (isJsonFile(dragboard)) {
+            if (hasJsonFile(dragboard)) {
                 importCardFromFile(dragboard.getFiles().get(0));
                 success = true;
             }
@@ -240,16 +239,47 @@ public class ImportExportPage extends Application {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select a directory to save the card file");
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Yu-Gi-Oh card (*.json)", "*.json");
-        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.getExtensionFilters()
+                .add(new FileChooser.ExtensionFilter("Yu-Gi-Oh card (*.json)", "*.json"));
+        fileChooser.getExtensionFilters()
+                .add(new FileChooser.ExtensionFilter("Yu-Gi-Oh multiple card (*.csv)", "*.csv"));
         fileChooser.setInitialFileName(cardName);
         File file = fileChooser.showSaveDialog(stage);
         if (file == null) return;
 
+        JSONObject value = new JSONObject(answer.getString("Value"));
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (isJsonFileName(file.getName())) stringBuilder.append(value);
+        else { // requested file is csv
+            if (value.has("Atk")) { // card is monster
+                stringBuilder.append("Name,Level,Attribute,MonsterType,CardType,Atk,Def,Description,Price,cardID\n");
+                stringBuilder.append("\"").append(value.getString("Name")).append("\"").append(",")
+                        .append(value.getInt("Level")).append(",")
+                        .append(value.getString("Attribute")).append(",")
+                        .append(value.getString("MonsterType")).append(",")
+                        .append(value.getString("CardType")).append(',')
+                        .append(value.getInt("Atk")).append(",")
+                        .append(value.getInt("Def")).append(",")
+                        .append("\"").append(value.getString("Description")).append("\"").append(",")
+                        .append(value.getInt("Price")).append(",")
+                        .append(value.getInt("CardID")).append("\n");
+            } else { // card is spell
+                stringBuilder.append("Name,Type,Icon,Description,Status,Price,cardID\n");
+                stringBuilder.append("\"").append(value.getString("Name")).append("\"").append(",")
+                        .append(value.getString("Type")).append(",")
+                        .append(value.getString("Icon")).append(",")
+                        .append("\"").append(value.getString("Description")).append("\"").append(",")
+                        .append(value.getString("Status")).append(",")
+                        .append(value.getInt("Price")).append(",")
+                        .append(value.getInt("CardID")).append("\n");
+            }
+        }
+
         Alert alert;
         try {
             FileWriter fileWriter = new FileWriter(file);
-            fileWriter.write(answer.getString("Value"));
+            fileWriter.write(stringBuilder.toString());
             fileWriter.close();
 
             alert = new Alert(Alert.AlertType.INFORMATION);
@@ -261,10 +291,12 @@ public class ImportExportPage extends Application {
         alert.show();
     }
 
-    private boolean isJsonFile(Dragboard dragboard) {
+    private boolean hasJsonFile(Dragboard dragboard) {
         if (!dragboard.hasFiles()) return false;
+        return isJsonFileName(dragboard.getFiles().get(0).getName());
+    }
 
-        String fileName = dragboard.getFiles().get(0).getName();
+    private boolean isJsonFileName(String fileName) {
         int i = fileName.lastIndexOf('.');
         return i > 0 && fileName.substring(i + 1).equals("json");
     }
