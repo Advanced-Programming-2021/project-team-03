@@ -12,7 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -62,7 +62,15 @@ public class GamePage extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent startingPane = FXMLLoader.load(getClass().getResource("/view/fxml/Game.fxml"));
         this.pane = (AnchorPane) startingPane;
-        primaryStage.setScene(new Scene(startingPane));
+        Scene scene = new Scene(startingPane);
+        scene.setOnKeyPressed(keyEvent -> {
+            try {
+                checkForCheat(keyEvent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        primaryStage.setScene(scene);
         stage = primaryStage;
         stage.show();
     }
@@ -129,7 +137,7 @@ public class GamePage extends Application {
         opponentGraveyard.removeImage();
     }
 
-    private void refreshMap(){
+    private void refreshMap() {
         cleanMap();
         loadMap();
     }
@@ -248,19 +256,19 @@ public class GamePage extends Application {
     }
 
     private void loadGameField() {
-        if (playerFieldCard.isFull() && playerFieldCard.isFaceUp()){
+        if (playerFieldCard.isFull() && playerFieldCard.isFaceUp()) {
             try {
                 gameField.setImage(MainView.getInstance().getBackgroundImage(playerFieldCard.getCardName()));
-            }catch (Exception exception){
+            } catch (Exception exception) {
                 gameField.setImage(normalFieldImage);
             }
-        }else if (opponentFieldCard.isFull() && opponentFieldCard.isFaceUp()){
+        } else if (opponentFieldCard.isFull() && opponentFieldCard.isFaceUp()) {
             try {
                 gameField.setImage(MainView.getInstance().getBackgroundImage(opponentFieldCard.getCardName()));
-            }catch (Exception exception){
+            } catch (Exception exception) {
                 gameField.setImage(normalFieldImage);
             }
-        }else {
+        } else {
             gameField.setImage(normalFieldImage);
         }
     }
@@ -402,21 +410,20 @@ public class GamePage extends Application {
     public void surrender(JSONObject answer) {
         String type = answer.getString("Type");
         String value = answer.getString("Value");
-        if (type.equals("Successful")){
+        if (type.equals("Successful")) {
             try {
                 GameResultPage.setGamePage(this);
                 GameResultPage.setMessageString(value);
                 new GameResultPage().start(stage);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else{
+        } else {
             //TODO showError;
         }
     }
 
-    private void setGraveyardOnMouseClicked(){
+    private void setGraveyardOnMouseClicked() {
         playerGraveyard.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -438,12 +445,12 @@ public class GamePage extends Application {
         ArrayList<String> cards = MainView.getInstance().showOpponentGraveyard();
         GraveyardPage graveyard = new GraveyardPage();
         graveyard.setCardNames(cards);
-        for (String string: cards){
+        for (String string : cards) {
             System.out.println(string); //TODO remove me;
         }
         try {
             graveyard.start(stage);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -454,7 +461,7 @@ public class GamePage extends Application {
         graveyard.setCardNames(cards);
         try {
             graveyard.start(stage);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -466,5 +473,11 @@ public class GamePage extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void checkForCheat(KeyEvent keyEvent) throws Exception {
+        KeyCombination combination = new KeyCodeCombination(KeyCode.C, KeyCombination.SHIFT_DOWN, KeyCombination.CONTROL_DOWN);
+        if (combination.match(keyEvent))
+            new Cheat().start(stage);
     }
 }
