@@ -39,7 +39,7 @@ public class GameResultPage extends Application {
     }
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         this.message.setText(GameResultPage.messageString);
     }
 

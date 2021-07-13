@@ -5,6 +5,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import org.json.JSONObject;
 import view.pages.GamePage;
+import view.pages.GameResultPage;
 import view.viewmodel.ScoreboardUser;
 
 import java.util.ArrayList;
@@ -606,29 +607,23 @@ public class MainView {
         return switch (requestType) {
             case "Print message" -> printMessage(valueObject);
             case "Game is over" -> gameIsOver(valueObject);
-            case "Round is over" -> roundIsOver(valueObject);
             default -> error();
         };
     }
 
-    private boolean isRoundOver;
     private boolean isGameOver;
     private GamePage gamePage;
 
     private String printMessage(JSONObject valueObject) {
         String message = valueObject.getString("Message");
-        gamePage.printMessage(message);
-        return "Do not need request answer";
-    }
-
-    private String roundIsOver(JSONObject valueObject) {
-        printMessage(valueObject);
-        isRoundOver = true;
+        if (gamePage != null)
+            gamePage.printMessage(message);
         return "Do not need request answer";
     }
 
     private String gameIsOver(JSONObject valueObject) {
-        printMessage(valueObject);
+        String message = valueObject.getString("Message");
+        GameResultPage.setMessageString(message);
         isGameOver = true;
         return "Do not need request answer";
     }
@@ -638,10 +633,6 @@ public class MainView {
         answerObject.put("Type", "Error");
         answerObject.put("Value", "Invalid Request Type!!!");
         return answerObject.toString();
-    }
-
-    public boolean isRoundOver() {
-        return isRoundOver;
     }
 
     public boolean isGameOver() {

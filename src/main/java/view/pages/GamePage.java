@@ -78,7 +78,6 @@ public class GamePage extends Application {
         });
         primaryStage.setScene(scene);
         stage = primaryStage;
-        MainView.getInstance().setGamePage(this);
         stage.show();
     }
 
@@ -105,6 +104,7 @@ public class GamePage extends Application {
                 })
         );
         playtime.play();
+        MainView.getInstance().setGamePage(this);
     }
 
     public void pause(MouseEvent mouseEvent) throws Exception {
@@ -159,9 +159,24 @@ public class GamePage extends Application {
         opponentGraveyard.removeImage();
     }
 
+    private boolean resultShown = false;
+
     private void refreshMap() {
+        if (!resultShown)
+            checkGameResults();
         cleanMap();
         loadMap();
+    }
+
+    private void checkGameResults() {
+        if (MainView.getInstance().isGameOver()) {
+            try {
+                GameResultPage.setGamePage(this);
+                new GameResultPage().start(stage);
+                resultShown = true;
+            } catch (Exception ignored) {
+            }
+        }
     }
 
     private void cleanArray(ArrayList<CardView> array) {
