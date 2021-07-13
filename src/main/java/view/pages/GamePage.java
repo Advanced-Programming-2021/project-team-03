@@ -81,6 +81,7 @@ public class GamePage extends Application {
                     loadStartingCardViews();
                     setAllOnMouseEnteredHandler();
                     setAllOnMouseExitHandler();
+                    setGraveyardOnMouseClicked();
                     loadMap();
                 })
         );
@@ -414,6 +415,30 @@ public class GamePage extends Application {
             //TODO showError;
         }
     }
+
+    private void setGraveyardOnMouseClicked(){
+        playerGraveyard.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                showPlayerGraveyard();
+            }
+        });
+        opponentGraveyard.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                showOpponentGraveyard();
+            }
+        });
+    }
+
+    private void showOpponentGraveyard() {
+        ArrayList<String> cards = MainView.getInstance().showOpponentGraveyard();
+    }
+
+    private void showPlayerGraveyard() {
+        ArrayList<String> cards = MainView.getInstance().showPlayerGraveyard();
+    }
+
 
     public void endGame() {
         try {

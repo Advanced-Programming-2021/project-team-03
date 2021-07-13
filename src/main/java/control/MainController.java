@@ -117,11 +117,24 @@ public class MainController {
             case "Show deck summary" -> showDeckSummary(valueObject);
             case "Show all user cards" -> showAllUserCards(valueObject);
             case "Get phase" -> getPhase(valueObject);
+            case "Show opponent graveyard" -> showOpponentGraveyard(valueObject);
             //endregion
 
 
             default -> error();
         };
+    }
+
+    private String showOpponentGraveyard(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+
+        JSONObject answerObject = new JSONObject();
+        if (isTokenInvalid(token)) putTokenError(answerObject);
+        else {
+            answerObject.put("Type", "Graveyard")
+                    .put("Value", GameController.getInstance().getOpponentGraveyard());
+        }
+        return answerObject.toString();
     }
 
     private String getPhase(JSONObject valueObject) {
