@@ -63,21 +63,18 @@ public class GraveyardPage extends Application implements Initializable {
     }
 
     private void animations() {
-        nameLabel.setOpacity(0);
-        scrollPane.setOpacity(0);
+        nameLabel.setOpacity(0.0);
+        scrollPane.setOpacity(0.0);
         FadeTransition label = new FadeTransition(Duration.seconds(1), nameLabel);
-
-
         label.setFromValue(0.0);
         label.setToValue(1.0);
-
         label.play();
-        label.setOnFinished(actionEvent -> {
-            FadeTransition bar = new FadeTransition(Duration.seconds(1), scrollBar);
-            bar.setFromValue(0.0);
-            bar.setToValue(0.8);
-            bar.play();
-        });
+
+        FadeTransition bar = new FadeTransition(Duration.seconds(1), scrollBar);
+        bar.setFromValue(0.0);
+        bar.setToValue(0.8);
+        bar.setDelay(Duration.seconds(1));
+        bar.play();
     }
 
     private void loadCards() {
