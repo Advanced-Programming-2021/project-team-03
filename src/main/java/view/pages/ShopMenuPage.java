@@ -316,7 +316,7 @@ class ShopCard {
             label.setStyle("-fx-background-color: rgba(255, 255, 255, 0.7);" +
                     "-fx-border-radius: 30px;" +
                     "-fx-background-radius: 30px;" +
-                    "-fx-font-size: 13px");
+                    "-fx-font-size: 14px");
 
             newPopup.getContent().add(label);
         }
