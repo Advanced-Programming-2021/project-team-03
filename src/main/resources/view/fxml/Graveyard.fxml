@@ -14,7 +14,7 @@
                 <Image url="@../../assets/pageImages/GraveyardBackground.jpg" />
             </image>
         </ImageView>
-        <Text layoutX="75.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GRAVEYARD" textAlignment="CENTER">
+        <Text fx:id="nameLabel" layoutX="75.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GRAVEYARD" textAlignment="CENTER">
             <font>
                 <Font name="Georgia Bold Italic" size="36.0" />
             </font>

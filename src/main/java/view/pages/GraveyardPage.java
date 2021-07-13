@@ -1,6 +1,9 @@
 package view.pages;
 
+import javafx.animation.FadeTransition;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,8 +19,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import view.viewcontroller.MainView;
 
 import java.net.URL;
@@ -29,6 +34,8 @@ public class GraveyardPage extends Application implements Initializable {
 
     @FXML
     public ScrollPane scrollPane;
+    public Text nameLabel;
+    public ScrollPane scrollBar;
 
     private ArrayList<String> cardNames;
 
@@ -51,10 +58,24 @@ public class GraveyardPage extends Application implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        animations();
         loadCards();
     }
 
-    private void loadCards(){
+    private void animations() {
+        FadeTransition label = new FadeTransition(Duration.seconds(1), nameLabel);
+        FadeTransition bar = new FadeTransition(Duration.seconds(1), scrollBar);
+
+        label.setFromValue(0.0);
+        label.setToValue(1.0);
+        bar.setFromValue(0.0);
+        bar.setToValue(0.8);
+
+        label.play();
+        label.setOnFinished(actionEvent -> bar.play());
+    }
+
+    private void loadCards() {
         HBox hBox = new HBox();
         try {
             for (String cardName : cardNames) {
