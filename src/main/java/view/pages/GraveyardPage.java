@@ -37,7 +37,7 @@ public class GraveyardPage extends Application implements Initializable {
     public Text nameLabel;
     public ScrollPane scrollBar;
 
-    private ArrayList<String> cardNames;
+    private static ArrayList<String> cardNames;
 
 
     @Override
@@ -58,21 +58,26 @@ public class GraveyardPage extends Application implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        animations();
         loadCards();
+        animations();
     }
 
     private void animations() {
+        nameLabel.setOpacity(0);
+        scrollPane.setOpacity(0);
         FadeTransition label = new FadeTransition(Duration.seconds(1), nameLabel);
-        FadeTransition bar = new FadeTransition(Duration.seconds(1), scrollBar);
+
 
         label.setFromValue(0.0);
         label.setToValue(1.0);
-        bar.setFromValue(0.0);
-        bar.setToValue(0.8);
 
         label.play();
-        label.setOnFinished(actionEvent -> bar.play());
+        label.setOnFinished(actionEvent -> {
+            FadeTransition bar = new FadeTransition(Duration.seconds(1), scrollBar);
+            bar.setFromValue(0.0);
+            bar.setToValue(0.8);
+            bar.play();
+        });
     }
 
     private void loadCards() {

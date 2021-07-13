@@ -420,15 +420,16 @@ public class GamePage extends Application {
         playerGraveyard.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                showPlayerGraveyard();
                 System.out.println("player graveyard"); //TODO remove me
+                showPlayerGraveyard();
+
             }
         });
         opponentGraveyard.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                showOpponentGraveyard();
                 System.out.println("opponent graveyard"); //TODO remove me
+                showOpponentGraveyard();
             }
         });
     }
@@ -437,6 +438,9 @@ public class GamePage extends Application {
         ArrayList<String> cards = MainView.getInstance().showOpponentGraveyard();
         GraveyardPage graveyard = new GraveyardPage();
         graveyard.setCardNames(cards);
+        for (String string: cards){
+            System.out.println(string); //TODO remove me;
+        }
         try {
             graveyard.start(stage);
         }catch (Exception e){
