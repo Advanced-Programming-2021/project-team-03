@@ -48,8 +48,6 @@ public class GraveyardPage extends Application implements Initializable {
         pauseWindow.setScene(scene);
         pauseWindow.getIcons().add(new Image(String.valueOf(getClass().getResource("/assets/pageImages/logo.png"))));
         pauseWindow.setTitle("GRAVEYARD");
-//        pauseWindow.setWidth(400);
-//        pauseWindow.setHeight(400);
         pauseWindow.setResizable(false);
         pauseWindow.initModality(Modality.APPLICATION_MODAL);
         GraveyardPage.stage = pauseWindow;
@@ -59,22 +57,15 @@ public class GraveyardPage extends Application implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadCards();
-//        animations();
+        animations();
     }
 
     private void animations() {
         nameLabel.setOpacity(0.0);
-        scrollPane.setOpacity(0.0);
         FadeTransition label = new FadeTransition(Duration.seconds(1), nameLabel);
         label.setFromValue(0.0);
         label.setToValue(1.0);
         label.play();
-
-        FadeTransition bar = new FadeTransition(Duration.seconds(1), scrollBar);
-        bar.setFromValue(0.0);
-        bar.setToValue(0.8);
-        bar.setDelay(Duration.seconds(1));
-        bar.play();
     }
 
     private void loadCards() {

@@ -1,23 +1,60 @@
 package view.pages;
 
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.json.JSONObject;
 import view.viewcontroller.MainView;
 
-public class MainPage extends Application {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MainPage extends Application implements Initializable {
     private static Stage stage;
+    public Button IO;
+    public Button shop;
+    public Button deck;
+    public Button scoreboard;
+    public Button profile;
+    public Button logout;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent startingPane = FXMLLoader.load(getClass().getResource("/view/fxml/Main.fxml"));
         primaryStage.setScene(new Scene(startingPane));
         stage = primaryStage;
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        startingAnimations();
+    }
+
+    private void startingAnimations() {
+        play(IO, true);
+        play(shop, true);
+        play(deck, true);
+        play(scoreboard, false);
+        play(profile, false);
+        play(logout, false);
+    }
+
+    private void play(Button button, boolean toRight) {
+        button.setLayoutX(418);
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(1), button);
+        if (toRight)
+            transition.setToX(350);
+        else
+            transition.setToX(-350);
+        transition.play();
     }
 
     public void logout(MouseEvent mouseEvent) throws Exception {
@@ -60,6 +97,5 @@ public class MainPage extends Application {
     }
 
     public void cardCreator(MouseEvent mouseEvent) {
-
     }
 }
