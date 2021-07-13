@@ -34,7 +34,7 @@ public class StartPage extends Application {
         mediaPlayer = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/ThemeSongs.mp3")).toString()));
         mediaPlayer.setVolume(0.2);
         mediaPlayer.setCycleCount(-1);
-        mediaPlayer.play();
+        //mediaPlayer.play();
     }
 
     public void register(MouseEvent mouseEvent) throws Exception {
