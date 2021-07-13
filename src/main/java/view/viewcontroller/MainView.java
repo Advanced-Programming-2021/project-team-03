@@ -458,8 +458,14 @@ public class MainView {
     }
 
     public Image getCardImage(String cardName) {
-        CardNames cardEnum = CardNames.valueOf(toEnumCase(cardName));
-        String url = String.valueOf(getClass().getResource("/assets/cards/" + cardEnum.imageName + ".jpg"));
+        CardNames cardEnum;
+        String url;
+        try {
+            cardEnum = CardNames.valueOf(toEnumCase(cardName));
+            url = String.valueOf(getClass().getResource("/assets/cards/" + cardEnum.imageName + ".jpg"));
+        } catch (IllegalArgumentException e) {
+            url = String.valueOf(getClass().getResource("/assets/cards/Default.jpg"));
+        }
         return new Image(url);
     }
 
