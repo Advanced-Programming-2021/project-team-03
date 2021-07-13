@@ -4,6 +4,8 @@ import control.MainController;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import org.json.JSONObject;
+import view.pages.GamePage;
+import view.pages.GameResultPage;
 import view.viewmodel.ScoreboardUser;
 
 import java.util.ArrayList;
@@ -479,6 +481,16 @@ public class MainView {
         return 0;
     }
 
+    public JSONObject reduceBalance(int amount) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Amount", amount);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Reduce balance");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
     public JSONObject buyCard(String cardName) {
         JSONObject value = new JSONObject();
         value.put("Token", token);
@@ -513,7 +525,7 @@ public class MainView {
         return success;
     }
 
-    private String toEnumCase(String string) {
+    public String toEnumCase(String string) {
         return string.toUpperCase()
                 .replace(' ', '_')
                 .replace('-', '_')
@@ -609,4 +621,56 @@ public class MainView {
         else
             return answer.getString("Value");
     }
+
+
+    //region requests
+    public String getRequest(String input) {
+        JSONObject inputObject = new JSONObject(input);
+        String requestType = inputObject.getString("Type");
+        JSONObject valueObject = new JSONObject();
+        try {
+            valueObject = inputObject.getJSONObject("Value");
+        } catch (Exception ignored) {
+        }
+
+        return switch (requestType) {
+            case "Print message" -> printMessage(valueObject);
+            case "Game is over" -> gameIsOver(valueObject);
+            default -> error();
+        };
+    }
+
+    private boolean isGameOver;
+    private GamePage gamePage;
+
+    private String printMessage(JSONObject valueObject) {
+        String message = valueObject.getString("Message");
+        if (gamePage != null)
+            gamePage.printMessage(message);
+        return "Do not need request answer";
+    }
+
+    private String gameIsOver(JSONObject valueObject) {
+        String message = valueObject.getString("Message");
+        GameResultPage.setMessageString(message);
+        isGameOver = true;
+        return "Do not need request answer";
+    }
+
+    private String error() {
+        JSONObject answerObject = new JSONObject();
+        answerObject.put("Type", "Error");
+        answerObject.put("Value", "Invalid Request Type!!!");
+        return answerObject.toString();
+    }
+
+    public boolean isGameOver() {
+        return isGameOver;
+    }
+
+    public void setGamePage(GamePage gamePage) {
+        this.gamePage = gamePage;
+    }
+
+    //end region
 }

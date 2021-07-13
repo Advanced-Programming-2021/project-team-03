@@ -3,7 +3,7 @@ package model.enums;
 public enum MonsterModels {
     BEAST_WARRIOR("Beast Warrior"),
     WARRIOR("Warrior"),
-    FIEND("Friend"),
+    FIEND("Fiend"),
     AQUA("Aqua"),
     BEAST("Beast"),
     PYRO("Pyro"),

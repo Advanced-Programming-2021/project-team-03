@@ -3,6 +3,7 @@ package view;
 import control.MainController;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import view.viewcontroller.MainView;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -176,6 +177,7 @@ public class View {
 
     public String getRequest(String input) {
         // parsing the json string request with JSONObject library
+        MainView.getInstance().getRequest(input);
         JSONObject inputObject = new JSONObject(input);
         String requestType = inputObject.getString("Type");
         JSONObject valueObject = new JSONObject();
@@ -787,7 +789,7 @@ public class View {
             else if (inputCommand.matches(GAME_MENU_COMMANDS[13])) attackToMonster(inputCommand);
             else if (inputCommand.matches(GAME_MENU_COMMANDS[14])) directAttack();
             else if (inputCommand.matches(GAME_MENU_COMMANDS[15])) {
-                if (surrender()){
+                if (surrender()) {
                     isGameOver = true;
                     break; // means surrender request accepted and the game is over.
                 }

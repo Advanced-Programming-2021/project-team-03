@@ -104,6 +104,7 @@ public class GamePage extends Application {
                 })
         );
         playtime.play();
+        MainView.getInstance().setGamePage(this);
     }
 
     public void pause(MouseEvent mouseEvent) throws Exception {
@@ -134,6 +135,17 @@ public class GamePage extends Application {
         refreshMap();
     }
 
+    public void printMessage(String value) {
+        messageText.setText(value);
+        Timeline playtime = new Timeline(
+                new KeyFrame(Duration.seconds(1), event -> {
+                    messageText.setText("");
+                })
+        );
+        playtime.play();
+        refreshMap();
+    }
+
     private void cleanMap() {
         cleanArray(playerMonsters);
         cleanArray(playerSpellAndTraps);
@@ -147,9 +159,24 @@ public class GamePage extends Application {
         opponentGraveyard.removeImage();
     }
 
+    private boolean resultShown = false;
+
     private void refreshMap() {
+        if (!resultShown)
+            checkGameResults();
         cleanMap();
         loadMap();
+    }
+
+    private void checkGameResults() {
+        if (MainView.getInstance().isGameOver()) {
+            try {
+                GameResultPage.setGamePage(this);
+                new GameResultPage().start(stage);
+                resultShown = true;
+            } catch (Exception ignored) {
+            }
+        }
     }
 
     private void cleanArray(ArrayList<CardView> array) {
@@ -640,7 +667,7 @@ public class GamePage extends Application {
                     activeSpell();
                 }
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -650,7 +677,7 @@ public class GamePage extends Application {
         String type = answer.getString("Type");
         if (type.equals("Successful")) {
             Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/ActiveSpell.wav")).toExternalForm());
-            if (mediaPlayer != null){
+            if (mediaPlayer != null) {
                 mediaPlayer.stop();
             }
             mediaPlayer = new MediaPlayer(media);
@@ -668,7 +695,7 @@ public class GamePage extends Application {
         String type = answer.getString("Type");
         if (type.equals("Successful")) {
             Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/SummonMonster.wav")).toExternalForm());
-            if (mediaPlayer != null){
+            if (mediaPlayer != null) {
                 mediaPlayer.stop();
             }
             mediaPlayer = new MediaPlayer(media);
@@ -686,7 +713,7 @@ public class GamePage extends Application {
         String type = answer.getString("Type");
         if (type.equals("Successful")) {
             Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/SetCard.wav")).toExternalForm());
-            if (mediaPlayer != null){
+            if (mediaPlayer != null) {
                 mediaPlayer.stop();
             }
             mediaPlayer = new MediaPlayer(media);
