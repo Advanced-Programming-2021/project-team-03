@@ -4,6 +4,8 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
+import javafx.scene.ImageCursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -19,6 +21,7 @@ import org.json.JSONObject;
 import view.viewcontroller.MainView;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -26,6 +29,7 @@ public class ShopMenuPage extends Application {
     private static Stage stage;
 
     @FXML
+    private Scene scene;
     public Text balance;
     public Text messageText;
     public ImageView I1;
@@ -66,19 +70,23 @@ public class ShopMenuPage extends Application {
     private Label[] priceLabels = new Label[6];
     private Label[] cardNumberLabels = new Label[6];
     private int pageIndex = 0;
+    private Image canNotBuyIcon = new Image(String.valueOf(getClass().getResource("/assets/icon/canNotBuyIcon.png")));
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent startingPane = FXMLLoader.load(getClass().getResource("/view/fxml/ShopMenu.fxml"));
-        primaryStage.setScene(new Scene(startingPane));
+        this.scene = new Scene(startingPane);
+        primaryStage.setScene(scene);
         stage = primaryStage;
     }
 
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
         loadAllCards();
         loadStartingTextsAndImages();
         setAllImagesOnMouseClickedFunction();
+        setAllImagesOnMouseEnteredFunction();
+        setAllImagesOnMouseExitedFunction();
         loadSixCard();
         loadBalance();
     }
@@ -204,7 +212,40 @@ public class ShopMenuPage extends Application {
             imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
-                    buyCard(finalI);
+                    int cardIndex = pageIndex * 6 + finalI;
+                    ShopCard card = allCards.get(cardIndex);
+                    if (card.getPrice() <= Integer.parseInt(balance.getText())){
+                        buyCard(finalI);
+                    }
+                }
+            });
+        }
+    }
+
+    private void setAllImagesOnMouseEnteredFunction(){
+        for (int i = 0; i < 6; i++) {
+            ImageView imageView = cardImages[i];
+            int finalI = i;
+            imageView.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    int cardIndex = pageIndex * 6 + finalI;
+                    ShopCard card = allCards.get(cardIndex);
+                    if (card.getPrice() > Integer.parseInt(balance.getText())){
+                        stage.getScene().setCursor(new ImageCursor(canNotBuyIcon));
+                    }
+                }
+            });
+        }
+    }
+
+    private void setAllImagesOnMouseExitedFunction(){
+        for (int i = 0; i < 6; i++) {
+            ImageView imageView = cardImages[i];
+            imageView.setOnMouseExited(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    stage.getScene().setCursor(Cursor.DISAPPEAR);
                 }
             });
         }
