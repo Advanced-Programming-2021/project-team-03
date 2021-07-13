@@ -4,6 +4,7 @@ import control.MainController;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import org.json.JSONObject;
+import view.pages.GamePage;
 import view.viewmodel.ScoreboardUser;
 
 import java.util.ArrayList;
@@ -610,12 +611,13 @@ public class MainView {
         };
     }
 
-    private String incomingMessageToShow;
     private boolean isRoundOver;
     private boolean isGameOver;
+    private GamePage gamePage;
 
     private String printMessage(JSONObject valueObject) {
-        incomingMessageToShow = valueObject.getString("Message");
+        String message = valueObject.getString("Message");
+        gamePage.printMessage(message);
         return "Do not need request answer";
     }
 
@@ -638,16 +640,16 @@ public class MainView {
         return answerObject.toString();
     }
 
-    public String getIncomingMessageToShow() {
-        return incomingMessageToShow;
-    }
-
     public boolean isRoundOver() {
         return isRoundOver;
     }
 
     public boolean isGameOver() {
         return isGameOver;
+    }
+
+    public void setGamePage(GamePage gamePage) {
+        this.gamePage = gamePage;
     }
 
     //end region
