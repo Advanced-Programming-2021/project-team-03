@@ -418,5 +418,12 @@ public class MainView {
         String url = String.valueOf(getClass().getResource("/assets/cards/" + cardEnum.imageName + ".jpg"));
         return new Image(url);
     }
+
+    public Image getBackgroundImage(String fieldName) throws Exception {
+        BackgroundEnums background = BackgroundEnums.valueOf(toEnumCase(fieldName));
+        String url = String.valueOf(getClass().getResource("/assets/field/" + background.backgroundName + ".jpg"));
+        return new Image(url);
+    }
+
     //endregion
 }
