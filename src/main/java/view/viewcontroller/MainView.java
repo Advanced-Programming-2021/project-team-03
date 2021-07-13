@@ -310,7 +310,9 @@ public class MainView {
         JSONObject messageToSendToControl = new JSONObject();
         messageToSendToControl.put("Type", "Get map for graphic");
         messageToSendToControl.put("Value", value);
-        return sendRequestToControl(messageToSendToControl);
+        JSONObject answer = sendRequestToControl(messageToSendToControl);
+        System.out.println(answer.getJSONObject("Map").toString()); //TODO remove me
+        return answer;
     }
 
     public boolean isCoinOnStarFace() {
@@ -332,7 +334,10 @@ public class MainView {
         JSONObject messageToSendToControl = new JSONObject();
         messageToSendToControl.put("Type", "Surrender");
         messageToSendToControl.put("Value", value);
-        return sendRequestToControl(messageToSendToControl);
+        JSONObject answer = sendRequestToControl(messageToSendToControl);
+        System.out.println(answer.getString("Type"));
+        System.out.println(answer.getString("Value"));
+        return answer;
     }
 
     public JSONObject goToTheNextPhase() {

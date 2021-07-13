@@ -7,7 +7,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.GraveyardPage">
+<AnchorPane prefHeight="400" prefWidth="400" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.GraveyardPage">
     <children>
         <ImageView fitHeight="400.0" fitWidth="400.0" pickOnBounds="true">
             <image>
@@ -48,6 +48,6 @@
                 </RadialGradient>
             </fill>
         </Text>
-      <ScrollPane fx:id="scrollPane" layoutX="10.0" layoutY="135.0" opacity="0.8" prefHeight="250.0" prefWidth="380.0" />
+      <ScrollPane fx:id="scrollPane" layoutX="25.0" layoutY="134.0" opacity="0.8" prefHeight="234.0" prefWidth="349.0" />
     </children>
 </AnchorPane>

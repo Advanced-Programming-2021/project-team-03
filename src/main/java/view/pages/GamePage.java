@@ -81,8 +81,8 @@ public class GamePage extends Application {
                     loadStartingCardViews();
                     setAllOnMouseEnteredHandler();
                     setAllOnMouseExitHandler();
-                    setGraveyardOnMouseClicked();
                     loadMap();
+                    setGraveyardOnMouseClicked();
                 })
         );
         playtime.play();
@@ -342,6 +342,8 @@ public class GamePage extends Application {
     private void setAllOnMouseEnteredHandler() {
         setOnMouseEnteredHandler(playerFieldCard);
         setOnMouseEnteredHandler(opponentFieldCard);
+        setOnMouseEnteredHandler(playerGraveyard);
+        setOnMouseEnteredHandler(opponentGraveyard);
         setOnMouseEnteredHandlerForArray(playerHand);
         setOnMouseEnteredHandlerForArray(playerMonsters);
         setOnMouseEnteredHandlerForArray(playerSpellAndTraps);
@@ -373,6 +375,8 @@ public class GamePage extends Application {
     private void setAllOnMouseExitHandler() {
         setOnMouseExitedHandler(playerFieldCard);
         setOnMouseExitedHandler(opponentFieldCard);
+        setOnMouseExitedHandler(playerGraveyard);
+        setOnMouseExitedHandler(opponentGraveyard);
         setOnMouseExitedHandlerForArray(playerHand);
         setOnMouseExitedHandlerForArray(playerMonsters);
         setOnMouseExitedHandlerForArray(playerSpellAndTraps);

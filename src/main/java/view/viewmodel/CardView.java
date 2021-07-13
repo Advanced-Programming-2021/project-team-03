@@ -19,6 +19,7 @@ public class CardView extends ImageView {
         this.setFitWidth(75);
         this.isFaceUp = false;
         this.isFull = false;
+        this.setImage(null);
     }
 
     public void putTheCardOnTheBack() {

@@ -80,7 +80,7 @@ public class Board {
 
     public void setFieldCard(Update gameUpdate, SpellAndTrap fieldCard) {
         if (this.fieldCard != null) {
-            addCardToGraveyard(fieldCard);
+            addCardToGraveyard(this.fieldCard);
             if (this.fieldCard.isActive())
                 gameUpdate.addCardToGraveyard(this.fieldCard);
         }
