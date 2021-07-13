@@ -8,12 +8,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -24,6 +28,7 @@ import view.viewcontroller.MainView;
 import view.viewmodel.CardView;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class GamePage extends Application {
     private static Stage stage;
@@ -57,6 +62,7 @@ public class GamePage extends Application {
     private CardView opponentGraveyard;
     private final double MAX_HEALTH = 8000.0;
     private CardView selectedCard;
+    private static MediaPlayer mediaPlayer;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -93,9 +99,8 @@ public class GamePage extends Application {
                     loadStartingCardViews();
                     setAllOnMouseEnteredHandler();
                     setAllOnMouseExitHandler();
-                    setGraveyardOnMouseClicked();
-                    loadMap();
                     setAllOnMouseClickedHandler();
+                    loadMap();
                 })
         );
         playtime.play();
@@ -339,19 +344,19 @@ public class GamePage extends Application {
     private void loadStartingCardViews() {
         Integer[] xPositions = {500, 597, 697, 798, 896};
         for (int i = 0; i < 5; i++) {
-            opponentSpellAndTraps.add(new CardView(125, xPositions[i]));
-            opponentMonsters.add(new CardView(244, xPositions[i]));
-            playerMonsters.add(new CardView(389, xPositions[i]));
-            playerSpellAndTraps.add(new CardView(511, xPositions[i]));
+            opponentSpellAndTraps.add(new CardView(125, xPositions[i], "Opponent", "Spell", i));
+            opponentMonsters.add(new CardView(244, xPositions[i], "Opponent", "Monster", i));
+            playerMonsters.add(new CardView(389, xPositions[i], "Myself", "Monster", i));
+            playerSpellAndTraps.add(new CardView(511, xPositions[i], "Myself", "Spell", i));
         }
         for (int i = 0; i < 6; i++) {
-            playerHand.add(new CardView(650, 400 + i * 100));
-            opponentHand.add(new CardView(-15, 400 + i * 100));
+            playerHand.add(new CardView(650, 400 + i * 100, "Myself", "Hand", i));
+            opponentHand.add(new CardView(-15, 400 + i * 100, "Opponent", "Hand", i));
         }
-        playerFieldCard = new CardView(413, 1000);
-        playerGraveyard = new CardView(381, 399);
-        opponentFieldCard = new CardView(216, 399);
-        opponentGraveyard = new CardView(241, 1000);
+        playerFieldCard = new CardView(413, 1000, "Myself", "Field", 0);
+        playerGraveyard = new CardView(381, 399, "Myself", "Grave", 0);
+        opponentFieldCard = new CardView(216, 399, "Opponent", "Field", 0);
+        opponentGraveyard = new CardView(241, 1000, "Opponent", "Grave", 0);
         pane.getChildren().add(playerFieldCard);
         pane.getChildren().add(playerGraveyard);
         pane.getChildren().add(opponentFieldCard);
@@ -500,6 +505,120 @@ public class GamePage extends Application {
 
     private void setAllOnMouseClickedHandler() {
         setGraveyardOnMouseClicked();
+        for (CardView cardView : playerHand) {
+            cardView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    if (cardView.isFull()) {
+                        clickedOnPlayerHand(cardView, mouseEvent);
+                    }
+                }
+            });
+        }
+        for (CardView cardView : playerSpellAndTraps) {
+            cardView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    if (cardView.isFull()) {
+                        clickedOnPlayerSpells(cardView, mouseEvent);
+                    }
+                }
+            });
+        }
+        for (CardView cardView : playerMonsters) {
+            cardView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    if (cardView.isFull()) {
+                        clickedOnPlayerMonsters(cardView, mouseEvent);
+                    }
+                }
+            });
+        }
+    }
 
+    private void clickedOnPlayerMonsters(CardView cardView, MouseEvent mouseEvent) {
+        //TODO
+    }
+
+    private void clickedOnPlayerSpells(CardView cardView, MouseEvent mouseEvent) {
+        //TODO
+    }
+
+    private void clickedOnPlayerHand(CardView cardView, MouseEvent mouseEvent) {
+        try {
+            String cardType = MainView.getInstance().getCardType(cardView.getCardName());
+            if (cardType.equals("Monster")) {
+                if (mouseEvent.getButton() == MouseButton.SECONDARY) { //Right click
+                    selectCard(cardView.getOwner(), cardView.getType(), cardView.getPosition());
+                    setCard();
+                } else if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                    selectCard(cardView.getOwner(), cardView.getType(), cardView.getPosition());
+                    summonMonster();
+                }
+            } else {
+                if (mouseEvent.getButton() == MouseButton.SECONDARY) { //Right click
+                    selectCard(cardView.getOwner(), cardView.getType(), cardView.getPosition());
+                    setCard();
+                } else if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                    selectCard(cardView.getOwner(), cardView.getType(), cardView.getPosition());
+                    activeSpell();
+                }
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void activeSpell() {
+        JSONObject answer = MainView.getInstance().activeSpell();
+        String type = answer.getString("Type");
+        if (type.equals("Successful")) {
+            Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/ActiveSpell.wav")).toExternalForm());
+            mediaPlayer.stop();
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+            refreshMap();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(answer.getString("Value"));
+            alert.show();
+        }
+    }
+
+    private void summonMonster() {
+        JSONObject answer = MainView.getInstance().summonMonster();
+        String type = answer.getString("Type");
+        if (type.equals("Successful")) {
+            Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/SummonMonster.wav")).toExternalForm());
+            mediaPlayer.stop();
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+            refreshMap();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(answer.getString("Value"));
+            alert.show();
+        }
+    }
+
+    private void setCard() {
+        JSONObject answer = MainView.getInstance().setCard();
+        String type = answer.getString("Type");
+        if (type.equals("Successful")) {
+            Media media = new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/SetCard.wav")).toExternalForm());
+            mediaPlayer.stop();
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+            refreshMap();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(answer.getString("Value"));
+            alert.show();
+        }
+    }
+
+    private void selectCard(String owner, String type, int position) {
+        MainView.getInstance().selectCard(owner, type, position);
     }
 }

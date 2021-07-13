@@ -51,7 +51,7 @@ public class StartPage extends Application implements Initializable {
 
     private void backgroundMusic() {
         mediaPlayer = new MediaPlayer(new Media(Objects.requireNonNull(getClass().getResource("/assets/soundtrack/ThemeSongs.mp3")).toString()));
-        mediaPlayer.setVolume(0.2);
+        mediaPlayer.setVolume(0.1);
         mediaPlayer.setCycleCount(-1);
         mediaPlayer.play();
     }

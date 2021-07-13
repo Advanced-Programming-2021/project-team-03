@@ -393,6 +393,45 @@ public class MainView {
         }
         return graveyard;
     }
+
+    public JSONObject selectCard(String cardOwner, String type, int position) {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        value.put("Type", type);
+        value.put("Position", String.valueOf(position));
+        value.put("Owner", cardOwner);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Select Card");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
+    public JSONObject setCard() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Set in field");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
+    public JSONObject summonMonster() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Summon");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
+
+    public JSONObject activeSpell() {
+        JSONObject value = new JSONObject();
+        value.put("Token", token);
+        JSONObject messageToSendToControl = new JSONObject();
+        messageToSendToControl.put("Type", "Active effect");
+        messageToSendToControl.put("Value", value);
+        return sendRequestToControl(messageToSendToControl);
+    }
     //endregion
 
     //region ShopMenuPage
