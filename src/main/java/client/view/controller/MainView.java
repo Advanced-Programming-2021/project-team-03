@@ -519,4 +519,14 @@ public class MainView {
                 .put("ID", messageID)
                 .put("Text", newText)));
     }
+
+    public Image getProfileImageByID(int ID) {
+        try {
+            return new Image(String.valueOf(getClass().getResource("/assets/profilepictures/"
+                    + ID + ".png")));
+        } catch (Exception e) {
+            return new Image(String.valueOf(getClass().getResource("/assets/profilepictures/1.png")));
+        }
+
+    }
 }
