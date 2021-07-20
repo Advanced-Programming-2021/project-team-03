@@ -129,6 +129,7 @@ public class MainController {
                 case "Delete message" -> deleteMessage(valueObject);
                 case "Pin message" -> pinMessage(valueObject);
                 case "Edit message" -> editMessage(valueObject);
+                case "Get profile public info" -> getProfilePublicInfo(valueObject);
                 case "Get profile picture number by username" -> getProfileImageByUsername(valueObject);
                 //endregion
 
@@ -198,6 +199,18 @@ public class MainController {
         }
 
         return answerObject.toString();
+    }
+
+    private String getProfilePublicInfo(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+        if (invalidToken(token)) return TOKEN_ERROR;
+        User user = User.getByUsername(valueObject.getString("Username"));
+        if (user == null) return errorAnswer("No user found with this Username");
+        return successfulAnswer(new JSONObject()
+                .put("Username", user.getUsername())
+                .put("Nickname", user.getNickname())
+                .put("Score", user.getScore())
+                .put("Level", user.getLevel()));
     }
 
     private String getProfileImageByUsername(JSONObject valueObject) {
