@@ -30,6 +30,7 @@ public class ChatRoomPage extends Application {
     public Label onlineUsersLabel;
     public static final MainView view = MainView.getInstance();
     private VBox vBox;
+    private Message pinnedMessage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -64,6 +65,7 @@ public class ChatRoomPage extends Application {
     }
 
     private void loadMessages() {
+        loadPinnedMessage();
         onlineUsersLabel.setText(view.onlineUsersNum() + " online users");
         vBox.getChildren().clear();
 
@@ -94,8 +96,6 @@ public class ChatRoomPage extends Application {
             alignment.setPrefWidth(510);
             vBox.getChildren().add(alignment);
         }
-
-        loadPinnedMessage();
     }
 
     public void back(ActionEvent actionEvent) throws Exception {
@@ -116,7 +116,7 @@ public class ChatRoomPage extends Application {
 
     private void pin(Message message) {
         view.alertMaker(view.pinMessage(message.ID));
-        loadPinnedMessage();
+        loadMessages();
     }
 
     private void delete(Message message) {
@@ -160,7 +160,7 @@ public class ChatRoomPage extends Application {
 
     private void loadPinnedMessage() {
         VBox pinnedVBox = new VBox();
-        Message pinnedMessage = view.getPinnedMessage();
+        pinnedMessage = view.getPinnedMessage();
         pinnedPane.getChildren().clear();
         if (pinnedMessage == null) {
             pinnedLabel.setText("No pinned message");
@@ -198,8 +198,14 @@ public class ChatRoomPage extends Application {
             messageVBox.getChildren().add(editedLabel);
         }
 
-        MenuItem pinItem = new MenuItem("Pin message");
-        pinItem.setOnAction(event -> pin(message));
+        MenuItem pinItem;
+        if (pinnedMessage != null && pinnedMessage.ID == message.ID) {
+            pinItem = new MenuItem("Unpin message");
+            pinItem.setOnAction(event -> unpin(null));
+        } else {
+            pinItem = new MenuItem("Pin message");
+            pinItem.setOnAction(event -> pin(message));
+        }
 
         MenuButton menuButton = new MenuButton("...", null, pinItem);
         if (message.senderNickname.equals(nickName)) {
@@ -213,7 +219,7 @@ public class ChatRoomPage extends Application {
     }
 
     public void unpin(ActionEvent actionEvent) {
-        if (view.getPinnedMessage() == null) return;
+        if (pinnedMessage == null) return;
         view.alertMaker(view.pinMessage(0));
         loadPinnedMessage();
     }
