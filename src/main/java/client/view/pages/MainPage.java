@@ -1,5 +1,6 @@
 package client.view.pages;
 
+import client.view.controller.MainView;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;

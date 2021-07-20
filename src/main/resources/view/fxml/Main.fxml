@@ -50,7 +50,7 @@
             <Font name="Baskerville Old Face" size="32.4" />
         </font>
     </Button>
-   <Button layoutX="75.0" layoutY="120.0" mnemonicParsing="false" onAction="#chatRoom" onMouseClicked="#cardCreator" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons" stylesheets="@../css/buttonStyles.css" text="Card Creator" textAlignment="CENTER">
+   <Button layoutX="75.0" layoutY="120.0" mnemonicParsing="false" onAction="#chatRoom" onMouseClicked="#cardCreator" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons" stylesheets="@../css/buttonStyles.css" text="Chat Room" textAlignment="CENTER">
       <font>
          <Font name="Baskerville Old Face" size="32.4" />
       </font>
