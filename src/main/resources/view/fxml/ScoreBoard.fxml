@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/11.0.2"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.ScoreBoardPage">
+<AnchorPane prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="client.view.pages.ScoreBoardPage">
     <children>
         <ImageView fitHeight="720.0" fitWidth="1080.0" pickOnBounds="true">
             <image>
@@ -23,7 +26,9 @@
                              resizable="false" text="Score"/>
             </columns>
         </TableView>
-        <Button layoutX="520.0" layoutY="680.0" mnemonicParsing="false" onAction="#back"
+        <Button layoutX="470.5" layoutY="682.0" mnemonicParsing="false" onAction="#back" prefWidth="59.5"
                 style="-fx-background-color: LIGHTBLUE; -fx-background-radius: 40;" text="Back"/>
+        <Button layoutX="550.0" layoutY="682.0" mnemonicParsing="false" onAction="#refresh"
+                style="-fx-background-color: LIGHTBLUE; -fx-background-radius: 40;" text="Refresh"/>
     </children>
 </AnchorPane>

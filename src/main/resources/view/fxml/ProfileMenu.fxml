@@ -5,72 +5,97 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.ProfileMenuPage">
-   <children>
-      <ImageView fitHeight="720" fitWidth="1080" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../assets/pageImages/ProfileBackground.jpg" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="profileImage" fitHeight="150.0" fitWidth="200.0" layoutX="74.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
-      </ImageView>
-      <Text fx:id="usernameText" layoutX="250.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="600">
-         <font>
-            <Font name="Baskerville Old Face" size="42.0" />
-         </font>
-      </Text>
-      <Text fx:id="nicknameText" layoutX="250.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="600">
-         <font>
-            <Font name="Baskerville Old Face" size="42.0" />
-         </font>
-      </Text>
-      <Button layoutX="271.0" layoutY="639.0" mnemonicParsing="false" onMouseClicked="#back" styleClass="profileButtons" stylesheets="@../css/buttonStyles.css" text="Back">
-         <font>
-            <Font name="Baskerville Old Face" size="24.0" />
-         </font></Button>
-      <Button layoutX="74.0" layoutY="566.0" mnemonicParsing="false" onMouseClicked="#addChangeNicknameFields" styleClass="profileButtons" stylesheets="@../css/buttonStyles.css" text="Change Nickname">
-         <font>
-            <Font name="Baskerville Old Face" size="24.0" />
-         </font></Button>
-      <Button layoutX="348.0" layoutY="566.0" mnemonicParsing="false" onMouseClicked="#addChangePasswordFields" styleClass="profileButtons" stylesheets="@../css/buttonStyles.css" text="Change Password">
-         <font>
-            <Font name="Baskerville Old Face" size="24.0" />
-         </font></Button>
-      <Button fx:id="OKButton" layoutX="276.0" layoutY="498.0" mnemonicParsing="false" onMouseClicked="#okButton" styleClass="profileButtons" stylesheets="@../css/buttonStyles.css" text="OK" visible="false">
-         <font>
-            <Font name="Baskerville Old Face" size="24.0" />
-         </font></Button>
-      <TextField fx:id="nicknameField" alignment="CENTER" layoutX="316.0" layoutY="277.0" prefHeight="36.0" prefWidth="211.0" promptText="New Nickname" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" visible="false">
-         <font>
-            <Font name="Baskerville Old Face" size="18.0" />
-         </font></TextField>
-      <Text fx:id="newNicknameText" layoutX="74.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New Nickname:" visible="false" wrappingWidth="241.8">
-         <font>
-            <Font name="Baskerville Old Face" size="36.0" />
-         </font>
-      </Text>
-      <PasswordField fx:id="currentPasswordField" alignment="CENTER" layoutX="316.0" layoutY="277.0" prefHeight="36.0" prefWidth="211.0" promptText="Current Password" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" visible="false">
-         <font>
-            <Font name="Baskerville Old Face" size="18.0" />
-         </font></PasswordField>
-      <Text fx:id="currentPasswordText" layoutX="48.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Password:" visible="false" wrappingWidth="263.8">
-         <font>
-            <Font name="Baskerville Old Face" size="36.0" />
-         </font>
-      </Text>
-      <PasswordField fx:id="newPasswordField" alignment="CENTER" layoutX="316.0" layoutY="340" prefHeight="36.0" prefWidth="211.0" promptText="New Password" styleClass="registerTextField" stylesheets="@../css/textFieldStyle.css" visible="false">
-         <font>
-            <Font name="Baskerville Old Face" size="18.0" />
-         </font></PasswordField>
-      <Text fx:id="newPasswordText" layoutX="93.0" layoutY="367.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New Password:" visible="false" wrappingWidth="218.8">
-         <font>
-            <Font name="Baskerville Old Face" size="36.0" />
-         </font>
-      </Text>
-      <Text fx:id="messageText" layoutX="61.0" layoutY="423.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-alignment: center;" wrappingWidth="500.13671875">
-         <font>
-            <Font name="Baskerville Old Face" size="24.0" />
-         </font>
-      </Text>
-   </children>
+<AnchorPane prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.view.pages.ProfileMenuPage">
+    <children>
+        <ImageView fitHeight="720" fitWidth="1080" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../../assets/pageImages/ProfileBackground.jpg"/>
+            </image>
+        </ImageView>
+        <ImageView fx:id="profileImage" fitHeight="150.0" fitWidth="200.0" layoutX="74.0" layoutY="41.0"
+                   pickOnBounds="true" preserveRatio="true">
+        </ImageView>
+        <Text fx:id="usernameText" layoutX="250.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              wrappingWidth="600">
+            <font>
+                <Font name="Baskerville Old Face" size="42.0"/>
+            </font>
+        </Text>
+        <Text fx:id="nicknameText" layoutX="250.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              wrappingWidth="600">
+            <font>
+                <Font name="Baskerville Old Face" size="42.0"/>
+            </font>
+        </Text>
+        <Button layoutX="271.0" layoutY="639.0" mnemonicParsing="false" onMouseClicked="#back"
+                styleClass="profileButtons" stylesheets="@../css/buttonStyles.css" text="Back">
+            <font>
+                <Font name="Baskerville Old Face" size="24.0"/>
+            </font>
+        </Button>
+        <Button layoutX="74.0" layoutY="566.0" mnemonicParsing="false" onMouseClicked="#addChangeNicknameFields"
+                styleClass="profileButtons" stylesheets="@../css/buttonStyles.css" text="Change Nickname">
+            <font>
+                <Font name="Baskerville Old Face" size="24.0"/>
+            </font>
+        </Button>
+        <Button layoutX="348.0" layoutY="566.0" mnemonicParsing="false" onMouseClicked="#addChangePasswordFields"
+                styleClass="profileButtons" stylesheets="@../css/buttonStyles.css" text="Change Password">
+            <font>
+                <Font name="Baskerville Old Face" size="24.0"/>
+            </font>
+        </Button>
+        <Button fx:id="OKButton" layoutX="276.0" layoutY="498.0" mnemonicParsing="false" onMouseClicked="#okButton"
+                styleClass="profileButtons" stylesheets="@../css/buttonStyles.css" text="OK" visible="false">
+            <font>
+                <Font name="Baskerville Old Face" size="24.0"/>
+            </font>
+        </Button>
+        <TextField fx:id="nicknameField" alignment="CENTER" layoutX="316.0" layoutY="277.0" prefHeight="36.0"
+                   prefWidth="211.0" promptText="New Nickname" styleClass="registerTextField"
+                   stylesheets="@../css/textFieldStyle.css" visible="false">
+            <font>
+                <Font name="Baskerville Old Face" size="18.0"/>
+            </font>
+        </TextField>
+        <Text fx:id="newNicknameText" layoutX="74.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              text="New Nickname:" visible="false" wrappingWidth="241.8">
+            <font>
+                <Font name="Baskerville Old Face" size="36.0"/>
+            </font>
+        </Text>
+        <PasswordField fx:id="currentPasswordField" alignment="CENTER" layoutX="316.0" layoutY="277.0" prefHeight="36.0"
+                       prefWidth="211.0" promptText="Current Password" styleClass="registerTextField"
+                       stylesheets="@../css/textFieldStyle.css" visible="false">
+            <font>
+                <Font name="Baskerville Old Face" size="18.0"/>
+            </font>
+        </PasswordField>
+        <Text fx:id="currentPasswordText" layoutX="48.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              text="Current Password:" visible="false" wrappingWidth="263.8">
+            <font>
+                <Font name="Baskerville Old Face" size="36.0"/>
+            </font>
+        </Text>
+        <PasswordField fx:id="newPasswordField" alignment="CENTER" layoutX="316.0" layoutY="340" prefHeight="36.0"
+                       prefWidth="211.0" promptText="New Password" styleClass="registerTextField"
+                       stylesheets="@../css/textFieldStyle.css" visible="false">
+            <font>
+                <Font name="Baskerville Old Face" size="18.0"/>
+            </font>
+        </PasswordField>
+        <Text fx:id="newPasswordText" layoutX="93.0" layoutY="367.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              text="New Password:" visible="false" wrappingWidth="218.8">
+            <font>
+                <Font name="Baskerville Old Face" size="36.0"/>
+            </font>
+        </Text>
+        <Text fx:id="messageText" layoutX="61.0" layoutY="423.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              style="-fx-text-alignment: center;" wrappingWidth="500.13671875">
+            <font>
+                <Font name="Baskerville Old Face" size="24.0"/>
+            </font>
+        </Text>
+    </children>
 </AnchorPane>

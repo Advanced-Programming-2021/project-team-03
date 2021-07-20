@@ -8,7 +8,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720"
             prefWidth="1080" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="view.pages.StartPage">
+            fx:controller="client.view.pages.StartPage">
     <children>
         <ImageView fitHeight="720.0" fitWidth="1080.0" pickOnBounds="true">
             <image>
