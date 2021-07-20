@@ -177,7 +177,7 @@ public class User {
         updateInDatabase();
     }
 
-    public synchronized void setStartingCards() throws DatabaseException {
+    public synchronized void setStarterPack() throws DatabaseException {
         ArrayList<Monster> monsters = new ArrayList<>(Monster.getAllMonsters().values());
         ArrayList<SpellAndTrap> spellAndTraps = new ArrayList<>(SpellAndTrap.getAllSpellAndTraps().values());
         Collections.shuffle(monsters);

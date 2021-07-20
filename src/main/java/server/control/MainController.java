@@ -1004,7 +1004,7 @@ public class MainController {
         if (User.doesNicknameExists(nickname))
             return errorAnswer("User with nickname " + nickname + " already exists");
         try {
-            new User(username, password, nickname).setStartingCards();
+            new User(username, password, nickname).setStarterPack();
             return successfulAnswer("User created successfully!");
         } catch (DatabaseException e) {
             return errorAnswer(e.errorMessage);
