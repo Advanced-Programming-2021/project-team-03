@@ -55,6 +55,8 @@ public class MainController {
         //this method receives a input string and return a string as an answer
         /* note that the strings are in Json format */
 
+        updateServer();
+
         // parsing the json string request with JSONObject library
         JSONObject inputObject = new JSONObject(input);
         String requestType = inputObject.getString("Type");
@@ -126,11 +128,72 @@ public class MainController {
                 case "Pin message" -> pinMessage(valueObject);
                 //endregion
 
+                //region auction requests
+                case "Create an auction" -> createAuctionCommand(valueObject);
+                case "Bid for auction" -> bidForAuctionCommand(valueObject);
+                case "See all auctions" -> seeAllAuctionsCommand();
+                //endregion
+
                 default -> error();
             };
         } catch (Exception e) {
             return errorAnswer("Error occurred: " + e.getMessage());
         }
+    }
+
+    private void updateServer() {
+        AuctionController.getInstance().checkAllAuctions();
+    }
+
+    private String seeAllAuctionsCommand() {
+        return new JSONObject().put("All auctions", AuctionController.getInstance().getAllAuctions()).toString();
+    }
+
+    private String bidForAuctionCommand(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+        int auctionId = Integer.parseInt(valueObject.getString("ID"));
+        int price = Integer.parseInt(valueObject.getString("Price"));
+        if (invalidToken(token)) return TOKEN_ERROR;
+
+        JSONObject answerObject = new JSONObject();
+
+        if (AuctionController.getInstance().containsId(auctionId)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "User does not have this card");
+        } else if (AuctionController.getInstance().bidderDoesNotHaveEnoughMoney(onlineUsers.get(token), price)) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "User does not have this card");
+        } else {
+            answerObject.put("Type", "Success");
+            answerObject.put("Value", AuctionController.getInstance().bidForAuction(onlineUsers.get(token), auctionId, price));
+        }
+
+        return answerObject.toString();
+    }
+
+    private String createAuctionCommand(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+        String cardName = valueObject.getString("Card Name");
+        int price = Integer.parseInt(valueObject.getString("Price"));
+        if (invalidToken(token)) return TOKEN_ERROR;
+
+        JSONObject answerObject = new JSONObject();
+
+        if (User.getByUsername(onlineUsers.get(token)).getNumberOfCards(cardName) == 0) {
+            answerObject.put("Type", "Error");
+            answerObject.put("Value", "User does not have this card");
+        } else {
+            try {
+                AuctionController.getInstance().addAuction(onlineUsers.get(token), cardName, price);
+                answerObject.put("Type", "Success");
+                answerObject.put("Value", "Auction created");
+            } catch (Exception e) {
+                answerObject.put("Type", "Error");
+                answerObject.put("Value", "Auction failed");
+            }
+        }
+
+        return answerObject.toString();
     }
 
     private String pinMessage(JSONObject valueObject) {

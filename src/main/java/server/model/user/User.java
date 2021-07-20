@@ -208,4 +208,9 @@ public class User {
         }
         return counter;
     }
+
+    public void removeCard(Card card) throws DatabaseException {
+        cards.remove(card);
+        updateInDatabase();
+    }
 }
