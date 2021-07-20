@@ -11,15 +11,14 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -175,7 +174,7 @@ public class ChatRoomPage extends Application {
         setMessageVBox(pinnedMessage, pinnedVBox);
         pinnedVBox.setPadding(new Insets(20));
         pinnedVBox.setSpacing(10);
-        pinnedVBox.setMaxHeight(210);
+        pinnedVBox.setMaxHeight(200);
         pinnedPane.getChildren().add(pinnedVBox);
     }
 
@@ -196,6 +195,7 @@ public class ChatRoomPage extends Application {
                 view.getProfileImageByID(view.getProfileImageNumber(message.senderUsername)));
         profileImage.setPreserveRatio(true);
         profileImage.setFitWidth(100);
+        profileImage.setOnMouseClicked(event -> showProfilePopup(message));
         profileVBox.getChildren().add(profileImage);
 
         Label senderLabel = new Label(message.senderNickname);
@@ -242,6 +242,14 @@ public class ChatRoomPage extends Application {
             menuButton.getItems().addAll(deleteItem, editItem);
         }
         if (!message.deleted) messageVBox.getChildren().add(menuButton);
+    }
+
+    private void showProfilePopup(Message message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Profile Details");
+        alert.setHeaderText(message.senderUsername);
+        alert.setContentText(view.getUserInfo(message.senderUsername).toString());
+        alert.show();
     }
 
     public void unpin(ActionEvent actionEvent) {

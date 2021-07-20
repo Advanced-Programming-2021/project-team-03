@@ -1,6 +1,7 @@
 package client.view.controller;
 
 import client.clientconfig.Client;
+import client.view.model.ClientUser;
 import client.view.model.Message;
 import client.view.model.ScoreboardUser;
 import client.view.pages.GamePage;
@@ -9,6 +10,7 @@ import com.google.gson.Gson;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import org.json.JSONObject;
+import server.control.databaseController.UserJson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,6 +156,23 @@ public class MainView {
         } catch (Exception e) {
             return 1;
         }
+    }
+
+    private boolean isSuccessful(JSONObject answer) {
+        return answer.has("Type") && answer.getString("Type").equals("Successful");
+    }
+
+    public ClientUser getUserInfo(String username) {
+        JSONObject answer = sendRequestToControl(jsonWithType("Get profile public info",
+                jsonWithToken().put("Username", username)));
+        if (!isSuccessful(answer)) return null;
+        answer = answer.getJSONObject("Value");
+        ClientUser user = new ClientUser();
+        user.nickname = answer.getString("Nickname");
+        user.score = answer.getInt("Score");
+        user.level = answer.getInt("Level");
+        user.username = answer.getString("Username");
+        return user;
     }
 
     public int getProfileImageNumber(String username) {

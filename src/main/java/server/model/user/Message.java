@@ -35,6 +35,8 @@ public class Message {
     public Message deleteMessage() {
         this.text = "(Deleted Message)";
         deleted = true;
+        if (pinned.ID == this.ID) pinned = null;
+        allMessages.remove(this.ID);
         return this;
     }
 
