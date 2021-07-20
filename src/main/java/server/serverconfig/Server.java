@@ -6,13 +6,17 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Server {
     private static Server instance;
     private static final String HOST = "127.0.0.1";
     private final static int PORT = 7777;
+    private final ExecutorService threadPool;
 
     private Server() {
+        threadPool = Executors.newFixedThreadPool(5);
     }
 
     public static Server getInstance() {
@@ -36,14 +40,9 @@ public class Server {
                     dataInputStream = new DataInputStream(socket.getInputStream());
                     String input = dataInputStream.readUTF();
 
-                    ServerThread serverThread = new ServerThread();
-                    serverThread.start();
-                    String message = serverThread.run(input);
-                    dataOutputStream.writeUTF(message);
-                    dataOutputStream.flush();
-                    dataInputStream.close();
-                    dataOutputStream.close();
-                    socket.close();
+                    Runnable request = new Request(input, dataInputStream, dataOutputStream, socket);
+                    threadPool.execute(request);
+
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
