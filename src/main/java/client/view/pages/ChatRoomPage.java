@@ -1,10 +1,8 @@
-package view.pages;
+package client.view.pages;
 
 import client.view.controller.MainView;
 import client.view.model.Message;
-import client.view.pages.MainPage;
 import javafx.application.Application;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

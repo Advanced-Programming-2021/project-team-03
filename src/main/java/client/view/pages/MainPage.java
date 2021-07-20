@@ -2,6 +2,7 @@ package client.view.pages;
 
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -12,7 +13,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.json.JSONObject;
-import client.view.controller.MainView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -98,5 +98,9 @@ public class MainPage extends Application implements Initializable {
 
     public void cardCreator(MouseEvent mouseEvent) throws Exception {
         new CardCreatorPage().start(stage);
+    }
+
+    public void chatRoom(ActionEvent actionEvent) throws Exception {
+        new ChatRoomPage().start(stage);
     }
 }
