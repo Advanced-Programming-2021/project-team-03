@@ -127,6 +127,7 @@ public class MainController {
                 case "Delete message" -> deleteMessage(valueObject);
                 case "Pin message" -> pinMessage(valueObject);
                 case "Edit message" -> editMessage(valueObject);
+                case "Get profile picture number by username" -> getProfileImageByUsername(valueObject);
                 //endregion
 
                 default -> error();
@@ -134,6 +135,14 @@ public class MainController {
         } catch (Exception e) {
             return errorAnswer("Error occurred: " + e.getMessage());
         }
+    }
+
+    private String getProfileImageByUsername(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+        if (invalidToken(token)) return TOKEN_ERROR;
+        User user = User.getByUsername(valueObject.getString("Username"));
+        if (user == null) return errorAnswer("No user found with this Username");
+        return successAnswer(user.getProfileImageID());
     }
 
     private String editMessage(JSONObject valueObject) {

@@ -2,6 +2,7 @@ package client.view.model;
 
 public class Message {
     public String senderNickname;
+    public String senderUsername;
     public int ID;
     public String text;
     public String time;

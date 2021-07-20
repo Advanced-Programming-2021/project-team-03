@@ -10,6 +10,7 @@ public class Message {
     private static int IDCount = 1;
 
     public final String senderNickname;
+    public final String senderUsername;
     public final int ID;
     private String text;
     private String time;
@@ -19,6 +20,7 @@ public class Message {
     public Message(String text, User user) {
         this.text = text;
         this.senderNickname = user.getNickname();
+        this.senderUsername = user.getUsername();
         ID = IDCount++;
         setCurrentTime();
         allMessages.put(ID, this);

@@ -155,6 +155,17 @@ public class MainView {
             return 1;
         }
     }
+
+    public int getProfileImageNumber(String username) {
+        JSONObject answer = sendRequestToControl(
+                jsonWithType("Get profile picture number by username",
+                        jsonWithToken().put("Username",  username)));
+        try {
+            return answer.getInt("Value");
+        } catch (Exception e) {
+            return 1;
+        }
+    }
     //endregion
 
     //region ScoreBoardPage
@@ -527,6 +538,5 @@ public class MainView {
         } catch (Exception e) {
             return new Image(String.valueOf(getClass().getResource("/assets/profilepictures/1.png")));
         }
-
     }
 }

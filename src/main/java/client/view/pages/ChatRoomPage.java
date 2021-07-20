@@ -11,9 +11,14 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
@@ -72,7 +77,7 @@ public class ChatRoomPage extends Application {
         String cssLayout = """
                 -fx-border-color: rgba(95, 177, 236, 0.9);
                 -fx-border-insets: 3;
-                -fx-border-width: 3;
+                -fx-border-width: 4;
                 -fx-border-radius: 10px;
                 """;
 
@@ -177,17 +182,38 @@ public class ChatRoomPage extends Application {
     private void setMessageVBox(Message message, VBox messageVBox) {
         messageVBox.getChildren().clear();
 
+        VBox profileVBox = new VBox();
+        profileVBox.setAlignment(Pos.CENTER);
+        profileVBox.setStyle("""
+                -fx-border-color: orange;
+                -fx-border-insets: 1;
+                -fx-border-width: 2;
+                -fx-border-radius: 5px;
+                """);
+        profileVBox.setMaxWidth(120);
+
+        ImageView profileImage = new ImageView(
+                view.getProfileImageByID(view.getProfileImageNumber(message.senderUsername)));
+        profileImage.setPreserveRatio(true);
+        profileImage.setFitWidth(100);
+        profileVBox.getChildren().add(profileImage);
+
         Label senderLabel = new Label(message.senderNickname);
-        messageVBox.getChildren().add(senderLabel);
+        senderLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+        profileVBox.getChildren().add(senderLabel);
+
+        messageVBox.getChildren().add(profileVBox);
 
         Label textLabel = new Label(message.text);
         textLabel.setWrapText(true);
         textLabel.setTextAlignment(TextAlignment.LEFT);
         textLabel.setPrefWidth(200);
+        textLabel.setFont(Font.font("Verdana", FontWeight.NORMAL, 13));
 
         messageVBox.getChildren().add(textLabel);
 
         Label timeLabel = new Label(message.time);
+        timeLabel.setFont(Font.font("Verdana", FontWeight.NORMAL, 10));
         messageVBox.getChildren().add(timeLabel);
 
         if (message.deleted) {
