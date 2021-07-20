@@ -1,15 +1,14 @@
 package client.view.controller;
 
 import client.clientconfig.Client;
+import client.view.model.Message;
+import client.view.model.ScoreboardUser;
+import client.view.pages.GamePage;
+import client.view.pages.GameResultPage;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import org.json.JSONObject;
-import client.view.model.Message;
-import client.view.pages.GamePage;
-import client.view.pages.GameResultPage;
-import client.view.model.ScoreboardUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -494,14 +493,30 @@ public class MainView {
 
     public Message getPinnedMessage() {
         JSONObject answer = sendRequestToControl(jsonWithType("Show pinned message", jsonWithToken()));
-        return new Gson().fromJson(answer.get("Value").toString(), Message.class);
+        if (answer.getString("Type").equals("Successful"))
+            return new Gson().fromJson(answer.get("Value").toString(), Message.class);
+        return null;
     }
 
     public JSONObject sendMessage(String text) {
         return sendRequestToControl(jsonWithType("Send message", jsonWithToken().put("Text", text)));
     }
 
-    public JSONObject pinMessage(int messageID) {
+    public JSONObject pinMessage(int messageID) { // enter ID = 0 to unpin the pinned message
         return sendRequestToControl(jsonWithType("Pin message", jsonWithToken().put("ID", messageID)));
+    }
+
+    public int onlineUsersNum() {
+        return sendRequestToControl(jsonWithType("Get number of online users", jsonWithToken())).getInt("Value");
+    }
+
+    public JSONObject deleteMessage(int messageID) {
+        return sendRequestToControl(jsonWithType("Delete message", jsonWithToken().put("ID", messageID)));
+    }
+
+    public JSONObject editMessage(int messageID, String newText) {
+        return sendRequestToControl(jsonWithType("Edit message", jsonWithToken()
+                .put("ID", messageID)
+                .put("Text", newText)));
     }
 }
