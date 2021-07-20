@@ -9,16 +9,16 @@ public class Message {
     public static Message pinned;
     private static int IDCount = 1;
 
-    public final String sender;
+    public final String senderNickname;
     public final int ID;
     private String text;
     private String time;
     private boolean edited;
     private boolean deleted;
 
-    public Message(String text, String sender) {
+    public Message(String text, User user) {
         this.text = text;
-        this.sender = sender;
+        this.senderNickname = user.getNickname();
         ID = IDCount++;
         setCurrentTime();
         allMessages.put(ID, this);
@@ -37,6 +37,7 @@ public class Message {
     }
 
     public Message editText(String text) {
+        if (deleted) return this;
         this.text = text;
         edited = true;
         return this;
@@ -46,12 +47,8 @@ public class Message {
         return text;
     }
 
-    public static void setPinned(Message pinned) {
-        Message.pinned = pinned;
-    }
-
-    public String getTime() {
-        return time;
+    public void setPinned() {
+        pinned = this;
     }
 
     public static Message getByID(int ID) {
