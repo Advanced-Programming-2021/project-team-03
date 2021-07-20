@@ -14,516 +14,356 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720"
             prefWidth="1080" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="client.view.pages.DeckEditPage">
-    <children>
-        <ImageView fitHeight="720.0" fitWidth="1080.0" pickOnBounds="true">
-            <image>
-                <Image url="@../../assets/pageImages/DeckEditBackground.jpg"/>
-            </image>
-        </ImageView>
-        <Pane fx:id="mainPane" layoutX="255.0" layoutY="13.0" prefHeight="490.0" prefWidth="805.0"
-              styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css">
-            <children>
-                <ImageView fx:id="main1" fitHeight="85.0" fitWidth="58.0" layoutX="23.0" layoutY="22.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main49" fitHeight="85.0" fitWidth="58.0" layoutX="23.0" layoutY="390.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main13" fitHeight="85.0" fitWidth="58.0" layoutX="23.0" layoutY="114.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main25" fitHeight="85.0" fitWidth="58.0" layoutX="23.0" layoutY="206.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main37" fitHeight="85.0" fitWidth="58.0" layoutX="23.0" layoutY="298.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main2" fitHeight="85.0" fitWidth="58.0" layoutX="87.0" layoutY="22.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main3" fitHeight="85.0" fitWidth="58.0" layoutX="151.0" layoutY="22.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main4" fitHeight="85.0" fitWidth="58.0" layoutX="215.0" layoutY="22.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main5" fitHeight="85.0" fitWidth="58.0" layoutX="279.0" layoutY="22.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main6" fitHeight="85.0" fitWidth="58.0" layoutX="343.0" layoutY="22.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main7" fitHeight="85.0" fitWidth="58.0" layoutX="407.0" layoutY="22.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main8" fitHeight="85.0" fitWidth="58.0" layoutX="471.0" layoutY="22.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main9" fitHeight="85.0" fitWidth="58.0" layoutX="535.0" layoutY="22.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main10" fitHeight="85.0" fitWidth="58.0" layoutX="599.0" layoutY="22.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main11" fitHeight="85.0" fitWidth="58.0" layoutX="663.0" layoutY="22.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main12" fitHeight="85.0" fitWidth="58.0" layoutX="727.0" layoutY="22.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main14" fitHeight="85.0" fitWidth="58.0" layoutX="87.0" layoutY="114.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main36" fitHeight="85.0" fitWidth="58.0" layoutX="727.0" layoutY="206.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main35" fitHeight="85.0" fitWidth="58.0" layoutX="663.0" layoutY="206.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main34" fitHeight="85.0" fitWidth="58.0" layoutX="599.0" layoutY="206.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main33" fitHeight="85.0" fitWidth="58.0" layoutX="535.0" layoutY="206.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main32" fitHeight="85.0" fitWidth="58.0" layoutX="471.0" layoutY="206.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main31" fitHeight="85.0" fitWidth="58.0" layoutX="407.0" layoutY="206.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main29" fitHeight="85.0" fitWidth="58.0" layoutX="279.0" layoutY="206.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main30" fitHeight="85.0" fitWidth="58.0" layoutX="343.0" layoutY="206.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main27" fitHeight="85.0" fitWidth="58.0" layoutX="151.0" layoutY="206.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main28" fitHeight="85.0" fitWidth="58.0" layoutX="215.0" layoutY="206.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main26" fitHeight="85.0" fitWidth="58.0" layoutX="87.0" layoutY="206.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main24" fitHeight="85.0" fitWidth="58.0" layoutX="727.0" layoutY="114.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main23" fitHeight="85.0" fitWidth="58.0" layoutX="663.0" layoutY="114.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main22" fitHeight="85.0" fitWidth="58.0" layoutX="599.0" layoutY="114.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main21" fitHeight="85.0" fitWidth="58.0" layoutX="535.0" layoutY="114.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main20" fitHeight="85.0" fitWidth="58.0" layoutX="471.0" layoutY="114.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main19" fitHeight="85.0" fitWidth="58.0" layoutX="407.0" layoutY="114.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main18" fitHeight="85.0" fitWidth="58.0" layoutX="343.0" layoutY="114.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main17" fitHeight="85.0" fitWidth="58.0" layoutX="279.0" layoutY="114.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main16" fitHeight="85.0" fitWidth="58.0" layoutX="215.0" layoutY="114.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main15" fitHeight="85.0" fitWidth="58.0" layoutX="151.0" layoutY="114.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main38" fitHeight="85.0" fitWidth="58.0" layoutX="87.0" layoutY="298.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main55" fitHeight="85.0" fitWidth="58.0" layoutX="407.0" layoutY="390.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main54" fitHeight="85.0" fitWidth="58.0" layoutX="343.0" layoutY="390.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main53" fitHeight="85.0" fitWidth="58.0" layoutX="279.0" layoutY="390.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main52" fitHeight="85.0" fitWidth="58.0" layoutX="215.0" layoutY="390.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main51" fitHeight="85.0" fitWidth="58.0" layoutX="151.0" layoutY="390.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main50" fitHeight="85.0" fitWidth="58.0" layoutX="87.0" layoutY="390.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main48" fitHeight="85.0" fitWidth="58.0" layoutX="727.0" layoutY="298.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main47" fitHeight="85.0" fitWidth="58.0" layoutX="663.0" layoutY="298.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main46" fitHeight="85.0" fitWidth="58.0" layoutX="599.0" layoutY="298.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main45" fitHeight="85.0" fitWidth="58.0" layoutX="535.0" layoutY="298.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main44" fitHeight="85.0" fitWidth="58.0" layoutX="471.0" layoutY="298.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main43" fitHeight="85.0" fitWidth="58.0" layoutX="407.0" layoutY="298.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main42" fitHeight="85.0" fitWidth="58.0" layoutX="343.0" layoutY="298.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main41" fitHeight="85.0" fitWidth="58.0" layoutX="279.0" layoutY="298.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main40" fitHeight="85.0" fitWidth="58.0" layoutX="215.0" layoutY="298.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main39" fitHeight="85.0" fitWidth="58.0" layoutX="151.0" layoutY="298.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main60" fitHeight="85.0" fitWidth="58.0" layoutX="727.0" layoutY="390.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main59" fitHeight="85.0" fitWidth="58.0" layoutX="663.0" layoutY="390.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main58" fitHeight="85.0" fitWidth="58.0" layoutX="599.0" layoutY="390.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main57" fitHeight="85.0" fitWidth="58.0" layoutX="535.0" layoutY="390.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="main56" fitHeight="85.0" fitWidth="58.0" layoutX="471.0" layoutY="390.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-            </children>
-        </Pane>
-        <Pane fx:id="sidePane" layoutX="255.0" layoutY="509.0" prefHeight="202.0" prefWidth="805.0"
-              styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css">
-            <children>
-                <ImageView fx:id="side1" fitHeight="85.0" fitWidth="58.0" layoutX="23.0" layoutY="10.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="side13" fitHeight="85.0" fitWidth="58.0" layoutX="23.0" layoutY="102.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="side14" fitHeight="85.0" fitWidth="58.0" layoutX="87.0" layoutY="102.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="side12" fitHeight="85.0" fitWidth="58.0" layoutX="727.0" layoutY="10.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="side11" fitHeight="85.0" fitWidth="58.0" layoutX="663.0" layoutY="10.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="side10" fitHeight="85.0" fitWidth="58.0" layoutX="599.0" layoutY="10.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="side9" fitHeight="85.0" fitWidth="58.0" layoutX="535.0" layoutY="10.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="side8" fitHeight="85.0" fitWidth="58.0" layoutX="471.0" layoutY="10.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="side7" fitHeight="85.0" fitWidth="58.0" layoutX="407.0" layoutY="10.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="side6" fitHeight="85.0" fitWidth="58.0" layoutX="343.0" layoutY="10.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="side5" fitHeight="85.0" fitWidth="58.0" layoutX="279.0" layoutY="10.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="side4" fitHeight="85.0" fitWidth="58.0" layoutX="215.0" layoutY="10.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="side3" fitHeight="85.0" fitWidth="58.0" layoutX="151.0" layoutY="10.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="side2" fitHeight="85.0" fitWidth="58.0" layoutX="87.0" layoutY="10.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-                <ImageView fx:id="side15" fitHeight="85.0" fitWidth="58.0" layoutX="151.0" layoutY="102.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-                    </image>
-                </ImageView>
-            </children>
-        </Pane>
-        <Label fx:id="mainLabel" layoutX="813.0" prefHeight="31.0" prefWidth="253.0" style="-fx-alignment: center;"
-               styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css"
-               text="Main deck: &lt;&gt;/(40~60)">
-            <font>
-                <Font size="23.0"/>
-            </font>
-        </Label>
-        <ScrollPane id="scrollPane" fx:id="scrollPane" layoutX="10.0" layoutY="45.0" prefHeight="366.0"
-                    prefWidth="233.0"
-                    style="-fx-background-color: rgba(255, 255, 255, 0.7)rgba(255, 255, 255, 0.7); -fx-opacity: 0.7; -fx-background-radius: 20; -fx-border-radius: 40;"
-                    stylesheets="@../css/buttonStyles.css">
-            <effect>
-                <DropShadow spread="0.59">
-                    <color>
-                        <Color red="0.1041666641831398" green="0.3118055462837219" blue="0.375"/>
-                    </color>
-                </DropShadow>
-            </effect>
-        </ScrollPane>
-        <ImageView fx:id="zoomedImage" fitHeight="300.0" fitWidth="206.0" layoutX="29.0" layoutY="418.0"
+    <ImageView fitHeight="720.0" fitWidth="1080.0" pickOnBounds="true">
+        <Image url="@../../assets/pageImages/DeckEditBackground.jpg"/>
+    </ImageView>
+    <Pane fx:id="mainPane" layoutX="255.0" layoutY="13.0" prefHeight="490.0" prefWidth="805.0"
+          styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css">
+        <ImageView fx:id="main1" fitHeight="85.0" fitWidth="58.0" layoutX="23.0" layoutY="22.0"
                    pickOnBounds="true" preserveRatio="true">
-            <image>
-                <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
-            </image>
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
         </ImageView>
-        <Label fx:id="deckLabel" layoutX="2.0" layoutY="2.0" prefHeight="24.0" prefWidth="338.0"
-               style="-fx-alignment: center;" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css"
-               text="Editing &lt;deckName&gt; (valid?)">
-            <font>
-                <Font size="23.0"/>
-            </font>
-        </Label>
-        <Label fx:id="sideLabel" layoutX="813.0" layoutY="489.0" prefHeight="31.0" prefWidth="253.0"
-               style="-fx-alignment: center;" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css"
-               text="Side deck: &lt;&gt;/15">
-            <font>
-                <Font size="23.0"/>
-            </font>
-        </Label>
-        <Button layoutX="815.0" layoutY="640.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="61.2"
-                prefWidth="236.0" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Back">
-            <font>
-                <Font size="24.0"/>
-            </font>
-        </Button>
-    </children>
+        <ImageView fx:id="main49" fitHeight="85.0" fitWidth="58.0" layoutX="23.0" layoutY="390.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main13" fitHeight="85.0" fitWidth="58.0" layoutX="23.0" layoutY="114.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main25" fitHeight="85.0" fitWidth="58.0" layoutX="23.0" layoutY="206.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main37" fitHeight="85.0" fitWidth="58.0" layoutX="23.0" layoutY="298.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main2" fitHeight="85.0" fitWidth="58.0" layoutX="87.0" layoutY="22.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main3" fitHeight="85.0" fitWidth="58.0" layoutX="151.0" layoutY="22.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main4" fitHeight="85.0" fitWidth="58.0" layoutX="215.0" layoutY="22.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main5" fitHeight="85.0" fitWidth="58.0" layoutX="279.0" layoutY="22.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main6" fitHeight="85.0" fitWidth="58.0" layoutX="343.0" layoutY="22.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main7" fitHeight="85.0" fitWidth="58.0" layoutX="407.0" layoutY="22.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main8" fitHeight="85.0" fitWidth="58.0" layoutX="471.0" layoutY="22.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main9" fitHeight="85.0" fitWidth="58.0" layoutX="535.0" layoutY="22.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main10" fitHeight="85.0" fitWidth="58.0" layoutX="599.0" layoutY="22.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main11" fitHeight="85.0" fitWidth="58.0" layoutX="663.0" layoutY="22.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main12" fitHeight="85.0" fitWidth="58.0" layoutX="727.0" layoutY="22.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main14" fitHeight="85.0" fitWidth="58.0" layoutX="87.0" layoutY="114.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main36" fitHeight="85.0" fitWidth="58.0" layoutX="727.0" layoutY="206.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main35" fitHeight="85.0" fitWidth="58.0" layoutX="663.0" layoutY="206.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main34" fitHeight="85.0" fitWidth="58.0" layoutX="599.0" layoutY="206.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main33" fitHeight="85.0" fitWidth="58.0" layoutX="535.0" layoutY="206.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main32" fitHeight="85.0" fitWidth="58.0" layoutX="471.0" layoutY="206.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main31" fitHeight="85.0" fitWidth="58.0" layoutX="407.0" layoutY="206.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main29" fitHeight="85.0" fitWidth="58.0" layoutX="279.0" layoutY="206.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main30" fitHeight="85.0" fitWidth="58.0" layoutX="343.0" layoutY="206.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main27" fitHeight="85.0" fitWidth="58.0" layoutX="151.0" layoutY="206.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main28" fitHeight="85.0" fitWidth="58.0" layoutX="215.0" layoutY="206.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main26" fitHeight="85.0" fitWidth="58.0" layoutX="87.0" layoutY="206.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main24" fitHeight="85.0" fitWidth="58.0" layoutX="727.0" layoutY="114.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main23" fitHeight="85.0" fitWidth="58.0" layoutX="663.0" layoutY="114.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main22" fitHeight="85.0" fitWidth="58.0" layoutX="599.0" layoutY="114.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main21" fitHeight="85.0" fitWidth="58.0" layoutX="535.0" layoutY="114.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main20" fitHeight="85.0" fitWidth="58.0" layoutX="471.0" layoutY="114.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main19" fitHeight="85.0" fitWidth="58.0" layoutX="407.0" layoutY="114.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main18" fitHeight="85.0" fitWidth="58.0" layoutX="343.0" layoutY="114.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main17" fitHeight="85.0" fitWidth="58.0" layoutX="279.0" layoutY="114.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main16" fitHeight="85.0" fitWidth="58.0" layoutX="215.0" layoutY="114.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main15" fitHeight="85.0" fitWidth="58.0" layoutX="151.0" layoutY="114.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main38" fitHeight="85.0" fitWidth="58.0" layoutX="87.0" layoutY="298.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main55" fitHeight="85.0" fitWidth="58.0" layoutX="407.0" layoutY="390.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main54" fitHeight="85.0" fitWidth="58.0" layoutX="343.0" layoutY="390.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main53" fitHeight="85.0" fitWidth="58.0" layoutX="279.0" layoutY="390.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main52" fitHeight="85.0" fitWidth="58.0" layoutX="215.0" layoutY="390.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main51" fitHeight="85.0" fitWidth="58.0" layoutX="151.0" layoutY="390.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main50" fitHeight="85.0" fitWidth="58.0" layoutX="87.0" layoutY="390.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main48" fitHeight="85.0" fitWidth="58.0" layoutX="727.0" layoutY="298.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main47" fitHeight="85.0" fitWidth="58.0" layoutX="663.0" layoutY="298.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main46" fitHeight="85.0" fitWidth="58.0" layoutX="599.0" layoutY="298.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main45" fitHeight="85.0" fitWidth="58.0" layoutX="535.0" layoutY="298.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main44" fitHeight="85.0" fitWidth="58.0" layoutX="471.0" layoutY="298.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main43" fitHeight="85.0" fitWidth="58.0" layoutX="407.0" layoutY="298.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main42" fitHeight="85.0" fitWidth="58.0" layoutX="343.0" layoutY="298.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main41" fitHeight="85.0" fitWidth="58.0" layoutX="279.0" layoutY="298.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main40" fitHeight="85.0" fitWidth="58.0" layoutX="215.0" layoutY="298.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main39" fitHeight="85.0" fitWidth="58.0" layoutX="151.0" layoutY="298.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main60" fitHeight="85.0" fitWidth="58.0" layoutX="727.0" layoutY="390.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main59" fitHeight="85.0" fitWidth="58.0" layoutX="663.0" layoutY="390.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main58" fitHeight="85.0" fitWidth="58.0" layoutX="599.0" layoutY="390.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main57" fitHeight="85.0" fitWidth="58.0" layoutX="535.0" layoutY="390.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="main56" fitHeight="85.0" fitWidth="58.0" layoutX="471.0" layoutY="390.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+    </Pane>
+    <Pane fx:id="sidePane" layoutX="255.0" layoutY="509.0" prefHeight="202.0" prefWidth="805.0"
+          styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css">
+        <ImageView fx:id="side1" fitHeight="85.0" fitWidth="58.0" layoutX="23.0" layoutY="10.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="side13" fitHeight="85.0" fitWidth="58.0" layoutX="23.0" layoutY="102.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="side14" fitHeight="85.0" fitWidth="58.0" layoutX="87.0" layoutY="102.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="side12" fitHeight="85.0" fitWidth="58.0" layoutX="727.0" layoutY="10.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="side11" fitHeight="85.0" fitWidth="58.0" layoutX="663.0" layoutY="10.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="side10" fitHeight="85.0" fitWidth="58.0" layoutX="599.0" layoutY="10.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="side9" fitHeight="85.0" fitWidth="58.0" layoutX="535.0" layoutY="10.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="side8" fitHeight="85.0" fitWidth="58.0" layoutX="471.0" layoutY="10.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="side7" fitHeight="85.0" fitWidth="58.0" layoutX="407.0" layoutY="10.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="side6" fitHeight="85.0" fitWidth="58.0" layoutX="343.0" layoutY="10.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="side5" fitHeight="85.0" fitWidth="58.0" layoutX="279.0" layoutY="10.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="side4" fitHeight="85.0" fitWidth="58.0" layoutX="215.0" layoutY="10.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="side3" fitHeight="85.0" fitWidth="58.0" layoutX="151.0" layoutY="10.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="side2" fitHeight="85.0" fitWidth="58.0" layoutX="87.0" layoutY="10.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+        <ImageView fx:id="side15" fitHeight="85.0" fitWidth="58.0" layoutX="151.0" layoutY="102.0"
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+        </ImageView>
+    </Pane>
+    <Label fx:id="mainLabel" layoutX="813.0" prefHeight="31.0" prefWidth="253.0" style="-fx-alignment: center;"
+           styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css"
+           text="Main deck: &lt;&gt;/(40~60)">
+        <font>
+            <Font size="23.0"/>
+        </font>
+    </Label>
+    <ScrollPane id="scrollPane" fx:id="scrollPane" layoutX="10.0" layoutY="45.0" prefHeight="366.0"
+                prefWidth="233.0"
+                style="-fx-background-color: rgba(255, 255, 255, 0.7)rgba(255, 255, 255, 0.7); -fx-opacity: 0.7; -fx-background-radius: 20; -fx-border-radius: 40;"
+                stylesheets="@../css/buttonStyles.css">
+        <effect>
+            <DropShadow spread="0.59">
+                <color>
+                    <Color red="0.1041666641831398" green="0.3118055462837219" blue="0.375"/>
+                </color>
+            </DropShadow>
+        </effect>
+    </ScrollPane>
+    <ImageView fx:id="zoomedImage" fitHeight="300.0" fitWidth="206.0" layoutX="29.0" layoutY="418.0"
+               pickOnBounds="true" preserveRatio="true">
+        <Image url="@../../assets/cards/AdvancedRitualArt.jpg"/>
+    </ImageView>
+    <Label fx:id="deckLabel" layoutX="2.0" layoutY="2.0" prefHeight="24.0" prefWidth="338.0"
+           style="-fx-alignment: center;" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css"
+           text="Editing &lt;deckName&gt; (valid?)">
+        <font>
+            <Font size="23.0"/>
+        </font>
+    </Label>
+    <Label fx:id="sideLabel" layoutX="813.0" layoutY="489.0" prefHeight="31.0" prefWidth="253.0"
+           style="-fx-alignment: center;" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css"
+           text="Side deck: &lt;&gt;/15">
+        <font>
+            <Font size="23.0"/>
+        </font>
+    </Label>
+    <Button layoutX="815.0" layoutY="640.0" mnemonicParsing="false" onMouseClicked="#back" prefHeight="61.2"
+            prefWidth="236.0" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Back">
+        <font>
+            <Font size="24.0"/>
+        </font>
+    </Button>
 </AnchorPane>

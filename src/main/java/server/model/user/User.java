@@ -53,12 +53,7 @@ public class User {
 
     public boolean doesMatchPassword(String candidatePassword) {
         // Check if the candidate salted-hash matches the passwordHash
-        return BCrypt.checkpw(candidatePassword, this.passwordHash);
-    }
-
-    public synchronized void removeUser() throws DatabaseException {
-        allUsers.remove(username);
-        Database.remove(this);
+        return !BCrypt.checkpw(candidatePassword, this.passwordHash);
     }
 
     public String getNickname() {

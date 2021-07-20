@@ -849,7 +849,7 @@ public class MainController {
         String currentPassword = valueObject.getString("Current password");
         String newPassword = valueObject.getString("New password");
 
-        if (!User.getByUsername(onlineUsers.get(token)).doesMatchPassword(currentPassword))
+        if (User.getByUsername(onlineUsers.get(token)).doesMatchPassword(currentPassword))
             return errorAnswer("current password is invalid!");
         if (newPassword.equals(currentPassword))
             return errorAnswer("please enter a new password!");
@@ -945,7 +945,7 @@ public class MainController {
         String password = valueObject.getString("Password");
 
         if (User.getByUsername(username) == null ||
-                !User.getByUsername(username).doesMatchPassword(password))
+                User.getByUsername(username).doesMatchPassword(password))
             return errorAnswer("Username or password is wrong!");
 
         return successfulAnswer(login(username));

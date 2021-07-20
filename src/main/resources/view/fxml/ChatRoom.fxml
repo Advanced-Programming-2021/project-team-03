@@ -9,37 +9,35 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.view.pages.ChatRoomPage">
-    <children>
-      <ImageView fitHeight="720.0" fitWidth="388.0" layoutX="996.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../assets/pageImages/ChatRoomPattern.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="720.0" fitWidth="388.0" layoutX="664.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../assets/pageImages/ChatRoomPattern.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="720.0" fitWidth="388.0" layoutX="332.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../assets/pageImages/ChatRoomPattern.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="720.0" fitWidth="388.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../assets/pageImages/ChatRoomPattern.png" />
-         </image>
-      </ImageView>
-      <ScrollPane fx:id="messagesPane" layoutX="447.0" layoutY="104.0" prefHeight="443.0" prefWidth="563.0" style="-fx-background-color: transparent;" />
-      <TextArea fx:id="messageText" layoutX="448.0" layoutY="558.0" prefHeight="59.0" prefWidth="470.0" promptText="type new message..." snapToPixel="false" />
-      <Separator layoutX="447.0" layoutY="547.0" prefHeight="0.0" prefWidth="563.0" snapToPixel="false" style="-fx-background-radius: 5; -fx-background-size: 5; -fx-border-style: solid; -fx-border-width: 3;" />
-      <Button layoutX="921.0" layoutY="561.0" mnemonicParsing="false" onAction="#send" prefHeight="26.0" prefWidth="86.0" text="Send" />
-      <Button layoutX="921.0" layoutY="590.0" mnemonicParsing="false" onAction="#clear" prefHeight="26.0" prefWidth="86.0" text="Clear" />
-      <Button layoutX="35.0" layoutY="655.0" mnemonicParsing="false" onAction="#back" prefHeight="47.0" prefWidth="183.0" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Back">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Button>
-    </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720"
+            prefWidth="1080" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="client.view.pages.ChatRoomPage">
+    <ImageView fitHeight="720.0" fitWidth="388.0" layoutX="996.0" pickOnBounds="true" preserveRatio="true">
+        <Image url="@../../assets/pageImages/ChatRoomPattern.png"/>
+    </ImageView>
+    <ImageView fitHeight="720.0" fitWidth="388.0" layoutX="664.0" pickOnBounds="true" preserveRatio="true">
+        <Image url="@../../assets/pageImages/ChatRoomPattern.png"/>
+    </ImageView>
+    <ImageView fitHeight="720.0" fitWidth="388.0" layoutX="332.0" pickOnBounds="true" preserveRatio="true">
+        <Image url="@../../assets/pageImages/ChatRoomPattern.png"/>
+    </ImageView>
+    <ImageView fitHeight="720.0" fitWidth="388.0" pickOnBounds="true" preserveRatio="true">
+        <Image url="@../../assets/pageImages/ChatRoomPattern.png"/>
+    </ImageView>
+    <ScrollPane fx:id="messagesPane" layoutX="447.0" layoutY="104.0" prefHeight="443.0" prefWidth="563.0"
+                style="-fx-background-color: transparent;"/>
+    <TextArea fx:id="messageText" layoutX="448.0" layoutY="558.0" prefHeight="59.0" prefWidth="470.0"
+              promptText="type new message..." snapToPixel="false"/>
+    <Separator layoutX="447.0" layoutY="547.0" prefHeight="0.0" prefWidth="563.0" snapToPixel="false"
+               style="-fx-background-radius: 5; -fx-background-size: 5; -fx-border-style: solid; -fx-border-width: 3;"/>
+    <Button layoutX="921.0" layoutY="561.0" mnemonicParsing="false" onAction="#send" prefHeight="26.0"
+            prefWidth="86.0" text="Send"/>
+    <Button layoutX="921.0" layoutY="590.0" mnemonicParsing="false" onAction="#clear" prefHeight="26.0"
+            prefWidth="86.0" text="Clear"/>
+    <Button layoutX="35.0" layoutY="655.0" mnemonicParsing="false" onAction="#back" prefHeight="47.0"
+            prefWidth="183.0" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Back">
+        <font>
+            <Font size="24.0"/>
+        </font>
+    </Button>
 </AnchorPane>

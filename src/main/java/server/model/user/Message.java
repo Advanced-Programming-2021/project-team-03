@@ -1,9 +1,7 @@
 package server.model.user;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Message {

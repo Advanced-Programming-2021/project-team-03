@@ -7,37 +7,33 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.view.pages.GamePausePage">
-    <children>
-        <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true">
-            <image>
-                <Image url="@../../assets/pageImages/PauseBackground.jpg"/>
-            </image>
-        </ImageView>
-        <Button fx:id="back" layoutX="10.0" layoutY="290.0" mnemonicParsing="false" onAction="#exit" prefHeight="40.0"
-                prefWidth="152.0" styleClass="PauseButtons" stylesheets="@../css/buttonStyles.css" text="Back">
-            <font>
-                <Font name="Georgia Bold Italic" size="22.0"/>
-            </font>
-        </Button>
-        <Button fx:id="surrender" layoutX="438.0" layoutY="210.0" mnemonicParsing="false" onAction="#surrender"
-                prefHeight="40.0" prefWidth="152.0" styleClass="PauseButtons" stylesheets="@../css/buttonStyles.css"
-                text="Surrender">
-            <font>
-                <Font name="Georgia Bold Italic" size="22.0"/>
-            </font>
-        </Button>
-        <Button fx:id="mute" layoutX="438.0" layoutY="50.0" mnemonicParsing="false" onAction="#mute" prefHeight="40.0"
-                prefWidth="152.0" styleClass="PauseButtons" stylesheets="@../css/buttonStyles.css" text="Mute">
-            <font>
-                <Font name="Georgia Bold Italic" size="22.0"/>
-            </font>
-        </Button>
-        <Button fx:id="unmute" layoutX="10.0" layoutY="130.0" mnemonicParsing="false" onAction="#unmute"
-                prefHeight="40.0" prefWidth="152.0" styleClass="PauseButtons" stylesheets="@../css/buttonStyles.css"
-                text="Unmute">
-            <font>
-                <Font name="Georgia Bold Italic" size="22.0"/>
-            </font>
-        </Button>
-    </children>
+    <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true">
+        <Image url="@../../assets/pageImages/PauseBackground.jpg"/>
+    </ImageView>
+    <Button fx:id="back" layoutX="10.0" layoutY="290.0" mnemonicParsing="false" onAction="#exit" prefHeight="40.0"
+            prefWidth="152.0" styleClass="PauseButtons" stylesheets="@../css/buttonStyles.css" text="Back">
+        <font>
+            <Font name="Georgia Bold Italic" size="22.0"/>
+        </font>
+    </Button>
+    <Button fx:id="surrender" layoutX="438.0" layoutY="210.0" mnemonicParsing="false" onAction="#surrender"
+            prefHeight="40.0" prefWidth="152.0" styleClass="PauseButtons" stylesheets="@../css/buttonStyles.css"
+            text="Surrender">
+        <font>
+            <Font name="Georgia Bold Italic" size="22.0"/>
+        </font>
+    </Button>
+    <Button fx:id="mute" layoutX="438.0" layoutY="50.0" mnemonicParsing="false" onAction="#mute" prefHeight="40.0"
+            prefWidth="152.0" styleClass="PauseButtons" stylesheets="@../css/buttonStyles.css" text="Mute">
+        <font>
+            <Font name="Georgia Bold Italic" size="22.0"/>
+        </font>
+    </Button>
+    <Button fx:id="unmute" layoutX="10.0" layoutY="130.0" mnemonicParsing="false" onAction="#unmute"
+            prefHeight="40.0" prefWidth="152.0" styleClass="PauseButtons" stylesheets="@../css/buttonStyles.css"
+            text="Unmute">
+        <font>
+            <Font name="Georgia Bold Italic" size="22.0"/>
+        </font>
+    </Button>
 </AnchorPane>
