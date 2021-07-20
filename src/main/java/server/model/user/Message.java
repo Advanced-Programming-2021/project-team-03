@@ -13,6 +13,8 @@ public class Message {
     public final int ID;
     private String text;
     private String time;
+    private boolean edited;
+    private boolean deleted;
 
     public Message(String text, String sender) {
         this.text = text;
@@ -30,11 +32,13 @@ public class Message {
 
     public Message deleteMessage() {
         this.text = "(Deleted Message)";
+        deleted = true;
         return this;
     }
 
     public Message editText(String text) {
         this.text = text;
+        edited = true;
         return this;
     }
 
