@@ -133,6 +133,14 @@ public class MainController {
         }
     }
 
+
+    private String showPinnedMessage(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+        if (invalidToken(token)) return TOKEN_ERROR;
+        if (Message.pinned == null) return errorAnswer("No pinned message");
+        return successfulAnswer(new Gson().toJson(Message.pinned));
+    }
+
     private String pinMessage(JSONObject valueObject) {
         String token = valueObject.getString("Token");
         if (invalidToken(token)) return TOKEN_ERROR;
@@ -144,13 +152,6 @@ public class MainController {
         if (Message.getByID(messageID) == null) return errorAnswer("No message found with this name");
         Message.pinned = Message.getByID(messageID);
         return successfulAnswer("Message pinned successfully");
-    }
-
-    private String showPinnedMessage(JSONObject valueObject) {
-        String token = valueObject.getString("Token");
-        if (invalidToken(token)) return TOKEN_ERROR;
-        if (Message.pinned == null) return errorAnswer("No pinned message");
-        return successfulAnswer(new Gson().toJson(Message.pinned));
     }
 
     private String sendMessage(JSONObject valueObject) {
