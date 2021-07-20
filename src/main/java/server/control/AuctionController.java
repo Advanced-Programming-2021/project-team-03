@@ -24,9 +24,11 @@ public class AuctionController {
     }
 
     private final HashMap<Integer, Auction> allAuctions;
+    private static int idCounter = 0;
 
     public void addAuction(String owner, String cardName, int startingPrice) throws DatabaseException {
-        Auction auction = new Auction(owner, cardName, startingPrice, allAuctions.size() + 1);
+        idCounter += 1;
+        Auction auction = new Auction(owner, cardName, startingPrice, idCounter);
         allAuctions.put(auction.getId(), auction);
     }
 
