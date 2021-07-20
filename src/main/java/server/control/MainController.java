@@ -125,7 +125,11 @@ public class MainController {
                 case "Show all messages" -> showAllMessages(valueObject);
                 case "Show pinned message" -> showPinnedMessage(valueObject);
                 case "Send message" -> sendMessage(valueObject);
+                case "Get number of online users" -> getNumberOfOnlineUsers(valueObject);
+                case "Delete message" -> deleteMessage(valueObject);
                 case "Pin message" -> pinMessage(valueObject);
+                case "Edit message" -> editMessage(valueObject);
+                case "Get profile picture number by username" -> getProfileImageByUsername(valueObject);
                 //endregion
 
                 //region auction requests
@@ -196,17 +200,41 @@ public class MainController {
         return answerObject.toString();
     }
 
-    private String pinMessage(JSONObject valueObject) {
+    private String getProfileImageByUsername(JSONObject valueObject) {
         String token = valueObject.getString("Token");
         if (invalidToken(token)) return TOKEN_ERROR;
-        int messageID = valueObject.getInt("ID");
-        if (messageID == 0) {
-            Message.pinned = null;
-            return successfulAnswer("Message unpinned successfully");
-        }
-        if (Message.getByID(messageID) == null) return errorAnswer("No message found with this name");
-        Message.pinned = Message.getByID(messageID);
-        return successfulAnswer("Message pinned successfully");
+        User user = User.getByUsername(valueObject.getString("Username"));
+        if (user == null) return errorAnswer("No user found with this Username");
+        return successAnswer(user.getProfileImageID());
+    }
+
+    private String editMessage(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+        if (invalidToken(token)) return TOKEN_ERROR;
+        Message message = Message.getByID(valueObject.getInt("ID"));
+        String newText = valueObject.getString("Text");
+        if (message == null) return errorAnswer("No message found with this ID");
+        if (!message.senderNickname.equals(User.getByUsername(onlineUsers.get(token)).getNickname()))
+            return errorAnswer("You don't have access to edit this message!");
+        message.editText(newText);
+        return successfulAnswer("Message edited successfully to \"" + newText + "\"");
+    }
+
+    private String deleteMessage(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+        if (invalidToken(token)) return TOKEN_ERROR;
+        Message message = Message.getByID(valueObject.getInt("ID"));
+        if (message == null) return errorAnswer("No message found with this ID");
+        if (!message.senderNickname.equals(User.getByUsername(onlineUsers.get(token)).getNickname()))
+            return errorAnswer("You don't have access to delete this message!");
+        message.deleteMessage();
+        return successfulAnswer("Message deleted successfully");
+    }
+
+    private String getNumberOfOnlineUsers(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+        if (invalidToken(token)) return TOKEN_ERROR;
+        return successfulAnswer(onlineUsers.size());
     }
 
     private String showPinnedMessage(JSONObject valueObject) {
@@ -216,11 +244,24 @@ public class MainController {
         return successfulAnswer(new Gson().toJson(Message.pinned));
     }
 
+    private String pinMessage(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+        if (invalidToken(token)) return TOKEN_ERROR;
+        int messageID = valueObject.getInt("ID");
+        if (messageID == 0) {
+            Message.pinned = null;
+            return successfulAnswer("Message unpinned successfully");
+        }
+        if (Message.getByID(messageID) == null) return errorAnswer("No message found with this name");
+        Message.getByID(messageID).setPinned();
+        return successfulAnswer("Message pinned successfully");
+    }
+
     private String sendMessage(JSONObject valueObject) {
         String token = valueObject.getString("Token");
         String text = valueObject.getString("Text");
         if (invalidToken(token)) return TOKEN_ERROR;
-        new Message(text, onlineUsers.get(token));
+        new Message(text, User.getByUsername(onlineUsers.get(token)));
         return successfulAnswer("Message sent successfully");
     }
 
@@ -1035,7 +1076,7 @@ public class MainController {
         if (User.doesNicknameExists(nickname))
             return errorAnswer("User with nickname " + nickname + " already exists");
         try {
-            new User(username, password, nickname).setStartingCards();
+            new User(username, password, nickname).setStarterPack();
             return successfulAnswer("User created successfully!");
         } catch (DatabaseException e) {
             return errorAnswer(e.errorMessage);

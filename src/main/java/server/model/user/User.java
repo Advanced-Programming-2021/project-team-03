@@ -177,7 +177,7 @@ public class User {
         updateInDatabase();
     }
 
-    public synchronized void setStartingCards() throws DatabaseException {
+    public synchronized void setStarterPack() throws DatabaseException {
         ArrayList<Monster> monsters = new ArrayList<>(Monster.getAllMonsters().values());
         ArrayList<SpellAndTrap> spellAndTraps = new ArrayList<>(SpellAndTrap.getAllSpellAndTraps().values());
         Collections.shuffle(monsters);
@@ -201,12 +201,7 @@ public class User {
     }
 
     public int getNumberOfCards(String cardName) {
-        int counter = 0;
-        for (Card card : cards) {
-            if (card.getCardName().equals(cardName))
-                counter += 1;
-        }
-        return counter;
+        return (int) cards.stream().filter(card -> card.getCardName().equals(cardName)).count();
     }
 
     public void removeCard(Card card) throws DatabaseException {
