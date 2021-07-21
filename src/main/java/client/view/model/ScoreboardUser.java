@@ -2,7 +2,7 @@ package client.view.model;
 
 public class ScoreboardUser {
     private int rank;
-    private final String nickname;
+    public String nickname;
     private final int score;
 
     public ScoreboardUser(int rank, String nickname, int score) {

@@ -1,6 +1,7 @@
 package client.view.pages;
 
 import client.view.controller.MainView;
+import client.view.model.ClientUser;
 import client.view.model.ScoreboardUser;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -19,7 +20,9 @@ import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class ScoreBoardPage extends Application implements Initializable {
     private static Stage stage;
@@ -55,13 +58,26 @@ public class ScoreBoardPage extends Application implements Initializable {
     }
 
     private ObservableList<ScoreboardUser> updateScoreBoard() {
-        ArrayList<ScoreboardUser> allUsers = new ArrayList<>(MainView.getInstance().getScoreboardUsers());
+        MainView view = MainView.getInstance();
+        ArrayList<ScoreboardUser> allUsers = new ArrayList<>(view.getScoreboardUsers());
         allUsers.sort((o1, o2) -> {
             if (o1.getScore() == o2.getScore())
                 return o1.getNickname().compareTo(o2.getNickname());
             else
                 return o2.getScore() - o1.getScore();
         });
+
+
+
+        List<String> onlineUsers = view.getOnlineUsers()
+                .stream().map(username -> view.getUserInfo(username).nickname).collect(Collectors.toList());
+        String nickname = view.getNickname();
+        for (ScoreboardUser user : allUsers) {
+            StringBuilder add = new StringBuilder();
+            if (onlineUsers.contains(user.nickname)) add.append(" (online)");
+            if (nickname.equals(user.nickname)) add.append("(you)");
+            user.nickname = user.nickname + add;
+        }
 
         ObservableList<ScoreboardUser> userObservableList = FXCollections.observableArrayList();
         int counter = 20;
