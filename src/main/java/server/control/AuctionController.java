@@ -76,7 +76,7 @@ public class AuctionController {
     }
 
     private boolean canBidForTheAuction(int auctionId, int price) {
-        return allAuctions.get(auctionId).getHighestBid() < price;
+        return (allAuctions.get(auctionId).getHighestBid() < price) && (allAuctions.get(auctionId).getStartingPrice() < price);
     }
 
     public void checkAllAuctions() {

@@ -169,8 +169,13 @@ public class MainController {
             answerObject.put("Type", "Error");
             answerObject.put("Value", "You don't have enough money.");
         } else {
-            answerObject.put("Type", "Success");
-            answerObject.put("Value", AuctionController.getInstance().bidForAuction(onlineUsers.get(token), auctionId, price));
+            String answer = AuctionController.getInstance().bidForAuction(onlineUsers.get(token), auctionId, price);
+            if (answer.equals("your bid placed successful")) {
+                answerObject.put("Type", "Success");
+            } else {
+                answerObject.put("Type", "Error");
+            }
+            answerObject.put("Value", answer);
         }
 
         return answerObject.toString();

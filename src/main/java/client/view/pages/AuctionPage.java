@@ -58,13 +58,15 @@ public class AuctionPage extends Application {
         setCardImages(userCards, userCardImages);
 
         VBox vbox = new VBox();
-        for (ImageView cardImage : userCardImages) {
+        for (int i = 0; i < userCardImages.size(); i++) {
+            ImageView cardImage = userCardImages.get(i);
             cardImage.setPreserveRatio(true);
             cardImage.setFitWidth(200);
+            int finalI = i;
             cardImage.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
-                    newAuction(cardImage);
+                    newAuction(finalI);
                 }
             });
             vbox.getChildren().add(cardImage);
@@ -75,7 +77,7 @@ public class AuctionPage extends Application {
         cardsScrollPane.setContent(vbox);
     }
 
-    private void newAuction(ImageView cardImage) {
+    private void newAuction(int index) {
         TextInputDialog dialog = new TextInputDialog("Set Starting Price");
         dialog.setTitle("Set Starting Price");
         dialog.setHeaderText(null);
@@ -90,7 +92,7 @@ public class AuctionPage extends Application {
                 alert.setTitle("Price Format Error");
                 alert.show();
             } else {
-                String cardName = userCards.get(userCardImages.indexOf(cardImage));
+                String cardName = userCards.get(index);
                 boolean success = MainView.getInstance().newAuction(cardName, price);
                 if (success) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -112,9 +114,10 @@ public class AuctionPage extends Application {
 
     private void refresh() {
         auctionsText = new ArrayList<>();
+        auctionsImages = new ArrayList<>();
         userCardImages = new ArrayList<>();
-        loadAuctions();
         loadCards();
+        loadAuctions();
     }
 
     private void setCardImages(List<String> cards, ArrayList<ImageView> cardImages) {
