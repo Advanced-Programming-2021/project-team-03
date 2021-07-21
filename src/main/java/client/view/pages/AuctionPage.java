@@ -2,7 +2,6 @@ package client.view.pages;
 
 import client.view.controller.MainView;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -63,12 +62,7 @@ public class AuctionPage extends Application {
             cardImage.setPreserveRatio(true);
             cardImage.setFitWidth(200);
             int finalI = i;
-            cardImage.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    newAuction(finalI);
-                }
-            });
+            cardImage.setOnMouseClicked(mouseEvent -> newAuction(finalI));
             vbox.getChildren().add(cardImage);
         }
         vbox.setSpacing(5);
@@ -153,12 +147,7 @@ public class AuctionPage extends Application {
             ImageView imageView = new ImageView(MainView.getInstance().getCardImage(auction.getString("Card Name")));
             imageView.setPreserveRatio(true);
             imageView.setFitWidth(400);
-            imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    newPrice(imageView);
-                }
-            });
+            imageView.setOnMouseClicked(mouseEvent -> newPrice(imageView));
             auctionsImages.add(imageView);
         }
         VBox vbox = new VBox();

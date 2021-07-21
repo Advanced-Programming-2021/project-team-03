@@ -105,7 +105,7 @@ public class AllMonsterEffects {
 
     //Marshmallon effect
     public String marshmallonEffect(Game game, Monster opponentMonster, FaceUpSituation opponentMonsterFaceUpSit, Player attackingPlayer,
-                                    AttackingFormat opponentMonsterFormat, Monster attackingMonster, Board attackingPlayerBoard, Board opponentBoard,
+                                    AttackingFormat opponentMonsterFormat, Monster attackingMonster, Board attackingPlayerBoard,
                                     int attackingDef, int defendingDef, Update gameUpdates, PlayerTurn turn) {
         StringBuilder answerString = new StringBuilder();
         answerString.append("Marshmallon effect activated!\n");

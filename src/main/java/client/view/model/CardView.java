@@ -11,9 +11,9 @@ public class CardView extends ImageView {
     private boolean isFull;
     private boolean isFaceUp;
     private String cardName = "";
-    private int index;
-    private String type;
-    private String owner;
+    private final int index;
+    private final String type;
+    private final String owner;
 
     public CardView(int yLocation, int xLocation, String owner, String type, int index) {
         this.setLayoutY(yLocation);

@@ -33,19 +33,17 @@ public class Message {
         time = dtf.format(now);
     }
 
-    public Message deleteMessage() {
+    public void deleteMessage() {
         this.text = "(Deleted Message)";
         deleted = true;
         if (pinned.ID == this.ID) pinned = null;
         allMessages.remove(this.ID);
-        return this;
     }
 
-    public Message editText(String text) {
-        if (deleted) return this;
+    public void editText(String text) {
+        if (deleted) return;
         this.text = text;
         edited = true;
-        return this;
     }
 
     public String getText() {

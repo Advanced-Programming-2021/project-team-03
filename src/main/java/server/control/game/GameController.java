@@ -577,7 +577,7 @@ public class GameController {
         if (opponentMonster.getCardName().equals("Marshmallon")) {
             answerString.append(AllMonsterEffects.getInstance().marshmallonEffect(game, opponentMonster, opponentMonsterFaceUpSit,
                     game.getPlayerByTurn(turn), opponentMonsterFormat
-                    , attackingMonster, attackingPlayerBoard, opponentBoard, attackingDef, defendingDef, gameUpdates, turn));
+                    , attackingMonster, attackingPlayerBoard, attackingDef, defendingDef, gameUpdates, turn));
             return answerString.toString();
         }
         switch (opponentMonsterFormat) {
@@ -779,7 +779,7 @@ public class GameController {
             game.setActivatedFieldCard(spell);
             game.setFiledActivated(true);
         } else if (spell.getIcon() == EQUIP)
-            AllSpellsEffects.getInstance().equipmentActivator(board, spell, game, gameUpdates, turn);
+            AllSpellsEffects.getInstance().equipmentActivator(board, spell);
         else {
             AllSpellsEffects.getInstance().cardActivator(spell, game, gameUpdates, turn);
         }
@@ -931,7 +931,7 @@ public class GameController {
     private void checkForEquipments(Board board) {
         for (SpellAndTrap spellAndTrap : board.getSpellAndTrapsInField().values()) {
             if (spellAndTrap.getIcon().equals(EQUIP) && spellAndTrap.isActive()) {
-                AllSpellsEffects.getInstance().equipmentActivator(board, spellAndTrap, game, gameUpdates, turn);
+                AllSpellsEffects.getInstance().equipmentActivator(board, spellAndTrap);
             }
         }
     }

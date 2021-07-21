@@ -63,7 +63,7 @@ public class AllSpellsEffects {
         }
     }
 
-    public void equipmentActivator(Board board, SpellAndTrap equipmentCard, Game game, Update gameUpdates, PlayerTurn turn) {
+    public void equipmentActivator(Board board, SpellAndTrap equipmentCard) {
         equipmentCard.setActive(true);
 
         Monster equippedMonster = board.getMonsterInFieldByPosition(board.getSpellPosition(equipmentCard));

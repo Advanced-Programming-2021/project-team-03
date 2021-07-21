@@ -1,7 +1,6 @@
 package client.view.pages;
 
 import client.view.controller.MainView;
-import client.view.model.ClientUser;
 import client.view.model.ScoreboardUser;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.effect.Reflection?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.paint.*?>
-<?import javafx.scene.text.*?>
-
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 <AnchorPane prefHeight="400" prefWidth="400" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="client.view.pages.GraveyardPage">
     <ImageView fitHeight="400.0" fitWidth="400.0" pickOnBounds="true">

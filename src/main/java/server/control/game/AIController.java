@@ -126,7 +126,7 @@ public class AIController {
         if (opponentMonster.getCardName().equals("Marshmallon")) {
             answerString.append(AllMonsterEffects.getInstance().marshmallonEffect(game, opponentMonster, opponentMonsterFaceUpSit,
                     game.getPlayerByTurn(PlayerTurn.PLAYER2), opponentMonsterFormat
-                    , attackingMonster, attackingPlayerBoard, opponentBoard, attackingDef, defendingDef, gameUpdate, PlayerTurn.PLAYER2));
+                    , attackingMonster, attackingPlayerBoard, attackingDef, defendingDef, gameUpdate, PlayerTurn.PLAYER2));
             MainController.getInstance().sendPrintRequestToView(answerString.toString());
             return;
         }
@@ -275,7 +275,7 @@ public class AIController {
             game.setActivatedFieldCard(spell);
             game.setFiledActivated(true);
         } else if (spell.getIcon() == EQUIP)
-            AllSpellsEffects.getInstance().equipmentActivator(board, spell, game, gameUpdate, PlayerTurn.PLAYER2);
+            AllSpellsEffects.getInstance().equipmentActivator(board, spell);
         else {
             AllSpellsEffects.getInstance().cardActivator(spell, game, gameUpdate, PlayerTurn.PLAYER2);
         }

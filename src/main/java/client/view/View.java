@@ -207,7 +207,7 @@ public class View {
     private String getOneCardNameFromUser() {
         System.out.println("You must write a card name");
         JSONObject answerObject = new JSONObject();
-        String inputCommand = "";
+        String inputCommand;
         while (true) {
             inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
             if (inputCommand.length() == 0) System.out.println("Invalid command!");
@@ -271,9 +271,10 @@ public class View {
     }
 
     private String theTrickyEffect() {
-        System.out.println("You can use special summon for The Tricky card.\n" +
-                "if you want to use special summon you should write position of one card from your hand to remove it.\n" +
-                "And if you do not want to do it you can Write Cancel for normal Summon.");
+        System.out.println("""
+                You can use special summon for The Tricky card.
+                if you want to use special summon you should write position of one card from your hand to remove it.
+                And if you do not want to do it you can Write Cancel for normal Summon.""");
         JSONObject answerObject = new JSONObject();
         while (true) {
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
@@ -292,9 +293,10 @@ public class View {
     }
 
     private String terratigerTheEmpoweredWarriorEffect() {
-        System.out.println("You can summon another monster card from your hand.\n" +
-                "The level of the selected monster must be a maximum of 4.\n" +
-                "Write your monster position number from your hand or write Cancel to cancel.");
+        System.out.println("""
+                You can summon another monster card from your hand.
+                The level of the selected monster must be a maximum of 4.
+                Write your monster position number from your hand or write Cancel to cancel.""");
         JSONObject answerObject = new JSONObject();
         while (true) {
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
@@ -672,7 +674,7 @@ public class View {
 
     //region duel menu methods
     private void duelMenu() {
-        int regexIndex = 0;
+        int regexIndex;
         while (true) {
             String inputCommand = SCANNER.nextLine().trim().replaceAll("(\\s)+", " ");
             if (inputCommand.matches(DUEL_MENU_COMMANDS[0])) break; //Duel exit and back to main menu
@@ -772,7 +774,7 @@ public class View {
         showMap();
         isGameOver = false;
         isRoundOver = false;
-        boolean mapShowFlag = true;
+        boolean mapShowFlag;
         int regexIndex;
         while (true) {
             if (isRoundOver || isGameOver) {

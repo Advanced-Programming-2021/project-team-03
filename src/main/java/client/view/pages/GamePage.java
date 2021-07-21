@@ -51,14 +51,14 @@ public class GamePage extends Application {
     public Button pauseButton;
     public Button nextPhaseButton;
 
-    private ArrayList<CardView> playerMonsters = new ArrayList<>();
-    private ArrayList<CardView> playerSpellAndTraps = new ArrayList<>();
-    private ArrayList<CardView> playerHand = new ArrayList<>();
+    private final ArrayList<CardView> playerMonsters = new ArrayList<>();
+    private final ArrayList<CardView> playerSpellAndTraps = new ArrayList<>();
+    private final ArrayList<CardView> playerHand = new ArrayList<>();
     private CardView playerFieldCard;
     private CardView playerGraveyard;
-    private ArrayList<CardView> opponentMonsters = new ArrayList<>();
-    private ArrayList<CardView> opponentSpellAndTraps = new ArrayList<>();
-    private ArrayList<CardView> opponentHand = new ArrayList<>();
+    private final ArrayList<CardView> opponentMonsters = new ArrayList<>();
+    private final ArrayList<CardView> opponentSpellAndTraps = new ArrayList<>();
+    private final ArrayList<CardView> opponentHand = new ArrayList<>();
     private CardView opponentFieldCard;
     private CardView opponentGraveyard;
     private final double MAX_HEALTH = 8000.0;
@@ -128,9 +128,7 @@ public class GamePage extends Application {
         String value = answer.getString("Value");
         messageText.setText(MainView.getInstance().getPhase());
         Timeline playtime = new Timeline(
-                new KeyFrame(Duration.seconds(1), event -> {
-                    messageText.setText("");
-                })
+                new KeyFrame(Duration.seconds(1), event -> messageText.setText(""))
         );
         playtime.play();
         refreshMap();
@@ -139,9 +137,7 @@ public class GamePage extends Application {
     public void printMessage(String value) {
         messageText.setText(value);
         Timeline playtime = new Timeline(
-                new KeyFrame(Duration.seconds(1), event -> {
-                    messageText.setText("");
-                })
+                new KeyFrame(Duration.seconds(1), event -> messageText.setText(""))
         );
         playtime.play();
         refreshMap();
@@ -501,19 +497,8 @@ public class GamePage extends Application {
     }
 
     private void setGraveyardOnMouseClicked() {
-        playerGraveyard.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                showPlayerGraveyard();
-
-            }
-        });
-        opponentGraveyard.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                showOpponentGraveyard();
-            }
-        });
+        playerGraveyard.setOnMouseClicked(mouseEvent -> showPlayerGraveyard());
+        opponentGraveyard.setOnMouseClicked(mouseEvent -> showOpponentGraveyard());
     }
 
     private void showOpponentGraveyard() {
@@ -555,59 +540,39 @@ public class GamePage extends Application {
     private void setAllOnMouseClickedHandler() {
         setGraveyardOnMouseClicked();
         for (CardView cardView : playerHand) {
-            cardView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    if (cardView.isFull()) {
-                        clickedOnPlayerHand(cardView, mouseEvent);
-                    }
+            cardView.setOnMouseClicked(mouseEvent -> {
+                if (cardView.isFull()) {
+                    clickedOnPlayerHand(cardView, mouseEvent);
                 }
             });
         }
         for (CardView cardView : playerSpellAndTraps) {
-            cardView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    if (cardView.isFull()) {
-                        clickedOnPlayerSpells(cardView, mouseEvent);
-                    }
+            cardView.setOnMouseClicked(mouseEvent -> {
+                if (cardView.isFull()) {
+                    clickedOnPlayerSpells(cardView, mouseEvent);
                 }
             });
         }
         for (CardView cardView : playerMonsters) {
-            cardView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    if (cardView.isFull()) {
-                        clickedOnPlayerMonsters(cardView, mouseEvent);
-                    }
+            cardView.setOnMouseClicked(mouseEvent -> {
+                if (cardView.isFull()) {
+                    clickedOnPlayerMonsters(cardView, mouseEvent);
                 }
             });
         }
-        playerFieldCard.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (playerFieldCard.isFull()) {
-                    clickedOnPlayerFieldCard();
-                }
+        playerFieldCard.setOnMouseClicked(mouseEvent -> {
+            if (playerFieldCard.isFull()) {
+                clickedOnPlayerFieldCard();
             }
         });
         for (CardView cardView : opponentMonsters) {
-            cardView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    if (cardView.isFull()) {
-                        clickedOnOpponentMonsters(cardView, mouseEvent);
-                    }
+            cardView.setOnMouseClicked(mouseEvent -> {
+                if (cardView.isFull()) {
+                    clickedOnOpponentMonsters(cardView, mouseEvent);
                 }
             });
         }
-        opponentProfile.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                clickedOnOpponentProfile(opponentProfile);
-            }
-        });
+        opponentProfile.setOnMouseClicked(mouseEvent -> clickedOnOpponentProfile(opponentProfile));
     }
 
     private void clickedOnOpponentProfile(ImageView opponentProfile) {
@@ -616,9 +581,7 @@ public class GamePage extends Application {
             directAttack();
             opponentProfile.setEffect(new DropShadow(60, Color.DARKRED));
             Timeline playtime = new Timeline(
-                    new KeyFrame(Duration.seconds(1.5), event -> {
-                        opponentProfile.setEffect(null);
-                    })
+                    new KeyFrame(Duration.seconds(1.5), event -> opponentProfile.setEffect(null))
             );
             playtime.play();
         }
@@ -694,9 +657,7 @@ public class GamePage extends Application {
             selectCard(cardView.getOwner(), cardView.getType(), cardView.getPosition());
             cardView.setEffect(new DropShadow(60, Color.DARKRED));
             Timeline playtime = new Timeline(
-                    new KeyFrame(Duration.seconds(1.5), event -> {
-                        cardView.setEffect(null);
-                    })
+                    new KeyFrame(Duration.seconds(1.5), event -> cardView.setEffect(null))
             );
             playtime.play();
         } else {
@@ -711,7 +672,7 @@ public class GamePage extends Application {
     }
 
     private void setMonsterPosition(CardView cardView) {
-        Double rotate = cardView.getRotate();
+        double rotate = cardView.getRotate();
         JSONObject answer;
         if (rotate < 10) { //now attack
             answer = MainView.getInstance().setPosition("Defense");
