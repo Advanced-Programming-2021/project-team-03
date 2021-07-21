@@ -32,7 +32,7 @@
             <Image url="@../../assets/pageImages/ChatRoomPattern.png" />
          </image>
       </ImageView>
-      <ScrollPane fx:id="messagesPane" layoutX="434.0" layoutY="104.0" prefHeight="449.0" prefWidth="576.0" style="-fx-background-color: transparent;" />
+      <ScrollPane fx:id="messagesPane" layoutX="434.0" layoutY="45.0" prefHeight="508.0" prefWidth="576.0" style="-fx-background-color: transparent;" />
       <TextArea fx:id="messageText" layoutX="437.0" layoutY="558.0" prefHeight="94.0" prefWidth="481.0" promptText="type new message..." snapToPixel="false" />
       <Button layoutX="921.0" layoutY="561.0" mnemonicParsing="false" onAction="#send" prefHeight="26.0" prefWidth="86.0" text="Send" />
       <Button layoutX="921.0" layoutY="591.0" mnemonicParsing="false" onAction="#clear" prefHeight="26.0" prefWidth="86.0" text="Clear" />
@@ -46,13 +46,13 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <Pane fx:id="pinnedPane" layoutX="82.0" layoutY="105.0" prefHeight="217.0" prefWidth="257.0" />
+      <Pane fx:id="pinnedPane" layoutX="82.0" layoutY="105.0" prefHeight="302.0" prefWidth="257.0" />
       <Label fx:id="pinnedLabel" alignment="CENTER" layoutX="70.0" layoutY="44.0" prefHeight="47.0" prefWidth="273.0" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Pinned Message">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Button layoutX="115.0" layoutY="340.0" mnemonicParsing="false" onAction="#unpin" prefHeight="47.0" prefWidth="183.0" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Unpin">
+      <Button layoutX="115.0" layoutY="425.0" mnemonicParsing="false" onAction="#unpin" prefHeight="47.0" prefWidth="183.0" styleClass="importExportButtons" stylesheets="@../css/buttonStyles.css" text="Unpin">
          <font>
             <Font size="24.0" />
          </font>

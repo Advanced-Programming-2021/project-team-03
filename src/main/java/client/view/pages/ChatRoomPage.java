@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -117,7 +118,7 @@ public class ChatRoomPage extends Application {
         }
         if (replyingTo == null) view.sendMessage(text);
         else {
-            System.out.println(view.replyMessage(text, replyingTo.ID));
+            view.replyMessage(text, replyingTo.ID);
             cancelReply(null);
         }
 
@@ -212,8 +213,15 @@ public class ChatRoomPage extends Application {
         Label senderLabel = new Label(message.senderNickname);
         senderLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
         profileVBox.getChildren().add(senderLabel);
-
         messageVBox.getChildren().add(profileVBox);
+
+        if (message.repliedMessage != null && !message.repliedMessage.equals("")) {
+            Label replyLabel = new Label("replying to -> " + message.repliedMessage);
+            replyLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 9));
+            replyLabel.setStyle("-fx-text-fill: green");
+            replyLabel.setMaxWidth(200);
+            messageVBox.getChildren().add(replyLabel);
+        }
 
         Label textLabel = new Label(message.text);
         textLabel.setWrapText(true);
@@ -222,6 +230,8 @@ public class ChatRoomPage extends Application {
         textLabel.setFont(Font.font("Verdana", FontWeight.NORMAL, 13));
 
         messageVBox.getChildren().add(textLabel);
+
+        messageVBox.getChildren().add(new Separator(Orientation.HORIZONTAL));
 
         Label timeLabel = new Label(message.time);
         timeLabel.setFont(Font.font("Verdana", FontWeight.NORMAL, 10));
