@@ -178,7 +178,7 @@ public class MainView {
     public int getProfileImageNumber(String username) {
         JSONObject answer = sendRequestToControl(
                 jsonWithType("Get profile picture number by username",
-                        jsonWithToken().put("Username",  username)));
+                        jsonWithToken().put("Username", username)));
         try {
             return answer.getInt("Value");
         } catch (Exception e) {
@@ -341,7 +341,7 @@ public class MainView {
     //region ShopMenuPage
     public int getNumberOfBoughtCard(String cardName) {
         JSONObject answer = sendRequestToControl(jsonWithType("Get number of bought card",
-                        jsonWithToken().put("Card name", cardName)));
+                jsonWithToken().put("Card name", cardName)));
         String type = answer.getString("Type");
         if (type.equals("Success")) return answer.getInt("Value");
         else return 0;
@@ -557,5 +557,20 @@ public class MainView {
         } catch (Exception e) {
             return new Image(String.valueOf(getClass().getResource("/assets/profilepictures/1.png")));
         }
+    }
+
+    public JSONObject getAllAuctions() {
+        return sendRequestToControl(jsonWithType("See all auctions", jsonWithToken()));
+    }
+
+    public boolean newAuction(String cardName, String price) {
+        JSONObject answer = sendRequestToControl(jsonWithType("Create an auction",
+                jsonWithToken().put("Card Name", cardName).put("Price", price)));
+        return answer.getString("Type").equals("Success");
+    }
+
+    public JSONObject newPrice(String id, String price) {
+        return sendRequestToControl(jsonWithType("Bid for auction",
+                jsonWithToken().put("ID", id).put("Price", price)));
     }
 }

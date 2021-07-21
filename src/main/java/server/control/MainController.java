@@ -162,12 +162,12 @@ public class MainController {
 
         JSONObject answerObject = new JSONObject();
 
-        if (AuctionController.getInstance().containsId(auctionId)) {
+        if (!AuctionController.getInstance().containsId(auctionId)) {
             answerObject.put("Type", "Error");
-            answerObject.put("Value", "User does not have this card");
+            answerObject.put("Value", "Auction with this Id not found.");
         } else if (AuctionController.getInstance().bidderDoesNotHaveEnoughMoney(onlineUsers.get(token), price)) {
             answerObject.put("Type", "Error");
-            answerObject.put("Value", "User does not have this card");
+            answerObject.put("Value", "You don't have enough money.");
         } else {
             answerObject.put("Type", "Success");
             answerObject.put("Value", AuctionController.getInstance().bidForAuction(onlineUsers.get(token), auctionId, price));

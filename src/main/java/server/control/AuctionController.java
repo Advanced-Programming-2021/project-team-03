@@ -1,6 +1,7 @@
 package server.control;
 
 import com.google.gson.JsonArray;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import server.control.databaseController.DatabaseException;
 import server.model.user.Auction;
@@ -33,8 +34,8 @@ public class AuctionController {
     }
 
 
-    public JsonArray getAllAuctions() {
-        JsonArray array = new JsonArray();
+    public JSONArray getAllAuctions() {
+        JSONArray array = new JSONArray();
         for (Auction auction : allAuctions.values()) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("Id", auction.getId());
@@ -44,7 +45,7 @@ public class AuctionController {
             jsonObject.put("Highest Bidder", auction.getHighestBidder());
             jsonObject.put("Starting Price", auction.getStartingPrice());
             jsonObject.put("Starting Time", auction.getStartingTime());
-            array.add(String.valueOf(jsonObject));
+            array.put(jsonObject);
         }
         return array;
     }

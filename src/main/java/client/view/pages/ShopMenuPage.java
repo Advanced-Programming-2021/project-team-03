@@ -283,6 +283,10 @@ public class ShopMenuPage extends Application {
     public void auctions(MouseEvent mouseEvent) throws Exception {
         new AuctionPage().start(stage);
     }
+
+    public void auction(MouseEvent mouseEvent) throws Exception {
+        new AuctionPage().start(stage);
+    }
 }
 
 class ShopCard {
