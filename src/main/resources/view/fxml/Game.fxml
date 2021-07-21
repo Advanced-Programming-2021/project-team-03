@@ -7,121 +7,138 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="pane" prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.GamePage">
-   <children>
-      <ImageView fx:id="gameField" fitHeight="720.0" fitWidth="720.0" layoutX="360.0" pickOnBounds="true">
-         <image>
-            <Image fx:id="normalFieldImage" url="@../../assets/field/NormalField.jpg" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="720.0" fitWidth="360.0" pickOnBounds="true">
-         <image>
-            <Image url="@../../assets/pageImages/GameBackground.jpg" />
-         </image></ImageView>
-      <ImageView fx:id="selectedCardImage" fitHeight="343.0" fitWidth="294.0" layoutX="33.0" layoutY="188.0" pickOnBounds="true" />
-      <ImageView fx:id="opponentProfile" fitHeight="120" fitWidth="110" layoutX="14.0" layoutY="20" pickOnBounds="true" preserveRatio="true">
-         <effect>
-            <Reflection />
-         </effect></ImageView>
-      <ImageView fx:id="playerProfile" fitHeight="120" fitWidth="110" layoutX="14.0" layoutY="578.0" pickOnBounds="true" preserveRatio="true">
-         <effect>
-            <Reflection />
-         </effect></ImageView>
-      <ProgressBar fx:id="opponentLPBar" layoutX="155.0" layoutY="145.0" prefHeight="20.0" prefWidth="175.0" progress="1.0" style="-fx-accent: blue;">
-         <effect>
+<AnchorPane fx:id="pane" prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/11.0.2"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.view.pages.GamePage">
+    <ImageView fx:id="gameField" fitHeight="720.0" fitWidth="720.0" layoutX="360.0" pickOnBounds="true">
+        <Image fx:id="normalFieldImage" url="@../../assets/field/NormalField.jpg"/>
+    </ImageView>
+    <ImageView fitHeight="720.0" fitWidth="360.0" pickOnBounds="true">
+        <Image url="@../../assets/pageImages/GameBackground.jpg"/>
+    </ImageView>
+    <ImageView fx:id="selectedCardImage" fitHeight="343.0" fitWidth="294.0" layoutX="33.0" layoutY="188.0"
+               pickOnBounds="true"/>
+    <ImageView fx:id="opponentProfile" fitHeight="120" fitWidth="110" layoutX="14.0" layoutY="20"
+               pickOnBounds="true" preserveRatio="true">
+        <effect>
+            <Reflection/>
+        </effect>
+    </ImageView>
+    <ImageView fx:id="playerProfile" fitHeight="120" fitWidth="110" layoutX="14.0" layoutY="578.0"
+               pickOnBounds="true" preserveRatio="true">
+        <effect>
+            <Reflection/>
+        </effect>
+    </ImageView>
+    <ProgressBar fx:id="opponentLPBar" layoutX="155.0" layoutY="145.0" prefHeight="20.0" prefWidth="175.0"
+                 progress="1.0" style="-fx-accent: blue;">
+        <effect>
             <DropShadow spread="0.5">
-               <color>
-                  <Color red="1.0" green="0.1411764770746231" blue="0.9921568632125854" />
-               </color>
+                <color>
+                    <Color red="1.0" green="0.1411764770746231" blue="0.9921568632125854"/>
+                </color>
             </DropShadow>
-         </effect></ProgressBar>
-      <Text fx:id="opponentNickname" fill="#3642ff" layoutX="105.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="250.0">
-         <font>
-            <Font name="Georgia Bold Italic" size="24.0" />
-         </font>
-         <effect>
+        </effect>
+    </ProgressBar>
+    <Text fx:id="opponentNickname" fill="#3642ff" layoutX="105.0" layoutY="50.0" strokeType="OUTSIDE"
+          strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="250.0">
+        <font>
+            <Font name="Georgia Bold Italic" size="24.0"/>
+        </font>
+        <effect>
             <DropShadow spread="0.2">
-               <color>
-                  <Color red="1.0" green="0.14000000059604645" blue="0.9913256764411926" />
-               </color>
+                <color>
+                    <Color red="1.0" green="0.14000000059604645" blue="0.9913256764411926"/>
+                </color>
             </DropShadow>
-         </effect>
-      </Text>
-      <Text fx:id="playerLifePoint" fill="#fa4dba" layoutX="175.0" layoutY="625.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="130.0">
-         <font>
-            <Font name="Georgia Bold Italic" size="24.0" />
-         </font>
-         <effect>
+        </effect>
+    </Text>
+    <Text fx:id="playerLifePoint" fill="#fa4dba" layoutX="175.0" layoutY="625.0" strokeType="OUTSIDE"
+          strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="130.0">
+        <font>
+            <Font name="Georgia Bold Italic" size="24.0"/>
+        </font>
+        <effect>
             <DropShadow spread="0.5">
-               <color>
-                  <Color red="0.13725490868091583" green="0.800000011920929" blue="1.0" />
-               </color>
+                <color>
+                    <Color red="0.13725490868091583" green="0.800000011920929" blue="1.0"/>
+                </color>
             </DropShadow>
-         </effect></Text>
-      <Text fx:id="playerNickname" fill="#ff2654" layoutX="105.0" layoutY="675.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="250.0">
-         <font>
-            <Font name="Georgia Bold Italic" size="24.0" />
-         </font>
-         <effect>
+        </effect>
+    </Text>
+    <Text fx:id="playerNickname" fill="#ff2654" layoutX="105.0" layoutY="675.0" strokeType="OUTSIDE"
+          strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="250.0">
+        <font>
+            <Font name="Georgia Bold Italic" size="24.0"/>
+        </font>
+        <effect>
             <DropShadow spread="0.5">
-               <color>
-                  <Color red="0.1388888955116272" green="0.7990740537643433" blue="1.0" />
-               </color>
+                <color>
+                    <Color red="0.1388888955116272" green="0.7990740537643433" blue="1.0"/>
+                </color>
             </DropShadow>
-         </effect>
-      </Text>
-      <ProgressBar fx:id="playerLPBar" layoutX="155.0" layoutY="565.0" prefHeight="20.0" prefWidth="175.0" progress="1.0" style="-fx-accent: red;">
-         <effect>
+        </effect>
+    </Text>
+    <ProgressBar fx:id="playerLPBar" layoutX="155.0" layoutY="565.0" prefHeight="20.0" prefWidth="175.0"
+                 progress="1.0" style="-fx-accent: red;">
+        <effect>
             <DropShadow spread="0.5">
-               <color>
-                  <Color red="0.13725490868091583" green="0.800000011920929" blue="1.0" />
-               </color>
+                <color>
+                    <Color red="0.13725490868091583" green="0.800000011920929" blue="1.0"/>
+                </color>
             </DropShadow>
-         </effect></ProgressBar>
-      <Text fx:id="opponentLifePoint" fill="#23ccff" layoutX="175.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="130.0">
-         <font>
-            <Font name="Georgia Bold Italic" size="28.0" />
-         </font>
-         <effect>
+        </effect>
+    </ProgressBar>
+    <Text fx:id="opponentLifePoint" fill="#23ccff" layoutX="175.0" layoutY="105.0" strokeType="OUTSIDE"
+          strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="130.0">
+        <font>
+            <Font name="Georgia Bold Italic" size="28.0"/>
+        </font>
+        <effect>
             <DropShadow spread="0.5">
-               <color>
-                  <Color red="1.0" green="0.1411764770746231" blue="0.9921568632125854" />
-               </color>
+                <color>
+                    <Color red="1.0" green="0.1411764770746231" blue="0.9921568632125854"/>
+                </color>
             </DropShadow>
-         </effect></Text>
-      <Button fx:id="pauseButton" layoutX="328.0" layoutY="163.0" mnemonicParsing="false" onMouseClicked="#pause" prefHeight="47.0" prefWidth="110.0" style="-fx-rotate: 270;" styleClass="GameButtons" stylesheets="@../css/buttonStyles.css" text="Pause" />
-      <Button fx:id="nextPhaseButton" layoutX="327.0" layoutY="520.0" mnemonicParsing="false" onMouseClicked="#nextPhase" prefHeight="45.0" prefWidth="110.0" style="-fx-rotate: 270;" styleClass="GameButtons" stylesheets="@../css/buttonStyles.css" text="Next Phase" />
-      <Text fx:id="messageText" layoutX="548.0" layoutY="364.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="345.0">
-         <font>
-            <Font name="Georgia Bold Italic" size="30.0" />
-         </font>
-         <fill>
+        </effect>
+    </Text>
+    <Button fx:id="pauseButton" layoutX="328.0" layoutY="163.0" mnemonicParsing="false" onMouseClicked="#pause"
+            prefHeight="47.0" prefWidth="110.0" style="-fx-rotate: 270;" styleClass="GameButtons"
+            stylesheets="@../css/buttonStyles.css" text="Pause"/>
+    <Button fx:id="nextPhaseButton" layoutX="327.0" layoutY="520.0" mnemonicParsing="false"
+            onMouseClicked="#nextPhase" prefHeight="45.0" prefWidth="110.0" style="-fx-rotate: 270;"
+            styleClass="GameButtons" stylesheets="@../css/buttonStyles.css" text="Next Phase"/>
+    <Text fx:id="messageText" layoutX="548.0" layoutY="364.0" strokeType="OUTSIDE" strokeWidth="0.0"
+          textAlignment="CENTER" wrappingWidth="345.0">
+        <font>
+            <Font name="Georgia Bold Italic" size="30.0"/>
+        </font>
+        <fill>
             <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
-               <stops>
-                  <Stop>
-                     <color>
-                        <Color />
-                     </color>
-                  </Stop>
-                  <Stop offset="0.007633587786259542">
-                     <color>
-                        <Color />
-                     </color>
-                  </Stop>
-                  <Stop offset="1.0">
-                     <color>
-                        <Color red="1.0" />
-                     </color>
-                  </Stop>
-               </stops>
+                <stops>
+                    <Stop>
+                        <color>
+                            <Color/>
+                        </color>
+                    </Stop>
+                    <Stop offset="0.007633587786259542">
+                        <color>
+                            <Color/>
+                        </color>
+                    </Stop>
+                    <Stop offset="1.0">
+                        <color>
+                            <Color red="1.0"/>
+                        </color>
+                    </Stop>
+                </stops>
             </RadialGradient>
-         </fill>
-         <effect>
+        </fill>
+        <effect>
             <DropShadow spread="0.5">
-               <color>
-                  <Color red="1.0" green="1.0" blue="1.0" />
-               </color>
+                <color>
+                    <Color red="1.0" green="1.0" blue="1.0"/>
+                </color>
             </DropShadow>
-         </effect></Text>
-   </children>
+        </effect>
+    </Text>
 </AnchorPane>

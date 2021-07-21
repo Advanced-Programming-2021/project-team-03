@@ -1,72 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/11.0.2"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.pages.MainPage">
-    <children>
-        <ImageView fitHeight="720.0" fitWidth="1080.0" pickOnBounds="true">
-            <image>
-                <Image url="@../../assets/pageImages/MainBackground.jpg"/>
-            </image>
-        </ImageView>
-        <Button id="leftButtons" fx:id="logout" layoutX="75.0" layoutY="540.0" mnemonicParsing="false"
-                onMouseClicked="#logout" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons"
-                stylesheets="@../css/buttonStyles.css" text="Logout">
-            <font>
-                <Font name="Baskerville Old Face" size="32.4"/>
-            </font>
-        </Button>
-        <Button id="leftButtons" fx:id="profile" layoutX="75.0" layoutY="180.0" mnemonicParsing="false"
-                onMouseClicked="#profile" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons"
-                stylesheets="@../css/buttonStyles.css" text="Profile">
-            <font>
-                <Font name="Baskerville Old Face" size="32.4"/>
-            </font>
-        </Button>
-        <Button id="leftButtons" fx:id="scoreboard" layoutX="75.0" layoutY="360.0" mnemonicParsing="false"
-                onMouseClicked="#scoreBoard" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons"
-                stylesheets="@../css/buttonStyles.css" text="Score Board">
-            <font>
-                <Font name="Baskerville Old Face" size="32.4"/>
-            </font>
-        </Button>
-        <Button id="rightButtons" fx:id="deck" layoutX="768.0" layoutY="180.0" mnemonicParsing="false"
-                onMouseClicked="#deck" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons"
-                stylesheets="@../css/buttonStyles.css" text="Deck">
-            <font>
-                <Font name="Baskerville Old Face" size="32.4"/>
-            </font>
-        </Button>
-        <Button layoutX="418.0" layoutY="66.0" mnemonicParsing="false" onMouseClicked="#duel" prefHeight="62.0"
-                prefWidth="237.0" styleClass="mainPageButtons" stylesheets="@../css/buttonStyles.css" text="Duel">
-            <font>
-                <Font name="Baskerville Old Face" size="32.4"/>
-            </font>
-        </Button>
-        <Button id="rightButtons" fx:id="shop" layoutX="768.0" layoutY="360.0" mnemonicParsing="false"
-                onMouseClicked="#shop" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons"
-                stylesheets="@../css/buttonStyles.css" text="Shop">
-            <font>
-                <Font name="Baskerville Old Face" size="32.4"/>
-            </font>
-        </Button>
-        <Button id="rightButtons" fx:id="IO" layoutX="768.0" layoutY="540.0" mnemonicParsing="false"
-                onMouseClicked="#importExport" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons"
-                stylesheets="@../css/buttonStyles.css" text="Import/Export">
-            <font>
-                <Font name="Baskerville Old Face" size="32.4"/>
-            </font>
-        </Button>
-        <Button layoutX="418.0" layoutY="180.0" mnemonicParsing="false" onMouseClicked="#cardCreator" prefHeight="62.0"
-                prefWidth="237.0" styleClass="mainPageButtons" stylesheets="@../css/buttonStyles.css"
-                text="Card Creator" textAlignment="CENTER">
-            <font>
-                <Font name="Baskerville Old Face" size="32.4"/>
-            </font>
-        </Button>
-    </children>
+<AnchorPane prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.view.pages.MainPage">
+    <ImageView fitHeight="720.0" fitWidth="1080.0" pickOnBounds="true">
+        <Image url="@../../assets/pageImages/MainBackground.jpg" />
+    </ImageView>
+    <Button id="leftButtons" fx:id="logout" layoutX="75.0" layoutY="540.0" mnemonicParsing="false" onMouseClicked="#logout" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons" stylesheets="@../css/buttonStyles.css" text="Logout">
+        <font>
+            <Font name="Baskerville Old Face" size="32.4" />
+        </font>
+    </Button>
+    <Button id="leftButtons" fx:id="profile" layoutX="75.0" layoutY="260.0" mnemonicParsing="false" onMouseClicked="#profile" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons" stylesheets="@../css/buttonStyles.css" text="Profile">
+        <font>
+            <Font name="Baskerville Old Face" size="32.4" />
+        </font>
+    </Button>
+    <Button id="leftButtons" fx:id="scoreboard" layoutX="75.0" layoutY="400.0" mnemonicParsing="false" onMouseClicked="#scoreBoard" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons" stylesheets="@../css/buttonStyles.css" text="Score Board">
+        <font>
+            <Font name="Baskerville Old Face" size="32.4" />
+        </font>
+    </Button>
+    <Button id="rightButtons" fx:id="deck" layoutX="768.0" layoutY="260.0" mnemonicParsing="false" onMouseClicked="#deck" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons" stylesheets="@../css/buttonStyles.css" text="Deck">
+        <font>
+            <Font name="Baskerville Old Face" size="32.4" />
+        </font>
+    </Button>
+    <Button layoutX="418.0" layoutY="66.0" mnemonicParsing="false" onMouseClicked="#duel" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons" stylesheets="@../css/buttonStyles.css" text="Duel">
+        <font>
+            <Font name="Baskerville Old Face" size="32.4" />
+        </font>
+    </Button>
+    <Button id="rightButtons" fx:id="shop" layoutX="768.0" layoutY="400.0" mnemonicParsing="false" onMouseClicked="#shop" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons" stylesheets="@../css/buttonStyles.css" text="Shop">
+        <font>
+            <Font name="Baskerville Old Face" size="32.4" />
+        </font>
+    </Button>
+    <Button id="rightButtons" fx:id="IO" layoutX="768.0" layoutY="540.0" mnemonicParsing="false" onMouseClicked="#importExport" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons" stylesheets="@../css/buttonStyles.css" text="Import/Export">
+        <font>
+            <Font name="Baskerville Old Face" size="32.4" />
+        </font>
+    </Button>
+    <Button layoutX="768.0" layoutY="120.0" mnemonicParsing="false" onMouseClicked="#cardCreator" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons" stylesheets="@../css/buttonStyles.css" text="Card Creator" textAlignment="CENTER">
+        <font>
+            <Font name="Baskerville Old Face" size="32.4" />
+        </font>
+    </Button>
+   <Button layoutX="75.0" layoutY="120.0" mnemonicParsing="false" onAction="#chatRoom" onMouseClicked="#cardCreator" prefHeight="62.0" prefWidth="237.0" styleClass="mainPageButtons" stylesheets="@../css/buttonStyles.css" text="Chat Room" textAlignment="CENTER">
+      <font>
+         <Font name="Baskerville Old Face" size="32.4" />
+      </font>
+   </Button>
 </AnchorPane>
