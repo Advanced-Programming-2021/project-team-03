@@ -28,6 +28,7 @@
     -fx-background-color: rgba(255, 255, 255, 0.7);
     -fx-background-radius: 40;
     -fx-text-fill: black;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 10, 0.5, 0.0, 0.0);
 }
 
 .registerButtons {
@@ -119,4 +120,75 @@
     -fx-background-radius: 40;
     -fx-text-fill: red;
     -fx-effect: dropshadow(two-pass-box, aqua, 15, 0.0, 0.1, 3);
+}
+
+.ShopButtons {
+    -fx-border-color: #a8f6a2;
+    -fx-border-radius: 40;
+    -fx-border-width: 1;
+    -fx-text-fill: #a8f6a2;
+    -fx-background-color: black;
+    -fx-background-radius: 40;
+    -fx-effect: dropshadow(two-pass-box, #c02cb2, 15, 0.0, 0.1, 3);
+}
+
+.ShopButtons:hover {
+    -fx-border-color: #c02cb2;
+    -fx-background-color: transparent;
+    -fx-background-radius: 40;
+    -fx-text-fill: #c02cb2;
+    -fx-effect: dropshadow(two-pass-box, #a8f6a2, 15, 0.0, 0.1, 3);
+}
+
+.GameButtons {
+    -fx-border-color: green;
+    -fx-border-radius: 40;
+    -fx-border-width: 1;
+    -fx-text-fill: white;
+    -fx-background-color: black;
+    -fx-background-radius: 40;
+}
+
+.GameButtons:hover {
+    -fx-border-color: yellow;
+    -fx-background-color: black;
+    -fx-background-radius: 40;
+    -fx-text-fill: yellow;
+    -fx-effect: dropshadow(two-pass-box, white, 15, 0.0, 0.1, 3);
+}
+
+.PauseButtons {
+    -fx-border-color: #fcecdf;
+    -fx-border-radius: 40;
+    -fx-border-width: 1;
+    -fx-text-fill: #fcecdf;
+    -fx-background-color: black;
+    -fx-background-radius: 40;
+    -fx-effect: dropshadow(two-pass-box, #f97000, 15, 0.0, 0.1, 3);
+}
+
+.PauseButtons:hover {
+    -fx-border-color: #f97000;
+    -fx-background-color: #fcecdf;
+    -fx-background-radius: 40;
+    -fx-text-fill: #f97000;
+    -fx-effect: dropshadow(two-pass-box, #fffe10, 15, 0.0, 0.1, 3);
+}
+
+.cheatButton {
+    -fx-border-color: purple;
+    -fx-border-radius: 40;
+    -fx-border-width: 1;
+    -fx-text-fill: purple;
+    -fx-background-color: white;
+    -fx-background-radius: 40;
+    -fx-effect: dropshadow(two-pass-box, #f97000, 15, 0.0, 0.1, 3);
+}
+
+.cheatButton:hover {
+    -fx-border-color: #ff0051;
+    -fx-background-color: black;
+    -fx-background-radius: 40;
+    -fx-text-fill: #ff0051;
+    -fx-effect: dropshadow(two-pass-box, #f97000, 15, 0.0, 0.1, 3);
 }
