@@ -1,21 +1,28 @@
 package client.view.pages;
 
+import client.view.model.ClientUser;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.json.JSONObject;
 import client.view.controller.MainView;
+
+import java.util.List;
 
 public class DuelMenuPage extends Application {
     private static Stage stage;
@@ -28,6 +35,12 @@ public class DuelMenuPage extends Application {
     public Text numberOfRoundsText;
     public Text opponentUsernameText;
     public ImageView fireImageView;
+    public ScrollPane usersPane;
+    public Label onlineUsersLabel;
+
+    private String nickname;
+    private HBox hBox;
+    private final MainView view = MainView.getInstance();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -39,9 +52,79 @@ public class DuelMenuPage extends Application {
 
     @FXML
     public void initialize() {
+        initializeUsers();
         setSinglePlayMatchFiledVisible(false);
         setMultiPlayMatchFiledVisible(false);
         fireAnimation();
+    }
+
+    private void initializeUsers() {
+        nickname = view.getNickname();
+        usersPane.setPadding(new Insets(10));
+        usersPane.setCenterShape(true);
+
+        hBox = new HBox();
+        hBox.setSpacing(10);
+        hBox.setPadding(new Insets(8));
+        usersPane.setContent(hBox);
+        usersPane.setPadding(new Insets(8));
+
+        String cssLayout2 = """
+                -fx-border-color: rgb(231, 201, 133);
+                -fx-border-insets: 5;
+                -fx-border-width: 6;
+                -fx-border-radius: 10px;
+                -fx-background-color: rgba(255, 255, 255, 0)
+                """;
+        usersPane.setStyle(cssLayout2);
+        loadUsers();
+    }
+
+    private void loadUsers() {
+        List<String> users = view.getOnlineUsers();
+        hBox.getChildren().clear();
+        users.stream().map(view::getUserInfo)
+                .map(this::getProfileVBox).forEach(vBox1 -> hBox.getChildren().add(vBox1));
+        onlineUsersLabel.setText("Lobby | " + hBox.getChildren().size() + " online users");
+    }
+
+    private VBox getProfileVBox(ClientUser user) {
+        VBox profileVBox = new VBox();
+        profileVBox.setAlignment(Pos.CENTER);
+        if (user.nickname.equals(nickname)) {
+            profileVBox.setStyle("""
+                -fx-border-color: orange;
+                -fx-border-insets: 1;
+                -fx-border-width: 4;
+                -fx-border-radius: 5px;
+                """);
+        } else {
+            profileVBox.setStyle("""
+                -fx-border-color: green;
+                -fx-border-insets: 1;
+                -fx-border-width: 2;
+                -fx-border-radius: 5px;
+                """);
+        }
+        profileVBox.setMaxWidth(120);
+        ImageView profileImage = new ImageView(view.getProfileImageByID(user.profileImageID));
+        profileImage.setPreserveRatio(true);
+        profileImage.setFitWidth(100);
+        profileImage.setOnMouseClicked(event -> showProfilePopup(user));
+        profileVBox.getChildren().add(profileImage);
+
+        Label nicknameLabel = new Label(user.nickname);
+        nicknameLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+        profileVBox.getChildren().add(nicknameLabel);
+        return profileVBox;
+    }
+
+    private void showProfilePopup(ClientUser clientUser) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Profile Details");
+        alert.setHeaderText(clientUser.nickname);
+        alert.setContentText(clientUser.toString());
+        alert.show();
     }
 
     private void fireAnimation() {

@@ -132,6 +132,7 @@ public class MainController {
                 case "Get profile public info" -> getProfilePublicInfo(valueObject);
                 case "Reply message" -> replyMessage(valueObject);
                 case "Get profile picture number by username" -> getProfileImageByUsername(valueObject);
+                case "Get online users" -> getOnlineUsers(valueObject);
                 //endregion
 
                 //region auction requests
@@ -145,6 +146,12 @@ public class MainController {
         } catch (Exception e) {
             return errorAnswer("Error occurred: " + e.getMessage());
         }
+    }
+
+    private String getOnlineUsers(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+        if (invalidToken(token)) return TOKEN_ERROR;
+        return successfulAnswer(onlineUsers.values().toArray());
     }
 
     private void updateServer() {
@@ -216,7 +223,8 @@ public class MainController {
                 .put("Username", user.getUsername())
                 .put("Nickname", user.getNickname())
                 .put("Score", user.getScore())
-                .put("Level", user.getLevel()));
+                .put("Level", user.getLevel())
+                .put("Profile", user.getProfileImageID()));
     }
 
     private String replyMessage(JSONObject valueObject) {

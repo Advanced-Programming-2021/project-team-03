@@ -10,7 +10,6 @@ import com.google.gson.Gson;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import org.json.JSONObject;
-import server.control.databaseController.UserJson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -172,6 +171,7 @@ public class MainView {
         user.score = answer.getInt("Score");
         user.level = answer.getInt("Level");
         user.username = answer.getString("Username");
+        user.profileImageID = answer.getInt("Profile");
         return user;
     }
 
@@ -578,5 +578,11 @@ public class MainView {
     public JSONObject newPrice(String id, String price) {
         return sendRequestToControl(jsonWithType("Bid for auction",
                 jsonWithToken().put("ID", id).put("Price", price)));
+    }
+
+    public List<String> getOnlineUsers() {
+        JSONObject answer =  sendRequestToControl(jsonWithType("Get online users", jsonWithToken()));
+        if (!isSuccessful(answer)) return null;
+        return answer.getJSONArray("Value").toList().stream().map(Object::toString).collect(Collectors.toList());
     }
 }
