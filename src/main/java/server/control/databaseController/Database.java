@@ -228,7 +228,7 @@ public class Database {
         }
     }
 
-    private static void writeToJson(Object object, String filePath) throws DatabaseException { // TODO pretty print JSON
+    private static void writeToJson(Object object, String filePath) throws DatabaseException {
         if (MainController.initializing) return;
         try {
             File file = new File(filePath);

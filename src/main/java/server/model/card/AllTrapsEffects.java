@@ -150,8 +150,6 @@ public class AllTrapsEffects {
 
     public void negateAttackEffect(Game game, Update gameUpdates, PlayerTurn turn) {
         MainController.getInstance().sendPrintRequestToView("Negate Attack trap activated and battle phase will be finish");
-        // View.getInstance().goToTheNextPhase();
-        //TODO fix this feature
     }
 
     public boolean canTimeSealActivate(GamePhases currentPhase, Game game, PlayerTurn playerTurn, TrapNames trapName) {

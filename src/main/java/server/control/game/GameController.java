@@ -747,7 +747,7 @@ public class GameController {
                     JSONArray tributeCards = viewTributeAnswer.getJSONArray("Tribute card numbers");
                     ArrayList<Integer> cardsPositions = new ArrayList<>();
                     for (int i = 0; i < tributeCards.length(); i++) {
-                        cardsPositions.add(tributeCards.getInt(i)); //TODO: test this function
+                        cardsPositions.add(tributeCards.getInt(i));
                     }
                     int monstersLevelSum = 0;
                     for (Integer position : cardsPositions) {

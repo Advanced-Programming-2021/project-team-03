@@ -433,10 +433,6 @@ public class MainController {
 
     public String sendRequestToView(JSONObject messageToSend) {
         System.out.println(messageToSend);
-        /*send the statements of the game to view
-         * such as phase name, players' turn, ask for card activation and etc*/
-
-        //TODO
         return null;
     }
 
