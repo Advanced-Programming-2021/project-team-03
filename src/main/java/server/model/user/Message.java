@@ -11,6 +11,7 @@ public class Message {
 
     public final String senderNickname;
     public final String senderUsername;
+    private String repliedMessage;
     public final int ID;
     private String text;
     private String time;
@@ -57,5 +58,9 @@ public class Message {
 
     public static Message getByID(int ID) {
         return allMessages.get(ID);
+    }
+
+    public void reply(Message repliedMessage) {
+        this.repliedMessage = repliedMessage.text;
     }
 }

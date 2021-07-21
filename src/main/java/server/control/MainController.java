@@ -130,6 +130,7 @@ public class MainController {
                 case "Pin message" -> pinMessage(valueObject);
                 case "Edit message" -> editMessage(valueObject);
                 case "Get profile public info" -> getProfilePublicInfo(valueObject);
+                case "Reply message" -> replyMessage(valueObject);
                 case "Get profile picture number by username" -> getProfileImageByUsername(valueObject);
                 //endregion
 
@@ -216,6 +217,17 @@ public class MainController {
                 .put("Nickname", user.getNickname())
                 .put("Score", user.getScore())
                 .put("Level", user.getLevel()));
+    }
+
+    private String replyMessage(JSONObject valueObject) {
+        String token = valueObject.getString("Token");
+        if (invalidToken(token)) return TOKEN_ERROR;
+        String text = valueObject.getString("Text");
+        Message repliedMessage = Message.getByID(valueObject.getInt("RepliedID"));
+        if (repliedMessage == null) return errorAnswer("Can not find the message with this ID to reply to");
+        Message message = new Message(text, User.getByUsername(onlineUsers.get(token)));
+        message.reply(repliedMessage);
+        return successfulAnswer("Replied successfully");
     }
 
     private String getProfileImageByUsername(JSONObject valueObject) {

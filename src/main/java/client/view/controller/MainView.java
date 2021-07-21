@@ -175,6 +175,12 @@ public class MainView {
         return user;
     }
 
+    public JSONObject replyMessage(String messageText, int repliedMessageID) {
+        return sendRequestToControl(jsonWithType("Reply message", jsonWithToken()
+                .put("Text", messageText)
+                .put("RepliedID", repliedMessageID)));
+    }
+
     public int getProfileImageNumber(String username) {
         JSONObject answer = sendRequestToControl(
                 jsonWithType("Get profile picture number by username",

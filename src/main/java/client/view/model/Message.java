@@ -4,6 +4,7 @@ public class Message {
     public String senderNickname;
     public String senderUsername;
     public int ID;
+    public String repliedMessage;
     public String text;
     public String time;
     public boolean edited;

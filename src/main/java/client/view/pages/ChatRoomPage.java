@@ -28,6 +28,7 @@ public class ChatRoomPage extends Application {
     private static Stage stage;
     public Pane pinnedPane;
     public Label pinnedLabel;
+    public Button cancelReplyButton;
     private String nickName;
     public ScrollPane messagesPane;
     public TextArea messageText;
@@ -35,6 +36,7 @@ public class ChatRoomPage extends Application {
     public static final MainView view = MainView.getInstance();
     private VBox vBox;
     private Message pinnedMessage;
+    private Message replyingTo;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -45,6 +47,7 @@ public class ChatRoomPage extends Application {
 
     @FXML
     public void initialize() {
+        cancelReplyButton.setDisable(true);
         nickName = view.getNickname();
         messagesPane.setPadding(new Insets(10));
         messagesPane.setCenterShape(true);
@@ -108,8 +111,16 @@ public class ChatRoomPage extends Application {
 
     public void send(ActionEvent actionEvent) {
         String text = messageText.getText();
-        if (text.equals("")) return;
-        view.sendMessage(text);
+        if (text.equals("")) {
+            replyingTo = null;
+            return;
+        }
+        if (replyingTo == null) view.sendMessage(text);
+        else {
+            System.out.println(view.replyMessage(text, replyingTo.ID));
+            cancelReply(null);
+        }
+
         clear(null);
         loadMessages();
     }
@@ -233,7 +244,10 @@ public class ChatRoomPage extends Application {
             pinItem.setOnAction(event -> pin(message));
         }
 
-        MenuButton menuButton = new MenuButton("...", null, pinItem);
+        MenuItem replyItem = new MenuItem("Reply");
+        replyItem.setOnAction(event -> reply(message));
+
+        MenuButton menuButton = new MenuButton("...", null, replyItem, pinItem);
         if (message.senderNickname.equals(nickName)) {
             MenuItem deleteItem = new MenuItem("Delete message");
             MenuItem editItem = new MenuItem("Edit message");
@@ -256,5 +270,18 @@ public class ChatRoomPage extends Application {
         if (pinnedMessage == null) return;
         view.alertMaker(view.pinMessage(0));
         loadPinnedMessage();
+    }
+
+    public void cancelReply(ActionEvent actionEvent) {
+        replyingTo = null;
+        messageText.setPromptText("type new message...");
+        cancelReplyButton.setDisable(true);
+        loadMessages();
+    }
+
+    public void reply(Message replyTo) {
+        replyingTo = replyTo;
+        messageText.setPromptText("replying to: " + replyTo.text);
+        cancelReplyButton.setDisable(false);
     }
 }
