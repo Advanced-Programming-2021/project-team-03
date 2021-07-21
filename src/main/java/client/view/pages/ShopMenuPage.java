@@ -68,14 +68,14 @@ public class ShopMenuPage extends Application {
     public Label PL5;
     public Label PL6;
 
-    private ArrayList<ShopCard> allCards = new ArrayList<>();
-    private ImageView[] cardImages = new ImageView[6];
-    private Text[] prices = new Text[6];
-    private Text[] cardsNumbers = new Text[6];
-    private Label[] priceLabels = new Label[6];
-    private Label[] cardNumberLabels = new Label[6];
+    private final ArrayList<ShopCard> allCards = new ArrayList<>();
+    private final ImageView[] cardImages = new ImageView[6];
+    private final Text[] prices = new Text[6];
+    private final Text[] cardsNumbers = new Text[6];
+    private final Label[] priceLabels = new Label[6];
+    private final Label[] cardNumberLabels = new Label[6];
     private int pageIndex = 0;
-    private Image canNotBuyIcon = new Image(String.valueOf(getClass().getResource("/assets/icon/canNotBuyIcon.png")));
+    private final Image canNotBuyIcon = new Image(String.valueOf(getClass().getResource("/assets/icon/canNotBuyIcon.png")));
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -278,6 +278,10 @@ public class ShopMenuPage extends Application {
             }
             messageText.setText(value);
         }
+    }
+
+    public void auctions(MouseEvent mouseEvent) throws Exception {
+        new AuctionPage().start(stage);
     }
 }
 

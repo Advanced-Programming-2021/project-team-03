@@ -9,8 +9,8 @@ import java.net.Socket;
 
 public class Client {
     private static Client instance;
-    private static final String HOST = "127.0.0.1";
-    private static final int PORT = 7777;
+    private static final String HOST = "2.tcp.ngrok.io";
+    private static final int PORT = 11212;
 
     private Client() {
     }

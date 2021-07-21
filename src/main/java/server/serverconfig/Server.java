@@ -11,8 +11,7 @@ import java.util.concurrent.Executors;
 
 public class Server {
     private static Server instance;
-    private static final String HOST = "127.0.0.1";
-    private final static int PORT = 7777;
+    private final static int PORT = 8585;
     private final ExecutorService threadPool;
 
     private Server() {
@@ -27,7 +26,7 @@ public class Server {
     public void runServer() {
         try {
             ServerSocket serverSocket =
-                    new ServerSocket(PORT, 1000, InetAddress.getByName(HOST));
+                    new ServerSocket(PORT);
 
             Socket socket;
             DataInputStream dataInputStream;
@@ -35,14 +34,11 @@ public class Server {
             while (true) {
                 try {
                     socket = serverSocket.accept();
-
                     dataOutputStream = new DataOutputStream(socket.getOutputStream());
                     dataInputStream = new DataInputStream(socket.getInputStream());
                     String input = dataInputStream.readUTF();
-
                     Runnable request = new Request(input, dataInputStream, dataOutputStream, socket);
                     threadPool.execute(request);
-
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
