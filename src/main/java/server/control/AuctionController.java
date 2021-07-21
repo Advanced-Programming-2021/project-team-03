@@ -1,6 +1,5 @@
 package server.control;
 
-import com.google.gson.JsonArray;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import server.control.databaseController.DatabaseException;

@@ -1,12 +1,12 @@
 package server.model.user;
 
+import org.mindrot.jbcrypt.BCrypt;
 import server.control.MainController;
 import server.control.databaseController.Database;
 import server.control.databaseController.DatabaseException;
 import server.model.card.Card;
 import server.model.card.Monster;
 import server.model.card.SpellAndTrap;
-import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.ArrayList;
 import java.util.Collections;

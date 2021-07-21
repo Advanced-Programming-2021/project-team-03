@@ -1,5 +1,6 @@
 package client.view.pages;
 
+import client.view.controller.MainView;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +20,6 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import client.view.controller.MainView;
 
 import java.util.ArrayList;
 

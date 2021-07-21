@@ -1,5 +1,7 @@
 package server.control.game;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import server.control.MainController;
 import server.control.databaseController.DatabaseException;
 import server.model.card.*;
@@ -9,8 +11,6 @@ import server.model.game.Game;
 import server.model.game.Player;
 import server.model.game.PlayerTurn;
 import server.model.user.User;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;

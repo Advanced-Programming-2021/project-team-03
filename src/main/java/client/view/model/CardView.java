@@ -1,8 +1,8 @@
 package client.view.model;
 
+import client.view.controller.MainView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import client.view.controller.MainView;
 
 public class CardView extends ImageView {
     Image backImage = new Image(String.valueOf(getClass().getResource("/assets/cards/Unknown.jpg")));

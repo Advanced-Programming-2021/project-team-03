@@ -1,5 +1,6 @@
 package client.view.pages;
 
+import client.view.controller.MainView;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -7,13 +8,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.media.AudioClip;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import client.view.Main;
-import client.view.controller.MainView;
 
 public class Cheat extends Application {
     public TextField input;

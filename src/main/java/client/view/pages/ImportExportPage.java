@@ -1,9 +1,10 @@
 package client.view.pages;
 
-import com.google.gson.Gson;
-import com.opencsv.bean.CsvToBeanBuilder;
+import client.view.controller.MainView;
 import client.view.model.MonsterCSV;
 import client.view.model.SpellAndTrapCSV;
+import com.google.gson.Gson;
+import com.opencsv.bean.CsvToBeanBuilder;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,7 +29,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import client.view.controller.MainView;
 
 import java.io.*;
 import java.util.ArrayList;

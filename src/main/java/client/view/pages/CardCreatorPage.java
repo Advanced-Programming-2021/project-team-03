@@ -1,7 +1,10 @@
 package client.view.pages;
 
-import com.google.gson.Gson;
+import client.view.controller.MainView;
+import client.view.model.CardAttributes;
 import client.view.model.MonsterCSV;
+import client.view.model.MonsterModels;
+import com.google.gson.Gson;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -11,10 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import client.view.model.CardAttributes;
-import client.view.model.MonsterModels;
 import org.json.JSONObject;
-import client.view.controller.MainView;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;

@@ -2,6 +2,8 @@ package server.control;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import server.control.databaseController.Database;
 import server.control.databaseController.DatabaseException;
 import server.control.databaseController.MonsterCSV;
@@ -15,10 +17,11 @@ import server.model.user.Deck;
 import server.model.user.DeckType;
 import server.model.user.Message;
 import server.model.user.User;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static server.control.game.GamePhases.*;

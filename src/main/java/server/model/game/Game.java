@@ -1,5 +1,7 @@
 package server.model.game;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import server.control.databaseController.DatabaseException;
 import server.control.game.GameController;
 import server.control.game.Update;
@@ -8,8 +10,6 @@ import server.model.card.SpellAndTrap;
 import server.model.user.Deck;
 import server.model.user.DeckType;
 import server.model.user.User;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;

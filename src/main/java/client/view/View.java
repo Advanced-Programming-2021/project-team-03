@@ -1,9 +1,9 @@
 package client.view;
 
 import client.clientconfig.Client;
+import client.view.controller.MainView;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import client.view.controller.MainView;
 
 import java.util.ArrayList;
 import java.util.Scanner;

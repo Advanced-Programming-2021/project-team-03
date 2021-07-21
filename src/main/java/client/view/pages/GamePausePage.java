@@ -1,5 +1,6 @@
 package client.view.pages;
 
+import client.view.controller.MainView;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -11,7 +12,6 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import client.view.controller.MainView;
 import javafx.util.Duration;
 
 import java.net.URL;

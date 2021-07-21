@@ -1,5 +1,7 @@
 package client.view.pages;
 
+import client.view.controller.MainView;
+import client.view.model.ScoreboardUser;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -14,8 +16,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import client.view.controller.MainView;
-import client.view.model.ScoreboardUser;
 
 import java.net.URL;
 import java.util.ArrayList;

@@ -1,5 +1,6 @@
 package client.view.pages;
 
+import client.view.controller.MainView;
 import client.view.model.ClientUser;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
@@ -20,7 +21,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.json.JSONObject;
-import client.view.controller.MainView;
 
 import java.util.List;
 

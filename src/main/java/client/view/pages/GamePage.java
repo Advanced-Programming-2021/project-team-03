@@ -1,5 +1,8 @@
 package client.view.pages;
 
+import client.view.animations.CoinFlipAnimation;
+import client.view.controller.MainView;
+import client.view.model.CardView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -12,12 +15,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -26,9 +27,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import client.view.animations.CoinFlipAnimation;
-import client.view.controller.MainView;
-import client.view.model.CardView;
 
 import java.util.ArrayList;
 import java.util.Objects;

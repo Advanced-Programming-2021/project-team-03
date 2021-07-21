@@ -1,5 +1,6 @@
 package server.model.card;
 
+import org.json.JSONObject;
 import server.control.MainController;
 import server.control.game.Update;
 import server.control.game.UpdateEnum;
@@ -9,7 +10,6 @@ import server.model.game.Board;
 import server.model.game.Game;
 import server.model.game.Player;
 import server.model.game.PlayerTurn;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
